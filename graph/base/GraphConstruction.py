@@ -21,6 +21,7 @@ Universitaetsklinikum Muenster
 
 #TODO: "deposit" atlas coordinate files
 #TODO: add advanced documentation for every method
+#TODO: debug the copy steps, add a fisher transform for the connectivity matrix values
 
 from photonai.graph.base.GraphBase import GraphBase
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -94,7 +95,12 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
         X_mean = np.squeeze(np.mean(X, axis=0))
 
         # select the proper matrix in case you have multiple
-        X_mean = X_mean[:, :, self.adjacency_axis]
+        if np.ndim(X_mean) == 3:
+            X_mean = X_mean[:, :, self.adjacency_axis]
+        elif np.ndim(X_mean) == 2:
+            X_mean = X_mean
+        else:
+            raise ValueError('The input matrices need to have 3 or 4 dimensions. Please check your input matrix.')
 
         # generate adjacency matrix
         d, idx = self.distance_sklearn_metrics(X_mean, k=10, metric='euclidean')
@@ -106,7 +112,7 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
         X = np.reshape(X, (X.shape[0], X.shape[1], X.shape[2], -1))
         # X = X[..., None] + adjacency[None, None, :] #use broadcasting to speed up computation
         adjacency = np.repeat(adjacency[np.newaxis, :, :, np.newaxis], X.shape[0], axis=0)
-        X = np.concatenate(adjacency, X, axis=3)
+        X = np.concatenate((adjacency, X), axis=3)
 
         # Todo: CAVE!!! check that the matrices have similar shape, so that you can actually concatenate them (and make sure that they are compatible with the pytorch_geometric)
 
@@ -225,6 +231,8 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
                  concatenation_axis = 3,
                  one_hot_nodes = 0,
                  return_adjacency_only = 0,
+                 fisher_transform = 1,
+                 use_abs = 0,
                  logs=''):
         self.k_distance = k_distance
         self.threshold = threshold
@@ -232,6 +240,8 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
         self.concatenation_axis = concatenation_axis
         self.one_hot_nodes = one_hot_nodes
         self.return_adjacency_only = return_adjacency_only
+        self.fisher_transform = fisher_transform
+        self.use_abs = use_abs
         if logs:
             self.logs = logs
         else:
@@ -244,11 +254,19 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
 
         # ensure that the array has the "right" number of dimensions
         if np.ndim(X) == 4:
-            Threshold_matrix = X[:, :, :, self.adjacency_axis]
-            X_transformed = X
+            Threshold_matrix = X[:, :, :, self.adjacency_axis].copy()
+            X_transformed = X.copy()
+            if self.fisher_transform == 1:
+                X_transformed = np.arctanh(X_transformed)
+            if self.use_abs == 1:
+                X_transformed = np.abs(X_transformed)
         elif np.ndim(X) == 3:
             Threshold_matrix = X.copy()
             X_transformed = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
+            if self.fisher_transform == 1:
+                np.arctanh(X_transformed)
+            if self.use_abs == 1:
+                X_transformed = np.abs(X_transformed)
         else:
             raise Exception('encountered unusual dimensions, please check your dimensions')
         #This creates and indvidual adjacency matrix for each person
@@ -288,9 +306,12 @@ class GraphConstructorPercentage(BaseEstimator, TransformerMixin):
 
     # use the mean 2d FA or NOS DTI-Matrix of all samples for thresholding the graphs
 
-    def __init__(self, percentage = 0.8, adjacency_axis = 0, logs=''):
+    def __init__(self, percentage = 0.8, adjacency_axis = 0,
+                 fisher_transform = 0, use_abs = 0, logs=''):
         self.percentage = percentage
         self.adjacency_axis = adjacency_axis
+        self.fisher_transform = fisher_transform
+        self.use_abs = use_abs
         if logs:
             self.logs = logs
         else:
@@ -307,7 +328,25 @@ class GraphConstructorPercentage(BaseEstimator, TransformerMixin):
         for i in range(X.shape[0]):
             #select top percent connections
             # calculate threshold from given percentage cutoff
-            lst = X[i, :, :, self.adjacency_axis].tolist()
+            if np.ndim(X) == 3:
+                lst = X[i, :, :].tolist()
+                BinarizedMatrix = X[i, :, :].copy()
+                if self.fisher_transform == 1:
+                    np.arctanh(BinarizedMatrix)
+                if self.use_abs == 1:
+                    BinarizedMatrix = np.abs(BinarizedMatrix)
+                X_transformed = X.copy()
+                X_transformed = X_transformed.reshape((X_transformed.shape[0], X_transformed.shape[1], X_transformed.shape[2], -1))
+            elif np.ndim(X) == 4:
+                lst = X[i, :, :, self.adjacency_axis].tolist()
+                BinarizedMatrix = X[i, :, :, self.adjacency_axis].copy()
+                if self.fisher_transform == 0:
+                    np.arctanh(BinarizedMatrix)
+                if self.use_abs == 1:
+                    BinarizedMatrix = np.abs(BinarizedMatrix)
+                X_transformed = X.copy()
+            else:
+                raise ValueError('Input matrix needs to have either 3 or 4 dimensions not more or less.')
             lst = [item for sublist in lst for item in sublist]
             lst.sort()
             #new_lst = lst[int(len(lst) * self.percentage): int(len(lst) * 1)]
@@ -316,7 +355,6 @@ class GraphConstructorPercentage(BaseEstimator, TransformerMixin):
 
 
             #Threshold matrix X to create adjacency matrix
-            BinarizedMatrix = X[i, :, :, self.adjacency_axis]
             BinarizedMatrix[BinarizedMatrix > threshold] = 1
             BinarizedMatrix[BinarizedMatrix < threshold] = 0
             BinarizedMatrix = BinarizedMatrix.reshape((-1, BinaryMatrix.shape[0], BinaryMatrix.shape[1]))
@@ -328,9 +366,9 @@ class GraphConstructorPercentage(BaseEstimator, TransformerMixin):
         #drop first matrix as it is empty
         BinaryMatrix = np.delete(BinaryMatrix, 0, 3)
         BinaryMatrix = np.swapaxes(BinaryMatrix, 3, 0)
-        X = np.concatenate((BinaryMatrix, X), axis = 3)
+        X_transformed = np.concatenate((BinaryMatrix, X_transformed), axis = 3)
 
-        return X
+        return X_transformed
 
 
 
