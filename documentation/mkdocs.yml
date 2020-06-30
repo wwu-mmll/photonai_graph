@@ -1,0 +1,48 @@
+# Project information
+site_name: PHOTONAI - Graph
+repo_name: 'photonai-graph'
+repo_url: 'https://github.com/wwu-mmll/photonai-graph'
+site_dir: '../docs'
+
+
+# Social media
+extra:
+  social:
+    - type: 'twitter'
+      link: 'https://twitter.com/medicalmachinelearninglab'
+
+# Theme configuration
+theme: 
+  name: 'material'
+  palette:
+    primary: 'deep orange'
+    accent: 'deep orange'
+  font:
+    text: 'Roboto'
+    code: 'Roboto Mono'
+
+# Latex
+extra_javascript:
+  - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
+
+# extensions
+markdown_extensions:
+  - pymdownx.arithmatex
+  - codehilite
+  - admonition
+
+# Site structure
+nav: 
+- Home: 'index.md'
+- Installation: 'installation.md'
+- Getting Started: 'getting_started.md'
+- Graph Construction: 'graph_construction.md'
+- Graph Measures: 'graph_measures.md'
+- Graph Embeddings: 'graph_embeddings.md'
+
+
+
+
+
+
+
