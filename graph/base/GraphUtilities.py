@@ -25,9 +25,13 @@ from sklearn.base import BaseEstimator, TransformerMixin
 import torch
 from networkx.convert_matrix import from_numpy_matrix, to_numpy_matrix
 from networkx.drawing.nx_pylab import draw
+import networkx.drawing as drawx
 from networkx.algorithms import asteroidal
 import networkx as nx
+import pygraphviz
 import numpy as np
+import pydot
+from networkx.drawing.nx_agraph import write_dot, read_dot
 from torch_geometric.utils import from_scipy_sparse_matrix
 from torch_geometric.data import Data
 from scipy.sparse import coo_matrix
@@ -102,6 +106,43 @@ def VisualizeNetworkx(Graphs):
         plt.show()
     # use networkx visualization function
 
+
+def save_networkx_to_dotfile(Graphs, path):
+    if isinstance(Graphs, list):
+        counter = 1
+        for graph in Graphs:
+            graph_path= path + "/graph" + str(counter)
+            write_dot(graph, graph_path)
+            counter += 1
+    if isinstance(Graphs, nx.classes.graph.Graph):
+        write_dot(Graphs, path)
+
+
+def load_dotfile_to_networkx(path):
+    if isinstance(path, list):
+        graph_list = []
+        for graph in path:
+            G = read_dot(graph)
+            graph_list.append(G)
+    if isinstance(path, str):
+        graph_list = read_dot(path)
+
+    return graph_list
+
+def pygraphviz_to_nx(Graphs):
+    if isinstance(Graphs, list):
+        A_Graphs = []
+        for graph in Graphs:
+            a_graph = drawx.nx_agraph.from_agraph(graph)
+            A_Graphs.append(a_graph)
+
+    elif isinstance(Graphs, pygraphviz.agraph.AGraph):
+        A_Graphs = drawx.nx_agraph.from_agraph(Graphs)
+
+    else:
+        raise TypeError('The input needs to be list of pygraphviz files or a single pygraphviz file. Please check your inputs.')
+
+    return A_Graphs
 
 def check_asteroidal(graph, return_boolean=True):
 
