@@ -22,6 +22,7 @@ Universitaetsklinikum Muenster
 
 #TODO: make graph utility with 1. converter for GCNs, 2. converter for networkx, 3. ?
 from sklearn.base import BaseEstimator, TransformerMixin
+import torch
 from networkx.convert_matrix import from_numpy_matrix, to_numpy_matrix
 from networkx.drawing.nx_pylab import draw
 from networkx.algorithms import asteroidal
@@ -31,8 +32,9 @@ from torch_geometric.utils import from_scipy_sparse_matrix
 from torch_geometric.data import Data
 from scipy.sparse import coo_matrix
 import matplotlib.pyplot as plt
-import torch
+from photonai.base import PhotonRegistry
 import os
+import json
 
 
 def DenseToNetworkx(X, adjacency_axis = 0):
@@ -129,6 +131,31 @@ def check_asteroidal(graph, return_boolean=True):
     return graph_answer
 
 
+def RegisterGraph_force():
+
+    registry = PhotonRegistry()
+
+    base_folder = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+    BaseJSON = os.path.join(base_folder, 'photonai/base/registry/PhotonCore.json')
+    GraphJSON = os.path.join(base_folder, 'photonai/graph/base/PhotonGraph.json')
+
+    # if a graph element is not registered
+    if not registry.check_availability("GraphConstructorPercentage"):
+        print('Graph available in a sec')
+        with open(BaseJSON, 'r') as base_json_file, open(GraphJSON, 'r') as graph_json_file:
+            base_j = json.load(base_json_file)
+            graph_j = json.load(graph_json_file)
+        base_j.update(graph_j)
+
+        with open(BaseJSON, 'w') as tf:
+            json.dump(base_j, tf)
+
+    # if a graph element is already registered
+    else:
+        print('Graph already available')
+
+    return print('done')
 
 '''
 class DenseToNetworkxTransformer(BaseEstimator, TransformerMixin):

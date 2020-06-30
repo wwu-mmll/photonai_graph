@@ -1,46 +1,46 @@
 {
    "GraphMeasureTransform":[
-      "photonai.graph.GraphMeasureTransform",
+      "photonai.graph.base.GraphMeasureTransform.GraphMeasureTransform",
       "Transformer"
    ],
    "GraphConstructorKNN":[
-      "photonai.graph.GraphConstruction.GraphConstructorKNN",
+      "photonai.graph.base.GraphConstruction.GraphConstructorKNN",
       "Transformer"
    ],
    "GraphConstructorSpatial":[
-      "photonai.graph.GraphConstruction.GraphConstructorSpatial",
+      "photonai.graph.base.GraphConstruction.GraphConstructorSpatial",
       "Transformer"
    ],
    "GraphConstructorThreshold":[
-      "photonai.graph.GraphConstruction.GraphConstructorThreshold",
+      "photonai.graph.base.GraphConstruction.GraphConstructorThreshold",
       "Transformer"
    ],
    "GraphConstructorPercentage":[
-      "photonai.graph.GraphConstruction.GraphConstructorPercentage",
+      "photonai.graph.base.GraphConstruction.GraphConstructorPercentage",
       "Transformer"
    ],
    "GraphEmbeddingGraphFactorization":[
-      "photonai.graph.GraphEmbedding.GraphEmbeddingGraphFactorization",
+      "photonai.graph.base.GraphEmbedding.GraphEmbeddingGraphFactorization",
       "Transformer"
    ],
    "GraphEmbeddingHOPE":[
-      "photonai.graph.GraphEmbedding.GraphEmbeddingHOPE",
+      "photonai.graph.base.GraphEmbedding.GraphEmbeddingHOPE",
       "Transformer"
    ],
    "GraphEmbeddingHOPE":[
-      "photonai.graph.GraphEmbedding.GraphEmbeddingHOPE",
+      "photonai.graph.base.GraphEmbedding.GraphEmbeddingHOPE",
       "Transformer"
    ],
    "GraphEmbeddingLaplacianEigenmaps":[
-      "photonai.graph.GraphEmbedding.GraphEmbeddingLaplacianEigenmaps",
+      "photonai.graph.base.GraphEmbedding.GraphEmbeddingLaplacianEigenmaps",
       "Transformer"
    ],
    "GraphEmbeddingLocallyLinearEmbedding":[
-      "photonai.graph.GraphEmbedding.GraphEmbeddingLocallyLinearEmbedding",
+      "photonai.graph.base.GraphEmbedding.GraphEmbeddingLocallyLinearEmbedding",
       "Transformer"
    ],
    "GraphEmbeddingSDNE":[
-      "photonai.graph.GraphEmbedding.GraphEmbeddingSDNE",
+      "photonai.graph.base.GraphEmbedding.GraphEmbeddingSDNE",
       "Transformer"
    ]
 }

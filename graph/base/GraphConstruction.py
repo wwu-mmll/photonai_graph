@@ -22,6 +22,7 @@ Universitaetsklinikum Muenster
 #TODO: "deposit" atlas coordinate files
 #TODO: add advanced documentation for every method
 
+from photonai.graph.base.GraphBase import GraphBase
 from sklearn.base import BaseEstimator, TransformerMixin
 import numpy as np
 import sklearn
@@ -222,12 +223,15 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
 
     def __init__(self, k_distance = 10, threshold = 0.1, adjacency_axis = 0,
                  concatenation_axis = 3,
-                 one_hot_nodes = 0, logs=''):
+                 one_hot_nodes = 0,
+                 return_adjacency_only = 0,
+                 logs=''):
         self.k_distance = k_distance
         self.threshold = threshold
         self.adjacency_axis = adjacency_axis
         self.concatenation_axis = concatenation_axis
         self.one_hot_nodes = one_hot_nodes
+        self.return_adjacency_only = return_adjacency_only
         if logs:
             self.logs = logs
         else:
@@ -238,8 +242,17 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
 
     def transform(self, X):
 
+        # ensure that the array has the "right" number of dimensions
+        if np.ndim(X) == 4:
+            Threshold_matrix = X[:, :, :, self.adjacency_axis]
+            X_transformed = X
+        elif np.ndim(X) == 3:
+            Threshold_matrix = X.copy()
+            X_transformed = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
+        else:
+            raise Exception('encountered unusual dimensions, please check your dimensions')
         #This creates and indvidual adjacency matrix for each person
-        Threshold_matrix = X[:,:,:,self.adjacency_axis]
+
         Threshold_matrix[Threshold_matrix > self.threshold] = 1
         Threshold_matrix[Threshold_matrix < self.threshold] = 0
         #add extra dimension to make sure that concatenation works later on
@@ -254,14 +267,18 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
             identity_matrix = np.reshape(identity_matrix, (identity_matrix.shape[0], identity_matrix.shape[1], identity_matrix.shape[2], -1))
             one_hot_node_features = np.repeat(identity_matrix, X.shape[0], 0)
             #concatenate matrices
-            X = np.concatenate((Threshold_matrix, one_hot_node_features), axis=self.concatenation_axis)
+            X_transformed = np.concatenate((Threshold_matrix, one_hot_node_features), axis=self.concatenation_axis)
         else:
-            X = np.concatenate((Threshold_matrix, X), axis=self.concatenation_axis)
-            X = np.delete(X, self.adjacency_axis, self.concatenation_axis)
+            if self.return_adjacency_only == 0:
+                X_transformed = np.concatenate((Threshold_matrix, X_transformed), axis=self.concatenation_axis)
+            elif self.return_adjacency_only == 1:
+                X_transformed = Threshold_matrix.copy()
+            else:
+                return ValueError("The argument return_adjacency_only takes only values 0 or 1 no other values. Please check your input values")
+            #X_transformed = np.delete(X_transformed, self.adjacency_axis, self.concatenation_axis)
 
 
-        return X
-
+        return X_transformed
 
 
 
@@ -322,8 +339,7 @@ class GraphConstructorPercentage(BaseEstimator, TransformerMixin):
 class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
-    def __init__(self, k_distance=10, number_of_walks=10,
-                 walk_length = 10, window_size = 5, adjacency_axis = 0, logs=''):
+    def __init__(self, k_distance=10, number_of_walks=10, walk_length=10, window_size=5, adjacency_axis=0, logs=''):
         self.k_distance = k_distance
         self.number_of_walks = number_of_walks
         self.walk_length = walk_length
