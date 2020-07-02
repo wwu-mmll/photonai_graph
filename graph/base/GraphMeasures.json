@@ -1,0 +1,644 @@
+{
+   "all_pairs_node_connectivity": {
+      "path" : "networkx.algorithms.approximation.connectivity.all_pairs_node_connectivity",
+      "self_loops_allowed": false,
+      "Undirected" : true,
+     "Output": "dict"
+},
+  "local_node_connectivity" : {
+    "path": "networkx.algorithms.approximation.connectivity.local_node_connectivity",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "node_connectivity" : {
+    "path": "networkx.algorithms.approximation.connectivity.node_connectivity",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "k_components" : {
+    "path": "networkx.algorithms.approximation.kcomponents.k_components",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "large_clique_size" : {
+    "path": "networkx.algorithms.approximation.clique.large_clique_size",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "average_clustering" : {
+    "path": "networkx.algorithms.approximation.clustering_coefficient.average_clustering",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "treewidth_min_degree" : {
+    "path": "networkx.algorithms.approximation.treewidth.treewidth_min_degreed",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "tuple"
+  },
+  "treewidth_min_fill_in" : {
+    "path": "networkx.algorithms.approximation.treewidth.treewidth_min_fill_in",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "tuple"
+  },
+  "degree_assortativity_coefficient" : {
+    "path": "networkx.algorithms.assortativity.degree_assortativity_coefficient",
+    "self_loops_allowed": false,
+    "Undirected": false,
+    "Output": "number"
+  },
+  "attribute_assortativity_coefficient" : {
+    "path": "networkx.algorithms.assortativity.attribute_assortativity_coefficient",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "numeric_assortativity_coefficient" : {
+    "path": "networkx.algorithms.assortativity.numeric_assortativity_coefficient",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "degree_pearson_correlation_coefficient" : {
+    "path": "networkx.algorithms.assortativity.degree_pearson_correlation_coefficient",
+    "self_loops_allowed": false,
+    "Undirected": false,
+    "Output": "number"
+  },
+  "average_neighbor_degree" : {
+    "path": "networkx.algorithms.assortativity.average_neighbor_degree",
+    "self_loops_allowed": false,
+    "Undirected": false,
+    "Output": "dict"
+  },
+  "average_degree_connectivity" : {
+    "path": "networkx.algorithms.assortativity.average_degree_connectivity",
+    "self_loops_allowed": false,
+    "Undirected": false,
+    "Output": "dict"
+  },
+  "k_nearest_neighbors" : {
+    "path": "networkx.algorithms.assortativity.k_nearest_neighbors",
+    "self_loops_allowed": false,
+    "Undirected": false,
+    "Output": "dict"
+  },
+  "degree_centrality" : {
+    "path": "networkx.algorithms.centrality.degree_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "in_degree_centrality" : {
+    "path": "networkx.algorithms.centrality.in_degree_centrality",
+    "self_loops_allowed": false,
+    "Undirected": false,
+    "Output": "dict"
+  },
+  "out_degree_centrality" : {
+    "path": "networkx.algorithms.centrality.out_degree_centrality",
+    "self_loops_allowed": false,
+    "Undirected": false,
+    "Output": "dict"
+  },
+  "eigenvector_centrality" : {
+    "path": "networkx.algorithms.centrality.eigenvector_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "katz_centrality" : {
+    "path": "nnetworkx.algorithms.centrality.katz_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "closeness_centrality" : {
+    "path": "networkx.algorithms.centrality.closeness_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "incremental_closeness_centrality" : {
+    "path": "networkx.algorithms.centrality.incremental_closeness_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "current_flow_closeness_centrality" : {
+    "path": "networkx.algorithms.centrality.current_flow_closeness_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "information_centrality" : {
+    "path": "networkx.algorithms.centrality.information_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "betweenness_centrality" : {
+    "path": "networkx.algorithms.centrality.betweenness_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "edge_betweenness_centrality" : {
+    "path": "networkx.algorithms.centrality.edge_betweenness_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "betweenness_centrality_subset" : {
+    "path": "networkx.algorithms.centrality.betweenness_centrality_subset",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "edge_betweenness_centrality_subset" : {
+    "path": "networkx.algorithms.centrality.edge_betweenness_centrality_subset",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "current_flow_betweenness_centrality" : {
+    "path": "networkx.algorithms.centrality.current_flow_betweenness_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "edge_current_flow_betweenness_centrality" : {
+    "path": "networkx.algorithms.centrality.edge_current_flow_betweenness_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "approximate_current_flow_betweenness_centrality" : {
+    "path": "networkx.algorithms.centrality.approximate_current_flow_betweenness_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "current_flow_betweenness_centrality_subset" : {
+    "path": "networkx.algorithms.centrality.current_flow_betweenness_centrality_subset",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "edge_current_flow_betweenness_centrality_subset" : {
+    "path": "networkx.algorithms.centrality.edge_current_flow_betweenness_centrality_subset",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "communicability_betweenness_centrality" : {
+    "path": "networkx.algorithms.centrality.communicability_betweenness_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "group_betweenness_centrality" : {
+    "path": "networkx.algorithms.centrality.group_betweenness_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "group_closeness_centrality" : {
+    "path": "networkx.algorithms.centrality.group_closeness_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "group_degree_centrality" : {
+    "path": "networkx.algorithms.centrality.group_degree_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "group_in_degree_centrality" : {
+    "path": "networkx.algorithms.centrality.group_in_degree_centrality",
+    "self_loops_allowed": false,
+    "Undirected": false,
+    "Output": "number"
+  },
+  "group_out_degree_centrality" : {
+    "path": "networkx.algorithms.centrality.group_out_degree_centrality",
+    "self_loops_allowed": false,
+    "Undirected": false,
+    "Output": "number"
+  },
+  "load_centrality" : {
+    "path": "networkx.algorithms.centrality.load_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "edge_load_centrality" : {
+    "path": "networkx.algorithms.centrality.edge_load_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "subgraph_centrality" : {
+    "path": "networkx.algorithms.centrality.subgraph_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "subgraph_centrality_exp" : {
+    "path": "networkx.algorithms.centrality.subgraph_centrality_exp",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "estrada_index" : {
+    "path": "networkx.algorithms.centrality.estrada_index",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "harmonic_centrality" : {
+    "path": "networkx.algorithms.centrality.harmonic_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "dispersion" : {
+    "path": "networkx.algorithms.centrality.dispersion",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict_dict"
+  },
+  "local_reaching_centrality" : {
+    "path": "networkx.algorithms.centrality.local_reaching_centrality",
+    "self_loops_allowed": false,
+    "Undirected": false,
+    "Output": "number"
+  },
+  "global_reaching_centrality" : {
+    "path": "networkx.algorithms.centrality.global_reaching_centrality",
+    "self_loops_allowed": false,
+    "Undirected": false,
+    "Output": "number"
+  },
+  "percolation_centrality" : {
+    "path": "networkx.algorithms.centrality.percolation_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "second_order_centrality" : {
+    "path": "networkx.algorithms.centrality.second_order_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "voterank" : {
+    "path": "networkx.algorithms.centrality.voterank",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "list"
+  },
+  "graph_clique_number" : {
+    "path": "networkx.algorithms.clique.graph_clique_number",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "graph_number_of_cliques" : {
+    "path": "networkx.algorithms.clique.graph_number_of_cliques",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "node_clique_number" : {
+    "path": "networkx.algorithms.clique.node_clique_number",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "number_of_cliques" : {
+    "path": "networkx.algorithms.clique.number_of_cliques",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "triangles" : {
+    "path": "networkx.algorithms.cluster.triangles",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "transitivity" : {
+    "path": "networkx.algorithms.cluster.transitivity",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "clustering" : {
+    "path": "networkx.algorithms.cluster.clustering",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "float_or_dict"
+  },
+  "average_clustering" : {
+    "path": "networkx.algorithms.cluster.average_clustering",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "square_clustering" : {
+    "path": "networkx.algorithms.cluster.square_clustering",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "communicability" : {
+    "path": "networkx.algorithms.communicability_alg.communicability",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict_dict"
+  },
+  "communicability_exp" : {
+    "path": "networkx.algorithms.communicability_alg.communicability_exp",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict_dict"
+  },
+  "number_connected_components" : {
+    "path": "networkx.algorithms.components.number_connected_components",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "number_strongly_connected_components" : {
+    "path": "networkx.algorithms.components.number_strongly_connected_components",
+    "self_loops_allowed": false,
+    "Undirected": false,
+    "Output": "number"
+  },
+  "number_weakly_connected_components" : {
+    "path": "networkx.algorithms.components.number_weakly_connected_components",
+    "self_loops_allowed": false,
+    "Undirected": false,
+    "Output": "number"
+  },
+  "number_attracting_components" : {
+    "path": "networkx.algorithms.components.number_attracting_components",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "average_node_connectivity" : {
+    "path": "networkx.algorithms.connectivity.connectivity.average_node_connectivity",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "all_pairs_node_connectivity" : {
+    "path": "networkx.algorithms.connectivity.connectivity.all_pairs_node_connectivity",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "edge_connectivity" : {
+    "path": "networkx.algorithms.connectivity.connectivity.edge_connectivity",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "local_edge_connectivity" : {
+    "path": "networkx.algorithms.connectivity.connectivity.local_edge_connectivity",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "local_node_connectivity" : {
+    "path": "networkx.algorithms.connectivity.connectivity.local_node_connectivity",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "node_connectivity" : {
+    "path": "networkx.algorithms.connectivity.connectivity.node_connectivity",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "integer"
+  },
+  "core_number" : {
+    "path": "networkx.algorithms.core.core_number",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "onion_layers" : {
+    "path": "networkx.algorithms.core.onion_layers",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "boundary_expansion" : {
+    "path": "networkx.algorithms.cuts.boundary_expansion",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "conductance" : {
+    "path": "networkx.algorithms.cuts.conductance",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "cut_size" : {
+    "path": "networkx.algorithms.cuts.cut_size",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "edge_expansion" : {
+    "path": "networkx.algorithms.cuts.edge_expansion",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "mixing_expansion" : {
+    "path": "networkx.algorithms.cuts.mixing_expansion",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "normalized_cut_size" : {
+    "path": "networkx.algorithms.cuts.normalized_cut_size",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "volume" : {
+    "path": "networkx.algorithms.cuts.volume",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "diameter" : {
+    "path": "networkx.algorithms.distance_measures.diameter",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "eccentricity" : {
+    "path": "networkx.algorithms.distance_measures.eccentricity",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "radius" : {
+    "path": "networkx.algorithms.distance_measures.radius",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "resistance_distance" : {
+    "path": "networkx.algorithms.distance_measures.resistance_distance",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "efficiency" : {
+    "path": "efficiency",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "local_efficiency" : {
+    "path": "networkx.algorithms.efficiency_measures.local_efficiency",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "global_efficiency" : {
+    "path": "networkx.algorithms.efficiency_measures.global_efficiency",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "flow_hierarchy" : {
+    "path": "networkx.algorithms.hierarchy.flow_hierarchy",
+    "self_loops_allowed": false,
+    "Undirected": false,
+    "Output": "number"
+  },
+  "number_of_isolates" : {
+    "path": "networkx.algorithms.isolate.number_of_isolates",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "pagerank" : {
+    "path": "networkx.algorithms.link_analysis.pagerank_alg.pagerank",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "hits" : {
+    "path": "networkx.algorithms.link_analysis.hits_alg.hits",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "tuple_dict"
+  },
+  "non_randomness" : {
+    "path": "networkx.algorithms.non_randomness.non_randomness",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dual_tuple"
+  },
+  "reciprocity" : {
+    "path": "networkx.algorithms.reciprocity.reciprocity",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "overall_reciprocity" : {
+    "path": "networkx.algorithms.reciprocity.overall_reciprocity",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "rich_club_coefficient" : {
+    "path": "networkx.algorithms.richclub.rich_club_coefficient",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "average_shortest_path_length" : {
+    "path": "networkx.algorithms.shortest_paths.generic.average_shortest_path_length",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "sigma" : {
+    "path": "networkx.algorithms.smallworld.sigma",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "omega" : {
+    "path": "networkx.algorithms.smallworld.omega",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "s_metric" : {
+    "path": "networkx.algorithms.smetric.s_metric",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "constraint" : {
+    "path": "networkx.algorithms.structuralholes.constraint",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "effective_size" : {
+    "path": "networkx.algorithms.structuralholes.effective_size",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "local_constraint" : {
+    "path": "networkx.algorithms.structuralholes.local_constraint",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "triadic_census" : {
+    "path": "networkx.algorithms.triads.triadic_census",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  },
+  "closeness_vitality" : {
+    "path": "networkx.algorithms.vitality.closeness_vitality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "float_or_dict"
+  },
+  "wiener_index" : {
+    "path": "networkx.algorithms.wiener.wiener_index",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
+  },
+  "transformer_name" : {
+    "path": "path.to.method",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict"
+  }
+}

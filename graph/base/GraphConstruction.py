@@ -103,20 +103,20 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
             raise ValueError('The input matrices need to have 3 or 4 dimensions. Please check your input matrix.')
 
         # generate adjacency matrix
-        d, idx = self.distance_sklearn_metrics(X_mean, k=10, metric='euclidean')
+        d, idx = self.distance_sklearn_metrics(X_mean, k=self.k_distance, metric='euclidean')
         adjacency = self.adjacency(d, idx).astype(np.float32)
 
         #turn adjacency into numpy matrix for concatenation
         adjacency = adjacency.toarray()
 
-        X = np.reshape(X, (X.shape[0], X.shape[1], X.shape[2], -1))
+        X_transformed = np.reshape(X, (X.shape[0], X.shape[1], X.shape[2], -1))
         # X = X[..., None] + adjacency[None, None, :] #use broadcasting to speed up computation
         adjacency = np.repeat(adjacency[np.newaxis, :, :, np.newaxis], X.shape[0], axis=0)
-        X = np.concatenate((adjacency, X), axis=3)
+        X_transformed = np.concatenate((adjacency, X_transformed), axis=3)
 
         # Todo: CAVE!!! check that the matrices have similar shape, so that you can actually concatenate them (and make sure that they are compatible with the pytorch_geometric)
 
-        return X
+        return X_transformed
 
 
 
@@ -377,12 +377,14 @@ class GraphConstructorPercentage(BaseEstimator, TransformerMixin):
 class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
-    def __init__(self, k_distance=10, number_of_walks=10, walk_length=10, window_size=5, adjacency_axis=0, logs=''):
+    def __init__(self, k_distance=10, number_of_walks=10, walk_length=10, window_size=5,
+                 no_edge_weight = 1, adjacency_axis=0, logs=''):
         self.k_distance = k_distance
         self.number_of_walks = number_of_walks
         self.walk_length = walk_length
         self.window_size = window_size
         self.adjacency_axis = adjacency_axis
+        self.no_edge_weight = no_edge_weight
         if logs:
             self.logs = logs
         else:
@@ -520,13 +522,20 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
         # use the mean 2d image of all samples for creating the different graph structures
         X_mean = np.squeeze(np.mean(X, axis=0))
 
-        X_mean = X_mean[:, :, self.adjacency_axis]
+        # select the proper matrix in case you have multiple
+        if np.ndim(X_mean) == 3:
+            X_mean = X_mean[:, :, self.adjacency_axis]
+        elif np.ndim(X_mean) == 2:
+            X_mean = X_mean
+        else:
+            raise ValueError('The input matrices need to have 3 or 4 dimensions. Please check your input matrix.')
 
-        d, idx = self.distance_sklearn_metrics(X_mean, k=10, metric='euclidean')
+        d, idx = self.distance_sklearn_metrics(X_mean, k=self.k_distance, metric='euclidean')
         adjacency = self.adjacency(d, idx).astype(np.float32)
 
         adjacency = adjacency.toarray()
-        adjacency[adjacency > 0] = 1
+        if self.no_edge_weight == 1:
+            adjacency[adjacency > 0] = 1
 
         adjacency_rowsum = np.sum(adjacency, axis=1)
         adjacency_norm = adjacency/adjacency_rowsum[:, np.newaxis]
@@ -543,9 +552,9 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
         higherorder_adjacency = higherorder_adjacency.toarray()
 
         # reshape X to add the new adjacency
-        X = np.reshape(X, (X.shape[0], X.shape[1], X.shape[2], -1))
+        X_transformed = np.reshape(X, (X.shape[0], X.shape[1], X.shape[2], -1))
         # X = X[..., None] + adjacency[None, None, :] #use broadcasting to speed up computation
         adjacency = np.repeat(higherorder_adjacency[np.newaxis, :, :, np.newaxis], X.shape[0], axis=0)
-        X = np.concatenate(adjacency, X, axis=3)
+        X_transformed = np.concatenate((adjacency, X_transformed), axis=3)
 
-        return X
+        return X_transformed

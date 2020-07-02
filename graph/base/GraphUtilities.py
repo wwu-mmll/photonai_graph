@@ -31,7 +31,6 @@ import networkx as nx
 import pygraphviz
 import numpy as np
 import pydot
-from networkx.drawing.nx_agraph import write_dot, read_dot
 from torch_geometric.utils import from_scipy_sparse_matrix
 from torch_geometric.data import Data
 from scipy.sparse import coo_matrix
@@ -107,44 +106,6 @@ def VisualizeNetworkx(Graphs):
     # use networkx visualization function
 
 
-def save_networkx_to_dotfile(Graphs, path, IDs=None):
-    # Case 1: a list of networkx graphs as input
-    if isinstance(Graphs, list):
-        # Case 1.1: an ID is specified
-        if isinstance(IDs, list):
-            # check they have equal length
-            if len(Graphs) == len(IDs):
-                # run graph_writing with IDs
-                for graph, i in zip(Graphs, IDs):
-                    graph_filename = "graph_" + str(i)
-                    graph_path = os.path.join(path, graph_filename)
-                    write_dot(graph, graph_path)
-            else:
-                # give back error cause unequal length
-                raise Exception('The graph ID list and the list of Graphs are not of equal length. Please ensure that they have equal length.')
-        # Case 1.2: no ID is specified
-        else:
-            # run the counter based method if no ID list is specified
-            counter = 1
-            for graph in Graphs:
-                graph_path= path + "/graph" + str(counter)
-                write_dot(graph, graph_path)
-                counter += 1
-    # Case 2: the input is just a single graph
-    if isinstance(Graphs, nx.classes.graph.Graph):
-        write_dot(Graphs, path)
-
-
-def load_dotfile_to_networkx(path):
-    if isinstance(path, list):
-        graph_list = []
-        for graph in path:
-            G = read_dot(graph)
-            graph_list.append(G)
-    if isinstance(path, str):
-        graph_list = read_dot(path)
-
-    return graph_list
 
 def pygraphviz_to_nx(Graphs):
     if isinstance(Graphs, list):
