@@ -36,6 +36,7 @@ from torch_geometric.data import Data
 from scipy.sparse import coo_matrix
 import matplotlib.pyplot as plt
 from photonai.base import PhotonRegistry
+from photonai.graph.base.GraphConversions import save_networkx_to_file
 import os
 import json
 
@@ -93,6 +94,12 @@ def get_random_labels(type = "classification", number_of_labels = 10):
 
     return y
 
+def save_graphs(Graphs, path="", input_format="networkx", output_format="dot"):
+    # check input format
+    if input_format == "networkx":
+        save_networkx_to_file(Graphs, path, output_format=output_format)
+    else:
+        raise Exception("Your desired output format is not supported yet.")
 
 def VisualizeNetworkx(Graphs):
     # check format in which graphs are presented or ordered

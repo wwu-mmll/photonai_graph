@@ -573,7 +573,8 @@
     "path": "networkx.algorithms.richclub.rich_club_coefficient",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "edge"
   },
   "average_shortest_path_length" : {
     "path": "networkx.algorithms.shortest_paths.generic.average_shortest_path_length",

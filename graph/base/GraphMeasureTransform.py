@@ -97,7 +97,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                     elif measure['Undirected'] == False:
                         i.to_directed()
                      # call function
-                    results = getattr(networkx.algorithms.approximation, key)(i, **value)
+                    results = getattr(networkx, key)(i, **value)
 
                     # handle results
                     if measure['Output'] == "dict":
@@ -163,14 +163,14 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                         measure = measure_j[key]
                         # remove self loops if not allowed
                         if measure['self_loops_allowed'] == False:
-                            i.remove_edges_from(networkx.selfloop_edges(i))
+                            graph.remove_edges_from(networkx.selfloop_edges(graph))
                         # make graph directed or undirected depending on what is needed
                         if measure['Undirected'] == True:
-                            i.to_undirected()
+                            graph.to_undirected()
                         elif measure['Undirected'] == False:
-                            i.to_directed()
+                            graph.to_directed()
                         # call function
-                        results = getattr(networkx.algorithms.approximation, key)(i, **value)
+                        results = getattr(networkx, key)(graph, **value)
 
                         # if the values are numbers: make a list of Subject ID, value, measure_name, edge=None, node=None
                         if measure['Output'] == "number":
@@ -182,7 +182,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                                 if measure['node_or_edge'] == 'node':
                                     list_to_append = [i, rsval, key, rskey, "None", "None"]
                                     measure_list.append(list_to_append)
-                                if measure['node_or_edge'] == 'edge':
+                                elif measure['node_or_edge'] == 'edge':
                                     list_to_append = [i, rsval, key, "None", rskey, "None"]
                                     measure_list.append(list_to_append)
                         # if the values are tuples
@@ -214,8 +214,10 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                         elif measure['Output'] == "tuple_dict":
                             raise Exception("Tuple-Dict outputs are not implemented.")
 
+        else:
+            raise Exception('no ID provided')
 
         df = pd.DataFrame(measure_list)
 
-        df.to_csv(path=path)
+        df.to_csv(path_or_buf=path)
 

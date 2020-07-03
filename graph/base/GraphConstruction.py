@@ -264,7 +264,7 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
             Threshold_matrix = X.copy()
             X_transformed = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
             if self.fisher_transform == 1:
-                np.arctanh(X_transformed)
+                X_transformed = np.arctanh(X_transformed)
             if self.use_abs == 1:
                 X_transformed = np.abs(X_transformed)
         else:
