@@ -24,6 +24,7 @@ Universitaetsklinikum Muenster
 #TODO: debug the copy steps, add a fisher transform for the connectivity matrix values
 
 from photonai.graph.base.GraphBase import GraphBase
+from photonai.graph.base.GraphUtilities import individual_ztransform, individual_fishertransform
 from sklearn.base import BaseEstimator, TransformerMixin
 import numpy as np
 import sklearn
@@ -40,8 +41,9 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
     #constructs the adjacency matrix for the connectivity matrices by a kNN approach
     #adapted from Ktena et al., 2017
 
-    def __init__(self, k_distance = 10, adjacency_axis = 0, logs=''):
+    def __init__(self, k_distance = 10, transform_style = "mean", adjacency_axis = 0, logs=''):
         self.k_distance = k_distance
+        self.transform_style = transform_style
         self.adjacency_axis = adjacency_axis
         if logs:
             self.logs = logs
@@ -91,30 +93,64 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
         return W
 
     def transform(self, X):
-        # use the mean 2d image of all samples for creating the different graph structures
-        X_mean = np.squeeze(np.mean(X, axis=0))
+        # transform each graph through its own adjacency or all graphs
+        if self.transform_style == "mean" or self.transform_style == "Mean":
+            # use the mean 2d image of all samples for creating the different graph structures
+            X_mean = np.squeeze(np.mean(X, axis=0))
 
-        # select the proper matrix in case you have multiple
-        if np.ndim(X_mean) == 3:
-            X_mean = X_mean[:, :, self.adjacency_axis]
-        elif np.ndim(X_mean) == 2:
-            X_mean = X_mean
+            # select the proper matrix in case you have multiple
+            if np.ndim(X_mean) == 3:
+                X_mean = X_mean[:, :, self.adjacency_axis]
+            elif np.ndim(X_mean) == 2:
+                X_mean = X_mean
+            else:
+                raise ValueError('The input matrices need to have 3 or 4 dimensions. Please check your input matrix.')
+
+            # generate adjacency matrix
+            d, idx = self.distance_sklearn_metrics(X_mean, k=self.k_distance, metric='euclidean')
+            adjacency = self.adjacency(d, idx).astype(np.float32)
+
+            #turn adjacency into numpy matrix for concatenation
+            adjacency = adjacency.toarray()
+
+            X_transformed = np.reshape(X, (X.shape[0], X.shape[1], X.shape[2], -1))
+            # X = X[..., None] + adjacency[None, None, :] #use broadcasting to speed up computation
+            adjacency = np.repeat(adjacency[np.newaxis, :, :, np.newaxis], X.shape[0], axis=0)
+            X_transformed = np.concatenate((adjacency, X_transformed), axis=3)
+
+        elif self.transform_style == "individual" or self.transform_style == "Individual":
+            # make a copy of x
+            X_knn = X.copy()
+            # select the proper matrix in case you have multiple
+            if np.ndim(X_knn) == 4:
+                X_knn = X_knn[:, :, :, self.adjacency_axis]
+                X_features = X_knn.copy()
+            elif np.ndim(X_knn) == 3:
+                X_knn = X_knn
+                X_features = X_knn.copy()
+                X_features = X_features.reshape((X_features.shape[0], X_features.shape[1], X_features.shape[2], -1))
+            else:
+                raise ValueError('The input matrices need to have 3 or 4 dimensions. Please check your input matrix.')
+
+            # make a list for all adjacency matrices
+            adjacency_list = []
+            # generate adjacency matrix for each individual
+            for i in range(X_knn.shape[0]):
+                d, idx = self.distance_sklearn_metrics(X_knn[i, :, :], k=self.k_distance, metric='euclidean')
+                adjacency = self.adjacency(d, idx).astype(np.float32)
+
+                # turn adjacency into numpy matrix for concatenation
+                adjacency = adjacency.toarray()
+                adjacency_list.append(adjacency)
+
+            # X = X[..., None] + adjacency[None, None, :] #use broadcasting to speed up computation
+            adjacency_list = np.asarray(adjacency_list)
+            adjacency_list = adjacency_list.reshape((adjacency_list.shape[0], adjacency_list.shape[1], adjacency_list.shape[2], -1))
+            X_transformed = np.concatenate((adjacency_list, X_features), axis=3)
+
         else:
-            raise ValueError('The input matrices need to have 3 or 4 dimensions. Please check your input matrix.')
-
-        # generate adjacency matrix
-        d, idx = self.distance_sklearn_metrics(X_mean, k=self.k_distance, metric='euclidean')
-        adjacency = self.adjacency(d, idx).astype(np.float32)
-
-        #turn adjacency into numpy matrix for concatenation
-        adjacency = adjacency.toarray()
-
-        X_transformed = np.reshape(X, (X.shape[0], X.shape[1], X.shape[2], -1))
-        # X = X[..., None] + adjacency[None, None, :] #use broadcasting to speed up computation
-        adjacency = np.repeat(adjacency[np.newaxis, :, :, np.newaxis], X.shape[0], axis=0)
-        X_transformed = np.concatenate((adjacency, X_transformed), axis=3)
-
-        # Todo: CAVE!!! check that the matrices have similar shape, so that you can actually concatenate them (and make sure that they are compatible with the pytorch_geometric)
+            raise KeyError('Only mean and individual transform are supported. '
+                           'Please check your spelling for the parameter transform_style.')
 
         return X_transformed
 
@@ -233,6 +269,8 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
                  return_adjacency_only = 0,
                  fisher_transform = 1,
                  use_abs = 0,
+                 zscore=0,
+                 use_abs_zscore = 0,
                  logs=''):
         self.k_distance = k_distance
         self.threshold = threshold
@@ -242,6 +280,8 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
         self.return_adjacency_only = return_adjacency_only
         self.fisher_transform = fisher_transform
         self.use_abs = use_abs
+        self.zscore = zscore
+        self.use_abs_zscore = use_abs_zscore
         if logs:
             self.logs = logs
         else:
@@ -257,16 +297,25 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
             Threshold_matrix = X[:, :, :, self.adjacency_axis].copy()
             X_transformed = X.copy()
             if self.fisher_transform == 1:
-                X_transformed = np.arctanh(X_transformed)
+                Threshold_matrix = individual_fishertransform(Threshold_matrix)
             if self.use_abs == 1:
-                X_transformed = np.abs(X_transformed)
+                Threshold_matrix = np.abs(Threshold_matrix)
+            if self.zscore == 1:
+                Threshold_matrix = individual_ztransform(Threshold_matrix)
+            if self.use_abs_zscore == 1:
+                Threshold_matrix = np.abs(Threshold_matrix)
         elif np.ndim(X) == 3:
             Threshold_matrix = X.copy()
             X_transformed = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
             if self.fisher_transform == 1:
-                X_transformed = np.arctanh(X_transformed)
+                Threshold_matrix = individual_fishertransform(Threshold_matrix)
             if self.use_abs == 1:
-                X_transformed = np.abs(X_transformed)
+                Threshold_matrix = np.abs(Threshold_matrix)
+            if self.zscore == 1:
+                Threshold_matrix = individual_ztransform(Threshold_matrix)
+            if self.use_abs_zscore == 1:
+                Threshold_matrix = np.abs(Threshold_matrix)
+
         else:
             raise Exception('encountered unusual dimensions, please check your dimensions')
         #This creates and indvidual adjacency matrix for each person
@@ -378,11 +427,13 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
     def __init__(self, k_distance=10, number_of_walks=10, walk_length=10, window_size=5,
-                 no_edge_weight = 1, adjacency_axis=0, logs=''):
+                 no_edge_weight = 1,
+                 transform_style = "mean", adjacency_axis=0, logs=''):
         self.k_distance = k_distance
         self.number_of_walks = number_of_walks
         self.walk_length = walk_length
         self.window_size = window_size
+        self.transform_style = transform_style
         self.adjacency_axis = adjacency_axis
         self.no_edge_weight = no_edge_weight
         if logs:
@@ -519,42 +570,94 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
         return coocurrence
 
     def transform(self, X):
-        # use the mean 2d image of all samples for creating the different graph structures
-        X_mean = np.squeeze(np.mean(X, axis=0))
+        # transform each individual or make a mean matrix
+        if self.transform_style == "mean":
+            # use the mean 2d image of all samples for creating the different graph structures
+            X_mean = np.squeeze(np.mean(X, axis=0))
 
-        # select the proper matrix in case you have multiple
-        if np.ndim(X_mean) == 3:
-            X_mean = X_mean[:, :, self.adjacency_axis]
-        elif np.ndim(X_mean) == 2:
-            X_mean = X_mean
+            # select the proper matrix in case you have multiple
+            if np.ndim(X_mean) == 3:
+                X_mean = X_mean[:, :, self.adjacency_axis]
+            elif np.ndim(X_mean) == 2:
+                X_mean = X_mean
+            else:
+                raise ValueError('The input matrices need to have 3 or 4 dimensions. Please check your input matrix.')
+
+            d, idx = self.distance_sklearn_metrics(X_mean, k=self.k_distance, metric='euclidean')
+            adjacency = self.adjacency(d, idx).astype(np.float32)
+
+            adjacency = adjacency.toarray()
+            if self.no_edge_weight == 1:
+                adjacency[adjacency > 0] = 1
+
+            adjacency_rowsum = np.sum(adjacency, axis=1)
+            adjacency_norm = adjacency/adjacency_rowsum[:, np.newaxis]
+
+            walks =self.random_walk(adjacency=adjacency_norm, walk_length=self.walk_length, num_walks=self.number_of_walks)
+
+            higherorder_adjacency = self.sliding_window_frequency(X_mean=adjacency, walk_list=walks)
+
+            # obtain the kNN graph from the new adjacency matrix
+            d, idx = self.distance_sklearn_metrics(higherorder_adjacency, k=10, metric='euclidean')
+            higherorder_adjacency = self.adjacency(d, idx).astype(np.float32)
+
+            # convert this adjacency matrix to dense format
+            higherorder_adjacency = higherorder_adjacency.toarray()
+
+            # reshape X to add the new adjacency
+            X_transformed = np.reshape(X, (X.shape[0], X.shape[1], X.shape[2], -1))
+            # X = X[..., None] + adjacency[None, None, :] #use broadcasting to speed up computation
+            adjacency = np.repeat(higherorder_adjacency[np.newaxis, :, :, np.newaxis], X.shape[0], axis=0)
+            X_transformed = np.concatenate((adjacency, X_transformed), axis=3)
+
+        elif self.transform_style == "individual":
+            X_rw = X.copy()
+            # select the proper matrix in case you have multiple
+            if np.ndim(X_rw) == 4:
+                X_rw = X_rw[:, :, :, self.adjacency_axis]
+                X_features = X_rw.copy()
+            elif np.ndim(X_rw) == 3:
+                X_rw = X_rw
+                X_features = X_rw.copy()
+                X_features = X_features.reshape((X_features.shape[0], X_features.shape[1], X_features.shape[2], -1))
+            else:
+                raise ValueError('The input matrices need to have 3 or 4 dimensions. Please check your input matrix.')
+
+            adjacency_list = []
+            for i in range(X.shape[0]):
+                d, idx = self.distance_sklearn_metrics(X_rw[i, :, :], k=self.k_distance, metric='euclidean')
+                adjacency = self.adjacency(d, idx).astype(np.float32)
+
+                # normalize adjacency
+                if self.no_edge_weight == 1:
+                    adjacency[adjacency > 0] = 1
+
+                adjacency_rowsum = np.sum(adjacency, axis=1)
+                adjacency_norm = adjacency / adjacency_rowsum[:, np.newaxis]
+
+                walks = self.random_walk(adjacency=adjacency_norm, walk_length=self.walk_length,
+                                         num_walks=self.number_of_walks)
+
+                higherorder_adjacency = self.sliding_window_frequency(X_mean=adjacency, walk_list=walks)
+
+                # obtain the kNN graph from the new adjacency matrix
+                d, idx = self.distance_sklearn_metrics(higherorder_adjacency, k=10, metric='euclidean')
+                higherorder_adjacency = self.adjacency(d, idx).astype(np.float32)
+
+                # convert this adjacency matrix to dense format
+                higherorder_adjacency = higherorder_adjacency.toarray()
+                # turn adjacency into numpy matrix for concatenation
+                adjacency = adjacency.toarray()
+                adjacency_list.append(adjacency)
+
+            adjacency_list = np.asarray(adjacency_list)
+            adjacency_list = adjacency_list.reshape((adjacency_list.shape[0], adjacency_list.shape[1],
+                                                    adjacency_list.shape[2], -1))
+            X_transformed = np.concatenate((adjacency_list, X_features), axis=3)
+
+
         else:
-            raise ValueError('The input matrices need to have 3 or 4 dimensions. Please check your input matrix.')
-
-        d, idx = self.distance_sklearn_metrics(X_mean, k=self.k_distance, metric='euclidean')
-        adjacency = self.adjacency(d, idx).astype(np.float32)
-
-        adjacency = adjacency.toarray()
-        if self.no_edge_weight == 1:
-            adjacency[adjacency > 0] = 1
-
-        adjacency_rowsum = np.sum(adjacency, axis=1)
-        adjacency_norm = adjacency/adjacency_rowsum[:, np.newaxis]
-
-        walks =self.random_walk(adjacency=adjacency_norm, walk_length=self.walk_length, num_walks=self.number_of_walks)
-
-        higherorder_adjacency = self.sliding_window_frequency(X_mean=adjacency, walk_list=walks)
-
-        # obtain the kNN graph from the new adjacency matrix
-        d, idx = self.distance_sklearn_metrics(higherorder_adjacency, k=10, metric='euclidean')
-        higherorder_adjacency = self.adjacency(d, idx).astype(np.float32)
-
-        # convert this adjacency matrix to dense format
-        higherorder_adjacency = higherorder_adjacency.toarray()
-
-        # reshape X to add the new adjacency
-        X_transformed = np.reshape(X, (X.shape[0], X.shape[1], X.shape[2], -1))
-        # X = X[..., None] + adjacency[None, None, :] #use broadcasting to speed up computation
-        adjacency = np.repeat(higherorder_adjacency[np.newaxis, :, :, np.newaxis], X.shape[0], axis=0)
-        X_transformed = np.concatenate((adjacency, X_transformed), axis=3)
+            raise KeyError('Only mean and individual transform are supported. '
+                           'Please check your spelling for the parameter transform_style.')
 
         return X_transformed

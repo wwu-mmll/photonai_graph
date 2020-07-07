@@ -10,7 +10,7 @@ and even create some random data to run some tests
 Version
 -------
 Created:        15-08-2019
-Last updated:   05-06-2020
+Last updated:   06-07-2020
 
 
 Author
@@ -31,17 +31,19 @@ import networkx as nx
 import pygraphviz
 import numpy as np
 import pydot
-from torch_geometric.utils import from_scipy_sparse_matrix
-from torch_geometric.data import Data
 from scipy.sparse import coo_matrix
+from scipy import stats
 import matplotlib.pyplot as plt
 from photonai.base import PhotonRegistry
-from photonai.graph.base.GraphConversions import save_networkx_to_file
+from photonai.graph.base.GraphConversions import save_networkx_to_file, networkx_to_dense, networkx_to_sparse, networkx_to_stellargraph
+from photonai.graph.base.GraphConversions import dense_to_networkx, dense_to_stellargraph, dense_to_sparse
+from photonai.graph.base.GraphConversions import sparse_to_networkx, sparse_to_dense, sparse_to_stellargraph
+from photonai.graph.base.GraphConversions import stellargraph_to_networkx, stellargraph_to_dense, stellargraph_to_sparse
 import os
 import json
 
 
-def DenseToNetworkx(X, adjacency_axis = 0):
+def DenseToNetworkx(X, adjacency_axis=0, feature_axis=1, feature_construction="collapse"):
 
     # convert if Dense is a list of ndarrays
     if isinstance(X, list):
@@ -49,6 +51,17 @@ def DenseToNetworkx(X, adjacency_axis = 0):
 
         for i in X:
             networkx_graph = from_numpy_matrix(A = i[:, :, adjacency_axis])
+            if feature_construction == "collapse":
+                features = np.sum(i[:, :, feature_axis], axis=1)
+                features = features.reshape((features.shape[0], -1))
+                features = dict(enumerate(features, 0))
+                nx.set_node_attributes(networkx_graph, features)
+            elif feature_construction == "collapse2":
+                sum_features = np.sum(i[:, :, feature_axis], axis=1)
+                var_features = np.var(i[:, :, feature_axis], axis=1)
+                features = np.concatenate((sum_features, var_features))
+                features = dict(enumerate(features, 0))
+                nx.set_node_attributes(networkx_graph, features)
             graph_list.append(networkx_graph)
 
         X_converted = graph_list
@@ -63,12 +76,79 @@ def DenseToNetworkx(X, adjacency_axis = 0):
 
         for i in range(X.shape[0]):
             networkx_graph = from_numpy_matrix(A=X[i, :, :, adjacency_axis])
+            if feature_construction == "collapse":
+                features = np.sum(X[i, :, :, feature_axis], axis=1)
+                features = features.reshape((features.shape[0], -1))
+                features = dict(enumerate(features, 0))
+                nx.set_node_attributes(networkx_graph, features, name="collapsed_weight")
+            elif feature_construction == "collapse2":
+                sum_features = np.sum(X[i, :, :, feature_axis], axis=1)
+                var_features = np.var(X[i, :, :, feature_axis], axis=1)
+                features = np.column_stack((sum_features, var_features))
+                features = dict(enumerate(features, 0))
+                nx.set_node_attributes(networkx_graph, features, name="collapsed_weight")
             graph_list.append(networkx_graph)
 
         X_converted = graph_list
 
-
     return X_converted
+
+
+def convert_graphs(graphs, input_format="networkx", output_format="stellargraph"):
+    # check input format
+    if input_format == "networkx":
+        if output_format == "networkx":
+            raise Exception('Graphs already in networkx format.')
+        elif output_format == "dense":
+            trans_graphs = networkx_to_dense(graphs)
+        elif output_format == "sparse":
+            trans_graphs = networkx_to_sparse(graphs)
+        elif output_format == "stellargraph":
+            trans_graphs = networkx_to_stellargraph(graphs)
+        else:
+            raise KeyError('Your specified output format is not supported.'
+                           'Please check your output format.')
+    elif input_format == "dense":
+        if output_format == "networkx":
+            trans_graphs = dense_to_networkx(graphs)
+        elif output_format == "dense":
+            raise Exception('Graphs already in dense format.')
+        elif output_format == "sparse":
+            trans_graphs = dense_to_sparse(graphs)
+        elif output_format == "stellargraph":
+            trans_graphs = dense_to_stellargraph(graphs)
+        else:
+            raise KeyError('Your specified output format is not supported.'
+                           'Please check your output format.')
+    elif input_format == "sparse":
+        if output_format == "networkx":
+            trans_graphs = sparse_to_networkx(graphs)
+        elif output_format == "dense":
+            trans_graphs = sparse_to_dense(graphs)
+        elif output_format == "sparse":
+            raise Exception('Graphs already in sparse format.')
+        elif output_format == "stellargraph":
+            trans_graphs = sparse_to_stellargraph(graphs)
+        else:
+            raise KeyError('Your specified output format is not supported.'
+                           'Please check your output format.')
+    elif input_format == "stellargraph":
+        if output_format == "networkx":
+            trans_graphs = stellargraph_to_networkx(graphs)
+        elif output_format == "dense":
+            trans_graphs = stellargraph_to_dense(graphs)
+        elif output_format == "sparse":
+            trans_graphs = stellargraph_to_sparse(graphs)
+        elif output_format == "stellargraph":
+            raise Exception('Graphs already in stellargraph format.')
+        else:
+            raise KeyError('Your specified output format is not supported.'
+                           'Please check your output format.')
+    else:
+        raise KeyError('Your specified input format is not supported.'
+                       'Please check your input format.')
+
+    return trans_graphs
 
 
 def get_random_connectivity_data(type = "dense", number_of_nodes = 114, number_of_individuals = 10, number_of_modalities = 2):
@@ -79,12 +159,12 @@ def get_random_connectivity_data(type = "dense", number_of_nodes = 114, number_o
     return random_matrices
 
 
-def get_random_labels(type = "classification", number_of_labels = 10):
+def get_random_labels(type="classification", number_of_labels=10):
 
     if type == "classification" or type == "Classification":
         y = np.random.rand(number_of_labels)
         y[y > 0.5] = 1
-        y[y < 0.5] = 1
+        y[y < 0.5] = 0
 
     if type == "regression" or type == "Regression":
         y = np.random.rand(number_of_labels)
@@ -112,6 +192,43 @@ def VisualizeNetworkx(Graphs):
         plt.show()
     # use networkx visualization function
 
+
+def individual_ztransform(X, adjacency_axis=0):
+    # check dimensions
+    transformed_matrices = []
+    if np.ndim(X) == 3:
+        for i in range(X.shape[0]):
+            matrix = X[i, :, :].copy()
+            matrix = stats.zscore(matrix)
+            transformed_matrices.append(matrix)
+    elif np.ndim(X) == 4:
+        for i in X.shape[0]:
+            matrix = X[i, :, :, adjacency_axis].copy()
+            matrix = stats.zscore(matrix)
+            transformed_matrices.append(matrix)
+
+    transformed_matrices = np.asarray(transformed_matrices)
+
+    return transformed_matrices
+
+
+def individual_fishertransform(X, adjacency_axis=0):
+    # check dimensions
+    transformed_matrices = []
+    if np.ndim(X) == 3:
+        for i in range(X.shape[0]):
+            matrix = X[i, :, :].copy()
+            matrix = np.arctanh(matrix)
+            transformed_matrices.append(matrix)
+    elif np.ndim(X) == 4:
+        for i in X.shape[0]:
+            matrix = X[i, :, :, adjacency_axis].copy()
+            matrix = np.arctanh(matrix)
+            transformed_matrices.append(matrix)
+
+    transformed_matrices = np.asarray(transformed_matrices)
+
+    return transformed_matrices
 
 
 def pygraphviz_to_nx(Graphs):
