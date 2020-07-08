@@ -27,10 +27,6 @@
       "photonai.graph.base.GraphEmbedding.GraphEmbeddingHOPE",
       "Transformer"
    ],
-   "GraphEmbeddingHOPE":[
-      "photonai.graph.base.GraphEmbedding.GraphEmbeddingHOPE",
-      "Transformer"
-   ],
    "GraphEmbeddingLaplacianEigenmaps":[
       "photonai.graph.base.GraphEmbedding.GraphEmbeddingLaplacianEigenmaps",
       "Transformer"
@@ -42,5 +38,21 @@
    "GraphEmbeddingSDNE":[
       "photonai.graph.base.GraphEmbedding.GraphEmbeddingSDNE",
       "Transformer"
+   ],
+   "GraphConvNet_Classifier":[
+      "photonai.graph.base.GraphConvNet.GraphConvNet_Classifier",
+      "Estimator"
+   ],
+   "GraphConvNet_Regressor":[
+      "photonai.graph.base.GraphConvNet.GraphConvNet_Regressor",
+      "Estimator"
+   ],
+   "DeepGraphCNN_Classifier": [
+      "photonai.graph.base.GraphConvNet.DeepGraphCNN_Classifier",
+      "Estimator"
+   ],
+   "DeepGraphCNN_Regressor": [
+      "photonai.graph.base.GraphConvNet.DeepGraphCNN_Regressor",
+      "Estimator"
    ]
 }

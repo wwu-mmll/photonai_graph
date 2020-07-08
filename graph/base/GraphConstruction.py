@@ -263,14 +263,14 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
     # threshold a matrix to generate the adjacency matrix
     # you can use both a different and the own matrix
 
-    def __init__(self, k_distance = 10, threshold = 0.1, adjacency_axis = 0,
-                 concatenation_axis = 3,
-                 one_hot_nodes = 0,
-                 return_adjacency_only = 0,
-                 fisher_transform = 1,
-                 use_abs = 0,
-                 zscore=0,
-                 use_abs_zscore = 0,
+    def __init__(self, k_distance=10, threshold=0.1, adjacency_axis=0,
+                 concatenation_axis=3,
+                 one_hot_nodes=0,
+                 return_adjacency_only=0,
+                 fisher_transform=0,
+                 use_abs=0,
+                 zscore=1,
+                 use_abs_zscore=0,
                  logs=''):
         self.k_distance = k_distance
         self.threshold = threshold

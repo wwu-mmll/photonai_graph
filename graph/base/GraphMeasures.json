@@ -3,19 +3,22 @@
       "path" : "networkx.algorithms.approximation.connectivity.all_pairs_node_connectivity",
       "self_loops_allowed": false,
       "Undirected" : true,
-     "Output": "dict"
+     "Output": "dict",
+     "node_or_edge": "edge"
 },
   "local_node_connectivity" : {
     "path": "networkx.algorithms.approximation.connectivity.local_node_connectivity",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "edge"
   },
   "node_connectivity" : {
     "path": "networkx.algorithms.approximation.connectivity.node_connectivity",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "k_components" : {
     "path": "networkx.algorithms.approximation.kcomponents.k_components",
@@ -27,7 +30,7 @@
     "path": "networkx.algorithms.approximation.clique.large_clique_size",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "number"
   },
   "average_clustering" : {
     "path": "networkx.algorithms.approximation.clustering_coefficient.average_clustering",
@@ -75,7 +78,8 @@
     "path": "networkx.algorithms.assortativity.average_neighbor_degree",
     "self_loops_allowed": false,
     "Undirected": false,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "average_degree_connectivity" : {
     "path": "networkx.algorithms.assortativity.average_degree_connectivity",
@@ -93,25 +97,29 @@
     "path": "networkx.algorithms.centrality.degree_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "in_degree_centrality" : {
     "path": "networkx.algorithms.centrality.in_degree_centrality",
     "self_loops_allowed": false,
     "Undirected": false,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "out_degree_centrality" : {
     "path": "networkx.algorithms.centrality.out_degree_centrality",
     "self_loops_allowed": false,
     "Undirected": false,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "eigenvector_centrality" : {
     "path": "networkx.algorithms.centrality.eigenvector_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "katz_centrality" : {
     "path": "nnetworkx.algorithms.centrality.katz_centrality",
@@ -123,37 +131,43 @@
     "path": "networkx.algorithms.centrality.closeness_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "incremental_closeness_centrality" : {
     "path": "networkx.algorithms.centrality.incremental_closeness_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "current_flow_closeness_centrality" : {
     "path": "networkx.algorithms.centrality.current_flow_closeness_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "information_centrality" : {
     "path": "networkx.algorithms.centrality.information_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "betweenness_centrality" : {
     "path": "networkx.algorithms.centrality.betweenness_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "edge_betweenness_centrality" : {
     "path": "networkx.algorithms.centrality.edge_betweenness_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "betweenness_centrality_subset" : {
     "path": "networkx.algorithms.centrality.betweenness_centrality_subset",
@@ -165,7 +179,8 @@
     "path": "networkx.algorithms.centrality.edge_betweenness_centrality_subset",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "edge"
   },
   "current_flow_betweenness_centrality" : {
     "path": "networkx.algorithms.centrality.current_flow_betweenness_centrality",
@@ -177,31 +192,36 @@
     "path": "networkx.algorithms.centrality.edge_current_flow_betweenness_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "edge"
   },
   "approximate_current_flow_betweenness_centrality" : {
     "path": "networkx.algorithms.centrality.approximate_current_flow_betweenness_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "current_flow_betweenness_centrality_subset" : {
     "path": "networkx.algorithms.centrality.current_flow_betweenness_centrality_subset",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "edge_current_flow_betweenness_centrality_subset" : {
     "path": "networkx.algorithms.centrality.edge_current_flow_betweenness_centrality_subset",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "edge"
   },
   "communicability_betweenness_centrality" : {
     "path": "networkx.algorithms.centrality.communicability_betweenness_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "group_betweenness_centrality" : {
     "path": "networkx.algorithms.centrality.group_betweenness_centrality",
@@ -237,25 +257,29 @@
     "path": "networkx.algorithms.centrality.load_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "edge_load_centrality" : {
     "path": "networkx.algorithms.centrality.edge_load_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "subgraph_centrality" : {
     "path": "networkx.algorithms.centrality.subgraph_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "subgraph_centrality_exp" : {
     "path": "networkx.algorithms.centrality.subgraph_centrality_exp",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "estrada_index" : {
     "path": "networkx.algorithms.centrality.estrada_index",
@@ -267,7 +291,8 @@
     "path": "networkx.algorithms.centrality.harmonic_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "dispersion" : {
     "path": "networkx.algorithms.centrality.dispersion",
@@ -291,13 +316,15 @@
     "path": "networkx.algorithms.centrality.percolation_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "second_order_centrality" : {
     "path": "networkx.algorithms.centrality.second_order_centrality",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "voterank" : {
     "path": "networkx.algorithms.centrality.voterank",
@@ -333,7 +360,8 @@
     "path": "networkx.algorithms.cluster.triangles",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "transitivity" : {
     "path": "networkx.algorithms.cluster.transitivity",
@@ -357,7 +385,8 @@
     "path": "networkx.algorithms.cluster.square_clustering",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "communicability" : {
     "path": "networkx.algorithms.communicability_alg.communicability",
@@ -405,7 +434,8 @@
     "path": "networkx.algorithms.connectivity.connectivity.all_pairs_node_connectivity",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "edge"
   },
   "edge_connectivity" : {
     "path": "networkx.algorithms.connectivity.connectivity.edge_connectivity",
@@ -435,13 +465,15 @@
     "path": "networkx.algorithms.core.core_number",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "onion_layers" : {
     "path": "networkx.algorithms.core.onion_layers",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "boundary_expansion" : {
     "path": "networkx.algorithms.cuts.boundary_expansion",
@@ -543,7 +575,8 @@
     "path": "networkx.algorithms.link_analysis.pagerank_alg.pagerank",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "hits" : {
     "path": "networkx.algorithms.link_analysis.hits_alg.hits",
@@ -561,7 +594,8 @@
     "path": "networkx.algorithms.reciprocity.reciprocity",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "overall_reciprocity" : {
     "path": "networkx.algorithms.reciprocity.overall_reciprocity",
@@ -604,13 +638,15 @@
     "path": "networkx.algorithms.structuralholes.constraint",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "effective_size" : {
     "path": "networkx.algorithms.structuralholes.effective_size",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "dict"
+    "Output": "dict",
+    "node_or_edge": "node"
   },
   "local_constraint" : {
     "path": "networkx.algorithms.structuralholes.local_constraint",

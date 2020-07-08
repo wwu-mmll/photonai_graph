@@ -135,7 +135,7 @@ class GraphConvNet_Classifier(BaseEstimator, ClassifierMixin):
         return y_labels
 
 
-class GraphConvNet_Regression(BaseEstimator, ClassifierMixin):
+class GraphConvNet_Regressor(BaseEstimator, ClassifierMixin):
 
     def __init__(self, multi_class: bool = True,
                  hidden_layer_sizes: list = None,
