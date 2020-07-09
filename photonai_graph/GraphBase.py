@@ -1,5 +1,5 @@
 import os
-from photonai_graph.photonai_graph.GraphUtilities import RegisterGraph_force
+from photonai_graph.GraphUtilities import RegisterGraph_force
 
 
 class GraphBase():

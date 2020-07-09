@@ -8,7 +8,7 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.layers import Dense, Dropout, Conv1D, MaxPool1D, Flatten
 from tensorflow.keras.losses import binary_crossentropy, mse
 from tensorflow.keras.callbacks import EarlyStopping
-from photonai_graph.photonai_graph.GraphUtilities import DenseToNetworkx
+from photonai_graph.GraphUtilities import DenseToNetworkx
 from sklearn.base import BaseEstimator, ClassifierMixin
 
 

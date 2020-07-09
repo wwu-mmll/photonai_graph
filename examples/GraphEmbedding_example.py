@@ -1,5 +1,5 @@
 from photonai.base import Hyperpipe, PipelineElement
-from photonai_graph.photonai_graph.GraphUtilities import get_random_connectivity_data, RegisterGraph_force
+from photonai_graph.GraphUtilities import get_random_connectivity_data, RegisterGraph_force
 from sklearn.model_selection import KFold
 import numpy as np
 

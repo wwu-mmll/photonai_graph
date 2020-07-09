@@ -23,7 +23,7 @@ Universitaetsklinikum Muenster
 #TODO: add advanced documentation for every method
 #TODO: debug the copy steps, add a fisher transform for the connectivity matrix values
 
-from photonai_graph.photonai_graph.GraphUtilities import individual_ztransform, individual_fishertransform
+from photonai_graph.GraphUtilities import individual_ztransform, individual_fishertransform
 from sklearn.base import BaseEstimator, TransformerMixin
 import numpy as np
 import sklearn

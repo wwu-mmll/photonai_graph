@@ -31,10 +31,10 @@ import pydot
 from scipy import stats
 import matplotlib.pyplot as plt
 from photonai.base import PhotonRegistry
-from photonai_graph.photonai_graph.GraphConversions import save_networkx_to_file, networkx_to_dense, networkx_to_sparse, networkx_to_stellargraph
-from photonai_graph.photonai_graph.GraphConversions import dense_to_networkx, dense_to_stellargraph, dense_to_sparse
-from photonai_graph.photonai_graph.GraphConversions import sparse_to_networkx, sparse_to_dense, sparse_to_stellargraph
-from photonai_graph.photonai_graph.GraphConversions import stellargraph_to_networkx, stellargraph_to_dense, stellargraph_to_sparse
+from photonai_graph.GraphConversions import save_networkx_to_file, networkx_to_dense, networkx_to_sparse, networkx_to_stellargraph
+from photonai_graph.GraphConversions import dense_to_networkx, dense_to_stellargraph, dense_to_sparse
+from photonai_graph.GraphConversions import sparse_to_networkx, sparse_to_dense, sparse_to_stellargraph
+from photonai_graph.GraphConversions import stellargraph_to_networkx, stellargraph_to_dense, stellargraph_to_sparse
 import os
 import json
 
