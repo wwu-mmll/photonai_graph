@@ -22,13 +22,11 @@ Universitaetsklinikum Muenster
 
 #TODO: make graph utility with 1. converter for GCNs, 2. converter for networkx, 3. ?
 from sklearn.base import BaseEstimator, TransformerMixin
-import torch
 from networkx.convert_matrix import from_numpy_matrix, to_numpy_matrix
 from networkx.drawing.nx_pylab import draw
 import networkx.drawing as drawx
 from networkx.algorithms import asteroidal
 import networkx as nx
-import pygraphviz
 import numpy as np
 import pydot
 from scipy.sparse import coo_matrix
@@ -231,18 +229,18 @@ def individual_fishertransform(X, adjacency_axis=0):
     return transformed_matrices
 
 
-def pygraphviz_to_nx(Graphs):
-    if isinstance(Graphs, list):
+def pydot_to_nx(graphs):
+    if isinstance(graphs, list):
         A_Graphs = []
-        for graph in Graphs:
-            a_graph = drawx.nx_agraph.from_agraph(graph)
+        for graph in graphs:
+            a_graph = drawx.nx_pydot.from_pydot(graph)
             A_Graphs.append(a_graph)
 
-    elif isinstance(Graphs, pygraphviz.agraph.AGraph):
-        A_Graphs = drawx.nx_agraph.from_agraph(Graphs)
+    elif isinstance(graphs, pydot.Dot):
+        A_Graphs = drawx.nx_pydot.from_pydot(graphs)
 
     else:
-        raise TypeError('The input needs to be list of pygraphviz files or a single pygraphviz file. Please check your inputs.')
+        raise TypeError('The input needs to be list of pydot files or a single pydot file. Please check your inputs.')
 
     return A_Graphs
 
