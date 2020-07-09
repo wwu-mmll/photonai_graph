@@ -1,58 +1,58 @@
 {
    "GraphMeasureTransform":[
-      "photonai.graph.base.GraphMeasureTransform.GraphMeasureTransform",
+      "photonai_graph.GraphMeasureTransform.GraphMeasureTransform",
       "Transformer"
    ],
    "GraphConstructorKNN":[
-      "photonai.graph.base.GraphConstruction.GraphConstructorKNN",
+      "photonai_graph.GraphConstruction.GraphConstructorKNN",
       "Transformer"
    ],
    "GraphConstructorSpatial":[
-      "photonai.graph.base.GraphConstruction.GraphConstructorSpatial",
+      "photonai_graph.GraphConstruction.GraphConstructorSpatial",
       "Transformer"
    ],
    "GraphConstructorThreshold":[
-      "photonai.graph.base.GraphConstruction.GraphConstructorThreshold",
+      "photonai_graph.GraphConstruction.GraphConstructorThreshold",
       "Transformer"
    ],
    "GraphConstructorPercentage":[
-      "photonai.graph.base.GraphConstruction.GraphConstructorPercentage",
+      "photonai_graph.GraphConstruction.GraphConstructorPercentage",
       "Transformer"
    ],
    "GraphEmbeddingGraphFactorization":[
-      "photonai.graph.base.GraphEmbedding.GraphEmbeddingGraphFactorization",
+      "photonai_graph.GraphEmbedding.GraphEmbeddingGraphFactorization",
       "Transformer"
    ],
    "GraphEmbeddingHOPE":[
-      "photonai.graph.base.GraphEmbedding.GraphEmbeddingHOPE",
+      "photonai_graph.GraphEmbedding.GraphEmbeddingHOPE",
       "Transformer"
    ],
    "GraphEmbeddingLaplacianEigenmaps":[
-      "photonai.graph.base.GraphEmbedding.GraphEmbeddingLaplacianEigenmaps",
+      "photonai_graph.GraphEmbedding.GraphEmbeddingLaplacianEigenmaps",
       "Transformer"
    ],
    "GraphEmbeddingLocallyLinearEmbedding":[
-      "photonai.graph.base.GraphEmbedding.GraphEmbeddingLocallyLinearEmbedding",
+      "photonai_graph.GraphEmbedding.GraphEmbeddingLocallyLinearEmbedding",
       "Transformer"
    ],
    "GraphEmbeddingSDNE":[
-      "photonai.graph.base.GraphEmbedding.GraphEmbeddingSDNE",
+      "photonai_graph.GraphEmbedding.GraphEmbeddingSDNE",
       "Transformer"
    ],
    "GraphConvNet_Classifier":[
-      "photonai.graph.base.GraphConvNet.GraphConvNet_Classifier",
+      "photonai_graph.GraphConvNet.GraphConvNet_Classifier",
       "Estimator"
    ],
    "GraphConvNet_Regressor":[
-      "photonai.graph.base.GraphConvNet.GraphConvNet_Regressor",
+      "photonai_graph.GraphConvNet.GraphConvNet_Regressor",
       "Estimator"
    ],
    "DeepGraphCNN_Classifier": [
-      "photonai.graph.base.GraphConvNet.DeepGraphCNN_Classifier",
+      "photonai_graph.GraphConvNet.DeepGraphCNN_Classifier",
       "Estimator"
    ],
    "DeepGraphCNN_Regressor": [
-      "photonai.graph.base.GraphConvNet.DeepGraphCNN_Regressor",
+      "photonai_graph.GraphConvNet.DeepGraphCNN_Regressor",
       "Estimator"
    ]
 }
