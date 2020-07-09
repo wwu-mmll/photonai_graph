@@ -1,10 +1,7 @@
 from photonai.base import Hyperpipe, PipelineElement
-from photonai_graph.GraphUtilities import get_random_connectivity_data, RegisterGraph_force
+from photonai_graph.GraphUtilities import get_random_connectivity_data
 from sklearn.model_selection import KFold
 import numpy as np
-
-# register photon photonai_graph with the photonai_graph force function
-RegisterGraph_force()
 
 # make random matrices to simulate connectivity matrices
 X = get_random_connectivity_data(number_of_nodes=400)

@@ -270,32 +270,6 @@ def check_asteroidal(graph, return_boolean=True):
     return graph_answer
 
 
-def RegisterGraph_force():
-
-    registry = PhotonRegistry()
-
-    base_folder = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-
-    BaseJSON = os.path.join(base_folder, 'photonai/photonai_graph/registry/PhotonCore.json')
-    GraphJSON = os.path.join(base_folder, 'photonai/photonai_graph/photonai_graph/photonai_graph.json')
-
-    # if a photonai_graph element is not registered
-    if not registry.check_availability("GraphConstructorPercentage"):
-        print('Graph available in a sec')
-        with open(BaseJSON, 'r') as base_json_file, open(GraphJSON, 'r') as graph_json_file:
-            base_j = json.load(base_json_file)
-            graph_j = json.load(graph_json_file)
-        base_j.update(graph_j)
-
-        with open(BaseJSON, 'w') as tf:
-            json.dump(base_j, tf)
-
-    # if a photonai_graph element is already registered
-    else:
-        print('Graph already available')
-
-    return print('done')
-
 '''
 class DenseToNetworkxTransformer(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
