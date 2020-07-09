@@ -1,0 +1,3 @@
+networkx
+pydot
+torch_geometric
