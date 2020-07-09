@@ -1,18 +1,14 @@
 import pandas as pd
-import numpy as np
-import stellargraph as sg
 from stellargraph.mapper import PaddedGraphGenerator
 from stellargraph.layer import GCNSupervisedGraphClassification, DeepGraphCNN
 from stellargraph import StellarGraph
 from sklearn import model_selection
-from IPython.display import display, HTML
 from tensorflow.keras import Model
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.layers import Dense, Dropout, Conv1D, MaxPool1D, Flatten
-from tensorflow.keras.losses import binary_crossentropy, kullback_leibler_divergence, mae, mse
+from tensorflow.keras.losses import binary_crossentropy, mse
 from tensorflow.keras.callbacks import EarlyStopping
-import tensorflow as tf
-from photonai.graph.base.GraphUtilities import DenseToNetworkx
+from photonai_graph.photonai_graph.GraphUtilities import DenseToNetworkx
 from sklearn.base import BaseEstimator, ClassifierMixin
 
 

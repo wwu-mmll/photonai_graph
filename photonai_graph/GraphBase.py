@@ -1,9 +1,10 @@
 import os
-from photonai.graph.base.GraphUtilities import RegisterGraph_force
+from photonai_graph.photonai_graph.GraphUtilities import RegisterGraph_force
+
 
 class GraphBase():
     _estimator_type = "transformer"
-    # mother calss for Graph modules
+    # mother class for Graph modules
     def __init__(self, logs=''):
         self.registered = RegisterGraph_force()
         if logs:

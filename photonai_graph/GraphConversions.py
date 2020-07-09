@@ -89,7 +89,7 @@ def save_networkx_to_file(Graphs, path, output_format="dot", IDs=None):
             else:
                 # give back error cause unequal length
                 raise Exception(
-                    'The graph ID list and the list of Graphs are not of equal length. '
+                    'The photonai_graph ID list and the list of Graphs are not of equal length. '
                     'Please ensure that they have equal length.')
         # Case 1.2: no ID is specified
         else:
@@ -179,7 +179,7 @@ def save_networkx_to_file(Graphs, path, output_format="dot", IDs=None):
                     graph_path = os.path.join(path, graph_filename)
                     nx.write_pajek(graph, graph_path)
                     counter += 1
-    # Case 2: the input is just a single graph
+    # Case 2: the input is just a single photonai_graph
     if isinstance(Graphs, nx.classes.graph.Graph):
         if output_format == "dot":
             write_dot(Graphs, path)
@@ -310,7 +310,7 @@ def networkx_to_dense(graphs):
     elif isinstance(graphs, nx.classes.graph.Graph):
         graph_list = nx.to_numpy_array(graphs)
     else:
-        raise Exception('Input needs to be either a list of networkx graphs or a networkx graph.')
+        raise Exception('Input needs to be either a list of networkx graphs or a networkx photonai_graph.')
 
     return graph_list
 
@@ -325,7 +325,7 @@ def networkx_to_sparse(graphs, format='csr'):
     if isinstance(graphs, nx.classes.graph.Graph):
         graph_list = nx.to_scipy_sparse_matrix(graphs, format=format)
     else:
-        raise Exception('Input needs to be a list of networkx graphs or a networkx graph.')
+        raise Exception('Input needs to be a list of networkx graphs or a networkx photonai_graph.')
 
     return graph_list
 
@@ -340,7 +340,7 @@ def networkx_to_stellargraph(graphs, node_features=None):
     elif isinstance(graphs, nx.classes.graph.Graph):
         graph_list = stellargraph.StellarGraph.from_networkx(graphs, node_features=node_features)
     else:
-        raise Exception('Input needs to be a list of networkx graphs or a networkx graph.')
+        raise Exception('Input needs to be a list of networkx graphs or a networkx photonai_graph.')
 
     return graph_list
 

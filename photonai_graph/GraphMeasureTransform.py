@@ -4,7 +4,7 @@ Project: PHOTON Graph
 ===========================================================
 Description
 -----------
-A wrapper containing functions for extracting graph measures that can then be
+A wrapper containing functions for extracting photonai_graph measures that can then be
 used for further machine learning analyses
 
 Version
@@ -25,24 +25,8 @@ Universitaetsklinikum Muenster
 #TODO: make documentation for every single method
 
 import networkx
-from networkx.algorithms import approximation
-from networkx.algorithms.assortativity import degree_assortativity_coefficient, average_degree_connectivity, attribute_assortativity_coefficient
-from networkx.algorithms.assortativity import numeric_assortativity_coefficient, degree_pearson_correlation_coefficient, average_neighbor_degree
-from networkx.algorithms.assortativity import k_nearest_neighbors
-from networkx.algorithms.centrality import degree_centrality, eigenvector_centrality, katz_centrality, closeness_centrality, current_flow_closeness_centrality
-from networkx.algorithms.centrality import information_centrality, in_degree_centrality, out_degree_centrality, incremental_closeness_centrality
-from networkx.algorithms.centrality import betweenness_centrality, edge_betweenness_centrality, load_centrality
-from networkx.algorithms.centrality import edge_load_centrality, betweenness_centrality_subset, edge_betweenness_centrality_subset, current_flow_betweenness_centrality
-from networkx.algorithms.centrality import edge_current_flow_betweenness_centrality, approximate_current_flow_betweenness_centrality, current_flow_betweenness_centrality_subset
-from networkx.algorithms.centrality import edge_current_flow_betweenness_centrality_subset, communicability_betweenness_centrality, group_betweenness_centrality
-from networkx.algorithms.centrality import group_closeness_centrality, group_degree_centrality, \
-    group_out_degree_centrality
-from networkx.algorithms.centrality import subgraph_centrality, subgraph_centrality_exp, estrada_index, harmonic_centrality, dispersion, local_reaching_centrality
-from networkx.algorithms.centrality import global_reaching_centrality, percolation_centrality, second_order_centrality, voterank
-from networkx.algorithms import clique, cluster, communicability_alg, components, connectivity, core, cuts, distance_measures, dominance, efficiency_measures, hierarchy
-from networkx.algorithms import isolate, link_analysis, non_randomness, reciprocity, richclub, shortest_paths, smallworld, smetric, structuralholes, triads, vitality, wiener
 from sklearn.base import BaseEstimator, TransformerMixin
-from photonai.graph.base.GraphUtilities import DenseToNetworkx
+from photonai_graph.photonai_graph.GraphUtilities import DenseToNetworkx
 import pandas as pd
 import numpy as np
 import json
@@ -75,7 +59,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
 
         # load json file
         base_folder = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-        measureJSON = os.path.join(base_folder, 'photonai/graph/base/GraphMeasures.json')
+        measureJSON = os.path.join(base_folder, 'photonai/photonai_graph/photonai_graph/GraphMeasures.json')
         with open(measureJSON, 'r') as measure_json_file:
             measure_j = json.load(measure_json_file)
 
@@ -91,7 +75,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                     # remove self loops if not allowed
                     if measure['self_loops_allowed'] == False:
                         i.remove_edges_from(networkx.selfloop_edges(i))
-                    # make graph directed or undirected depending on what is needed
+                    # make photonai_graph directed or undirected depending on what is needed
                     if measure['Undirected'] == True:
                         i.to_undirected()
                     elif measure['Undirected'] == False:
@@ -147,7 +131,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
 
         # load json file
         base_folder = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-        measureJSON = os.path.join(base_folder, 'photonai/graph/base/GraphMeasures.json')
+        measureJSON = os.path.join(base_folder, 'photonai/photonai_graph/photonai_graph/GraphMeasures.json')
         with open(measureJSON, 'r') as measure_json_file:
             measure_j = json.load(measure_json_file)
 
@@ -164,7 +148,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                         # remove self loops if not allowed
                         if measure['self_loops_allowed'] == False:
                             graph.remove_edges_from(networkx.selfloop_edges(graph))
-                        # make graph directed or undirected depending on what is needed
+                        # make photonai_graph directed or undirected depending on what is needed
                         if measure['Undirected'] == True:
                             graph.to_undirected()
                         elif measure['Undirected'] == False:

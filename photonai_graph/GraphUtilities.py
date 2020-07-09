@@ -4,7 +4,7 @@ Project: PHOTON Graph
 ===========================================================
 Description
 -----------
-A collection of functions for converting graph structure formats, Visualize the different graphs,
+A collection of functions for converting photonai_graph structure formats, Visualize the different graphs,
 and even create some random data to run some tests
 
 Version
@@ -20,23 +20,21 @@ Translationale Psychiatrie
 Universitaetsklinikum Muenster
 """
 
-#TODO: make graph utility with 1. converter for GCNs, 2. converter for networkx, 3. ?
-from sklearn.base import BaseEstimator, TransformerMixin
-from networkx.convert_matrix import from_numpy_matrix, to_numpy_matrix
+#TODO: make photonai_graph utility with 1. converter for GCNs, 2. converter for networkx, 3. ?
+from networkx.convert_matrix import from_numpy_matrix
 from networkx.drawing.nx_pylab import draw
 import networkx.drawing as drawx
 from networkx.algorithms import asteroidal
 import networkx as nx
 import numpy as np
 import pydot
-from scipy.sparse import coo_matrix
 from scipy import stats
 import matplotlib.pyplot as plt
 from photonai.base import PhotonRegistry
-from photonai.graph.base.GraphConversions import save_networkx_to_file, networkx_to_dense, networkx_to_sparse, networkx_to_stellargraph
-from photonai.graph.base.GraphConversions import dense_to_networkx, dense_to_stellargraph, dense_to_sparse
-from photonai.graph.base.GraphConversions import sparse_to_networkx, sparse_to_dense, sparse_to_stellargraph
-from photonai.graph.base.GraphConversions import stellargraph_to_networkx, stellargraph_to_dense, stellargraph_to_sparse
+from photonai_graph.photonai_graph.GraphConversions import save_networkx_to_file, networkx_to_dense, networkx_to_sparse, networkx_to_stellargraph
+from photonai_graph.photonai_graph.GraphConversions import dense_to_networkx, dense_to_stellargraph, dense_to_sparse
+from photonai_graph.photonai_graph.GraphConversions import sparse_to_networkx, sparse_to_dense, sparse_to_stellargraph
+from photonai_graph.photonai_graph.GraphConversions import stellargraph_to_networkx, stellargraph_to_dense, stellargraph_to_sparse
 import os
 import json
 
@@ -150,7 +148,7 @@ def convert_graphs(graphs, input_format="networkx", output_format="stellargraph"
 
 
 def get_random_connectivity_data(type = "dense", number_of_nodes = 114, number_of_individuals = 10, number_of_modalities = 2):
-    # make random connectivity graph data
+    # make random connectivity photonai_graph data
     if type == "dense":
         random_matrices = np.random.rand(number_of_individuals, number_of_nodes, number_of_nodes, number_of_modalities)
 
@@ -246,7 +244,7 @@ def pydot_to_nx(graphs):
 
 def check_asteroidal(graph, return_boolean=True):
 
-    # checks for asteroidal triples in the graph or in a list of networkx graphs
+    # checks for asteroidal triples in the photonai_graph or in a list of networkx graphs
     if return_boolean:
         if isinstance(graph, list):
             graph_answer = []
@@ -256,7 +254,7 @@ def check_asteroidal(graph, return_boolean=True):
         if isinstance(graph, nx.classes.graph.Graph):
             graph_answer = asteroidal.is_at_free(graph)
         else:
-            print('Your input is not a networkx graph or a list of networkx graphs. Please check your inputs.')
+            print('Your input is not a networkx photonai_graph or a list of networkx graphs. Please check your inputs.')
 
     if not return_boolean:
         if isinstance(graph, list):
@@ -267,7 +265,7 @@ def check_asteroidal(graph, return_boolean=True):
         if isinstance(graph, nx.classes.graph.Graph):
             graph_answer = asteroidal.find_asteroidal_triple(graph)
         else:
-            print('Your input is not a networkx graph or a list of networkx graphs. Please check your inputs.')
+            print('Your input is not a networkx photonai_graph or a list of networkx graphs. Please check your inputs.')
 
     return graph_answer
 
@@ -278,10 +276,10 @@ def RegisterGraph_force():
 
     base_folder = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-    BaseJSON = os.path.join(base_folder, 'photonai/base/registry/PhotonCore.json')
-    GraphJSON = os.path.join(base_folder, 'photonai/graph/base/PhotonGraph.json')
+    BaseJSON = os.path.join(base_folder, 'photonai/photonai_graph/registry/PhotonCore.json')
+    GraphJSON = os.path.join(base_folder, 'photonai/photonai_graph/photonai_graph/photonai_graph.json')
 
-    # if a graph element is not registered
+    # if a photonai_graph element is not registered
     if not registry.check_availability("GraphConstructorPercentage"):
         print('Graph available in a sec')
         with open(BaseJSON, 'r') as base_json_file, open(GraphJSON, 'r') as graph_json_file:
@@ -292,7 +290,7 @@ def RegisterGraph_force():
         with open(BaseJSON, 'w') as tf:
             json.dump(base_j, tf)
 
-    # if a graph element is already registered
+    # if a photonai_graph element is already registered
     else:
         print('Graph already available')
 
@@ -302,7 +300,7 @@ def RegisterGraph_force():
 class DenseToNetworkxTransformer(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
-    # turns a dense adjacency matrix coming from a graph constructor into a networkx graph
+    # turns a dense adjacency matrix coming from a photonai_graph constructor into a networkx photonai_graph
 
     def __init__(self, adjacency_axis = 0,
                  logs=''):
@@ -331,7 +329,7 @@ class DenseToNetworkxTransformer(BaseEstimator, TransformerMixin):
 class DenseToTorchGeometricTransformer(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
-    # turns a dense adjacency and feature matrix coming from a graph constructor into a pytorch geometric data object
+    # turns a dense adjacency and feature matrix coming from a photonai_graph constructor into a pytorch geometric data object
 
     def __init__(self, adjacency_axis = 0,
                  concatenation_axis = 3, data_as_list = 1,
@@ -354,7 +352,7 @@ class DenseToTorchGeometricTransformer(BaseEstimator, TransformerMixin):
             # transform y to long format
             y = y.long()
 
-            # disentangle adjacency matrix and graph
+            # disentangle adjacency matrix and photonai_graph
             adjacency = X[:, :, :, 1]
             feature_matrix = X[:, :, :, 0]
 
@@ -413,7 +411,7 @@ def GraphConverter(X, y, conversion_type = 'DenseToNetworkx', adjacency_axis = 0
             # transform y to long format
             y = y.long()
 
-            # disentangle adjacency matrix and graph
+            # disentangle adjacency matrix and photonai_graph
             adjacency = X[:, :, :, 1]
             feature_matrix = X[:, :, :, 0]
 

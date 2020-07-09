@@ -4,7 +4,7 @@ Project: PHOTON Graph
 ===========================================================
 Description
 -----------
-A wrapper containing functions for turning connectivity matrices into graph structures
+A wrapper containing functions for turning connectivity matrices into photonai_graph structures
 
 Version
 -------
@@ -23,15 +23,12 @@ Universitaetsklinikum Muenster
 #TODO: add advanced documentation for every method
 #TODO: debug the copy steps, add a fisher transform for the connectivity matrix values
 
-from photonai.graph.base.GraphBase import GraphBase
-from photonai.graph.base.GraphUtilities import individual_ztransform, individual_fishertransform
+from photonai_graph.photonai_graph.GraphUtilities import individual_ztransform, individual_fishertransform
 from sklearn.base import BaseEstimator, TransformerMixin
 import numpy as np
 import sklearn
 import scipy
-import pylab
 import os
-import random
 from itertools import islice, combinations
 
 
@@ -57,14 +54,14 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
         """Compute exact pairwise distances."""
         d = sklearn.metrics.pairwise.pairwise_distances(
             z, metric=metric, n_jobs=-2)
-        # k-NN graph.
+        # k-NN photonai_graph.
         idx = np.argsort(d)[:, 1:k + 1]
         d.sort()
         d = d[:, 1:k + 1]
         return d, idx
 
     def adjacency(self, dist, idx):
-        """Return the adjacency matrix of a kNN graph."""
+        """Return the adjacency matrix of a kNN photonai_graph."""
         M, k = dist.shape
         assert M, k == idx.shape
         assert dist.min() >= 0
@@ -82,7 +79,7 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
         # No self-connections.
         W.setdiag(0)
 
-        # Non-directed graph.
+        # Non-directed photonai_graph.
         bigger = W.T > W
         W = W - W.multiply(bigger) + W.T.multiply(bigger)
 
@@ -93,9 +90,9 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
         return W
 
     def transform(self, X):
-        # transform each graph through its own adjacency or all graphs
+        # transform each photonai_graph through its own adjacency or all graphs
         if self.transform_style == "mean" or self.transform_style == "Mean":
-            # use the mean 2d image of all samples for creating the different graph structures
+            # use the mean 2d image of all samples for creating the different photonai_graph structures
             X_mean = np.squeeze(np.mean(X, axis=0))
 
             # select the proper matrix in case you have multiple
@@ -178,7 +175,7 @@ class GraphConstructorSpatial(BaseEstimator, TransformerMixin):
         """Compute exact pairwise distances."""
         d = scipy.spatial.distance.pdist(z, metric)
         d = scipy.spatial.distance.squareform(d)
-        # k-NN graph.
+        # k-NN photonai_graph.
         idx = np.argsort(d)[:, 1:k + 1]
         d.sort()
         d = d[:, 1:k + 1]
@@ -187,7 +184,7 @@ class GraphConstructorSpatial(BaseEstimator, TransformerMixin):
 
 
     def adjacency(self, dist, idx):
-        """Return the adjacency matrix of a kNN graph."""
+        """Return the adjacency matrix of a kNN photonai_graph."""
         M, k = dist.shape
         assert M, k == idx.shape
         assert dist.min() >= 0
@@ -205,7 +202,7 @@ class GraphConstructorSpatial(BaseEstimator, TransformerMixin):
         # No self-connections.
         W.setdiag(0)
 
-        # Non-directed graph.
+        # Non-directed photonai_graph.
         bigger = W.T > W
         W = W - W.multiply(bigger) + W.T.multiply(bigger)
 
@@ -233,7 +230,7 @@ class GraphConstructorSpatial(BaseEstimator, TransformerMixin):
 
 
     def transform(self, X):
-        # use the mean 2d image of all samples for creating the different graph structures
+        # use the mean 2d image of all samples for creating the different photonai_graph structures
         X_mean = np.squeeze(np.mean(X, axis=0))
 
         #get atlas coords
@@ -422,7 +419,7 @@ class GraphConstructorPercentage(BaseEstimator, TransformerMixin):
 
 
 
-#uses random walks to generate the connectivity matrix for graph structures
+#uses random walks to generate the connectivity matrix for photonai_graph structures
 class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
@@ -448,14 +445,14 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
         """Compute exact pairwise distances."""
         d = sklearn.metrics.pairwise.pairwise_distances(
             z, metric=metric, n_jobs=-2)
-        # k-NN graph.
+        # k-NN photonai_graph.
         idx = np.argsort(d)[:, 1:k + 1]
         d.sort()
         d = d[:, 1:k + 1]
         return d, idx
 
     def adjacency(self, dist, idx):
-        """Return the adjacency matrix of a kNN graph."""
+        """Return the adjacency matrix of a kNN photonai_graph."""
         M, k = dist.shape
         assert M, k == idx.shape
         assert dist.min() >= 0
@@ -473,7 +470,7 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
         # No self-connections.
         W.setdiag(0)
 
-        # Non-directed graph.
+        # Non-directed photonai_graph.
         bigger = W.T > W
         W = W - W.multiply(bigger) + W.T.multiply(bigger)
 
@@ -484,11 +481,11 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
         return W
 
     def random_walk(self, adjacency, walk_length, num_walks):
-        """Performs a random walk on a given graph"""
+        """Performs a random walk on a given photonai_graph"""
         # a -> adj
         # i -> starting row
         walks = []  # holds transitions
-        elements = np.arange(adjacency.shape[0])  # for our graph [0,1,2,3]
+        elements = np.arange(adjacency.shape[0])  # for our photonai_graph [0,1,2,3]
         for k in range(num_walks):
             node_walks = []
             for i in range(elements.shape[0]):
@@ -572,7 +569,7 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
     def transform(self, X):
         # transform each individual or make a mean matrix
         if self.transform_style == "mean":
-            # use the mean 2d image of all samples for creating the different graph structures
+            # use the mean 2d image of all samples for creating the different photonai_graph structures
             X_mean = np.squeeze(np.mean(X, axis=0))
 
             # select the proper matrix in case you have multiple
@@ -597,7 +594,7 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
 
             higherorder_adjacency = self.sliding_window_frequency(X_mean=adjacency, walk_list=walks)
 
-            # obtain the kNN graph from the new adjacency matrix
+            # obtain the kNN photonai_graph from the new adjacency matrix
             d, idx = self.distance_sklearn_metrics(higherorder_adjacency, k=10, metric='euclidean')
             higherorder_adjacency = self.adjacency(d, idx).astype(np.float32)
 
@@ -640,7 +637,7 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
 
                 higherorder_adjacency = self.sliding_window_frequency(X_mean=adjacency, walk_list=walks)
 
-                # obtain the kNN graph from the new adjacency matrix
+                # obtain the kNN photonai_graph from the new adjacency matrix
                 d, idx = self.distance_sklearn_metrics(higherorder_adjacency, k=10, metric='euclidean')
                 higherorder_adjacency = self.adjacency(d, idx).astype(np.float32)
 

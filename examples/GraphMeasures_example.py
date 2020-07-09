@@ -1,9 +1,9 @@
-from photonai.base import Hyperpipe, PipelineElement, Preprocessing, OutputSettings
-from photonai.graph.base.GraphUtilities import get_random_connectivity_data, RegisterGraph_force
+from photonai.base import Hyperpipe, PipelineElement
+from photonai_graph.photonai_graph.GraphUtilities import get_random_connectivity_data, RegisterGraph_force
 from sklearn.model_selection import KFold
 import numpy as np
 
-# register photon graph with the graph force function
+# register photon photonai_graph with the photonai_graph force function
 RegisterGraph_force()
 
 # make random matrices to simulate connectivity matrices

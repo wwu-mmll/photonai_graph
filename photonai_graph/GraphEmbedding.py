@@ -4,7 +4,7 @@ Project: PHOTON Graph
 ===========================================================
 Description
 -----------
-A wrapper handling the different embedding strategies to perform graph embedding
+A wrapper handling the different embedding strategies to perform photonai_graph embedding
 
 Version
 -------
@@ -59,10 +59,10 @@ class GraphEmbeddingGraphFactorization(BaseEstimator, TransformerMixin):
     def transform(self, X):
 
         for i in range(X.shape[0]):
-            #take matrix and transform it into graph
+            #take matrix and transform it into photonai_graph
             G = networkx.convert_matrix.from_numpy_matrix(X[i, :, :, self.adjacency_axis])
 
-            #transform this graph with a graph embedding
+            #transform this photonai_graph with a photonai_graph embedding
             embedding = GraphFactorization(d=self.embedding_dimension, max_iter=self.maximum_iterations,
                                        eta=self.learning_rate, regu=self.regularization_coefficient)
             embedding.learn_embedding(graph=G, edge_f=None, is_weighted=True, no_python=True)
@@ -100,10 +100,10 @@ class GraphEmbeddingHOPE(BaseEstimator, TransformerMixin):
     def transform(self, X):
 
         for i in range(X.shape[0]):
-            #take matrix and transform it into graph
+            #take matrix and transform it into photonai_graph
             G = networkx.convert_matrix.from_numpy_matrix(X[i, :, :, self.adjacency_axis])
 
-            #transform this graph with a graph embedding
+            #transform this photonai_graph with a photonai_graph embedding
             if self.embedding_dimension == 1:
                 embedding = HOPE(d=2, beta=self.decay_factor)
                 embedding.learn_embedding(graph=G, edge_f=None, is_weighted=True, no_python=True)
@@ -148,10 +148,10 @@ class GraphEmbeddingLaplacianEigenmaps(BaseEstimator, TransformerMixin):
     def transform(self, X):
 
         for i in range(X.shape[0]):
-            #take matrix and transform it into graph
+            #take matrix and transform it into photonai_graph
             G = networkx.convert_matrix.from_numpy_matrix(X[i, :, :, self.adjacency_axis])
 
-            #transform this graph with a graph embedding
+            #transform this photonai_graph with a photonai_graph embedding
             embedding = LaplacianEigenmaps(d=self.embedding_dimension)
             embedding.learn_embedding(graph=G, edge_f=None, is_weighted=True, no_python=True)
             embedding_representation = embedding.get_embedding()
@@ -171,7 +171,7 @@ class GraphEmbeddingLaplacianEigenmaps(BaseEstimator, TransformerMixin):
 class GraphEmbeddingLocallyLinearEmbedding(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
-    # A Locally Linear Embedding returns a graph embedding that is equal to the number of nodes
+    # A Locally Linear Embedding returns a photonai_graph embedding that is equal to the number of nodes
 
     def __init__(self, embedding_dimension = 1,
                  decay_factor = 0.01,
@@ -190,10 +190,10 @@ class GraphEmbeddingLocallyLinearEmbedding(BaseEstimator, TransformerMixin):
     def transform(self, X):
 
         for i in range(X.shape[0]):
-            #take matrix and transform it into graph
+            #take matrix and transform it into photonai_graph
             G = networkx.convert_matrix.from_numpy_matrix(X[i, :, :, self.adjacency_axis])
 
-            #transform this graph with a graph embedding
+            #transform this photonai_graph with a photonai_graph embedding
             embedding = LocallyLinearEmbedding(d=self.embedding_dimension)
             embedding.learn_embedding(graph=G, edge_f=None, is_weighted=True, no_python=True)
             embedding_representation = embedding.get_embedding()
@@ -248,7 +248,7 @@ class GraphEmbeddingSDNE(BaseEstimator, TransformerMixin):
     def transform(self, X):
 
         for i in range(X.shape[0]):
-            #take matrix and transform it into graph
+            #take matrix and transform it into photonai_graph
             G = networkx.convert_matrix.from_numpy_matrix(X[i, :, :, self.adjacency_axis])
 
             embedding = SDNE(d= self.embedding_dimension, beta=self.seen_edge_reconstruction_weight,
