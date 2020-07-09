@@ -9,6 +9,6 @@ if not os.path.isfile(registered_file):
     logger.info("Registering Graph Module")
     from photonai.base import PhotonRegistry
     reg = PhotonRegistry()
-    reg.add_module(os.path.join(current_path, "photonai_neuro.json"))
+    reg.add_module(os.path.join(current_path, "photonai_graph.json"))
     with open(os.path.join(registered_file), "w") as f:
         f.write(str(datetime.now()))
