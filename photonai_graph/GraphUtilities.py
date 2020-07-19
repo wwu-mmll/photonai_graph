@@ -90,6 +90,36 @@ def DenseToNetworkx(X, adjacency_axis=0, feature_axis=1, feature_construction="c
     return X_converted
 
 
+def draw_connectivity_matrix(matrix, colorbar=False, adjacency_axis=None):
+    # check input format
+    if isinstance(matrix, np.ndarray) or isinstance(matrix, np.matrix):
+        if adjacency_axis is not None:
+            if np.ndim(matrix) == 4:
+                for i in range(matrix.shape[0]):
+                    plt.imshow(matrix[i, :, :, adjacency_axis])
+            elif np.ndim(matrix) == 3:
+                plt.imshow(matrix[:, :, adjacency_axis])
+            else:
+                raise Exception('Matrix dimension might not be specified correctlty.')
+        else:
+            if np.ndim(matrix) == 4:
+                raise Exception('You have 4 dimension, please specify axis to plot')
+            elif np.ndim(matrix) == 3:
+                for i in range(matrix.shape[0]):
+                    plt.imshow(matrix[i, :, :])
+            elif np.ndim(matrix) == 2:
+                plt.imshow(matrix)
+            else:
+                raise Exception('Matrix dimension might not be specified correctlty.')
+    elif isinstance(matrix, list):
+        for single_matrix in matrix:
+            if adjacency_axis is not None:
+                plt.imshow(matrix[:, :, adjacency_axis])
+    # TODO: implement a method for scipy sparse matrices if possible
+    else:
+        raise TypeError('draw_connectivity_matrix only takes numpy arrays, matrices or lists as input.')
+
+
 def convert_graphs(graphs, input_format="networkx", output_format="stellargraph"):
     # check input format
     if input_format == "networkx":
@@ -170,12 +200,14 @@ def get_random_labels(type="classification", number_of_labels=10):
 
     return y
 
+
 def save_graphs(Graphs, path="", input_format="networkx", output_format="dot"):
     # check input format
     if input_format == "networkx":
         save_networkx_to_file(Graphs, path, output_format=output_format)
     else:
         raise Exception("Your desired output format is not supported yet.")
+
 
 def VisualizeNetworkx(Graphs):
     # check format in which graphs are presented or ordered
@@ -242,6 +274,7 @@ def pydot_to_nx(graphs):
 
     return A_Graphs
 
+
 def check_asteroidal(graph, return_boolean=True):
 
     # checks for asteroidal triples in the photonai_graph or in a list of networkx graphs
@@ -269,6 +302,32 @@ def check_asteroidal(graph, return_boolean=True):
 
     return graph_answer
 
+
+def RegisterGraph_force():
+
+    registry = PhotonRegistry()
+
+    base_folder = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
+    BaseJSON = os.path.join(base_folder, 'photonai/photonai_graph/registry/PhotonCore.json')
+    GraphJSON = os.path.join(base_folder, 'photonai/photonai_graph/photonai_graph/photonai_graph.json')
+
+    # if a photonai_graph element is not registered
+    if not registry.check_availability("GraphConstructorPercentage"):
+        print('Graph available in a sec')
+        with open(BaseJSON, 'r') as base_json_file, open(GraphJSON, 'r') as graph_json_file:
+            base_j = json.load(base_json_file)
+            graph_j = json.load(graph_json_file)
+        base_j.update(graph_j)
+
+        with open(BaseJSON, 'w') as tf:
+            json.dump(base_j, tf)
+
+    # if a photonai_graph element is already registered
+    else:
+        print('Graph already available')
+
+    return print('done')
 
 '''
 class DenseToNetworkxTransformer(BaseEstimator, TransformerMixin):
