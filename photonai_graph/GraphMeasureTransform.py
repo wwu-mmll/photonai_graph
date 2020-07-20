@@ -135,7 +135,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         with open(measureJSON, 'r') as measure_json_file:
             measure_j = json.load(measure_json_file)
 
-        if not IDs == None:
+        if not type(IDs) == None:
 
             for graph, i in zip(graphs, IDs):
 
