@@ -58,8 +58,8 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         graphs = DenseToNetworkx(X, adjacency_axis=0)
 
         # load json file
-        base_folder = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-        measureJSON = os.path.join(base_folder, 'photonai/photonai_graph/photonai_graph/GraphMeasures.json')
+        base_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        measureJSON = os.path.join(base_folder, 'photonai_graph/GraphMeasures.json')
         with open(measureJSON, 'r') as measure_json_file:
             measure_j = json.load(measure_json_file)
 
@@ -130,8 +130,8 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         graphs = DenseToNetworkx(X, adjacency_axis=0)
 
         # load json file
-        base_folder = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-        measureJSON = os.path.join(base_folder, 'photonai/photonai_graph/photonai_graph/GraphMeasures.json')
+        base_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        measureJSON = os.path.join(base_folder, 'photonai_graph/GraphMeasures.json')
         with open(measureJSON, 'r') as measure_json_file:
             measure_j = json.load(measure_json_file)
 
