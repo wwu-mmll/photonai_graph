@@ -70,22 +70,30 @@ class GraphConvNet_Classifier(BaseEstimator, ClassifierMixin):
 
         test_accs = []
 
-        stratified_folds = model_selection.RepeatedStratifiedKFold(n_splits=self.folds, n_repeats=self.n_repeats).split(graph_labels, graph_labels)
+        self.model = self.create_graph_classification_model(generator)
 
-        for i, (train_index, test_index) in enumerate(stratified_folds):
-            print(f"Training and evaluating on fold {i + 1} out of {self.folds * self.n_repeats}...")
-            train_gen, test_gen = self.get_generators(train_index, test_index, graph_labels, batch_size=self.nn_batch_size, generator=generator)
+        X_train, X_test, y_train, y_test = model_selection.train_test_split(graphs, graph_labels)
+        train_gen, val_gen = self.get_generators(X_train, X_test, y_train, y_test, self.nn_batch_size, generator)
 
-            self.model = self.create_graph_classification_model(generator)
+        history, acc = self.train_fold(self.model, train_gen, val_gen, es, self.epochs)
 
-            history, acc = self.train_fold(self.model, train_gen, test_gen, es, self.epochs)
-
-            test_accs.append(acc)
+        test_accs.append(acc)
 
         return self
 
     def predict(self, X):
-        return self.model.predict(X)
+        # convert graphs to networkx in order to import them
+        X_graphs = DenseToNetworkx(X)
+        graphs = []
+        for graph in X_graphs:
+            graph = StellarGraph.from_networkx(graph, node_features="collapsed_weight")
+            graphs.append(graph)
+        # instantiate graph generators
+        generator = PaddedGraphGenerator(graphs=graphs)
+        # make test set
+        test_gen = generator.flow(graphs)
+
+        return self.model.predict(test_gen)
 
 
     def create_graph_classification_model(self, generator):
@@ -114,9 +122,9 @@ class GraphConvNet_Classifier(BaseEstimator, ClassifierMixin):
 
         return history, test_acc
 
-    def get_generators(self, train_index, test_index, graph_labels, batch_size, generator):
-        train_gen = generator.flow(train_index, targets=graph_labels.iloc[train_index].values, batch_size=batch_size)
-        test_gen = generator.flow(test_index, targets=graph_labels.iloc[test_index].values, batch_size=batch_size)
+    def get_generators(self, train_data, test_data, train_labels, test_labels, batch_size, generator):
+        train_gen = generator.flow(train_data, targets=train_labels, batch_size=batch_size)
+        test_gen = generator.flow(test_data, targets=test_labels, batch_size=batch_size)
 
         return train_gen, test_gen
 
@@ -141,7 +149,7 @@ class GraphConvNet_Regressor(BaseEstimator, ClassifierMixin):
                  epochs: int = 200,
                  folds: int = 10,
                  n_repeats: int = 5,
-                 nn_batch_size: int =64,
+                 nn_batch_size: int = 64,
                  metrics: list = None,
                  callbacks: list = None,
                  verbosity=1,
@@ -188,22 +196,30 @@ class GraphConvNet_Regressor(BaseEstimator, ClassifierMixin):
 
         test_accs = []
 
-        stratified_folds = model_selection.RepeatedStratifiedKFold(n_splits=self.folds, n_repeats=self.n_repeats).split(graph_labels, graph_labels)
+        self.model = self.create_graph_classification_model(generator)
 
-        for i, (train_index, test_index) in enumerate(stratified_folds):
-            print(f"Training and evaluating on fold {i + 1} out of {self.folds * self.n_repeats}...")
-            train_gen, test_gen = self.get_generators(train_index, test_index, graph_labels, batch_size=self.nn_batch_size, generator=generator)
+        X_train, X_test, y_train, y_test = model_selection.train_test_split(graphs, graph_labels)
+        train_gen, val_gen = self.get_generators(X_train, X_test, y_train, y_test, self.nn_batch_size, generator)
 
-            self.model = self.create_graph_classification_model(generator)
+        history, acc = self.train_fold(self.model, train_gen, val_gen, es, self.epochs)
 
-            history, acc = self.train_fold(self.model, train_gen, test_gen, es, self.epochs)
-
-            test_accs.append(acc)
+        test_accs.append(acc)
 
         return self
 
     def predict(self, X):
-        return self.model.predict(X)
+        # transform inputs
+        X_graphs = DenseToNetworkx(X)
+        graphs = []
+        for graph in X_graphs:
+            graph = StellarGraph.from_networkx(graph, node_features="collapsed_weight")
+            graphs.append(graph)
+        # instantiate graph generators
+        generator = PaddedGraphGenerator(graphs=graphs)
+        # make test set
+        test_gen = generator.flow(graphs)
+
+        return self.model.predict(test_gen)
 
 
     def create_graph_classification_model(self, generator):
@@ -232,9 +248,9 @@ class GraphConvNet_Regressor(BaseEstimator, ClassifierMixin):
 
         return history, test_acc
 
-    def get_generators(self, train_index, test_index, graph_labels, batch_size, generator):
-        train_gen = generator.flow(train_index, targets=graph_labels.iloc[train_index].values, batch_size=batch_size)
-        test_gen = generator.flow(test_index, targets=graph_labels.iloc[test_index].values, batch_size=batch_size)
+    def get_generators(self, train_data, test_data, train_labels, test_labels, batch_size, generator):
+        train_gen = generator.flow(train_data, targets=train_labels, batch_size=batch_size)
+        test_gen = generator.flow(test_data, targets=test_labels, batch_size=batch_size)
 
         return train_gen, test_gen
 
@@ -301,22 +317,30 @@ class DeepGraphCNN_Classifier(BaseEstimator, ClassifierMixin):
 
         test_accs = []
 
-        stratified_folds = model_selection.RepeatedStratifiedKFold(n_splits=self.folds, n_repeats=self.n_repeats).split(graph_labels, graph_labels)
+        self.model = self.create_graph_classification_model(generator)
 
-        for i, (train_index, test_index) in enumerate(stratified_folds):
-            print(f"Training and evaluating on fold {i + 1} out of {self.folds * self.n_repeats}...")
-            train_gen, test_gen = self.get_generators(train_index, test_index, graph_labels, batch_size=self.nn_batch_size, generator=generator)
+        X_train, X_test, y_train, y_test = model_selection.train_test_split(graphs, graph_labels)
+        train_gen, val_gen = self.get_generators(X_train, X_test, y_train, y_test, self.nn_batch_size, generator)
 
-            self.model = self.create_graph_classification_model(generator)
+        history, acc = self.train_fold(self.model, train_gen, val_gen, es, self.epochs)
 
-            history, acc = self.train_fold(self.model, train_gen, test_gen, es, self.epochs)
-
-            test_accs.append(acc)
+        test_accs.append(acc)
 
         return self
 
     def predict(self, X):
-        return self.model.predict(X)
+        # convert graphs to networkx in order to import them
+        X_graphs = DenseToNetworkx(X)
+        graphs = []
+        for graph in X_graphs:
+            graph = StellarGraph.from_networkx(graph, node_features="collapsed_weight")
+            graphs.append(graph)
+        # instantiate graph generators
+        generator = PaddedGraphGenerator(graphs=graphs)
+        # make test set
+        test_gen = generator.flow(graphs)
+
+        return self.model.predict(test_gen)
 
 
     def create_graph_classification_model(self, generator):
@@ -351,11 +375,12 @@ class DeepGraphCNN_Classifier(BaseEstimator, ClassifierMixin):
 
         return history, test_acc
 
-    def get_generators(self, train_index, test_index, graph_labels, batch_size, generator):
-        train_gen = generator.flow(train_index, targets=graph_labels.iloc[train_index].values, batch_size=batch_size)
-        test_gen = generator.flow(test_index, targets=graph_labels.iloc[test_index].values, batch_size=batch_size)
+    def get_generators(self, train_data, test_data, train_labels, test_labels, batch_size, generator):
+        train_gen = generator.flow(train_data, targets=train_labels, batch_size=batch_size)
+        test_gen = generator.flow(test_data, targets=test_labels, batch_size=batch_size)
 
         return train_gen, test_gen
+
 
     def encode_targets(self, y, type="sigmoid"):
         y_labels = y.copy()
@@ -392,7 +417,7 @@ class DeepGraphCNN_Regressor(BaseEstimator, ClassifierMixin):
         self._multi_class = None
         self.loss = loss
         self.multi_class = multi_class
-        self.epochs =epochs
+        self.epochs = epochs
         self.folds = folds
         self.n_repeats = n_repeats
         self.nn_batch_size = nn_batch_size
@@ -426,22 +451,30 @@ class DeepGraphCNN_Regressor(BaseEstimator, ClassifierMixin):
 
         test_accs = []
 
-        stratified_folds = model_selection.RepeatedStratifiedKFold(n_splits=self.folds, n_repeats=self.n_repeats).split(graph_labels, graph_labels)
+        self.model = self.create_graph_classification_model(generator)
 
-        for i, (train_index, test_index) in enumerate(stratified_folds):
-            print(f"Training and evaluating on fold {i + 1} out of {self.folds * self.n_repeats}...")
-            train_gen, test_gen = self.get_generators(train_index, test_index, graph_labels, batch_size=self.nn_batch_size, generator=generator)
+        X_train, X_test, y_train, y_test = model_selection.train_test_split(graphs, graph_labels)
+        train_gen, val_gen = self.get_generators(X_train, X_test, y_train, y_test, self.nn_batch_size, generator)
 
-            self.model = self.create_graph_classification_model(generator)
+        history, acc = self.train_fold(self.model, train_gen, val_gen, es, self.epochs)
 
-            history, acc = self.train_fold(self.model, train_gen, test_gen, es, self.epochs)
-
-            test_accs.append(acc)
+        test_accs.append(acc)
 
         return self
 
     def predict(self, X):
-        return self.model.predict(X)
+        # convert graphs to networkx in order to import them
+        X_graphs = DenseToNetworkx(X)
+        graphs = []
+        for graph in X_graphs:
+            graph = StellarGraph.from_networkx(graph, node_features="collapsed_weight")
+            graphs.append(graph)
+        # instantiate graph generators
+        generator = PaddedGraphGenerator(graphs=graphs)
+        # make test set
+        test_gen = generator.flow(graphs)
+
+        return self.model.predict(test_gen)
 
 
     def create_graph_classification_model(self, generator):
@@ -475,8 +508,8 @@ class DeepGraphCNN_Regressor(BaseEstimator, ClassifierMixin):
 
         return history, test_acc
 
-    def get_generators(self, train_index, test_index, graph_labels, batch_size, generator):
-        train_gen = generator.flow(train_index, targets=graph_labels.iloc[train_index].values, batch_size=batch_size)
-        test_gen = generator.flow(test_index, targets=graph_labels.iloc[test_index].values, batch_size=batch_size)
+    def get_generators(self, train_data, test_data, train_labels, test_labels, batch_size, generator):
+        train_gen = generator.flow(train_data, targets=train_labels, batch_size=batch_size)
+        test_gen = generator.flow(test_data, targets=test_labels, batch_size=batch_size)
 
         return train_gen, test_gen
