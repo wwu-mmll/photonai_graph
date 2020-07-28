@@ -36,7 +36,11 @@ nav:
 - Home: 'index.md'
 - Installation: 'installation.md'
 - Getting Started: 'getting_started.md'
-- Graph Construction: 'graph_construction.md'
+- Graph Construction: 
+    - Theory: 
+       'graph_construction.md'
+    - Examples:
+       'examples/graph_construction_examples.md'
 - Graph Measures: 'graph_measures.md'
 - Graph Embeddings: 'graph_embeddings.md'
 

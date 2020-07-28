@@ -1,3 +1,7 @@
+# This is how you get started
+
+hello
+
 ## Examples
 
 ```python
@@ -20,6 +24,17 @@ graph.do_something_cool()
 
 
 
+```python
+import pandas
+```
 
 
+
+!!! note "Important Information"
+
+  Please consider that this toolkit is still under active development. Use wisely!
+
+
+
+![my figure]("../imgs/test.jpg")
 
