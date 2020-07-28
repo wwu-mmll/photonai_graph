@@ -36,5 +36,5 @@ import pandas
 
 
 
-![my figure]("../imgs/test.jpg")
+![Image Title](img/test.jpg)
 
