@@ -6,10 +6,10 @@ To make life easier, you can simply try and install everything inside your curre
 
 ### Installation
 
-Install mkdocs (Python package) through PyPI (inside your Python environment, if you're using one). Make sure to install version 1.0.4 specifically as you will get problems generating the PDF otherwise (the tool to export the PDF relies on this version, unfortunately). We also need to install the material theme https://squidfunk.github.io/mkdocs-material/ and some custom plugins we're using to render Latex and so on.
+Install mkdocs (Python package) through PyPI (inside your Python environment, if you're using one). We also need to install the material theme https://squidfunk.github.io/mkdocs-material/ and some custom plugins we're using to render Latex and so on.
 
 ```bash
-pip install mkdocs==1.0.4 mkdocs-material pymdown-extensions
+pip install mkdocs mkdocs-material pymdown-extensions
 ```
 
 ### How to use it
@@ -32,7 +32,7 @@ Just follow that link or copy and paste it to your browser. You should now be ab
 
 To see the website while you are working on some of the markdown files (not the ones automatically generated, but the ones for general descriptions of the toolkit and so on), you can cd to the documentation folder and run `mkdocs serve`. You can then work on the markdowns and the changes live in the browser.
 
-To build the website, cd to the documentation folder and run `mkdocs gh-pages --clean`. This will create the website in the default gh-pages branch and push everything to the repo.
+To build the website, cd to the documentation folder and run `mkdocs gh-deploy`. This will create the website in the default gh-pages branch and push everything to the repo. Unfortunately, this will also create a docs folder in the master branch. Make sure to delete this folder.
 
 
 
