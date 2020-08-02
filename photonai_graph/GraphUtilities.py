@@ -10,7 +10,7 @@ and even create some random data to run some tests
 Version
 -------
 Created:        15-08-2019
-Last updated:   06-07-2020
+Last updated:   17-07-2020
 
 
 Author
@@ -30,7 +30,6 @@ import numpy as np
 import pydot
 from scipy import stats
 import matplotlib.pyplot as plt
-from photonai.base import PhotonRegistry
 from photonai_graph.GraphConversions import save_networkx_to_file, networkx_to_dense, networkx_to_sparse, networkx_to_stellargraph
 from photonai_graph.GraphConversions import dense_to_networkx, dense_to_stellargraph, dense_to_sparse
 from photonai_graph.GraphConversions import sparse_to_networkx, sparse_to_dense, sparse_to_stellargraph
@@ -200,14 +199,12 @@ def get_random_labels(type="classification", number_of_labels=10):
 
     return y
 
-
 def save_graphs(Graphs, path="", input_format="networkx", output_format="dot"):
     # check input format
     if input_format == "networkx":
         save_networkx_to_file(Graphs, path, output_format=output_format)
     else:
         raise Exception("Your desired output format is not supported yet.")
-
 
 def VisualizeNetworkx(Graphs):
     # check format in which graphs are presented or ordered
@@ -274,7 +271,6 @@ def pydot_to_nx(graphs):
 
     return A_Graphs
 
-
 def check_asteroidal(graph, return_boolean=True):
 
     # checks for asteroidal triples in the photonai_graph or in a list of networkx graphs
@@ -302,32 +298,6 @@ def check_asteroidal(graph, return_boolean=True):
 
     return graph_answer
 
-
-def RegisterGraph_force():
-
-    registry = PhotonRegistry()
-
-    base_folder = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-
-    BaseJSON = os.path.join(base_folder, 'photonai/photonai_graph/registry/PhotonCore.json')
-    GraphJSON = os.path.join(base_folder, 'photonai/photonai_graph/photonai_graph/photonai_graph.json')
-
-    # if a photonai_graph element is not registered
-    if not registry.check_availability("GraphConstructorPercentage"):
-        print('Graph available in a sec')
-        with open(BaseJSON, 'r') as base_json_file, open(GraphJSON, 'r') as graph_json_file:
-            base_j = json.load(base_json_file)
-            graph_j = json.load(graph_json_file)
-        base_j.update(graph_j)
-
-        with open(BaseJSON, 'w') as tf:
-            json.dump(base_j, tf)
-
-    # if a photonai_graph element is already registered
-    else:
-        print('Graph already available')
-
-    return print('done')
 
 '''
 class DenseToNetworkxTransformer(BaseEstimator, TransformerMixin):
