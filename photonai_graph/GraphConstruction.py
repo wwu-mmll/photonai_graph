@@ -143,6 +143,8 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
             # X = X[..., None] + adjacency[None, None, :] #use broadcasting to speed up computation
             adjacency_list = np.asarray(adjacency_list)
             adjacency_list = adjacency_list.reshape((adjacency_list.shape[0], adjacency_list.shape[1], adjacency_list.shape[2], -1))
+            if np.ndim(X_features) == 3:
+                X_features = X_features.reshape((X_features.shape[0], X_features.shape[1], X_features.shape[2], -1))
             X_transformed = np.concatenate((adjacency_list, X_features), axis=3)
 
         else:
@@ -345,8 +347,7 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
         return X_transformed
 
 
-
-
+# A method to construct a graph based on the percentage of strongest connections
 class GraphConstructorPercentage(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
@@ -395,43 +396,254 @@ class GraphConstructorPercentage(BaseEstimator, TransformerMixin):
                 raise ValueError('Input matrix needs to have either 3 or 4 dimensions not more or less.')
             lst = [item for sublist in lst for item in sublist]
             lst.sort()
-            #new_lst = lst[int(len(lst) * self.percentage): int(len(lst) * 1)]
-            #threshold = new_lst[0]
+            # new_lst = lst[int(len(lst) * self.percentage): int(len(lst) * 1)]
+            # threshold = new_lst[0]
             threshold = lst[int(len(lst) * self.percentage)]
 
-
-            #Threshold matrix X to create adjacency matrix
+            # Threshold matrix X to create adjacency matrix
             BinarizedMatrix[BinarizedMatrix > threshold] = 1
             BinarizedMatrix[BinarizedMatrix < threshold] = 0
             BinarizedMatrix = BinarizedMatrix.reshape((-1, BinaryMatrix.shape[0], BinaryMatrix.shape[1]))
             BinarizedMatrix = BinarizedMatrix.reshape((BinaryMatrix.shape[0], BinaryMatrix.shape[1], BinaryMatrix.shape[2], -1))
 
-            #concatenate matrix back
-            BinaryMatrix = np.concatenate((BinaryMatrix, BinarizedMatrix), axis = 3)
+            # concatenate matrix back
+            BinaryMatrix = np.concatenate((BinaryMatrix, BinarizedMatrix), axis=3)
 
-        #drop first matrix as it is empty
+        # drop first matrix as it is empty
         BinaryMatrix = np.delete(BinaryMatrix, 0, 3)
         BinaryMatrix = np.swapaxes(BinaryMatrix, 3, 0)
-        X_transformed = np.concatenate((BinaryMatrix, X_transformed), axis = 3)
+        X_transformed = np.concatenate((BinaryMatrix, X_transformed), axis=3)
 
         return X_transformed
 
 
+# a method to construct graphs based on a threshold window
+class GraphConstructorThresholdWindow(BaseEstimator, TransformerMixin):
+    _estimator_type = "transformer"
+
+    # threshold a matrix over a certain window to construct the adjacency
+    # you can use both a different and the own matrix
+
+    def __init__(self, threshold_upper=1, threshold_lower=0.8,
+                 adjacency_axis=0,
+                 concatenation_axis=3,
+                 one_hot_nodes=0,
+                 return_adjacency_only=0,
+                 fisher_transform=0,
+                 use_abs=0,
+                 zscore=1,
+                 use_abs_zscore=0,
+                 logs=''):
+        self.threshold_upper = threshold_upper
+        self.threshold_lower = threshold_lower
+        self.adjacency_axis = adjacency_axis
+        self.concatenation_axis = concatenation_axis
+        self.one_hot_nodes = one_hot_nodes
+        self.return_adjacency_only = return_adjacency_only
+        self.fisher_transform = fisher_transform
+        self.use_abs = use_abs
+        self.zscore = zscore
+        self.use_abs_zscore = use_abs_zscore
+        if logs:
+            self.logs = logs
+        else:
+            self.logs = os.getcwd()
+
+    def fit(self, X, y):
+        pass
+
+    def transform(self, X):
+
+        # ensure that the array has the "right" number of dimensions
+        if np.ndim(X) == 4:
+            threshold_matrix = X[:, :, :, self.adjacency_axis].copy()
+            X_transformed = X.copy()
+            if self.fisher_transform == 1:
+                threshold_matrix = individual_fishertransform(threshold_matrix)
+            if self.use_abs == 1:
+                threshold_matrix = np.abs(threshold_matrix)
+            if self.zscore == 1:
+                threshold_matrix = individual_ztransform(threshold_matrix)
+            if self.use_abs_zscore == 1:
+                threshold_matrix = np.abs(threshold_matrix)
+        elif np.ndim(X) == 3:
+            threshold_matrix = X.copy()
+            X_transformed = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
+            if self.fisher_transform == 1:
+                threshold_matrix = individual_fishertransform(threshold_matrix)
+            if self.use_abs == 1:
+                threshold_matrix = np.abs(threshold_matrix)
+            if self.zscore == 1:
+                threshold_matrix = individual_ztransform(threshold_matrix)
+            if self.use_abs_zscore == 1:
+                threshold_matrix = np.abs(threshold_matrix)
+
+        else:
+            raise Exception('encountered unusual dimensions, please check your dimensions')
+        # This creates and indvidual adjacency matrix for each person
+
+        threshold_matrix[threshold_matrix > self.threshold_upper] = 0
+        threshold_matrix[threshold_matrix < self.threshold_upper] = 1
+        threshold_matrix[threshold_matrix < self.threshold_lower] = 0
+        # add extra dimension to make sure that concatenation works later on
+        threshold_matrix = threshold_matrix.reshape(threshold_matrix.shape[0], threshold_matrix.shape[1], threshold_matrix.shape[2], -1)
+
+        # Add the matrix back again
+        if self.one_hot_nodes == 1:
+            # construct an identity matrix
+            identity_matrix = np.identity((X.shape[1]))
+            # expand its dimension for later re-addition
+            identity_matrix = np.reshape(identity_matrix, (-1, identity_matrix.shape[0], identity_matrix.shape[1]))
+            identity_matrix = np.reshape(identity_matrix, (identity_matrix.shape[0], identity_matrix.shape[1], identity_matrix.shape[2], -1))
+            one_hot_node_features = np.repeat(identity_matrix, X.shape[0], 0)
+            # concatenate matrices
+            X_transformed = np.concatenate((threshold_matrix, one_hot_node_features), axis=self.concatenation_axis)
+        else:
+            if self.return_adjacency_only == 0:
+                X_transformed = np.concatenate((threshold_matrix, X_transformed), axis=self.concatenation_axis)
+            elif self.return_adjacency_only == 1:
+                X_transformed = threshold_matrix.copy()
+            else:
+                return ValueError("The argument return_adjacency_only takes only values 0 or 1 no other values. Please check your input values")
+            # X_transformed = np.delete(X_transformed, self.adjacency_axis, self.concatenation_axis)
 
 
-#uses random walks to generate the connectivity matrix for photonai_graph structures
+        return X_transformed
+
+
+# a method to construct graphs based on a percentage window
+class GraphConstructorPercentageWindow(BaseEstimator, TransformerMixin):
+    _estimator_type = "transformer"
+
+    # threshold a matrix to generate the adjacency matrix
+    # you can use both a different and the own matrix
+
+    def __init__(self, transform_style: str = "individual",
+                 percentage_upper=0.5,
+                 percentage_lower=0.1,
+                 adjacency_axis=0,
+                 concatenation_axis=3,
+                 one_hot_nodes=0,
+                 return_adjacency_only=0,
+                 fisher_transform=0,
+                 use_abs=0,
+                 zscore=1,
+                 use_abs_zscore=0,
+                 logs=''):
+        self.transform_style = transform_style
+        self.percentage_upper = percentage_upper
+        self.percentage_lower = percentage_lower
+        self.adjacency_axis = adjacency_axis
+        self.concatenation_axis = concatenation_axis
+        self.one_hot_nodes = one_hot_nodes
+        self.return_adjacency_only = return_adjacency_only
+        self.fisher_transform = fisher_transform
+        self.use_abs = use_abs
+        self.zscore = zscore
+        self.use_abs_zscore = use_abs_zscore
+        if logs:
+            self.logs = logs
+        else:
+            self.logs = os.getcwd()
+
+    def fit(self, X, y):
+        pass
+
+    def transform(self, X):
+
+        # ensure that the array has the "right" number of dimensions
+        if np.ndim(X) == 4:
+            Threshold_matrix = X[:, :, :, self.adjacency_axis].copy()
+            X_transformed = X.copy()
+            if self.fisher_transform == 1:
+                Threshold_matrix = individual_fishertransform(Threshold_matrix)
+            if self.use_abs == 1:
+                Threshold_matrix = np.abs(Threshold_matrix)
+            if self.zscore == 1:
+                Threshold_matrix = individual_ztransform(Threshold_matrix)
+            if self.use_abs_zscore == 1:
+                Threshold_matrix = np.abs(Threshold_matrix)
+        elif np.ndim(X) == 3:
+            Threshold_matrix = X.copy()
+            X_transformed = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
+            if self.fisher_transform == 1:
+                Threshold_matrix = individual_fishertransform(Threshold_matrix)
+            if self.use_abs == 1:
+                Threshold_matrix = np.abs(Threshold_matrix)
+            if self.zscore == 1:
+                Threshold_matrix = individual_ztransform(Threshold_matrix)
+            if self.use_abs_zscore == 1:
+                Threshold_matrix = np.abs(Threshold_matrix)
+
+        else:
+            raise Exception('encountered unusual dimensions, please check your dimensions')
+        # This creates and indvidual adjacency matrix for each person
+        if self.transform_style == "individual":
+            for i in range(X.shape[0]):
+                # select top percent connections
+                # calculate threshold from given percentage cutoff
+                if np.ndim(X) == 3:
+                    lst = X[i, :, :].tolist()
+                    BinarizedMatrix = X[i, :, :].copy()
+                    if self.fisher_transform == 1:
+                        np.arctanh(BinarizedMatrix)
+                    if self.use_abs == 1:
+                        BinarizedMatrix = np.abs(BinarizedMatrix)
+                    X_transformed = X.copy()
+                    X_transformed = X_transformed.reshape(
+                        (X_transformed.shape[0], X_transformed.shape[1], X_transformed.shape[2], -1))
+                elif np.ndim(X) == 4:
+                    lst = X[i, :, :, self.adjacency_axis].tolist()
+                    BinarizedMatrix = X[i, :, :, self.adjacency_axis].copy()
+                    if self.fisher_transform == 0:
+                        np.arctanh(BinarizedMatrix)
+                    if self.use_abs == 1:
+                        BinarizedMatrix = np.abs(BinarizedMatrix)
+                    X_transformed = X.copy()
+                else:
+                    raise ValueError('Input matrix needs to have either 3 or 4 dimensions not more or less.')
+                lst = [item for sublist in lst for item in sublist]
+                lst.sort()
+                # new_lst = lst[int(len(lst) * self.percentage): int(len(lst) * 1)]
+                # threshold = new_lst[0]
+                threshold_upper = lst[int(len(lst) * self.percentage_upper)]
+                threshold_lower = lst[int(len(lst) * self.percentage_lower)]
+
+                # Threshold matrix X to create adjacency matrix
+                BinarizedMatrix[BinarizedMatrix > threshold_upper] = 0
+                BinarizedMatrix[BinarizedMatrix < threshold_upper] = 1
+                BinarizedMatrix[BinarizedMatrix < threshold_lower] = 0
+                BinarizedMatrix = BinarizedMatrix.reshape((-1, BinaryMatrix.shape[0], BinaryMatrix.shape[1]))
+                BinarizedMatrix = BinarizedMatrix.reshape(
+                    (BinaryMatrix.shape[0], BinaryMatrix.shape[1], BinaryMatrix.shape[2], -1))
+
+                # concatenate matrix back
+                BinaryMatrix = np.concatenate((BinaryMatrix, BinarizedMatrix), axis=3)
+
+                # drop first matrix as it is empty
+            BinaryMatrix = np.delete(BinaryMatrix, 0, 3)
+            BinaryMatrix = np.swapaxes(BinaryMatrix, 3, 0)
+            X_transformed = np.concatenate((BinaryMatrix, X_transformed), axis=3)
+        else:
+            raise Exception('Transformer only implemented for individual transform')
+
+        return X_transformed
+
+
+# uses random walks to generate the connectivity matrix for photonai_graph structures
 class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
     def __init__(self, k_distance=10, number_of_walks=10, walk_length=10, window_size=5,
                  no_edge_weight = 1,
-                 transform_style = "mean", adjacency_axis=0, logs=''):
+                 transform_style = "mean", adjacency_axis=0, feature_axis=1, logs=''):
         self.k_distance = k_distance
         self.number_of_walks = number_of_walks
         self.walk_length = walk_length
         self.window_size = window_size
         self.transform_style = transform_style
         self.adjacency_axis = adjacency_axis
+        self.feature_axis = feature_axis
         self.no_edge_weight = no_edge_weight
         if logs:
             self.logs = logs
@@ -602,7 +814,8 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
             higherorder_adjacency = higherorder_adjacency.toarray()
 
             # reshape X to add the new adjacency
-            X_transformed = np.reshape(X, (X.shape[0], X.shape[1], X.shape[2], -1))
+            X_transformed = X[:, :, :, self.feature_axis]
+            X_transformed = np.reshape(X_transformed, (X_transformed.shape[0], X_transformed.shape[1], X_transformed.shape[2], -1))
             # X = X[..., None] + adjacency[None, None, :] #use broadcasting to speed up computation
             adjacency = np.repeat(higherorder_adjacency[np.newaxis, :, :, np.newaxis], X.shape[0], axis=0)
             X_transformed = np.concatenate((adjacency, X_transformed), axis=3)
@@ -611,8 +824,9 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
             X_rw = X.copy()
             # select the proper matrix in case you have multiple
             if np.ndim(X_rw) == 4:
+                X_features = X_rw[:, :, :, self.feature_axis]
+                X_features = X_features.reshape((X_features.shape[0], X_features.shape[1], X_features.shape[2], -1))
                 X_rw = X_rw[:, :, :, self.adjacency_axis]
-                X_features = X_rw.copy()
             elif np.ndim(X_rw) == 3:
                 X_rw = X_rw
                 X_features = X_rw.copy()
@@ -629,6 +843,7 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
                 if self.no_edge_weight == 1:
                     adjacency[adjacency > 0] = 1
 
+                adjacency = adjacency.toarray()
                 adjacency_rowsum = np.sum(adjacency, axis=1)
                 adjacency_norm = adjacency / adjacency_rowsum[:, np.newaxis]
 
@@ -644,8 +859,7 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
                 # convert this adjacency matrix to dense format
                 higherorder_adjacency = higherorder_adjacency.toarray()
                 # turn adjacency into numpy matrix for concatenation
-                adjacency = adjacency.toarray()
-                adjacency_list.append(adjacency)
+                adjacency_list.append(higherorder_adjacency)
 
             adjacency_list = np.asarray(adjacency_list)
             adjacency_list = adjacency_list.reshape((adjacency_list.shape[0], adjacency_list.shape[1],
