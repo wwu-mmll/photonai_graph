@@ -9,7 +9,7 @@ A wrapper containing functions for turning connectivity matrices into photonai_g
 Version
 -------
 Created:        12-08-2019
-Last updated:   04-05-2020
+Last updated:   03-08-2020
 
 
 Author
@@ -19,9 +19,12 @@ Translationale Psychiatrie
 Universitaetsklinikum Muenster
 """
 
-#TODO: "deposit" atlas coordinate files
+#TODO: "deposit" atlas coordinate files ?
 #TODO: add advanced documentation for every method
-#TODO: debug the copy steps, add a fisher transform for the connectivity matrix values
+#TODO: add a fisher transform for the connectivity matrix values
+#TODO: make mean matrix an attribute
+#TODO: make a constructor mother class
+#TODO: add weighted method for different transformers
 
 from photonai_graph.GraphUtilities import individual_ztransform, individual_fishertransform
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -35,8 +38,43 @@ from itertools import islice, combinations
 class GraphConstructorKNN(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
-    #constructs the adjacency matrix for the connectivity matrices by a kNN approach
-    #adapted from Ktena et al., 2017
+    """
+    Transformer class for generating adjacency matrices 
+    from connectivity matrices. Selects the k nearest
+    neighbours for each node based on pairwise distance.
+    Recommended for functional connectivity.
+    Adapted from Ktena et al, 2017.
+    
+
+    Parameters
+    ----------
+    * `k_distance` [int]:
+        the k nearest neighbours value, for the kNN algorithm.
+    * `transform_style` [str, default="mean"]:
+        generate an adjacency matrix based on the mean matrix like in Ktena et al.: "mean" 
+	Or generate a different matrix for every individual: "individual"
+    * `adjacency_axis` [int]:
+        position of the adjacency matrix, default being zero
+    * `one_hot_nodes` [int]:
+        Whether to generate a one hot encoding of the nodes in the matrix.
+    * `return_adjacency_only` [int]:
+        whether to return the adjacency matrix only (1) or also a feature matrix (0)
+    * `fisher_transform` [int]:
+        Perform a fisher transform of each matrix. No (0) or Yes (1)
+    * `use_abs` [int]:
+        Changes the values to absolute values. Is applied after fisher transform and before
+	z-score transformation
+    * `verbosity` [int, default=0]:
+        The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
+    * `logs` [str, default='']:
+        Path to the log data    
+
+    Example
+    -------
+        constructor = GraphConstructorKNN(k_distance=6,
+                            		  fisher_transform=1,
+			    		  use_abs=1)
+   """
 
     def __init__(self, k_distance = 10, transform_style = "mean", adjacency_axis = 0, logs=''):
         self.k_distance = k_distance
@@ -158,6 +196,46 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
 class GraphConstructorSpatial(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
+    """
+    Transformer class for generating adjacency matrices 
+    from connectivity matrices. Selects the k nearest
+    neighbours for each node based on spatial distance
+    of the coordinates in the chosen atlas.
+    Adapted from Ktena et al, 2017.
+    
+
+    Parameters
+    ----------
+    * `k_distance` [int]:
+        the k nearest neighbours value, for the kNN algorithm.
+    * `transform_style` [str, default="mean"]:
+        generate an adjacency matrix based on the mean matrix like in Ktena et al.: "mean" 
+	Or generate a different matrix for every individual: "individual"
+    * `atlas_name` [str, default="ho"]:
+        name of the atlas coordinate file
+    * `atlas_path` [str, default="ho"]:
+        path to the atlas coordinate file
+    * `adjacency_axis` [int]:
+        position of the adjacency matrix, default being zero
+    * `one_hot_nodes` [int]:
+        Whether to generate a one hot encoding of the nodes in the matrix.
+    * `return_adjacency_only` [int]:
+        whether to return the adjacency matrix only (1) or also a feature matrix (0)
+    * `verbosity` [int, default=0]:
+        The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
+    * `logs` [str, default='']:
+        Path to the log data
+  
+    Example
+    -------
+        constructor = GraphConstructorSpatial(k_distance=7,
+					      transform_style="individual",
+					      atlas_name="ho_coords.csv",
+					      atlas_path="path/to/your/data/",
+                            		      fisher_transform=1,
+			    		      use_abs=1)
+   """
+    
     def __init__(self, k_distance = 10,
                  atlas_name = 'ho', atlas_folder = "", logs=''):
         self.k_distance = k_distance
@@ -259,10 +337,48 @@ class GraphConstructorSpatial(BaseEstimator, TransformerMixin):
 class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
-    # threshold a matrix to generate the adjacency matrix
-    # you can use both a different and the own matrix
+    """
+    Transformer class for generating adjacency matrices 
+    from connectivity matrices. Thresholds matrix based
+    on a chosen threshold value.
+    
 
-    def __init__(self, k_distance=10, threshold=0.1, adjacency_axis=0,
+    Parameters
+    ----------
+    * `threshold` [float]:
+        threshold value below which to set matrix entries to zero
+    * `adjacency_axis` [int]:
+        position of the adjacency matrix, default being zero
+    * `concatenation_axis` [int]:
+        Axis along which to concatenate the adjacency and feature matrix
+    * `one_hot_nodes` [int]:
+        Whether to generate a one hot encoding of the nodes in the matrix.
+    * `return_adjacency_only` [int]:
+        whether to return the adjacency matrix only (1) or also a feature matrix (0)
+    * `fisher_transform` [int]:
+        Perform a fisher transform of each matrix. No (0) or Yes (1)
+    * `use_abs` [int]:
+        Changes the values to absolute values. Is applied after fisher transform and before
+	z-score transformation
+    * `zscore` [int, default=0]:
+        performs a zscore transformation of the data. Applied after fisher transform and np_abs
+        eval_final_perfomance is set to True
+    * `use_abs_zscore` [int, default=0]:
+        whether to use the absolute values of the z-score transformation or allow for negative
+	values. Applied after fisher transform, use_abs and zscore
+    * `verbosity` [int, default=0]:
+        The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
+    * `logs` [str, default=None]:
+        Path to the log data    
+
+    Example
+    -------
+        constructor = GraphConstructorThreshold(threshold=0.5,
+                            			fisher_transform=1,
+			    			use_abs=1)
+   """
+
+    def __init__(self, threshold=0.1, adjacency_axis=0,
                  concatenation_axis=3,
                  one_hot_nodes=0,
                  return_adjacency_only=0,
@@ -271,7 +387,6 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
                  zscore=1,
                  use_abs_zscore=0,
                  logs=''):
-        self.k_distance = k_distance
         self.threshold = threshold
         self.adjacency_axis = adjacency_axis
         self.concatenation_axis = concatenation_axis
@@ -303,6 +418,7 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
                 Threshold_matrix = individual_ztransform(Threshold_matrix)
             if self.use_abs_zscore == 1:
                 Threshold_matrix = np.abs(Threshold_matrix)
+        # handle the case where there are 3 dimensions, meaning that there is no "adjacency axis"
         elif np.ndim(X) == 3:
             Threshold_matrix = X.copy()
             X_transformed = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
@@ -317,22 +433,21 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
 
         else:
             raise Exception('encountered unusual dimensions, please check your dimensions')
-        #This creates and indvidual adjacency matrix for each person
-
+        # This creates and indvidual adjacency matrix for each person
         Threshold_matrix[Threshold_matrix > self.threshold] = 1
         Threshold_matrix[Threshold_matrix < self.threshold] = 0
-        #add extra dimension to make sure that concatenation works later on
+        # add extra dimension to make sure that concatenation works later on
         Threshold_matrix = Threshold_matrix.reshape(Threshold_matrix.shape[0], Threshold_matrix.shape[1], Threshold_matrix.shape[2], -1)
 
-        #Add the matrix back again
+        # Add the matrix back again
         if self.one_hot_nodes == 1:
             #construct an identity matrix
             identity_matrix = np.identity((X.shape[1]))
-            #expand its dimension for later re-addition
+            # expand its dimension for later re-addition
             identity_matrix = np.reshape(identity_matrix, (-1, identity_matrix.shape[0], identity_matrix.shape[1]))
             identity_matrix = np.reshape(identity_matrix, (identity_matrix.shape[0], identity_matrix.shape[1], identity_matrix.shape[2], -1))
             one_hot_node_features = np.repeat(identity_matrix, X.shape[0], 0)
-            #concatenate matrices
+            # concatenate matrices
             X_transformed = np.concatenate((Threshold_matrix, one_hot_node_features), axis=self.concatenation_axis)
         else:
             if self.return_adjacency_only == 0:
@@ -341,7 +456,7 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
                 X_transformed = Threshold_matrix.copy()
             else:
                 return ValueError("The argument return_adjacency_only takes only values 0 or 1 no other values. Please check your input values")
-            #X_transformed = np.delete(X_transformed, self.adjacency_axis, self.concatenation_axis)
+            # X_transformed = np.delete(X_transformed, self.adjacency_axis, self.concatenation_axis)
 
 
         return X_transformed
@@ -351,7 +466,38 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
 class GraphConstructorPercentage(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
-    # use the mean 2d FA or NOS DTI-Matrix of all samples for thresholding the graphs
+    """
+    Transformer class for generating adjacency matrices 
+    from connectivity matrices. Selects the top x percent
+    of connections and sets all other connections to zero
+    
+
+    Parameters
+    ----------
+    * `percentage` [float]:
+        value of percent of connections to discard. A value of 0.9 keeps only the top 10%
+    * `adjacency_axis` [int]:
+        position of the adjacency matrix, default being zero
+    * `one_hot_nodes` [int]:
+        Whether to generate a one hot encoding of the nodes in the matrix.
+    * `return_adjacency_only` [int]:
+        whether to return the adjacency matrix only (1) or also a feature matrix (0)
+    * `fisher_transform` [int]:
+        Perform a fisher transform of each matrix. No (0) or Yes (1)
+    * `use_abs` [int]:
+        Changes the values to absolute values. Is applied after fisher transform and before
+	z-score transformation
+    * `verbosity` [int, default=0]:
+        The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
+    * `logs` [str, default='']:
+        Path to the log data
+
+    Example
+    -------
+        constructor = GraphConstructorPercentage(percentage=0.9,
+                            			 fisher_transform=1,
+			    			 use_abs=1)
+   """
 
     def __init__(self, percentage = 0.8, adjacency_axis = 0,
                  fisher_transform = 0, use_abs = 0, logs=''):
@@ -369,11 +515,11 @@ class GraphConstructorPercentage(BaseEstimator, TransformerMixin):
 
     def transform(self, X):
 
-        #generate binary matrix
+        # generate binary matrix
         BinaryMatrix = np.zeros((1, X.shape[1], X.shape[2], 1))
 
         for i in range(X.shape[0]):
-            #select top percent connections
+            # select top percent connections
             # calculate threshold from given percentage cutoff
             if np.ndim(X) == 3:
                 lst = X[i, :, :].tolist()
@@ -421,8 +567,48 @@ class GraphConstructorPercentage(BaseEstimator, TransformerMixin):
 class GraphConstructorThresholdWindow(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
-    # threshold a matrix over a certain window to construct the adjacency
-    # you can use both a different and the own matrix
+    """
+    Transformer class for generating adjacency matrices 
+    from connectivity matrices. Thresholds matrix based
+    on a chosen threshold window.
+    
+
+    Parameters
+    ----------
+    * `threshold_upper` [float]:
+        upper limit of the threshold window
+    * `threshold_lower` [float]:
+        lower limit of the threshold window
+    * `adjacency_axis` [int]:
+        position of the adjacency matrix, default being zero
+    * `concatenation_axis` [int]:
+        Axis along which to concatenate the adjacency and feature matrix
+    * `one_hot_nodes` [int]:
+        Whether to generate a one hot encoding of the nodes in the matrix.
+    * `return_adjacency_only` [int]:
+        whether to return the adjacency matrix only (1) or also a feature matrix (0)
+    * `fisher_transform` [int]:
+        Perform a fisher transform of each matrix. No (0) or Yes (1)
+    * `use_abs` [int]:
+        Changes the values to absolute values. Is applied after fisher transform and before
+	z-score transformation
+    * `zscore` [int, default=0]:
+        performs a zscore transformation of the data. Applied after fisher transform and np_abs
+        eval_final_perfomance is set to True
+    * `use_abs_zscore` [int, default=0]:
+        whether to use the absolute values of the z-score transformation or allow for negative
+	values. Applied after fisher transform, use_abs and zscore
+    * `verbosity` [int, default=0]:
+        The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
+    * `logs` [str, default=None]:
+        Path to the log data    
+
+    Example
+    -------
+        constructor = GraphConstructorThresholdWindow(threshold=0.5,
+                            			              fisher_transform=1,
+			    			                          use_abs=1)
+   """
 
     def __init__(self, threshold_upper=1, threshold_lower=0.8,
                  adjacency_axis=0,
@@ -515,8 +701,40 @@ class GraphConstructorThresholdWindow(BaseEstimator, TransformerMixin):
 class GraphConstructorPercentageWindow(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
-    # threshold a matrix to generate the adjacency matrix
-    # you can use both a different and the own matrix
+    """
+    Transformer class for generating adjacency matrices 
+    from connectivity matrices. Selects the top x percent
+    of connections and sets all other connections to zero
+    
+
+    Parameters
+    ----------
+    * `percentage_upper` [float]:
+        upper limit of the percentage window
+    * `percentage_lower` [float]:
+        lower limit of the percentage window
+    * `adjacency_axis` [int]:
+        position of the adjacency matrix, default being zero
+    * `one_hot_nodes` [int]:
+        Whether to generate a one hot encoding of the nodes in the matrix.
+    * `return_adjacency_only` [int]:
+        whether to return the adjacency matrix only (1) or also a feature matrix (0)
+    * `fisher_transform` [int]:
+        Perform a fisher transform of each matrix. No (0) or Yes (1)
+    * `use_abs` [int]:
+        Changes the values to absolute values. Is applied after fisher transform and before
+	z-score transformation
+    * `verbosity` [int, default=0]:
+        The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
+    * `logs` [str, default='']:
+        Path to the log data
+
+    Example
+    -------
+        constructor = GraphConstructorPercentageWindow(percentage=0.9,
+                            			               fisher_transform=1,
+			    			                           use_abs=1)
+   """
 
     def __init__(self, transform_style: str = "individual",
                  percentage_upper=0.5,
@@ -633,6 +851,51 @@ class GraphConstructorPercentageWindow(BaseEstimator, TransformerMixin):
 # uses random walks to generate the connectivity matrix for photonai_graph structures
 class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
+    
+    """
+    Transformer class for generating adjacency matrices 
+    from connectivity matrices. Generates a kNN matrix
+    and performs random walks on these. The coocurrence
+    of two nodes in those walks is then used to generate
+    a higher-order adjacency matrix, by applying the kNN
+    algorithm on the matrix again.
+    Adapted from Ma et al., 2019.
+    
+
+    Parameters
+    ----------
+    * `k_distance` [int]:
+        the k nearest neighbours value, for the kNN algorithm.
+    * `transform_style` [str, default="mean"]:
+        generate an adjacency matrix based on the mean matrix like in Ktena et al.: "mean" or per person "individual"
+	Or generate a different matrix for every individual: "individual"
+    * `number_of_walks` [int, default=10]:
+        number of walks to take to sample the random walk matrix
+    * `walk_length` [int, default=10]:
+        length of the random walk, as the number of steps
+    * `window_size` [int, default=5]:
+        length of the random walk, as the number of steps
+    * `no_edge_weight` [int, default=1]:
+        whether to return an edge weight (0) or not (1)
+    * `adjacency_axis` [int]:
+        position of the adjacency matrix, default being zero
+    * `one_hot_nodes` [int]:
+        Whether to generate a one hot encoding of the nodes in the matrix.
+    * `return_adjacency_only` [int]:
+        whether to return the adjacency matrix only (1) or also a feature matrix (0)
+    * `verbosity` [int, default=0]:
+        The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
+    * `logs` [str, default='']:
+        Path to the log data    
+
+    Example
+    -------
+        constructor = GraphConstructorRandomWalks(k_distance=5,
+						  transform_style="individual",
+						  number_of_walks=25,
+                          fisher_transform=1,
+			    		  use_abs=1)
+   """
 
     def __init__(self, k_distance=10, number_of_walks=10, walk_length=10, window_size=5,
                  no_edge_weight = 1,
