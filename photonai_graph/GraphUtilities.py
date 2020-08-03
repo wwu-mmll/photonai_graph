@@ -90,6 +90,33 @@ def DenseToNetworkx(X, adjacency_axis=0, feature_axis=1, feature_construction="c
 
 
 def draw_connectivity_matrix(matrix, colorbar=False, adjacency_axis=None):
+    """Draw connectivity matrix.
+
+        Parameters
+        ----------
+        matrix : numpy.ndarray, numpy.matrix or a list of those
+	    the input matrix or matrices from which to draw the connectivity matrix
+            
+        colorbar : boolean, default=False
+            Whether to use a colorbar in the drawn plot
+	
+	adjacency_axis : int, default=None
+	    position of the the adjacency axis, if specified the array is assumed to
+	    have an additional axis where the matrix is stored.
+
+        Notes
+        -----
+        If new nodes are added with features, and any of the old nodes
+        do not have some of the feature fields, those fields are filled
+        by initializers defined with ``set_n_initializer`` (default filling
+        with zeros).
+
+        Examples
+        --------
+        >>> g = get_random_connectivity_data()
+        >>> draw_connectivity_matrix(adjacency_axis=0)
+               
+        """
     # check input format
     if isinstance(matrix, np.ndarray) or isinstance(matrix, np.matrix):
         if adjacency_axis is not None:
@@ -120,6 +147,34 @@ def draw_connectivity_matrix(matrix, colorbar=False, adjacency_axis=None):
 
 
 def convert_graphs(graphs, input_format="networkx", output_format="stellargraph"):
+    """Convert graphs from one format to the other.
+
+        Parameters
+        ----------
+        matrix : graphs
+	    list of graphs, or np.ndarray/np.matrix
+            
+        input_format : str, default="networkx"
+            format of the graphs to be transformed
+	
+	output_format : str, default="stellargraph"
+	    desired output format of the graph(s)
+
+	Returns
+        -------
+        list, np.ndarray, np.matrix
+            The transformed matrices as a list
+
+        Notes
+        -----
+        Output format is referenced by package name, written in lowercase letters
+
+        Examples
+        --------
+        >>> g = get_random_connectivity_data()
+        >>> draw_connectivity_matrix(g, adjacency_axis=0)
+               
+        """
     # check input format
     if input_format == "networkx":
         if output_format == "networkx":
@@ -185,6 +240,32 @@ def get_random_connectivity_data(type = "dense", number_of_nodes = 114, number_o
 
 
 def get_random_labels(type="classification", number_of_labels=10):
+    """get random labels for testing and debugging functions.
+
+        Parameters
+        ----------
+        type : str, default="classification"
+	    controls the type labels. "classification" outputs binary labels 0 and 1, "regression" outputs random float values.
+            
+	number_of_labels : int, default=10
+	    number of labels to generate
+
+	Returns
+        -------
+        np.ndarray
+            The labels as np.ndarray
+
+
+        Notes
+        -----
+        If used in conjunction with get_random_connectivity_data number_of_labels
+	should match number_of_individuals.
+
+        Examples
+        --------
+        >>> labels = get_random_labels()
+          
+        """
 
     if type == "classification" or type == "Classification":
         y = np.random.rand(number_of_labels)
@@ -200,6 +281,30 @@ def get_random_labels(type="classification", number_of_labels=10):
     return y
 
 def save_graphs(Graphs, path="", input_format="networkx", output_format="dot"):
+    """save graphs to file.
+
+        Parameters
+        ----------
+        graphs : 
+	    a list or a np.ndarray of graphs to be saved
+
+        input_format : str, default="networkx"
+	    format of the graphs to be saved        
+
+	path : str, default=""
+	    path where to save the graphs
+            
+	output_format : str, default="dot"
+	    the output format in which to save the graphs
+
+
+        Examples
+        --------
+	>>> g1, g2 = nx.line_graph(10), nx.line_graph(7)
+	>>> graphs = [g1, g2]
+        >>> save_graphs(graphs, path="path/to/your/data/")      
+        
+        """
     # check input format
     if input_format == "networkx":
         save_networkx_to_file(Graphs, path, output_format=output_format)
@@ -207,6 +312,22 @@ def save_graphs(Graphs, path="", input_format="networkx", output_format="dot"):
         raise Exception("Your desired output format is not supported yet.")
 
 def VisualizeNetworkx(Graphs):
+    """Visualize a networkx graph or graphs using networkx built-in visualization.
+
+        Parameters
+        ----------
+        graphs : 
+	    a list or of networkx graphs or a single networkx graph
+
+
+        Examples
+        --------
+	    >>> g1, g2 = nx.line_graph(10), nx.line_graph(7)
+	    >>> graphs = [g1, g2]
+        >>> visualizenetworkx(graphs)
+       
+        
+        """
     # check format in which graphs are presented or ordered
     if isinstance(Graphs, list):
         for graph in Graphs:
@@ -219,6 +340,28 @@ def VisualizeNetworkx(Graphs):
 
 
 def individual_ztransform(X, adjacency_axis=0):
+    """applies a z-score transformation individually to each connectivity matrix in an array
+
+        Parameters
+        ----------
+        X : np.ndarray
+	        a list or of networkx graphs or a single networkx graph
+
+	    adjacency_axis: int, default=0
+	        the position of the adjacency matrix
+
+	    Returns
+        -------
+        np.ndarray
+            The z-score transformed matrices as an array
+
+
+        Examples
+        --------
+	    >>> X = get_random_connectivity_data()
+	    >>> X_transformed = individual_ztransform(X)
+               
+        """
     # check dimensions
     transformed_matrices = []
     if np.ndim(X) == 3:
@@ -238,6 +381,28 @@ def individual_ztransform(X, adjacency_axis=0):
 
 
 def individual_fishertransform(X, adjacency_axis=0):
+    """applies a fisher transformation individually to each connectivity matrix in an array
+
+        Parameters
+        ----------
+        X : np.ndarray
+	        a list or of networkx graphs or a single networkx graph
+	    adjacency_axis: int, default=0
+	        the position of the adjacency matrix
+
+	    Returns
+        -------
+        np.ndarray
+            The fisher transformed matrices as an array
+
+
+        Examples
+        --------
+	    >>> X = get_random_connectivity_data()
+	    >>> X_transformed = individual_fishertransform(X)
+       
+        
+        """
     # check dimensions
     transformed_matrices = []
     if np.ndim(X) == 3:
@@ -257,6 +422,20 @@ def individual_fishertransform(X, adjacency_axis=0):
 
 
 def pydot_to_nx(graphs):
+    """transforms pydot graphs to networkx graphs
+
+        Parameters
+        ----------
+        graphs : list or pydot.Dot
+	    a list of pydot graphs or a single pydot graph
+
+
+	    Returns
+        -------
+        list or pydot.Dot
+            The input graph or graphs in networkx format
+
+        """
     if isinstance(graphs, list):
         A_Graphs = []
         for graph in graphs:
@@ -272,7 +451,23 @@ def pydot_to_nx(graphs):
     return A_Graphs
 
 def check_asteroidal(graph, return_boolean=True):
+    """checks whether a graph or a list graphs is asteroidal
 
+        Parameters
+        ----------
+        graphs : list or nx.classes.graph.Graph
+	        a list of networkx graphs or a single networkx graph
+
+	    return_boolean : boolean, default=True
+	        whether to return a True/False statement about the graphs or a list of asteroidal triples per graph
+
+
+	    Returns
+        -------
+        list or boolean
+            A list of True/False values or a list of asteroidal triples, or a single boolean value
+            
+        """
     # checks for asteroidal triples in the photonai_graph or in a list of networkx graphs
     if return_boolean:
         if isinstance(graph, list):
