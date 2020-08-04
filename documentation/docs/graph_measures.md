@@ -8,12 +8,6 @@ The GraphMeasureTransform class is a class for extracting graph measures from gr
 
 | Parameter | type | Description |
 | -----     | ----- | ----- |
-| C     | Delta |
-    * `graph_functions` [dict]:
-        a dict of graph functions to calculate with keys as the networkx function name and a dict of the arguments as
-	the value. In this second dictionary, the keys are the functions arguments and values are the desired values
-	for the argument.
-    * `verbosity` [int, default=0]:
-        The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
-    * `logs` [str, default=None]:
-        Path to the log data
+| graph_functions | dict | a dict of graph functions to calculate with keys as the networkx function name and a dict of the arguments as the value. In this second dictionary, the keys are the functions arguments and values are the desired values for the argument. |
+| verbosity | int, default=0 | The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug |
+| logs | str, default=None | path to the log data |
