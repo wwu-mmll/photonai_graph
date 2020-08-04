@@ -950,7 +950,7 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
     * `walk_length` [int, default=10]:
         length of the random walk, as the number of steps
     * `window_size` [int, default=5]:
-        length of the random walk, as the number of steps
+        size of the sliding window from which to sample to coocurrence of two nodes
     * `no_edge_weight` [int, default=1]:
         whether to return an edge weight (0) or not (1)
     * `adjacency_axis` [int]:
