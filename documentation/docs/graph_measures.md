@@ -6,8 +6,9 @@ Graph measures or metrics are values that capture graph properties like efficien
 
 The GraphMeasureTransform class is a class for extracting graph measures from graphs. A range of networkx graph measures is available and can be used in a PHOTON pipeline or extracted and written to a csv file for further use.
 
-Parameters
-    ----------
+| Parameter | type | Description |
+| -----     | ----- | ----- |
+| C     | Delta |
     * `graph_functions` [dict]:
         a dict of graph functions to calculate with keys as the networkx function name and a dict of the arguments as
 	the value. In this second dictionary, the keys are the functions arguments and values are the desired values
