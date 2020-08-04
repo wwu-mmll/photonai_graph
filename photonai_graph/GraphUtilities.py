@@ -280,7 +280,7 @@ def get_random_labels(type="classification", number_of_labels=10):
 
     return y
 
-def save_graphs(Graphs, path="", input_format="networkx", output_format="dot"):
+def save_graphs(Graphs, path="", input_format="networkx", output_format="dot", IDs=None):
     """save graphs to file.
 
         Parameters
@@ -307,7 +307,7 @@ def save_graphs(Graphs, path="", input_format="networkx", output_format="dot"):
         """
     # check input format
     if input_format == "networkx":
-        save_networkx_to_file(Graphs, path, output_format=output_format)
+        save_networkx_to_file(Graphs, path, output_format=output_format, IDs=IDs)
     else:
         raise Exception("Your desired output format is not supported yet.")
 
