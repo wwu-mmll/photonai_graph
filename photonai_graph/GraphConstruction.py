@@ -19,12 +19,12 @@ Translationale Psychiatrie
 Universitaetsklinikum Muenster
 """
 
-#TODO: "deposit" atlas coordinate files ?
-#TODO: add advanced documentation for every method
-#TODO: add a fisher transform for the connectivity matrix values
-#TODO: make mean matrix an attribute
-#TODO: make a constructor mother class
-#TODO: add weighted method for different transformers
+# TODO: "deposit" atlas coordinate files ?
+# TODO: add advanced documentation for every method
+# TODO: add a fisher transform for the connectivity matrix values
+# TODO: make mean matrix an attribute
+# TODO: make a constructor mother class
+# TODO: add weighted method for different transformers
 
 from photonai_graph.GraphUtilities import individual_ztransform, individual_fishertransform
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -37,7 +37,7 @@ from itertools import islice, combinations
 
 class GraphConstructor(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
-	
+
     """
     Base class for all graph constructors. Implements
     methods shared by different constructors.
@@ -50,9 +50,9 @@ class GraphConstructor(BaseEstimator, TransformerMixin):
     
     """
 
-    def __init__(self, k_distance = 10, 
-		 transform_style = "mean", 
-		 adjacency_axis = 0, logs=''):
+    def __init__(self, k_distance=10,
+                 transform_style="mean",
+                 adjacency_axis=0, logs=''):
         self.k_distance = k_distance
         self.transform_style = transform_style
         self.adjacency_axis = adjacency_axis
@@ -60,13 +60,14 @@ class GraphConstructor(BaseEstimator, TransformerMixin):
             self.logs = logs
         else:
             self.logs = os.getcwd()
-	
+        self.mean_matrix = None  # todo: attributes of self should be defined in the __init__
+
     def fit(self, X, y):
-	"""implements a mean matrix construction"""
-	
-	if self.transform_style == "mean" or self.transform_style == "Mean":
-	    # generate mean matrix
-	    X_mean = np.squeeze(np.mean(X, axis=0))
+        """implements a mean matrix construction"""
+
+        if self.transform_style == "mean" or self.transform_style == "Mean":
+            # generate mean matrix
+            X_mean = np.squeeze(np.mean(X, axis=0))
             # select the proper matrix in case you have multiple
             if np.ndim(X_mean) == 3:
                 X_mean = X_mean[:, :, self.adjacency_axis]
@@ -74,41 +75,44 @@ class GraphConstructor(BaseEstimator, TransformerMixin):
                 X_mean = X_mean
             else:
                 raise ValueError('The input matrices need to have 3 or 4 dimensions. Please check your input matrix.')
-	    # assign mean matrix for later use
-	    self.mean_matrix = X_mean
-		
-	elif self.transform_style == "individual" or self.transform_style == "Individual":
-	    pass
+            # assign mean matrix for later use
+            self.mean_matrix = X_mean
 
-	else:
-	    raise ValueError('transform_style needs to be individual or mean')
-	
-	return self
+        elif self.transform_style == "individual" or self.transform_style == "Individual":
+            pass
 
-    @staticmethod
-    def get_mtrx(X):
-	
-	if self.transform_style == "individual":
-	
-        # ensure that the array has the "right" number of dimensions
-        if np.ndim(X) == 4:
-            adjacency_matrix = X[:, :, :, self.adjacency_axis].copy()
-            feature_matrix = X.copy()
-        # handle the case where there are 3 dimensions, meaning that there is no "adjacency axis"
-        elif np.ndim(X) == 3:
-            adjacency_matrix = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
-            feature_matrix = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
-	else:
-	    raise Exception ('input matrix needs to have 3 or 4 dimensions')
-	
-	elif self.transform_style == "mean":
-	    adjacency_matrix = self.mean_matrix.copy()
-	    if np.dim(X) == 4:
-		feature_matrix = X.copy()
-	    elif np.dim(X) == 3:
-		feature_matrix = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
-	
-	return adjacency_matrix, feature_matrix 
+        else:
+            raise ValueError('transform_style needs to be individual or mean')
+
+        return self
+
+    def get_mtrx(self, X):
+        # Todo: This function was marked static, but used self.
+        # Todo: The indentation must be fixed (i only guessed)
+        # Todo: the following two variables are used, but might be unassigned
+        adjacency_matrix = None
+        feature_matrix = None
+
+        if self.transform_style == "individual":
+
+            # ensure that the array has the "right" number of dimensions
+            if np.ndim(X) == 4:
+                adjacency_matrix = X[:, :, :, self.adjacency_axis].copy()
+                feature_matrix = X.copy()
+            # handle the case where there are 3 dimensions, meaning that there is no "adjacency axis"
+            elif np.ndim(X) == 3:
+                adjacency_matrix = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
+                feature_matrix = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
+            else:
+                raise Exception('input matrix needs to have 3 or 4 dimensions')
+
+        elif self.transform_style == "mean":
+            adjacency_matrix = self.mean_matrix.copy()
+            if np.dim(X) == 4:
+                feature_matrix = X.copy()
+            elif np.dim(X) == 3:
+                feature_matrix = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
+        return adjacency_matrix, feature_matrix
 
 
 class GraphConstructorKNN(BaseEstimator, TransformerMixin):
@@ -128,7 +132,7 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
         the k nearest neighbours value, for the kNN algorithm.
     * `transform_style` [str, default="mean"]:
         generate an adjacency matrix based on the mean matrix like in Ktena et al.: "mean" 
-	Or generate a different matrix for every individual: "individual"
+        Or generate a different matrix for every individual: "individual"
     * `adjacency_axis` [int]:
         position of the adjacency matrix, default being zero
     * `one_hot_nodes` [int]:
@@ -139,7 +143,7 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
         Perform a fisher transform of each matrix. No (0) or Yes (1)
     * `use_abs` [int]:
         Changes the values to absolute values. Is applied after fisher transform and before
-	z-score transformation
+        z-score transformation
     * `verbosity` [int, default=0]:
         The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
     * `logs` [str, default='']:
@@ -148,11 +152,11 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
     Example
     -------
         constructor = GraphConstructorKNN(k_distance=6,
-                            		  fisher_transform=1,
-			    		  use_abs=1)
+                                          fisher_transform=1,
+                                          use_abs=1)
    """
 
-    def __init__(self, k_distance = 10, transform_style = "mean", adjacency_axis = 0, logs=''):
+    def __init__(self, k_distance=10, transform_style="mean", adjacency_axis=0, logs=''):
         self.k_distance = k_distance
         self.transform_style = transform_style
         self.adjacency_axis = adjacency_axis
@@ -162,9 +166,11 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
             self.logs = os.getcwd()
 
     def fit(self, X, y):
+        # todo: is this function really necessary?
         pass
 
     def distance_sklearn_metrics(self, z, k, metric='euclidean'):
+        # todo: check if this function could be static
         """Compute exact pairwise distances."""
         d = sklearn.metrics.pairwise.pairwise_distances(
             z, metric=metric, n_jobs=-2)
@@ -175,6 +181,8 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
         return d, idx
 
     def adjacency(self, dist, idx):
+        # todo: check if this function could be static
+        # todo: Duplicated code. Why is this code not moved into a shared parent class?
         """Return the adjacency matrix of a kNN photonai_graph."""
         M, k = dist.shape
         assert M, k == idx.shape
@@ -221,7 +229,7 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
             d, idx = self.distance_sklearn_metrics(X_mean, k=self.k_distance, metric='euclidean')
             adjacency = self.adjacency(d, idx).astype(np.float32)
 
-            #turn adjacency into numpy matrix for concatenation
+            # turn adjacency into numpy matrix for concatenation
             adjacency = adjacency.toarray()
 
             X_transformed = np.reshape(X, (X.shape[0], X.shape[1], X.shape[2], -1))
@@ -256,7 +264,10 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
 
             # X = X[..., None] + adjacency[None, None, :] #use broadcasting to speed up computation
             adjacency_list = np.asarray(adjacency_list)
-            adjacency_list = adjacency_list.reshape((adjacency_list.shape[0], adjacency_list.shape[1], adjacency_list.shape[2], -1))
+            adjacency_list = adjacency_list.reshape((adjacency_list.shape[0],
+                                                     adjacency_list.shape[1],
+                                                     adjacency_list.shape[2],
+                                                     -1))
             if np.ndim(X_features) == 3:
                 X_features = X_features.reshape((X_features.shape[0], X_features.shape[1], X_features.shape[2], -1))
             X_transformed = np.concatenate((adjacency_list, X_features), axis=3)
@@ -266,7 +277,6 @@ class GraphConstructorKNN(BaseEstimator, TransformerMixin):
                            'Please check your spelling for the parameter transform_style.')
 
         return X_transformed
-
 
 
 class GraphConstructorSpatial(BaseEstimator, TransformerMixin):
@@ -286,7 +296,7 @@ class GraphConstructorSpatial(BaseEstimator, TransformerMixin):
         the k nearest neighbours value, for the kNN algorithm.
     * `transform_style` [str, default="mean"]:
         generate an adjacency matrix based on the mean matrix like in Ktena et al.: "mean" 
-	Or generate a different matrix for every individual: "individual"
+        Or generate a different matrix for every individual: "individual"
     * `atlas_name` [str, default="ho"]:
         name of the atlas coordinate file
     * `atlas_path` [str, default="ho"]:
@@ -305,15 +315,15 @@ class GraphConstructorSpatial(BaseEstimator, TransformerMixin):
     Example
     -------
         constructor = GraphConstructorSpatial(k_distance=7,
-					      transform_style="individual",
-					      atlas_name="ho_coords.csv",
-					      atlas_path="path/to/your/data/",
-                            		      fisher_transform=1,
-			    		      use_abs=1)
+                                              transform_style="individual",
+                                              atlas_name="ho_coords.csv",
+                                              atlas_path="path/to/your/data/",
+                                              fisher_transform=1,
+                                              use_abs=1)
    """
-    
-    def __init__(self, k_distance = 10,
-                 atlas_name = 'ho', atlas_folder = "", logs=''):
+
+    def __init__(self, k_distance=10,
+                 atlas_name='ho', atlas_folder="", logs=''):
         self.k_distance = k_distance
         self.atlas_name = atlas_name
         self.atlas_folder = atlas_folder
@@ -322,12 +332,12 @@ class GraphConstructorSpatial(BaseEstimator, TransformerMixin):
         else:
             self.logs = os.getcwd()
 
-
     def fit(self, X, y):
+        # todo: is this function really necessary?
         pass
 
-
     def distance_scipy_spatial(self, z, k, metric='euclidean'):
+        # todo: check if this function could be static
         """Compute exact pairwise distances."""
         d = scipy.spatial.distance.pdist(z, metric)
         d = scipy.spatial.distance.squareform(d)
@@ -338,8 +348,9 @@ class GraphConstructorSpatial(BaseEstimator, TransformerMixin):
 
         return d, idx
 
-
     def adjacency(self, dist, idx):
+        # todo: check if this function could be static
+        # todo: Duplicated code. Why is this code not moved into a shared parent class?
         """Return the adjacency matrix of a kNN photonai_graph."""
         M, k = dist.shape
         assert M, k == idx.shape
@@ -368,8 +379,8 @@ class GraphConstructorSpatial(BaseEstimator, TransformerMixin):
 
         return W
 
-
     def get_atlas_coords(self, atlas_name, root_folder):
+        # todo: check if this function could be static
         """
             atlas_name   : name of the atlas used
         returns:
@@ -384,19 +395,20 @@ class GraphConstructorSpatial(BaseEstimator, TransformerMixin):
 
         return coords
 
-
     def transform(self, X):
+
+        # todo: X_mean is never used. Do we really need to compute this?
         # use the mean 2d image of all samples for creating the different photonai_graph structures
         X_mean = np.squeeze(np.mean(X, axis=0))
 
-        #get atlas coords
+        # get atlas coords
         coords = self.get_atlas_coords(atlas_name=self.atlas_name, root_folder=self.atlas_folder)
 
         # generate adjacency matrix
         dist, idx = self.distance_scipy_spatial(coords, k=10, metric='euclidean')
         adjacency = self.adjacency(dist, idx).astype(np.float32)
 
-        #turn adjacency into numpy matrix for concatenation
+        # turn adjacency into numpy matrix for concatenation
         adjacency = adjacency.toarray()
 
         X = np.reshape(X, (X.shape[0], X.shape[1], X.shape[2], -1))
@@ -405,9 +417,6 @@ class GraphConstructorSpatial(BaseEstimator, TransformerMixin):
         X = np.concatenate(adjacency, X, axis=3)
 
         return X
-
-
-
 
 
 class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
@@ -435,13 +444,13 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
         Perform a fisher transform of each matrix. No (0) or Yes (1)
     * `use_abs` [int]:
         Changes the values to absolute values. Is applied after fisher transform and before
-	z-score transformation
+        z-score transformation
     * `zscore` [int, default=0]:
         performs a zscore transformation of the data. Applied after fisher transform and np_abs
         eval_final_perfomance is set to True
     * `use_abs_zscore` [int, default=0]:
         whether to use the absolute values of the z-score transformation or allow for negative
-	values. Applied after fisher transform, use_abs and zscore
+        values. Applied after fisher transform, use_abs and zscore
     * `verbosity` [int, default=0]:
         The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
     * `logs` [str, default=None]:
@@ -450,8 +459,8 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
     Example
     -------
         constructor = GraphConstructorThreshold(threshold=0.5,
-                            			fisher_transform=1,
-			    			use_abs=1)
+                                                fisher_transform=1,
+                                                use_abs=1)
    """
 
     def __init__(self, threshold=0.1, adjacency_axis=0,
@@ -483,6 +492,8 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
     def transform(self, X):
 
         # ensure that the array has the "right" number of dimensions
+        # todo: duplicated code
+        # todo: all variable names should be lowercase (with an exeption for X)
         if np.ndim(X) == 4:
             Threshold_matrix = X[:, :, :, self.adjacency_axis].copy()
             X_transformed = X.copy()
@@ -511,13 +522,14 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
             raise Exception('encountered unusual dimensions, please check your dimensions')
         # This creates and indvidual adjacency matrix for each person
         Threshold_matrix[Threshold_matrix > self.threshold] = 1
+        # todo: duplicated code starting here again
         Threshold_matrix[Threshold_matrix < self.threshold] = 0
         # add extra dimension to make sure that concatenation works later on
         Threshold_matrix = Threshold_matrix.reshape(Threshold_matrix.shape[0], Threshold_matrix.shape[1], Threshold_matrix.shape[2], -1)
 
         # Add the matrix back again
         if self.one_hot_nodes == 1:
-            #construct an identity matrix
+            # construct an identity matrix
             identity_matrix = np.identity((X.shape[1]))
             # expand its dimension for later re-addition
             identity_matrix = np.reshape(identity_matrix, (-1, identity_matrix.shape[0], identity_matrix.shape[1]))
@@ -533,7 +545,6 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
             else:
                 return ValueError("The argument return_adjacency_only takes only values 0 or 1 no other values. Please check your input values")
             # X_transformed = np.delete(X_transformed, self.adjacency_axis, self.concatenation_axis)
-
 
         return X_transformed
 
@@ -562,7 +573,7 @@ class GraphConstructorPercentage(BaseEstimator, TransformerMixin):
         Perform a fisher transform of each matrix. No (0) or Yes (1)
     * `use_abs` [int]:
         Changes the values to absolute values. Is applied after fisher transform and before
-	z-score transformation
+        z-score transformation
     * `verbosity` [int, default=0]:
         The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
     * `logs` [str, default='']:
@@ -571,8 +582,8 @@ class GraphConstructorPercentage(BaseEstimator, TransformerMixin):
     Example
     -------
         constructor = GraphConstructorPercentage(percentage=0.9,
-                            			 fisher_transform=1,
-			    			 use_abs=1)
+                                                 fisher_transform=1,
+                                                 use_abs=1)
    """
 
     def __init__(self, percentage = 0.8, adjacency_axis = 0,
@@ -592,11 +603,13 @@ class GraphConstructorPercentage(BaseEstimator, TransformerMixin):
     def transform(self, X):
 
         # generate binary matrix
+        # todo: variable names should be lower case
         BinaryMatrix = np.zeros((1, X.shape[1], X.shape[2], 1))
 
         for i in range(X.shape[0]):
             # select top percent connections
             # calculate threshold from given percentage cutoff
+            # todo: duplicated code starting here
             if np.ndim(X) == 3:
                 lst = X[i, :, :].tolist()
                 BinarizedMatrix = X[i, :, :].copy()
@@ -605,7 +618,10 @@ class GraphConstructorPercentage(BaseEstimator, TransformerMixin):
                 if self.use_abs == 1:
                     BinarizedMatrix = np.abs(BinarizedMatrix)
                 X_transformed = X.copy()
-                X_transformed = X_transformed.reshape((X_transformed.shape[0], X_transformed.shape[1], X_transformed.shape[2], -1))
+                X_transformed = X_transformed.reshape((X_transformed.shape[0],
+                                                       X_transformed.shape[1],
+                                                       X_transformed.shape[2],
+                                                       -1))
             elif np.ndim(X) == 4:
                 lst = X[i, :, :, self.adjacency_axis].tolist()
                 BinarizedMatrix = X[i, :, :, self.adjacency_axis].copy()
@@ -667,13 +683,13 @@ class GraphConstructorThresholdWindow(BaseEstimator, TransformerMixin):
         Perform a fisher transform of each matrix. No (0) or Yes (1)
     * `use_abs` [int]:
         Changes the values to absolute values. Is applied after fisher transform and before
-	z-score transformation
+        z-score transformation
     * `zscore` [int, default=0]:
         performs a zscore transformation of the data. Applied after fisher transform and np_abs
         eval_final_perfomance is set to True
     * `use_abs_zscore` [int, default=0]:
         whether to use the absolute values of the z-score transformation or allow for negative
-	values. Applied after fisher transform, use_abs and zscore
+        values. Applied after fisher transform, use_abs and zscore
     * `verbosity` [int, default=0]:
         The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
     * `logs` [str, default=None]:
@@ -682,8 +698,8 @@ class GraphConstructorThresholdWindow(BaseEstimator, TransformerMixin):
     Example
     -------
         constructor = GraphConstructorThresholdWindow(threshold=0.5,
-                            			              fisher_transform=1,
-			    			                          use_abs=1)
+                                                      fisher_transform=1,
+                                                      use_abs=1)
    """
 
     def __init__(self, threshold_upper=1, threshold_lower=0.8,
@@ -712,10 +728,11 @@ class GraphConstructorThresholdWindow(BaseEstimator, TransformerMixin):
             self.logs = os.getcwd()
 
     def fit(self, X, y):
+        # todo: ...
         pass
 
     def transform(self, X):
-
+        # todo: duplicated code
         # ensure that the array has the "right" number of dimensions
         if np.ndim(X) == 4:
             threshold_matrix = X[:, :, :, self.adjacency_axis].copy()
@@ -769,7 +786,6 @@ class GraphConstructorThresholdWindow(BaseEstimator, TransformerMixin):
                 return ValueError("The argument return_adjacency_only takes only values 0 or 1 no other values. Please check your input values")
             # X_transformed = np.delete(X_transformed, self.adjacency_axis, self.concatenation_axis)
 
-
         return X_transformed
 
 
@@ -799,7 +815,7 @@ class GraphConstructorPercentageWindow(BaseEstimator, TransformerMixin):
         Perform a fisher transform of each matrix. No (0) or Yes (1)
     * `use_abs` [int]:
         Changes the values to absolute values. Is applied after fisher transform and before
-	z-score transformation
+        z-score transformation
     * `verbosity` [int, default=0]:
         The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
     * `logs` [str, default='']:
@@ -808,8 +824,8 @@ class GraphConstructorPercentageWindow(BaseEstimator, TransformerMixin):
     Example
     -------
         constructor = GraphConstructorPercentageWindow(percentage=0.9,
-                            			               fisher_transform=1,
-			    			                           use_abs=1)
+                                                       fisher_transform=1,
+                                                       use_abs=1)
    """
 
     def __init__(self, transform_style: str = "individual",
@@ -841,10 +857,11 @@ class GraphConstructorPercentageWindow(BaseEstimator, TransformerMixin):
             self.logs = os.getcwd()
 
     def fit(self, X, y):
+        # todo: ...
         pass
 
     def transform(self, X):
-
+        # todo: duplicated code
         # ensure that the array has the "right" number of dimensions
         if np.ndim(X) == 4:
             Threshold_matrix = X[:, :, :, self.adjacency_axis].copy()
@@ -927,7 +944,7 @@ class GraphConstructorPercentageWindow(BaseEstimator, TransformerMixin):
 # uses random walks to generate the connectivity matrix for photonai_graph structures
 class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
-    
+
     """
     Transformer class for generating adjacency matrices 
     from connectivity matrices. Generates a kNN matrix
@@ -944,7 +961,7 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
         the k nearest neighbours value, for the kNN algorithm.
     * `transform_style` [str, default="mean"]:
         generate an adjacency matrix based on the mean matrix like in Ktena et al.: "mean" or per person "individual"
-	Or generate a different matrix for every individual: "individual"
+        Or generate a different matrix for every individual: "individual"
     * `number_of_walks` [int, default=10]:
         number of walks to take to sample the random walk matrix
     * `walk_length` [int, default=10]:
@@ -967,15 +984,15 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
     Example
     -------
         constructor = GraphConstructorRandomWalks(k_distance=5,
-						  transform_style="individual",
-						  number_of_walks=25,
+                          transform_style="individual",
+                          number_of_walks=25,
                           fisher_transform=1,
-			    		  use_abs=1)
+                          use_abs=1)
    """
 
     def __init__(self, k_distance=10, number_of_walks=10, walk_length=10, window_size=5,
-                 no_edge_weight = 1,
-                 transform_style = "mean", adjacency_axis=0, feature_axis=1, logs=''):
+                 no_edge_weight=1,
+                 transform_style="mean", adjacency_axis=0, feature_axis=1, logs=''):
         self.k_distance = k_distance
         self.number_of_walks = number_of_walks
         self.walk_length = walk_length
@@ -990,9 +1007,11 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
             self.logs = os.getcwd()
 
     def fit(self, X, y):
+        # todo: ...
         pass
 
     def distance_sklearn_metrics(self, z, k, metric='euclidean'):
+        # todo: this function could be static
         """Compute exact pairwise distances."""
         d = sklearn.metrics.pairwise.pairwise_distances(
             z, metric=metric, n_jobs=-2)
@@ -1003,6 +1022,7 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
         return d, idx
 
     def adjacency(self, dist, idx):
+        # todo: duplicated code
         """Return the adjacency matrix of a kNN photonai_graph."""
         M, k = dist.shape
         assert M, k == idx.shape
@@ -1032,6 +1052,7 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
         return W
 
     def random_walk(self, adjacency, walk_length, num_walks):
+        # todo: this function could be static
         """Performs a random walk on a given photonai_graph"""
         # a -> adj
         # i -> starting row
@@ -1055,39 +1076,12 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
 
         return walks
 
-        '''
-
-        dims = 2
-        step_n = walk_length
-        step_set = [-1, 0, 1]
-        #start on a given random vertex
-        origin = vertices[np.random.randint(low=0, high=vertices.shape[0]), np.random.randint(low=0, high=vertices.shape[1])]
-
-        #step onto other random vertex
-        step_shape = (step_n, dims)
-        steps = np.random.choice(a=step_set, size=step_shape)
-        #append that vertex value to the series
-        path = np.concatenate([origin, steps])
-        #slide window and check if they co-occur
-        start = path[:1]
-        stop = path[-1:]
-
-
-        return #list of lists with random walks
-        
-        frequency = np.zeros((adjacency.shape))
-        for i in range(0, self.number_of_walks):
-            shuffled_vertices = random.shuffle(d) #do stuff
-            for i in range(len(shuffled_vertices)):
-                for j in range(len(shuffled_vertices[i])):
-                    vertex = d[i, j]
-                    self.random_walk(vertices = shuffled_vertices, walk_length=self.walk_length, startpoint=vertex)
-        
-        '''
+    # todo: the code that i have removed here is still in your git history.
 
     def sliding_window(self, seq, n):
-        "Returns a sliding window (of width n) over data from the iterable"
-        "   s -> (s0,s1,...s[n-1]), (s1,s2,...,sn), ...                   "
+        # todo: this function could be static
+        """Returns a sliding window (of width n) over data from the iterable
+            s -> (s0,s1,...s[n-1]), (s1,s2,...,sn), ...                   """
         it = iter(seq)
         result = tuple(islice(it, n))
         if len(result) == n:
@@ -1096,10 +1090,8 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
             result = result[1:] + (elem,)
             yield result
 
-
-
-
-        return #sliding window co-ocurrence
+        # todo: check return value
+        return  # sliding window co-ocurrence
 
     def sliding_window_frequency(self, X_mean, walk_list):
 
@@ -1121,6 +1113,7 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
         # transform each individual or make a mean matrix
         if self.transform_style == "mean":
             # use the mean 2d image of all samples for creating the different photonai_graph structures
+            # todo: duplicated code starting here.
             X_mean = np.squeeze(np.mean(X, axis=0))
 
             # select the proper matrix in case you have multiple
@@ -1154,7 +1147,10 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
 
             # reshape X to add the new adjacency
             X_transformed = X[:, :, :, self.feature_axis]
-            X_transformed = np.reshape(X_transformed, (X_transformed.shape[0], X_transformed.shape[1], X_transformed.shape[2], -1))
+            X_transformed = np.reshape(X_transformed, (X_transformed.shape[0],
+                                                       X_transformed.shape[1],
+                                                       X_transformed.shape[2],
+                                                       -1))
             # X = X[..., None] + adjacency[None, None, :] #use broadcasting to speed up computation
             adjacency = np.repeat(higherorder_adjacency[np.newaxis, :, :, np.newaxis], X.shape[0], axis=0)
             X_transformed = np.concatenate((adjacency, X_transformed), axis=3)
@@ -1202,9 +1198,8 @@ class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin):
 
             adjacency_list = np.asarray(adjacency_list)
             adjacency_list = adjacency_list.reshape((adjacency_list.shape[0], adjacency_list.shape[1],
-                                                    adjacency_list.shape[2], -1))
+                                                     adjacency_list.shape[2], -1))
             X_transformed = np.concatenate((adjacency_list, X_features), axis=3)
-
 
         else:
             raise KeyError('Only mean and individual transform are supported. '

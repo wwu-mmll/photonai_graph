@@ -20,9 +20,9 @@ Translationale Psychiatrie
 Universitaetsklinikum Muenster
 """
 
-#TODO: make error messages for possible errors
-#TODO: make the import section a bit more "airy"
-#TODO: make documentation for every single method
+# TODO: make error messages for possible errors
+# TODO: make the import section a bit more "airy"
+# TODO: make documentation for every single method
 
 import networkx
 from sklearn.base import BaseEstimator, TransformerMixin

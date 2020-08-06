@@ -36,7 +36,7 @@ class GraphConvNet_Classifier(BaseEstimator, ClassifierMixin):
         self._multi_class = None
         self.loss = loss
         self.multi_class = multi_class
-        self.epochs =epochs
+        self.epochs = epochs
         self.folds = folds
         self.n_repeats = n_repeats
         self.nn_batch_size = nn_batch_size
@@ -50,9 +50,11 @@ class GraphConvNet_Classifier(BaseEstimator, ClassifierMixin):
         if not metrics:
             metrics = ['accuracy']
 
+        # all used self. variables should be defined in __init__
+        self.model = None
 
     def fit(self, X, y):
-
+        # todo: duplicated code
         # encode targets the right way
         graph_labels = self.encode_targets(y)
         graph_labels = pd.get_dummies(graph_labels, drop_first=True)
@@ -95,8 +97,8 @@ class GraphConvNet_Classifier(BaseEstimator, ClassifierMixin):
 
         return self.model.predict(test_gen)
 
-
     def create_graph_classification_model(self, generator):
+        # todo: duplicated code
         gc_model = GCNSupervisedGraphClassification(
             layer_sizes=self.GCN_layer_sizes,
             activations=["relu"]*len(self.GCN_layer_sizes),
@@ -143,7 +145,7 @@ class GraphConvNet_Regressor(BaseEstimator, ClassifierMixin):
 
     def __init__(self, multi_class: bool = True,
                  hidden_layer_sizes: list = None,
-                 GCN_layer_sizes: list = [64, 64],
+                 GCN_layer_sizes=None,
                  learning_rate: float = 0.005,
                  loss: str = "mse",
                  epochs: int = 200,
@@ -157,6 +159,9 @@ class GraphConvNet_Regressor(BaseEstimator, ClassifierMixin):
                  activations='relu',  # list or str
                  optimizer="adam"):  # list or keras.optimizer
 
+        # Default variables should not be mutable.
+        if GCN_layer_sizes is None:
+            GCN_layer_sizes = [64, 64]
         self.GCN_layer_sizes = GCN_layer_sizes
         self.learning_rate = learning_rate
         self._loss = ""
@@ -177,9 +182,10 @@ class GraphConvNet_Regressor(BaseEstimator, ClassifierMixin):
         if not metrics:
             metrics = ['accuracy']
 
+        self.model = None
 
     def fit(self, X, y):
-
+        # todo: duplicated code
         # encode targets the right way
         graph_labels = pd.get_dummies(y, drop_first=True)
         # transform inputs
@@ -208,6 +214,7 @@ class GraphConvNet_Regressor(BaseEstimator, ClassifierMixin):
         return self
 
     def predict(self, X):
+        # todo: duplicated code
         # transform inputs
         X_graphs = DenseToNetworkx(X)
         graphs = []
@@ -221,8 +228,8 @@ class GraphConvNet_Regressor(BaseEstimator, ClassifierMixin):
 
         return self.model.predict(test_gen)
 
-
     def create_graph_classification_model(self, generator):
+        # todo: duplicated code
         gc_model = GCNSupervisedGraphClassification(
             layer_sizes=self.GCN_layer_sizes,
             activations=["relu"]*len(self.GCN_layer_sizes),
@@ -255,14 +262,12 @@ class GraphConvNet_Regressor(BaseEstimator, ClassifierMixin):
         return train_gen, test_gen
 
 
-
-
 # Deep Graph CNN Neural Network for Graph Classification
 class DeepGraphCNN_Classifier(BaseEstimator, ClassifierMixin):
 
     def __init__(self, multi_class: bool = True,
                  hidden_layer_sizes: list = None,
-                 GCN_layer_sizes: list = [32, 32, 32, 1],
+                 GCN_layer_sizes=None,
                  learning_rate: float = 0.005,
                  loss: str = "binary_crossentropy",
                  epochs: int = 200,
@@ -276,6 +281,8 @@ class DeepGraphCNN_Classifier(BaseEstimator, ClassifierMixin):
                  activations='tanh',  # list or str
                  optimizer="adam"):  # list or keras.optimizer
 
+        if GCN_layer_sizes is None:
+            GCN_layer_sizes = [32, 32, 32, 1]
         self.GCN_layer_sizes = GCN_layer_sizes
         self.learning_rate = learning_rate
         self._loss = ""
@@ -297,9 +304,10 @@ class DeepGraphCNN_Classifier(BaseEstimator, ClassifierMixin):
         if not metrics:
             metrics = ['accuracy']
 
+        self.model = None
 
     def fit(self, X, y):
-
+        # todo: duplicated code
         # encode targets the right way
         graph_labels = self.encode_targets(y)
         graph_labels = pd.get_dummies(graph_labels, drop_first=True)
@@ -329,6 +337,7 @@ class DeepGraphCNN_Classifier(BaseEstimator, ClassifierMixin):
         return self
 
     def predict(self, X):
+        # todo: duplicated code
         # convert graphs to networkx in order to import them
         X_graphs = DenseToNetworkx(X)
         graphs = []
@@ -341,7 +350,6 @@ class DeepGraphCNN_Classifier(BaseEstimator, ClassifierMixin):
         test_gen = generator.flow(graphs)
 
         return self.model.predict(test_gen)
-
 
     def create_graph_classification_model(self, generator):
         model = DeepGraphCNN(
