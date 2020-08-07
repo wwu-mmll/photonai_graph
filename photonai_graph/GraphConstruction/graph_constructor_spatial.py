@@ -1,12 +1,11 @@
 import os
 import scipy
 import numpy as np
-from sklearn.base import BaseEstimator, TransformerMixin
 
 from .abc_graph_constructor_adjacency import GraphConstructorAdjacency
 
 
-class GraphConstructorSpatial(BaseEstimator, TransformerMixin, GraphConstructorAdjacency):
+class GraphConstructorSpatial(GraphConstructorAdjacency):
     _estimator_type = "transformer"
 
     """

@@ -2,12 +2,11 @@ import os
 import numpy as np
 import sklearn
 from itertools import islice, combinations
-from sklearn.base import BaseEstimator, TransformerMixin
 
 from .abc_graph_constructor_adjacency import GraphConstructorAdjacency
 
 
-class GraphConstructorRandomWalks(BaseEstimator, TransformerMixin, GraphConstructorAdjacency):
+class GraphConstructorRandomWalks(GraphConstructorAdjacency):
     _estimator_type = "transformer"
 
     """
