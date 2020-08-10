@@ -62,7 +62,7 @@ def save_networkx_to_file(Graphs, path, output_format="dot", IDs=None):
                 for graph, i in zip(Graphs, IDs):
                     graph_filename = "graph_" + str(i)
                     graph_path = os.path.join(path, graph_filename)
-                    output_formats[output_format](path, graph_path)
+                    output_formats[output_format](graph, graph_path)
             else:
                 raise Exception("The output format is not supported. Please check your output format.")
         else:
