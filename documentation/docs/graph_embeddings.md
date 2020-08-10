@@ -2,7 +2,8 @@
 
 Graph Embeddings are a way to learn a low dimensional representation of a graph. Through a graph embedding a graph can be represented in low dimensional form, while preserving graph information. This low-dimensional representation can then be used for training classic machine learning algorithms that would otherwise make no use of the graph information.
 
-THe Graph Embeddings used by PHOTON Graph are static graph embeddings, based on the gem python package (link gem).
+The Graph Embeddings used by PHOTON Graph are static graph embeddings, based on the [gem python package](https://github.com/palash1992/GEM).
+
 
 ## Class - GraphEmbeddingGraphFactorization
 
@@ -26,6 +27,9 @@ Transformer class for calculating a Graph Embedding based on Graph Factorization
 ```
 
 
+
+
+
 ## Class - GraphEmbeddingHOPE
 
 Transformer class for calculating a Graph Embedding based on Higher-order proximity preserved embedding (Mingdong et al., 2016). Implementation based on gem python package.
@@ -46,6 +50,9 @@ constructor = GraphEmbeddingHOPE(embedding_dimension=1,
 ```
 
 
+
+
+
 ## Class - GraphEmbeddingLaplacianEigenmaps
 
 Transformer class for calculating a Graph Embedding based on Laplacian Eigenmaps (Belkin & Niyogi, 2013). Implementation based on gem python package.
@@ -60,6 +67,9 @@ Transformer class for calculating a Graph Embedding based on Laplacian Eigenmaps
 ```python
 constructor = GraphEmbeddingLaplacianEigenmaps(embedding_dimension=1)
 ```
+
+
+
 
 
 ## Class - GraphEmbeddingLocallyLinearEmbedding
@@ -78,6 +88,9 @@ Transformer class for calculating a Graph Embedding based on Locally Linear Embe
 ```python
 constructor = GraphEmbeddingLocallyLinearEmbedding(embedding_dimension=1)
 ```
+
+
+
 
 
 ## Class - GraphEmbeddingSDNE
