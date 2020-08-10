@@ -11,4 +11,39 @@ After transforming your matrix, using a graph constructor you can then use this 
 ### Machine Learning on Graphs
 
 Once you have a graph structure, you can then use this graph structure to do machine learning on it in a variety of ways. One option would be to extract graph measures and use these graph measures to do classical machine learning on them. The measures preserve graph information, that would be lost if only looking at node values for example. Depending on the measure it might contain global or local graph information. A similar idea applies to graph embeddings and kernels. They provide lower-dimensional representations of the graph structure, while still preserving graph information. The resulting embedding/kernel transformation can then be used to do classical machine learning.
-In contrast Graph Neural Nets are neural networks modified, so that they will make use of the graph information directly. With a variety of networks available...
+
+In contrast Graph Neural Nets are modified neural networks, that learn directly on graphs and make use of graph information. Here different architectures are available, and no transformation step is required prior to the network. Similar to classical machine learning algorithms
+
+### Building a pipeline
+
+Before building a pipeline, one has to determine the starting point. For illustrative purposes we will consider the case where one is starting with connectivity matrices. First you pick a graph constructor to turn your matrices into adjacency matrices. Then one has to choose whether transform the graph into a low dimensional representation or to directly use graph neural networks. Using PHOTON Graph this can be done in just a few lines of code.
+
+#### Example
+
+```python
+from photonai.base import Hyperpipe, PipelineElement
+from photonai_graph.GraphUtilities import get_random_connectivity_data, get_random_labels
+from sklearn.model_selection import KFold
+
+# make random matrices to simulate connectivity matrices
+X = get_random_connectivity_data(number_of_nodes=50, number_of_individuals=100)
+y = get_random_labels(type="regression", number_of_labels=100)
+
+# Design your Pipeline
+my_pipe = Hyperpipe('basic_gembedding_pipe',
+                    inner_cv=KFold(n_splits=5),
+                    outer_cv=KFold(n_splits=3),
+                    optimizer='sk_opt',
+                    optimizer_params={'n_configurations': 25},
+                    metrics=['mean_absolute_error'],
+                    best_config_metric='mean_absolute_error')
+
+my_pipe.add(PipelineElement('GraphConstructorThreshold',
+                            hyperparameters={'threshold': 0.95}))
+
+my_pipe.add(PipelineElement('GraphEmbeddingHOPE'))
+
+my_pipe.add(PipelineElement('SVR'))
+
+my_pipe.fit(X, y)
+```
