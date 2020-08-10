@@ -47,3 +47,7 @@ my_pipe.add(PipelineElement('SVR'))
 
 my_pipe.fit(X, y)
 ```
+
+### Extended Notes
+
+PHOTON Graph is written in such a way that each function is sklearn compatible. This means that every method can also used in custom pipelines outside of the PHOTON framework.
