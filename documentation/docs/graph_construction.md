@@ -2,6 +2,8 @@
 
 The Graph Construction module is a collection of transformer classes that construct adjacency matrices for graphs based on connectivity matrices. This includes well established methods like thresholding the connectivity matrix, but also allows for more complex adjacency matrix construction methods like kNN-based matrix construction. The adjacency matrices that the transform method of each class returns can then be converted into different formats like networkx, scipy sparse or dgl graphs.
 
+Depending on the type of data you are working with, you might have very noisy data. Or you might be interested only in weaker connections. Or you want the same adjacency matrix for every graph. Transforming your connectivity matrix into an adjacency matrix of your choice can be achieved by the different graph constructor classes, which implement different transformations of the connectivity matrix. In the case of noisy data, thresholding the connections might reduce noise and increase computational speed, by having to evaluate less edges later on. Picking a threshold or percentage window allows you to discard other connections, focusing on the information that is contained in the connections that fall in your window range. And creating the same adjacency matrix for every graph, with only different node features might allow you to use graph algorithms you might otherwise not be able to use.
+
 ## Class - GraphConstructor
 
 Base class inherited by all Graph Constructors. Implements the fit method, which initializes the mean matrix, for mean matrix based graph construction.
