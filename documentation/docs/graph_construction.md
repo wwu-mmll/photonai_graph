@@ -29,6 +29,22 @@ Transformer class for generating adjacency matrices from connectivity matrices. 
 | use_abs_zscore | int, default=0 | whether to use the absolute values of the z-score transformation or allow for negative values |
 | verbosity | int, default=0 | The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug |
 
+#### Example
+
+Use outside of a PHOTON pipeline
+
+```python
+constructor = GraphConstructorThreshold(threshold=0.5,
+                            			    fisher_transform=1,
+			    			                   use_abs=1)
+```
+
+Or as part of a pipeline
+
+```python
+my_pipe.add(PipelineElement('GraphConstructorThreshold',
+                            hyperparameters={'threshold': 0.5}))
+```
    
 ## Class - GraphConstructorPercentage
 
@@ -46,6 +62,23 @@ Transformer class for generating adjacency matrices from connectivity matrices. 
 | zscore | int, default=0 | performs a zscore transformation of the data. Applied after fisher transform and np_abs |
 | use_abs_zscore | int, default=0 | whether to use the absolute values of the z-score transformation or allow for negative values |
 | verbosity | int, default=0 | The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug |
+
+#### Example
+
+Use outside of a PHOTON pipeline
+
+```python
+constructor = GraphConstructorPercentage(percentage=0.9,
+                            			     fisher_transform=1,
+			    			                    use_abs=1)
+```
+
+Or as part of a pipeline
+
+```python
+my_pipe.add(PipelineElement('GraphConstructorPercentage',
+                            hyperparameters={'percentage': 0.9}))
+```
 
 
 ## Class - GraphConstructorThresholdWindow
@@ -65,6 +98,23 @@ Transformer class for generating adjacency matrices from connectivity matrices. 
 | zscore | int, default=0 | performs a zscore transformation of the data. Applied after fisher transform and np_abs |
 | use_abs_zscore | int, default=0 | whether to use the absolute values of the z-score transformation or allow for negative values |
 | verbosity | int, default=0 | The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug |
+
+#### Example
+
+Use outside of a PHOTON pipeline
+
+```python
+constructor = GraphConstructorThresholdWindow(threshold_upper=0.7,
+                            			          threshold_lower=0.3,
+			    			                         use_abs=1)
+```
+
+Or as part of a pipeline
+
+```python
+my_pipe.add(PipelineElement('GraphConstructorThresholdWindow',
+                            hyperparameters={'threshold_upper': 0.7, 'threshold_lower': 0.3}))
+```
 
 
 ## Class - GraphConstructorPercentageWindow
@@ -86,6 +136,24 @@ Transformer class for generating adjacency matrices from connectivity matrices. 
 | use_abs_zscore | int, default=0 | whether to use the absolute values of the z-score transformation or allow for negative values |
 | verbosity | int, default=0 | The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug |
 
+#### Example
+
+Use outside of a PHOTON pipeline
+
+```python
+constructor = GraphConstructorPercentageWindow(percentage_upper=0.9,
+                                               percentage_lower=0.7
+                            			           fisher_transform=1,
+			    			                          use_abs=1)
+```
+
+Or as part of a pipeline
+
+```python
+my_pipe.add(PipelineElement('GraphConstructorPercentageWindow',
+                            hyperparameters={'percentage_upper': 0.9, 'percentage_lower': 0.7}))
+```
+
 
 ## Class - GraphConstructorKNN
 
@@ -102,6 +170,23 @@ Transformer class for generating adjacency matrices from connectivity matrices. 
 | zscore | int, default=0 | performs a zscore transformation of the data. Applied after fisher transform and np_abs |
 | use_abs_zscore | int, default=0 | whether to use the absolute values of the z-score transformation or allow for negative values |
 | verbosity | int, default=0 | The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug |
+
+#### Example
+
+Use outside of a PHOTON pipeline
+
+```python
+constructor = GraphConstructorKNN(k_distance=6,
+                            		 fisher_transform=1,
+			    		                use_abs=1)
+```
+
+Or as part of a pipeline
+
+```python
+my_pipe.add(PipelineElement('GraphConstructorKNN',
+                            hyperparameters={'k_distance': 6}))
+```
 
 
 ## Class - GraphConstructorSpatial
@@ -122,6 +207,26 @@ Transformer class for generating adjacency matrices from connectivity matrices. 
 | use_abs_zscore | int, default=0 | whether to use the absolute values of the z-score transformation or allow for negative values |
 | verbosity | int, default=0 | The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug |
 
+#### Example
+
+Use outside of a PHOTON pipeline
+
+```python
+constructor = GraphConstructorSpatial(k_distance=7,
+					                       transform_style="individual",
+					                       atlas_name="ho_coords.csv",
+					                       atlas_path="path/to/your/data/",
+                            		     fisher_transform=1,
+			    		                    use_abs=1)
+```
+
+Or as part of a pipeline
+
+```python
+my_pipe.add(PipelineElement('GraphConstructorSpatial',
+                            hyperparameters={'k_distance': 7, 'transform_style': "individual", 
+                            'atlas_name': "ho_coords.csv", 'atlas_path': "path/to/your/data/"}))
+```
 
 ## Class - GraphConstructorRandomWalks
 
@@ -143,4 +248,25 @@ Transformer class for generating adjacency matrices from connectivity matrices. 
 | zscore | int, default=0 | performs a zscore transformation of the data. Applied after fisher transform and np_abs |
 | use_abs_zscore | int, default=0 | whether to use the absolute values of the z-score transformation or allow for negative values |
 | verbosity | int, default=0 | The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug |
+
+#### Example
+
+Use outside of a PHOTON pipeline
+
+```python
+constructor = GraphConstructorRandomWalks(k_distance=5,
+						                        transform_style="individual",
+						                        number_of_walks=25,
+                                          fisher_transform=1,
+			    		                        use_abs=1)
+```
+
+Or as part of a pipeline
+
+```python
+my_pipe.add(PipelineElement('GraphConstructorRandomWalks',
+                            hyperparameters={'k_distance': 5, 'transform_style': "individual", 
+                            'number_of_walks': 25}))
+```
+
 
