@@ -1,8 +1,5 @@
-To install PHOTONAI Graph, make sure you have PHOTONAI installed already. Then, you can simply run
-
-
+To install PHOTONAI Graph, you should create a new python/anaconda environment. After creating an environment activate it and install PHOTONAI Graph by simply executing:
 
 ```bash
-pip install photonai
 pip install photonai-graph
 ```
