@@ -36,6 +36,8 @@ nav:
 - Home: 'index.md'
 - Installation: 'installation.md'
 - Getting Started: 'getting_started.md'
+- Workflow: 'workflow.md'
+- API: 'API.md'
 - Graph Construction: 
     - Theory: 
        'graph_construction.md'
