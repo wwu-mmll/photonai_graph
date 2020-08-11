@@ -35,8 +35,8 @@ Use outside of a PHOTON pipeline
 
 ```python
 constructor = GraphConstructorThreshold(threshold=0.5,
-                            			    fisher_transform=1,
-			    			                   use_abs=1)
+                            		fisher_transform=1,
+			    		use_abs=1)
 ```
 
 Or as part of a pipeline
@@ -69,8 +69,8 @@ Use outside of a PHOTON pipeline
 
 ```python
 constructor = GraphConstructorPercentage(percentage=0.9,
-                            			     fisher_transform=1,
-			    			                    use_abs=1)
+                            		 fisher_transform=1,
+			    		 use_abs=1)
 ```
 
 Or as part of a pipeline
@@ -105,8 +105,8 @@ Use outside of a PHOTON pipeline
 
 ```python
 constructor = GraphConstructorThresholdWindow(threshold_upper=0.7,
-                            			          threshold_lower=0.3,
-			    			                         use_abs=1)
+                            		      threshold_lower=0.3,
+			    		      use_abs=1)
 ```
 
 Or as part of a pipeline
@@ -143,8 +143,8 @@ Use outside of a PHOTON pipeline
 ```python
 constructor = GraphConstructorPercentageWindow(percentage_upper=0.9,
                                                percentage_lower=0.7
-                            			           fisher_transform=1,
-			    			                          use_abs=1)
+                            		       fisher_transform=1,
+			    		       use_abs=1)
 ```
 
 Or as part of a pipeline
@@ -177,8 +177,8 @@ Use outside of a PHOTON pipeline
 
 ```python
 constructor = GraphConstructorKNN(k_distance=6,
-                            		 fisher_transform=1,
-			    		                use_abs=1)
+                            	  fisher_transform=1,
+			    	  use_abs=1)
 ```
 
 Or as part of a pipeline
@@ -213,11 +213,11 @@ Use outside of a PHOTON pipeline
 
 ```python
 constructor = GraphConstructorSpatial(k_distance=7,
-					                       transform_style="individual",
-					                       atlas_name="ho_coords.csv",
-					                       atlas_path="path/to/your/data/",
-                            		     fisher_transform=1,
-			    		                    use_abs=1)
+				      transform_style="individual",
+				      atlas_name="ho_coords.csv",
+				      atlas_path="path/to/your/data/",
+                            	      fisher_transform=1,
+			    	      use_abs=1)
 ```
 
 Or as part of a pipeline
@@ -255,10 +255,10 @@ Use outside of a PHOTON pipeline
 
 ```python
 constructor = GraphConstructorRandomWalks(k_distance=5,
-						                        transform_style="individual",
-						                        number_of_walks=25,
+					  transform_style="individual",
+					  number_of_walks=25,
                                           fisher_transform=1,
-			    		                        use_abs=1)
+			    		  use_abs=1)
 ```
 
 Or as part of a pipeline
