@@ -51,7 +51,7 @@ class GraphConvNet_Regressor(GraphNet):
 
         self.model = None
 
-    def create_graph_classification_model(self, generator):
+    def create_graph_model(self, generator):
         gc_model = GCNSupervisedGraphClassification(
             layer_sizes=self.GCN_layer_sizes,
             activations=["relu"] * len(self.GCN_layer_sizes),

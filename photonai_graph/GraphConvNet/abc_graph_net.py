@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.base import BaseEstimator, ClassifierMixin
 from stellargraph.mapper import PaddedGraphGenerator
 from tensorflow.keras.callbacks import EarlyStopping
-from photonai_graph.GraphUtilities import DenseToNetworkx
+from photonai_graph.GraphUtilities import dense_to_networkx
 from stellargraph import StellarGraph
 from sklearn import model_selection
 
@@ -12,11 +12,13 @@ class GraphNet(ABC, BaseEstimator, ClassifierMixin):
 
     def __init__(self):
         self.model = None
+        self.nn_batch_size = None
+        self.epochs = None
 
     def predict(self, X):
         # todo: duplicated code
         # convert graphs to networkx in order to import them
-        X_graphs = DenseToNetworkx(X)
+        X_graphs = dense_to_networkx(X)
         graphs = []
         for graph in X_graphs:
             graph = StellarGraph.from_networkx(graph, node_features="collapsed_weight")
@@ -31,7 +33,7 @@ class GraphNet(ABC, BaseEstimator, ClassifierMixin):
     def fit(self, X, y):
         graph_labels = pd.get_dummies(y, drop_first=True)
         # transform inputs
-        x_graphs = DenseToNetworkx(X)
+        x_graphs = dense_to_networkx(X)
         graphs = []
         for graph in x_graphs:
             graph = StellarGraph.from_networkx(graph, node_features="collapsed_weight")
@@ -44,7 +46,7 @@ class GraphNet(ABC, BaseEstimator, ClassifierMixin):
 
         test_accs = []
 
-        self.model = self.create_graph_classification_model(generator)
+        self.model = self.create_graph_model(generator)
 
         X_train, X_test, y_train, y_test = model_selection.train_test_split(graphs, graph_labels)
         train_gen, val_gen = self.get_generators(X_train, X_test, y_train, y_test, self.nn_batch_size, generator)
@@ -54,6 +56,13 @@ class GraphNet(ABC, BaseEstimator, ClassifierMixin):
         test_accs.append(acc)
 
         return self
+
+    @staticmethod
+    def get_generators(train_data, test_data, train_labels, test_labels, batch_size, generator):
+        raise NotImplementedError("Subclasses must implement this")
+
+    def create_graph_model(self, generator):
+        raise NotImplementedError("Subclasses must implement this")
 
     def train_fold(self, model, train_gen, test_gen, es, epochs):
         raise NotImplementedError("Subclasses must implement this")

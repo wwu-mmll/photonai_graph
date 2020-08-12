@@ -48,7 +48,7 @@ class DeepGraphCNN_Regressor(GraphNet):
         if not metrics:
             metrics = ['accuracy']
 
-    def create_graph_classification_model(self, generator):
+    def create_graph_model(self, generator):
         model = DeepGraphCNN(
             layer_sizes=self.GCN_layer_sizes,
             activations=[self.activations]*len(self.GCN_layer_sizes),

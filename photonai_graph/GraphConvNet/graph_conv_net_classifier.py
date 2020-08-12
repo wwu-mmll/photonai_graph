@@ -50,7 +50,7 @@ class GraphConvNet_Classifier(GraphNet):
         # all used self. variables should be defined in __init__
         self.model = None
 
-    def create_graph_classification_model(self, generator):
+    def create_graph_model(self, generator):
         gc_model = GCNSupervisedGraphClassification(
             layer_sizes=self.GCN_layer_sizes,
             activations=["relu"] * len(self.GCN_layer_sizes),
