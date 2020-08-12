@@ -2,7 +2,7 @@ import os
 import scipy
 import numpy as np
 
-from .abc_graph_constructor_adjacency import GraphConstructorAdjacency
+from photonai_graph.GraphConstruction.abc_graph_constructor_adjacency import GraphConstructorAdjacency
 
 
 class GraphConstructorSpatial(GraphConstructorAdjacency):

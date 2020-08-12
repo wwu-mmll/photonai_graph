@@ -3,7 +3,7 @@ import numpy as np
 import sklearn
 from itertools import islice, combinations
 
-from .abc_graph_constructor_adjacency import GraphConstructorAdjacency
+from photonai_graph.GraphConstruction.abc_graph_constructor_adjacency import GraphConstructorAdjacency
 
 
 class GraphConstructorRandomWalks(GraphConstructorAdjacency):
