@@ -1,0 +1,4 @@
+from photonai_graph.GraphConvNet.graph_conv_net_regressor import GraphConvNet_Regressor
+from photonai_graph.GraphConvNet.graph_conv_net_classifier import GraphConvNet_Classifier
+from photonai_graph.GraphConvNet.deep_graph_cnn_classifier import DeepGraphCNN_Classifier
+from photonai_graph.GraphConvNet.deep_graph_cnn_regressor import DeepGraphCNN_Regressor
