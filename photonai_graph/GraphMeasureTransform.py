@@ -26,7 +26,7 @@ Universitaetsklinikum Muenster
 
 import networkx
 from sklearn.base import BaseEstimator, TransformerMixin
-from photonai_graph.GraphUtilities import DenseToNetworkx
+from photonai_graph.GraphUtilities import dense_to_networkx
 import pandas as pd
 import numpy as np
 import json
@@ -55,7 +55,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
 
         X_transformed = []
 
-        graphs = DenseToNetworkx(X, adjacency_axis=0)
+        graphs = dense_to_networkx(X, adjacency_axis=0)
 
         # load json file
         base_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -119,7 +119,6 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
 
         return X_transformed
 
-
     def get_measure_info(self):
         pass
 
@@ -127,7 +126,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
 
         measure_list = []
         # turn graphs into networkx format
-        graphs = DenseToNetworkx(X, adjacency_axis=0)
+        graphs = dense_to_networkx(X, adjacency_axis=0)
 
         # load json file
         base_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -206,4 +205,3 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         col_names = ["ID", "value", "measure", "nodes", "edges"]
         
         df.to_csv(path_or_buf=path, names=col_names, index=None)
-

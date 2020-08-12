@@ -20,7 +20,7 @@ Translationale Psychiatrie
 Universitaetsklinikum Muenster
 """
 
-#TODO: make photonai_graph utility with 1. converter for GCNs, 2. converter for networkx, 3. ?
+# TODO: make photonai_graph utility with 1. converter for GCNs, 2. converter for networkx, 3. ?
 from networkx.convert_matrix import from_numpy_matrix
 from networkx.drawing.nx_pylab import draw
 import networkx.drawing as drawx
@@ -31,15 +31,18 @@ import pydot
 from scipy import stats
 import matplotlib.pyplot as plt
 from photonai_graph.GraphConversions import save_networkx_to_file, networkx_to_dense, networkx_to_sparse, networkx_to_stellargraph
-from photonai_graph.GraphConversions import dense_to_networkx, dense_to_stellargraph, dense_to_sparse
+from photonai_graph.GraphConversions import dense_to_networkx as dnx, dense_to_stellargraph, dense_to_sparse
 from photonai_graph.GraphConversions import sparse_to_networkx, sparse_to_dense, sparse_to_stellargraph
 from photonai_graph.GraphConversions import stellargraph_to_networkx, stellargraph_to_dense, stellargraph_to_sparse
-import os
-import json
+import warnings
 
 
 def DenseToNetworkx(X, adjacency_axis=0, feature_axis=1, feature_construction="collapse"):
+    # todo: I have renamed this function. Use dense_to_networkx in the future
+    warnings.warn("This function is renamed to dense_to_networkx", DeprecationWarning)
+    return dense_to_networkx(X, adjacency_axis, feature_axis, feature_construction)
 
+def dense_to_networkx(X, adjacency_axis=0, feature_axis=1, feature_construction="collapse"):
     # convert if Dense is a list of ndarrays
     if isinstance(X, list):
         graph_list = []
@@ -62,11 +65,11 @@ def DenseToNetworkx(X, adjacency_axis=0, feature_axis=1, feature_construction="c
         X_converted = graph_list
 
     # convert if Dense is just a single ndarray
-    if isinstance(X, nx.classes.graph.Graph):
+    elif isinstance(X, nx.classes.graph.Graph):
         X_converted = from_numpy_matrix(A=X[:, :, adjacency_axis])
 
     # convert if Dense is an ndarray consisting of multiple arrays
-    if isinstance(X, np.ndarray):
+    elif isinstance(X, np.ndarray):
         graph_list = []
 
         for i in range(X.shape[0]):
@@ -85,6 +88,8 @@ def DenseToNetworkx(X, adjacency_axis=0, feature_axis=1, feature_construction="c
             graph_list.append(networkx_graph)
 
         X_converted = graph_list
+    else:
+        raise ValueError("X has unsupported format. Please check input")
 
     return X_converted
 
@@ -95,14 +100,14 @@ def draw_connectivity_matrix(matrix, colorbar=False, adjacency_axis=None):
         Parameters
         ----------
         matrix : numpy.ndarray, numpy.matrix or a list of those
-	    the input matrix or matrices from which to draw the connectivity matrix
+        the input matrix or matrices from which to draw the connectivity matrix
             
         colorbar : boolean, default=False
             Whether to use a colorbar in the drawn plot
-	
-	adjacency_axis : int, default=None
-	    position of the the adjacency axis, if specified the array is assumed to
-	    have an additional axis where the matrix is stored.
+
+        adjacency_axis : int, default=None
+        position of the the adjacency axis, if specified the array is assumed to
+        have an additional axis where the matrix is stored.
 
         Notes
         -----
@@ -117,6 +122,7 @@ def draw_connectivity_matrix(matrix, colorbar=False, adjacency_axis=None):
         >>> draw_connectivity_matrix(adjacency_axis=0)
                
         """
+    # todo: colorbar not used
     # check input format
     if isinstance(matrix, np.ndarray) or isinstance(matrix, np.matrix):
         if adjacency_axis is not None:
@@ -151,16 +157,16 @@ def convert_graphs(graphs, input_format="networkx", output_format="stellargraph"
 
         Parameters
         ----------
-        matrix : graphs
-	    list of graphs, or np.ndarray/np.matrix
+        graphs : graphs
+            list of graphs, or np.ndarray/np.matrix
             
         input_format : str, default="networkx"
             format of the graphs to be transformed
-	
-	output_format : str, default="stellargraph"
-	    desired output format of the graph(s)
 
-	Returns
+        output_format : str, default="stellargraph"
+            desired output format of the graph(s)
+
+        Returns
         -------
         list, np.ndarray, np.matrix
             The transformed matrices as a list
@@ -178,6 +184,7 @@ def convert_graphs(graphs, input_format="networkx", output_format="stellargraph"
     # check input format
     if input_format == "networkx":
         if output_format == "networkx":
+            # todo: why not only return the graphs? Or raise a warning
             raise Exception('Graphs already in networkx format.')
         elif output_format == "dense":
             trans_graphs = networkx_to_dense(graphs)
@@ -190,7 +197,7 @@ def convert_graphs(graphs, input_format="networkx", output_format="stellargraph"
                            'Please check your output format.')
     elif input_format == "dense":
         if output_format == "networkx":
-            trans_graphs = dense_to_networkx(graphs)
+            trans_graphs = dnx(graphs)  # dense_to_networkx is redefined above, so we imported it as dnx
         elif output_format == "dense":
             raise Exception('Graphs already in dense format.')
         elif output_format == "sparse":
@@ -231,10 +238,16 @@ def convert_graphs(graphs, input_format="networkx", output_format="stellargraph"
     return trans_graphs
 
 
-def get_random_connectivity_data(type = "dense", number_of_nodes = 114, number_of_individuals = 10, number_of_modalities = 2):
+def get_random_connectivity_data(type="dense",
+                                 number_of_nodes=114,
+                                 number_of_individuals=10,
+                                 number_of_modalities=2):
     # make random connectivity photonai_graph data
     if type == "dense":
         random_matrices = np.random.rand(number_of_individuals, number_of_nodes, number_of_nodes, number_of_modalities)
+    else:
+        # todo what else
+        raise NotImplementedError("This function is not supported yet")
 
     return random_matrices
 
@@ -245,12 +258,12 @@ def get_random_labels(type="classification", number_of_labels=10):
         Parameters
         ----------
         type : str, default="classification"
-	    controls the type labels. "classification" outputs binary labels 0 and 1, "regression" outputs random float values.
+        controls the type labels. "classification" outputs binary labels 0 and 1, "regression" outputs random float values.
             
-	number_of_labels : int, default=10
-	    number of labels to generate
+        number_of_labels : int, default=10
+            number of labels to generate
 
-	Returns
+        Returns
         -------
         np.ndarray
             The labels as np.ndarray
@@ -259,7 +272,7 @@ def get_random_labels(type="classification", number_of_labels=10):
         Notes
         -----
         If used in conjunction with get_random_connectivity_data number_of_labels
-	should match number_of_individuals.
+        should match number_of_individuals.
 
         Examples
         --------
@@ -276,66 +289,78 @@ def get_random_labels(type="classification", number_of_labels=10):
         y = np.random.rand(number_of_labels)
 
     else:
-        print('random labels only implemented for classification and regression. Please check your spelling')
+        # todo: If we simply print this message, the execution will not be aborted.
+        # todo: In this case y is not defined in the return statement below.
+        raise ValueError('random labels only implemented for classification and regression. Please check your spelling')
 
     return y
 
-def save_graphs(Graphs, path="", input_format="networkx", output_format="dot", IDs=None):
+
+def save_graphs(graphs, path="", input_format="networkx", output_format="dot", IDs=None):
     """save graphs to file.
 
         Parameters
         ----------
         graphs : 
-	    a list or a np.ndarray of graphs to be saved
+            a list or a np.ndarray of graphs to be saved
 
         input_format : str, default="networkx"
-	    format of the graphs to be saved        
+            format of the graphs to be saved
 
-	path : str, default=""
-	    path where to save the graphs
+        path : str, default=""
+            path where to save the graphs
             
-	output_format : str, default="dot"
-	    the output format in which to save the graphs
+        output_format : str, default="dot"
+            the output format in which to save the graphs
 
 
         Examples
         --------
-	>>> g1, g2 = nx.line_graph(10), nx.line_graph(7)
-	>>> graphs = [g1, g2]
+        >>> g1, g2 = nx.line_graph(10), nx.line_graph(7)
+        >>> graphs = [g1, g2]
         >>> save_graphs(graphs, path="path/to/your/data/")      
         
         """
     # check input format
     if input_format == "networkx":
-        save_networkx_to_file(Graphs, path, output_format=output_format, IDs=IDs)
+        save_networkx_to_file(graphs, path, output_format=output_format, IDs=IDs)
     else:
         raise Exception("Your desired output format is not supported yet.")
 
-def VisualizeNetworkx(Graphs):
+
+def VisualizeNetworkx(graphs):
+    # todo: I have moved this function
+    warnings.warn("This function is renamed to visualize_networkx", DeprecationWarning)
+    return visualize_networkx(graphs)
+
+
+def visualize_networkx(graphs):
     """Visualize a networkx graph or graphs using networkx built-in visualization.
 
         Parameters
         ----------
         graphs : 
-	    a list or of networkx graphs or a single networkx graph
+        a list or of networkx graphs or a single networkx graph
 
 
         Examples
         --------
-	    >>> g1, g2 = nx.line_graph(10), nx.line_graph(7)
-	    >>> graphs = [g1, g2]
-        >>> visualizenetworkx(graphs)
+        >>> g1, g2 = nx.line_graph(10), nx.line_graph(7)
+        >>> graphs = [g1, g2]
+        >>> visualize_networkx(graphs)
        
         
         """
     # check format in which graphs are presented or ordered
-    if isinstance(Graphs, list):
-        for graph in Graphs:
+    if isinstance(graphs, list):
+        for graph in graphs:
             draw(graph)
             plt.show()
-    if isinstance(Graphs, nx.classes.graph.Graph):
-        draw(Graphs)
+    elif isinstance(graphs, nx.classes.graph.Graph):
+        draw(graphs)
         plt.show()
+    else:
+        raise ValueError("graphs has unexpected format")
     # use networkx visualization function
 
 
@@ -345,12 +370,12 @@ def individual_ztransform(X, adjacency_axis=0):
         Parameters
         ----------
         X : np.ndarray
-	        a list or of networkx graphs or a single networkx graph
+            a list or of networkx graphs or a single networkx graph
 
-	    adjacency_axis: int, default=0
-	        the position of the adjacency matrix
+        adjacency_axis: int, default=0
+            the position of the adjacency matrix
 
-	    Returns
+        Returns
         -------
         np.ndarray
             The z-score transformed matrices as an array
@@ -358,8 +383,8 @@ def individual_ztransform(X, adjacency_axis=0):
 
         Examples
         --------
-	    >>> X = get_random_connectivity_data()
-	    >>> X_transformed = individual_ztransform(X)
+        >>> X = get_random_connectivity_data()
+        >>> X_transformed = individual_ztransform(X)
                
         """
     # check dimensions
@@ -386,11 +411,11 @@ def individual_fishertransform(X, adjacency_axis=0):
         Parameters
         ----------
         X : np.ndarray
-	        a list or of networkx graphs or a single networkx graph
-	    adjacency_axis: int, default=0
-	        the position of the adjacency matrix
+            a list or of networkx graphs or a single networkx graph
+        adjacency_axis: int, default=0
+            the position of the adjacency matrix
 
-	    Returns
+        Returns
         -------
         np.ndarray
             The fisher transformed matrices as an array
@@ -398,8 +423,8 @@ def individual_fishertransform(X, adjacency_axis=0):
 
         Examples
         --------
-	    >>> X = get_random_connectivity_data()
-	    >>> X_transformed = individual_fishertransform(X)
+        >>> X = get_random_connectivity_data()
+        >>> X_transformed = individual_fishertransform(X)
        
         
         """
@@ -427,42 +452,43 @@ def pydot_to_nx(graphs):
         Parameters
         ----------
         graphs : list or pydot.Dot
-	    a list of pydot graphs or a single pydot graph
+        a list of pydot graphs or a single pydot graph
 
 
-	    Returns
+        Returns
         -------
         list or pydot.Dot
             The input graph or graphs in networkx format
 
         """
     if isinstance(graphs, list):
-        A_Graphs = []
+        a_graphs = []
         for graph in graphs:
             a_graph = drawx.nx_pydot.from_pydot(graph)
-            A_Graphs.append(a_graph)
+            a_graphs.append(a_graph)
 
     elif isinstance(graphs, pydot.Dot):
-        A_Graphs = drawx.nx_pydot.from_pydot(graphs)
+        a_graphs = drawx.nx_pydot.from_pydot(graphs)
 
     else:
         raise TypeError('The input needs to be list of pydot files or a single pydot file. Please check your inputs.')
 
-    return A_Graphs
+    return a_graphs
+
 
 def check_asteroidal(graph, return_boolean=True):
     """checks whether a graph or a list graphs is asteroidal
 
         Parameters
         ----------
-        graphs : list or nx.classes.graph.Graph
-	        a list of networkx graphs or a single networkx graph
+        graph : list or nx.classes.graph.Graph
+            a list of networkx graphs or a single networkx graph
 
-	    return_boolean : boolean, default=True
-	        whether to return a True/False statement about the graphs or a list of asteroidal triples per graph
+        return_boolean : boolean, default=True
+            whether to return a True/False statement about the graphs or a list of asteroidal triples per graph
 
 
-	    Returns
+        Returns
         -------
         list or boolean
             A list of True/False values or a list of asteroidal triples, or a single boolean value
@@ -478,9 +504,10 @@ def check_asteroidal(graph, return_boolean=True):
         if isinstance(graph, nx.classes.graph.Graph):
             graph_answer = asteroidal.is_at_free(graph)
         else:
-            print('Your input is not a networkx photonai_graph or a list of networkx graphs. Please check your inputs.')
+            raise ValueError('Your input is not a networkx photonai_graph or a list of networkx graphs. '
+                             'Please check your inputs.')
 
-    if not return_boolean:
+    else:
         if isinstance(graph, list):
             graph_answer = []
             for i in graph:
@@ -489,7 +516,8 @@ def check_asteroidal(graph, return_boolean=True):
         if isinstance(graph, nx.classes.graph.Graph):
             graph_answer = asteroidal.find_asteroidal_triple(graph)
         else:
-            print('Your input is not a networkx photonai_graph or a list of networkx graphs. Please check your inputs.')
+            raise ValueError('Your input is not a networkx photonai_graph or a list of networkx graphs. '
+                             'Please check your inputs.')
 
     return graph_answer
 
@@ -527,7 +555,8 @@ class DenseToNetworkxTransformer(BaseEstimator, TransformerMixin):
 class DenseToTorchGeometricTransformer(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
-    # turns a dense adjacency and feature matrix coming from a photonai_graph constructor into a pytorch geometric data object
+    # turns a dense adjacency and feature matrix coming 
+    # from a photonai_graph constructor into a pytorch geometric data object
 
     def __init__(self, adjacency_axis = 0,
                  concatenation_axis = 3, data_as_list = 1,
@@ -648,4 +677,3 @@ def GraphConverter(X, y, conversion_type = 'DenseToNetworkx', adjacency_axis = 0
         print('Not implemented yet')
         
 '''
-
