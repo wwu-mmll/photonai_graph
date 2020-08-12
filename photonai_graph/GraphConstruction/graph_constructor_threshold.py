@@ -107,6 +107,7 @@ class GraphConstructorThreshold(BaseEstimator, TransformerMixin):
         else:
             raise Exception('encountered unusual dimensions, please check your dimensions')
         # This creates and indvidual adjacency matrix for each person
+        # todo: threshold missing equal values (<= or >=)
         Threshold_matrix[Threshold_matrix > self.threshold] = 1
         # todo: duplicated code starting here again
         Threshold_matrix[Threshold_matrix < self.threshold] = 0
