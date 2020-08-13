@@ -45,6 +45,8 @@ nav:
        'examples/graph_construction_examples.md'
 - Graph Measures: 'graph_measures.md'
 - Graph Embeddings: 'graph_embeddings.md'
+- Graph Neural Networks: 'graph_convnets.md'
+- Graph Utilities: 'graph_utilities.md'
 
 
 
