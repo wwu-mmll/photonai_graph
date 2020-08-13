@@ -7,8 +7,9 @@ The graph utility functions module is a set of utility functions when working wi
 #### draw_connectivity_matrix
 
 >     ```python
-draw_connectivity_matrix(matrix, colorbar=False, adjacency_axis=None)
-```
+>     draw_connectivity_matrix(matrix, colorbar=False, adjacency_axis=None)
+>     ```
+
 
 >**Parameters**
 
