@@ -10,8 +10,8 @@ The graph utility functions module is a set of utility functions when working wi
 
 > Parameters
 
- ..* matrix : *(numpy.ndarray, numpy.matrix or a list of those)* the input matrix or matrices from which to draw the connectivity matrix
+* matrix : *(numpy.ndarray, numpy.matrix or a list of those)* the input matrix or matrices from which to draw the connectivity matrix
             
- ..* colorbar : *(boolean, default=False)* Whether to use a colorbar in the drawn plot
+* colorbar : *(boolean, default=False)* Whether to use a colorbar in the drawn plot
 	
- ..* adjacency_axis : *(int, default=None)* position of the the adjacency axis, if specified the array is assumed to have an additional axis where the matrix is stored.
+* adjacency_axis : *(int, default=None)* position of the the adjacency axis, if specified the array is assumed to have an additional axis where the matrix is stored.
