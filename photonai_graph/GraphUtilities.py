@@ -94,6 +94,57 @@ def dense_to_networkx(X, adjacency_axis=0, feature_axis=1, feature_construction=
     return X_converted
 
 
+def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=200,
+                      node_shape='o', weight=None, path=None):
+    """This functions draws a connectogram, from a graph."""
+
+    pos = nx.circular_layout(graph)
+    nx.draw_networkx_nodes(graph, pos, node_size=nodesize, node_shape=node_shape, cmap=colorscheme)
+
+    if weight is not None:
+        elarge = [(u, v) for (u, v, d) in graph.edges(data=True) if d['weight'] > weight]
+        esmall = [(u, v) for (u, v, d) in graph.edges(data=True) if d['weight'] <= weight]
+        nx.draw_networkx_edges(graph, pos, edgelist=elarge,
+                               width=6, connectionstyle=edge_rad)
+        nx.draw_networkx_edges(graph, pos, edgelist=esmall,
+                               width=6, alpha=0.5, edge_color='b', style='dashed', connectionstyle=edge_rad)
+
+    else:
+        nx.draw_networkx_edges(graph, pos, connectionstyle=edge_rad)
+
+    plt.show()
+
+    if path is not None:
+        plt.savefig(path)
+
+
+def draw_connectograms(graphs, curved_edge=False, colorscheme=None, path=None, ids=None, format=None):
+    """This function draws multiple connectograms, from graph lists."""
+    if isinstance(graphs, list):
+        if ids is not None:
+            if len(ids) == len(graphs):
+                for graph, ID in zip(graphs, ids):
+                    save_path = os.path.join(path, ID, format)
+                    draw_connectogram(graph, curved_edge, colorscheme, path=save_path)
+            else:
+                raise Exception('Number of IDs must match number of graphs.')
+        # if no IDs are provided graphs are just numbered
+        else:
+            counter = 0
+            for graph in graphs:
+                save_path = os.path.join(path, str(counter), format)
+                draw_connectogram(graph, curved_edge, colorscheme, path=save_path)
+                counter += 1
+
+    # if the it is only a single graph
+    elif isinstance(graphs, nx.classes.graph.Graph):
+        draw_connectogram(graphs, curved_edge, colorscheme, path=path)
+
+    # input should be list or single graph
+    else:
+        raise Exception('Input needs to be a single networkx graph or a list of those.')
+
+        
 def draw_connectivity_matrix(matrix, colorbar=False, adjacency_axis=None):
     """Draw connectivity matrix.
 
