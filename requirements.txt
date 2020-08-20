@@ -2,6 +2,7 @@ photonai
 networkx
 pydot
 gem @ git+https://github.com/palash1992/GEM.git#egg=gem
-stellargraph
+torch
+dgl
 pandas
 numpy
