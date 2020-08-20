@@ -27,7 +27,8 @@ within the PHOTON framework. The module provides a range of graph machine learni
                       'networkx',
                       'pydot',
                       'gem @ git+https://github.com/palash1992/GEM.git#egg=gem',
-                      'stellargraph',
+                      'torch',
+                      'dgl',
                       'pandas',
                       'numpy']
 )
