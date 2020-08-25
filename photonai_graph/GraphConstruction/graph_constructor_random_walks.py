@@ -1,12 +1,9 @@
-import os
 import numpy as np
-import sklearn
 from itertools import islice, combinations
+from photonai_graph.GraphConstruction.graph_constructor import GraphConstructor
 
-from photonai_graph.GraphConstruction.abc_graph_constructor_adjacency import GraphConstructorAdjacency
 
-
-class GraphConstructorRandomWalks(GraphConstructorAdjacency):
+class GraphConstructorRandomWalks(GraphConstructor):
     _estimator_type = "transformer"
 
     """
@@ -34,16 +31,6 @@ class GraphConstructorRandomWalks(GraphConstructorAdjacency):
         size of the sliding window from which to sample to coocurrence of two nodes
     * `no_edge_weight` [int, default=1]:
         whether to return an edge weight (0) or not (1)
-    * `adjacency_axis` [int]:
-        position of the adjacency matrix, default being zero
-    * `one_hot_nodes` [int]:
-        Whether to generate a one hot encoding of the nodes in the matrix.
-    * `return_adjacency_only` [int]:
-        whether to return the adjacency matrix only (1) or also a feature matrix (0)
-    * `verbosity` [int, default=0]:
-        The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
-    * `logs` [str, default='']:
-        Path to the log data    
 
     Example
     -------
@@ -54,36 +41,21 @@ class GraphConstructorRandomWalks(GraphConstructorAdjacency):
                           use_abs=1)
    """
 
-    def __init__(self, k_distance=10, number_of_walks=10, walk_length=10, window_size=5,
-                 no_edge_weight=1,
-                 transform_style="mean", adjacency_axis=0, feature_axis=1, logs=''):
+    def __init__(self,
+                 k_distance: int = 10,
+                 number_of_walks: int = 10,
+                 walk_length: int = 10,
+                 window_size: int = 5,
+                 no_edge_weight: int = 1,
+                 feature_axis=1,
+                 *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.k_distance = k_distance
         self.number_of_walks = number_of_walks
         self.walk_length = walk_length
         self.window_size = window_size
-        self.transform_style = transform_style
-        self.adjacency_axis = adjacency_axis
-        self.feature_axis = feature_axis
         self.no_edge_weight = no_edge_weight
-        if logs:
-            self.logs = logs
-        else:
-            self.logs = os.getcwd()
-
-    def fit(self, X, y):
-        # todo: ...
-        pass
-
-    @staticmethod
-    def distance_sklearn_metrics(self, z, k, metric='euclidean'):
-        """Compute exact pairwise distances."""
-        d = sklearn.metrics.pairwise.pairwise_distances(
-            z, metric=metric, n_jobs=-2)
-        # k-NN photonai_graph.
-        idx = np.argsort(d)[:, 1:k + 1]
-        d.sort()
-        d = d[:, 1:k + 1]
-        return d, idx
+        self.feature_axis = feature_axis
 
     @staticmethod
     def random_walk(adjacency, walk_length, num_walks):
@@ -140,6 +112,40 @@ class GraphConstructorRandomWalks(GraphConstructorAdjacency):
                     # if they occur at the same time add + 1 to the frequency table
 
         return coocurrence
+
+    def get_ho_adjacency(self, adj):
+        """Returns the higher order adjacency of a graph"""
+        adjacency_list = []
+        adj = np.squeeze(adj)
+        for i in range(adj.shape[0]):
+            d, idx = self.distance_sklearn_metrics(adj[i, :, :], k=self.k_distance, metric='euclidean')
+            adjacency = self.adjacency(d, idx).astype(np.float32)
+
+            # normalize adjacency
+            if self.no_edge_weight == 1:
+                adjacency[adjacency > 0] = 1
+
+            adjacency = adjacency.toarray()
+            higherorder_adjacency = self.__adjacency_to_dense(adjacency)
+            # turn adjacency into numpy matrix for concatenation
+            adjacency_list.append(higherorder_adjacency)
+
+        adjacency_list = np.asarray(adjacency_list)
+        ho_adjacency = adjacency_list[:, :, :, np.newaxis]
+
+        return ho_adjacency
+
+    def transform_test(self, X):
+        """Transforms the matrix using random walks"""
+        adj, feat = self.get_mtrx(X)
+        # do preparatory matrix transformations
+        adj = self.prep_mtrx(adj)
+        # threshold matrix
+        adj = self.get_ho_adjacency(adj)
+        # get feature matrix
+        X_transformed = self.get_features(adj, feat)
+
+        return X_transformed
 
     def transform(self, X):
         # transform each individual or make a mean matrix

@@ -1,11 +1,8 @@
-import os
 import numpy as np
-from sklearn.base import BaseEstimator, TransformerMixin
-
-from photonai_graph.GraphUtilities import individual_ztransform, individual_fishertransform
+from photonai_graph.GraphConstruction.graph_constructor import GraphConstructor
 
 
-class GraphConstructorThresholdWindow(BaseEstimator, TransformerMixin):
+class GraphConstructorThresholdWindow(GraphConstructor):
     _estimator_type = "transformer"
 
     """
@@ -51,91 +48,39 @@ class GraphConstructorThresholdWindow(BaseEstimator, TransformerMixin):
                                                       use_abs=1)
    """
 
-    def __init__(self, threshold_upper=1, threshold_lower=0.8,
-                 adjacency_axis=0,
-                 concatenation_axis=3,
-                 one_hot_nodes=0,
-                 return_adjacency_only=0,
-                 fisher_transform=0,
-                 use_abs=0,
-                 zscore=1,
-                 use_abs_zscore=0,
-                 logs=''):
+    def __init__(self,
+                 threshold_upper: float = 1,
+                 threshold_lower: float = 0.8,
+                 retain_weights: int = 0,
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.threshold_upper = threshold_upper
         self.threshold_lower = threshold_lower
-        self.adjacency_axis = adjacency_axis
-        self.concatenation_axis = concatenation_axis
-        self.one_hot_nodes = one_hot_nodes
-        self.return_adjacency_only = return_adjacency_only
-        self.fisher_transform = fisher_transform
-        self.use_abs = use_abs
-        self.zscore = zscore
-        self.use_abs_zscore = use_abs_zscore
-        if logs:
-            self.logs = logs
-        else:
-            self.logs = os.getcwd()
+        self.retain_weights = retain_weights
 
-    def fit(self, X, y):
-        # todo: ...
-        pass
-
-    def transform(self, X):
-        # todo: duplicated code
-        # ensure that the array has the "right" number of dimensions
-        if np.ndim(X) == 4:
-            threshold_matrix = X[:, :, :, self.adjacency_axis].copy()
-            X_transformed = X.copy()
-            if self.fisher_transform == 1:
-                threshold_matrix = individual_fishertransform(threshold_matrix)
-            if self.use_abs == 1:
-                threshold_matrix = np.abs(threshold_matrix)
-            if self.zscore == 1:
-                threshold_matrix = individual_ztransform(threshold_matrix)
-            if self.use_abs_zscore == 1:
-                threshold_matrix = np.abs(threshold_matrix)
-        elif np.ndim(X) == 3:
-            threshold_matrix = X.copy()
-            X_transformed = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
-            if self.fisher_transform == 1:
-                threshold_matrix = individual_fishertransform(threshold_matrix)
-            if self.use_abs == 1:
-                threshold_matrix = np.abs(threshold_matrix)
-            if self.zscore == 1:
-                threshold_matrix = individual_ztransform(threshold_matrix)
-            if self.use_abs_zscore == 1:
-                threshold_matrix = np.abs(threshold_matrix)
-
-        else:
-            raise Exception('encountered unusual dimensions, please check your dimensions')
-        # This creates and indvidual adjacency matrix for each person
-
-        threshold_matrix[threshold_matrix > self.threshold_upper] = 0
-        threshold_matrix[threshold_matrix < self.threshold_upper] = 1
-        threshold_matrix[threshold_matrix < self.threshold_lower] = 0
-        # add extra dimension to make sure that concatenation works later on
-        threshold_matrix = threshold_matrix.reshape(threshold_matrix.shape[0], threshold_matrix.shape[1],
-                                                    threshold_matrix.shape[2], -1)
-
-        # Add the matrix back again
-        if self.one_hot_nodes == 1:
-            # construct an identity matrix
-            identity_matrix = np.identity((X.shape[1]))
-            # expand its dimension for later re-addition
-            identity_matrix = np.reshape(identity_matrix, (-1, identity_matrix.shape[0], identity_matrix.shape[1]))
-            identity_matrix = np.reshape(identity_matrix, (
-            identity_matrix.shape[0], identity_matrix.shape[1], identity_matrix.shape[2], -1))
-            one_hot_node_features = np.repeat(identity_matrix, X.shape[0], 0)
-            # concatenate matrices
-            X_transformed = np.concatenate((threshold_matrix, one_hot_node_features), axis=self.concatenation_axis)
-        else:
-            if self.return_adjacency_only == 0:
-                X_transformed = np.concatenate((threshold_matrix, X_transformed), axis=self.concatenation_axis)
-            elif self.return_adjacency_only == 1:
-                X_transformed = threshold_matrix.copy()
-            else:
-                return ValueError(
-                    "The argument return_adjacency_only takes only values 0 or 1 no other values. Please check your input values")
-            # X_transformed = np.delete(X_transformed, self.adjacency_axis, self.concatenation_axis)
+    def transform_test(self, X):
+        """Transform input matrices accordingly"""
+        adj, feat = self.get_mtrx(X)
+        # do preparatory matrix transformations
+        adj = self.prep_mtrx(adj)
+        # threshold matrix
+        adj = self.threshold_window(adj)
+        # get feature matrix
+        X_transformed = self.get_features(adj, feat)
 
         return X_transformed
+
+    def threshold_window(self, adjacency):
+        """Threshold matrix"""
+        if self.retain_weights == 0:
+            adjacency[adjacency > self.threshold_upper] = 0
+            adjacency[(adjacency < self.threshold_upper) & (adjacency >= self.threshold_lower)] = 1
+            adjacency[adjacency < self.threshold_lower] = 0
+        elif self.retain_weights == 1:
+            adjacency[adjacency > self.threshold_upper] = 0
+            adjacency[adjacency < self.threshold_lower] = 0
+        else:
+            raise ValueError('retain weights needs to be 0 or 1')
+
+        return adjacency

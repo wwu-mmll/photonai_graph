@@ -1,11 +1,11 @@
 import os
 import scipy
 import numpy as np
+import scipy.spatial
+from photonai_graph.GraphConstruction.graph_constructor import GraphConstructor
 
-from photonai_graph.GraphConstruction.abc_graph_constructor_adjacency import GraphConstructorAdjacency
 
-
-class GraphConstructorSpatial(GraphConstructorAdjacency):
+class GraphConstructorSpatial(GraphConstructor):
     _estimator_type = "transformer"
 
     """
@@ -27,16 +27,6 @@ class GraphConstructorSpatial(GraphConstructorAdjacency):
         name of the atlas coordinate file
     * `atlas_path` [str, default="ho"]:
         path to the atlas coordinate file
-    * `adjacency_axis` [int]:
-        position of the adjacency matrix, default being zero
-    * `one_hot_nodes` [int]:
-        Whether to generate a one hot encoding of the nodes in the matrix.
-    * `return_adjacency_only` [int]:
-        whether to return the adjacency matrix only (1) or also a feature matrix (0)
-    * `verbosity` [int, default=0]:
-        The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
-    * `logs` [str, default='']:
-        Path to the log data
 
     Example
     -------
@@ -48,21 +38,45 @@ class GraphConstructorSpatial(GraphConstructorAdjacency):
                                               use_abs=1)
    """
 
-    def __init__(self, k_distance=10,
-                 atlas_name='ho', atlas_folder="", logs=''):
+    def __init__(self,
+                 k_distance: int = 10,
+                 atlas_name: str = 'ho',
+                 atlas_folder: str = "",
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.k_distance = k_distance
         self.atlas_name = atlas_name
         self.atlas_folder = atlas_folder
-        if logs:
-            self.logs = logs
-        else:
-            self.logs = os.getcwd()
 
-    def fit(self, X, y):
-        # todo: is this function really necessary?
-        pass
+    def get_spatial(self, X):
+        """Returns the adjacency based on the spatial matrix"""
+        # get atlas coords
+        coords = self.get_atlas_coords(atlas_name=self.atlas_name, root_folder=self.atlas_folder)
+        # generate adjacency matrix
+        dist, idx = self.distance_scipy_spatial(coords, k=self.k_distance, metric='euclidean')
+        adjacency = self.adjacency(dist, idx).astype(np.float32)
+        # turn adjacency into numpy matrix for concatenation
+        adjacency = adjacency.toarray()
+        # repeat into desired length
+        adjacency = np.repeat(adjacency[np.newaxis, :, :, np.newaxis], X.shape[0], axis=0)
 
-    def distance_scipy_spatial(self, z, k, metric='euclidean'):
+        return adjacency
+
+    def transform_test(self, X):
+        """Transform input matrices accordingly"""
+        adj, feat = self.get_mtrx(X)
+        # do preparatory matrix transformations
+        adj = self.prep_mtrx(adj)
+        # threshold matrix
+        adj = self.get_spatial(adj)
+        # get feature matrix
+        X_transformed = self.get_features(adj, feat)
+
+        return X_transformed
+
+    @staticmethod
+    def distance_scipy_spatial(z, k, metric='euclidean'):
         # todo: check if this function could be static
         """Compute exact pairwise distances."""
         d = scipy.spatial.distance.pdist(z, metric)
@@ -74,7 +88,8 @@ class GraphConstructorSpatial(GraphConstructorAdjacency):
 
         return d, idx
 
-    def get_atlas_coords(self, atlas_name, root_folder):
+    @staticmethod
+    def get_atlas_coords(atlas_name, root_folder):
         # todo: check if this function could be static
         """
             atlas_name   : name of the atlas used
@@ -89,26 +104,3 @@ class GraphConstructorSpatial(GraphConstructorAdjacency):
             coords = np.delete(coords, 82, axis=0)
 
         return coords
-
-    def transform(self, X):
-
-        # todo: X_mean is never used. Do we really need to compute this?
-        # use the mean 2d image of all samples for creating the different photonai_graph structures
-        X_mean = np.squeeze(np.mean(X, axis=0))
-
-        # get atlas coords
-        coords = self.get_atlas_coords(atlas_name=self.atlas_name, root_folder=self.atlas_folder)
-
-        # generate adjacency matrix
-        dist, idx = self.distance_scipy_spatial(coords, k=10, metric='euclidean')
-        adjacency = self.adjacency(dist, idx).astype(np.float32)
-
-        # turn adjacency into numpy matrix for concatenation
-        adjacency = adjacency.toarray()
-
-        X = np.reshape(X, (X.shape[0], X.shape[1], X.shape[2], -1))
-        # X = X[..., None] + adjacency[None, None, :] #use broadcasting to speed up computation
-        adjacency = np.repeat(adjacency[np.newaxis, :, :, np.newaxis], X.shape[0], axis=0)
-        X = np.concatenate(adjacency, X, axis=3)
-
-        return X
