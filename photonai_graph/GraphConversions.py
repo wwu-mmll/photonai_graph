@@ -124,6 +124,26 @@ def networkx_to_sparse(graphs, format='csr'):
     return graph_list
 
 
+def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
+    # convert networkx graphs to dgl graphs
+    if isinstance(graphs, list):
+        graph_list = []
+        for graph in graphs:
+            g = dgl.DGLGraph.from_networkx(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
+            graph_list.append(g)
+    elif isinstance(graphs, np.ndarray):
+        graph_list = []
+        for graph in range(graphs.shape[0]):
+            g = dgl.DGLGraph.from_networkx(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
+            graph_list.append(g)
+    elif isinstance(graphs, nx.classes.graph.Graph):
+        graph_list = dgl.DGLGraph.from_networkx(graphs)
+    else:
+        raise Exception('networkx_to_dgl only implemented for list, ndarrays or single networkx graph')
+
+    return graph_list
+
+
 def networkx_to_stellargraph(graphs, node_features=None):
     # convert networkx graphs to stellargraph graphs
     if isinstance(graphs, list):
@@ -280,6 +300,16 @@ def dense_to_sparse(graphs, type="coo_matrix", adjacency_axis=None, feature_axis
     return graph_list, feature_list
 
 
+def dense_to_dgl(graphs, adjacency_axis=None, feature_axis=None):
+    # this function converts dense matrices to dgl graphs
+    if adjacency_axis is None:
+        raise Exception('dense to dgl not implemented without adjacency axis')
+    else:
+        sparse_mtrx = dense_to_sparse(graphs, adjacency_axis=adjacency_axis, feature_axis=feature_axis)
+        graph_list = sparse_to_dgl(sparse_mtrx)
+    return graph_list
+
+
 def sparse_to_dense(graphs, features=None):
     if features is not None:
         if isinstance(graphs, list):
@@ -350,9 +380,67 @@ def sparse_to_stellargraph(graphs):
     return sg_graphs
 
 
+def sparse_to_dgl(graphs, adjacency_axis=0):
+    # take dense and make them long
+    if isinstance(graphs, tuple):
+        graph_list = []
+        for adj, feat in zip(graphs[0], graphs[1]):
+            g = dgl.DGLGraph()
+            g.from_scipy_sparse_matrix(spmat=adj)
+            graph_list.append(g)
+    else:
+        raise Exception('Expected tuple as input.')
+    return graph_list
+
+
 def stellargraph_to_sparse(graphs, format="csr"):
     # first port to networkx, then to sparse
     nx_graphs = stellargraph_to_networkx(graphs)
     sparse_matrices = networkx_to_sparse(nx_graphs, format=format)
 
     return sparse_matrices
+
+
+def check_dgl(graphs, adjacency_axis=None, feature_axis=None):
+    # this functions checks the input and converts it to dgl format
+    if isinstance(graphs, list):
+        if isinstance(graphs[0], nx.classes.graph.Graph):
+            dgl_graphs = networkx_to_dgl(graphs)
+        elif isinstance(graphs[0], sparse.spmatrix) \
+            or isinstance(graphs[0], sparse.bsr_matrix) \
+            or isinstance(graphs[0], sparse.lil_matrix) \
+            or isinstance(graphs[0], sparse.csc_matrix) \
+            or isinstance(graphs[0], sparse.coo_matrix) \
+            or isinstance(graphs[0], sparse.csr_matrix) \
+            or isinstance(graphs[0], sparse.dok_matrix) \
+            or isinstance(graphs[0], sparse.dia_matrix):
+            dgl_graphs = sparse_to_dgl(graphs)
+        elif isinstance((graphs[0]), dgl.DGLGraph):
+            dgl_graphs = graphs
+        else:
+            raise Exception('Can only handle lists of networkx graphs or scipy matrices')
+    elif isinstance(graphs, np.ndarray) or isinstance(graphs, np.matrix):
+        if np.ndim(graphs) == 1:
+            if isinstance(graphs[0], nx.classes.graph.Graph):
+                dgl_graphs = networkx_to_dgl(graphs)
+            elif isinstance(graphs[0], sparse.spmatrix) \
+                    or isinstance(graphs[0], sparse.bsr_matrix) \
+                    or isinstance(graphs[0], sparse.lil_matrix) \
+                    or isinstance(graphs[0], sparse.csc_matrix) \
+                    or isinstance(graphs[0], sparse.coo_matrix) \
+                    or isinstance(graphs[0], sparse.csr_matrix) \
+                    or isinstance(graphs[0], sparse.dok_matrix) \
+                    or isinstance(graphs[0], sparse.dia_matrix):
+                dgl_graphs = sparse_to_dgl(graphs)
+            elif isinstance((graphs[0]), dgl.DGLGraph):
+                dgl_graphs = graphs
+            else:
+                raise Exception('Can only handle ndarrays of networkx graphs or scipy matrices')
+        elif np.ndim(graphs) > 1:
+            dgl_graphs = dense_to_dgl(graphs, adjacency_axis, feature_axis)
+        else:
+            raise Exception('numpy matrix must have between one and four dimensions')
+    else:
+        raise TypeError('can only handle np arrays of lists as input')
+
+    return dgl_graphs
