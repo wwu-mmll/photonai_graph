@@ -1,3 +1,4 @@
+from photonai_graph.GraphEmbedding.graph_embedding_base import GraphEmbeddingBase
 from photonai_graph.GraphEmbedding.graph_embedding_graph_factorization import GraphEmbeddingGraphFactorization
 from photonai_graph.GraphEmbedding.graph_embedding_sdne import GraphEmbeddingSDNE
 from photonai_graph.GraphEmbedding.graph_embedding_hope import GraphEmbeddingHOPE
