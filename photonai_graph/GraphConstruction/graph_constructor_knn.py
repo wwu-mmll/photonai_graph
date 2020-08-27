@@ -46,10 +46,10 @@ class GraphConstructorKNN(GraphConstructor):
             adjacency_list.append(k_adjacency)
 
         # X = X[..., None] + adjacency[None, None, :] #use broadcasting to speed up computation
-        adjacency_kNN = np.asarray(adjacency_list)
-        adjacency_kNN = adjacency_kNN[:, :, :, np.newaxis]
+        adjacency_knn = np.asarray(adjacency_list)
+        adjacency_knn = adjacency_knn[:, :, :, np.newaxis]
 
-        return adjacency_kNN
+        return adjacency_knn
 
     def transform(self, X):
         """Transform matrices based on k nearest neighbours"""

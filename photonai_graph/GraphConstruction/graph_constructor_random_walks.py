@@ -94,7 +94,7 @@ class GraphConstructorRandomWalks(GraphConstructor):
             result = result[1:] + (elem,)
             yield result
 
-        # todo: check return value
+        # todo: check return value!
         return  # sliding window co-ocurrence
 
     def sliding_window_frequency(self, X_mean, walk_list):
@@ -115,22 +115,9 @@ class GraphConstructorRandomWalks(GraphConstructor):
 
     def get_ho_adjacency(self, adj):
         """Returns the higher order adjacency of a graph"""
-        adjacency_list = []
         adj = np.squeeze(adj)
-        for i in range(adj.shape[0]):
-            d, idx = self.distance_sklearn_metrics(adj[i, :, :], k=self.k_distance, metric='euclidean')
-            adjacency = self.adjacency(d, idx).astype(np.float32)
 
-            # normalize adjacency
-            if self.no_edge_weight == 1:
-                adjacency[adjacency > 0] = 1
-
-            adjacency = adjacency.toarray()
-            higherorder_adjacency = self.__adjacency_to_dense(adjacency)
-            # turn adjacency into numpy matrix for concatenation
-            adjacency_list.append(higherorder_adjacency)
-
-        adjacency_list = np.asarray(adjacency_list)
+        adjacency_list = self.__adjacency_to_list(adj, adj)
         ho_adjacency = adjacency_list[:, :, :, np.newaxis]
 
         return ho_adjacency
@@ -151,7 +138,6 @@ class GraphConstructorRandomWalks(GraphConstructor):
         # transform each individual or make a mean matrix
         if self.transform_style == "mean":
             # use the mean 2d image of all samples for creating the different photonai_graph structures
-            # todo: duplicated code starting here.
             X_mean = np.squeeze(np.mean(X, axis=0))
 
             # select the proper matrix in case you have multiple
@@ -198,21 +184,8 @@ class GraphConstructorRandomWalks(GraphConstructor):
             else:
                 raise ValueError('The input matrices need to have 3 or 4 dimensions. Please check your input matrix.')
 
-            adjacency_list = []
-            for i in range(X.shape[0]):
-                d, idx = self.distance_sklearn_metrics(X_rw[i, :, :], k=self.k_distance, metric='euclidean')
-                adjacency = self.adjacency(d, idx).astype(np.float32)
+            adjacency_list = self.__adjacency_to_list(X, X_rw)
 
-                # normalize adjacency
-                if self.no_edge_weight == 1:
-                    adjacency[adjacency > 0] = 1
-
-                adjacency = adjacency.toarray()
-                higherorder_adjacency = self.__adjacency_to_dense(adjacency)
-                # turn adjacency into numpy matrix for concatenation
-                adjacency_list.append(higherorder_adjacency)
-
-            adjacency_list = np.asarray(adjacency_list)
             adjacency_list = adjacency_list.reshape((adjacency_list.shape[0], adjacency_list.shape[1],
                                                      adjacency_list.shape[2], -1))
             X_transformed = np.concatenate((adjacency_list, X_features), axis=3)
@@ -223,7 +196,24 @@ class GraphConstructorRandomWalks(GraphConstructor):
 
         return X_transformed
 
-    # !===== Helper Function =====!
+    # !===== Helper Functions =====!
+    def __adjacency_to_list(self, X, X_rw):
+        adjacency_list = []
+        for i in range(X.shape[0]):
+            d, idx = self.distance_sklearn_metrics(X_rw[i, :, :], k=self.k_distance, metric='euclidean')
+            adjacency = self.adjacency(d, idx).astype(np.float32)
+
+            # normalize adjacency
+            if self.no_edge_weight == 1:
+                adjacency[adjacency > 0] = 1
+
+            adjacency = adjacency.toarray()
+            higherorder_adjacency = self.__adjacency_to_dense(adjacency)
+            # turn adjacency into numpy matrix for concatenation
+            adjacency_list.append(higherorder_adjacency)
+
+        return np.asarray(adjacency_list)
+
     def __adjacency_to_dense(self, adjacency):
         adjacency_rowsum = np.sum(adjacency, axis=1)
         adjacency_norm = adjacency / adjacency_rowsum[:, np.newaxis]

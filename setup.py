@@ -30,5 +30,6 @@ within the PHOTON framework. The module provides a range of graph machine learni
                       'torch',
                       'dgl',
                       'pandas',
-                      'numpy']
+                      'numpy',
+                      'scipy']
 )

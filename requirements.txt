@@ -6,3 +6,4 @@ torch
 dgl
 pandas
 numpy
+scipy
