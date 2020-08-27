@@ -1,12 +1,13 @@
 from sklearn.base import BaseEstimator, TransformerMixin
 from photonai_graph.GraphConversions import dense_to_networkx
+from abc import ABC
 import numpy as np
 import os
 
 
-class GraphEmbeddingBase(BaseEstimator, TransformerMixin):
+class GraphEmbeddingBase(BaseEstimator, TransformerMixin, ABC):
     _estimator_type = "transformer"
-
+    # todo: is this docstring correct?
     """
     Transformer class for calculating a Graph Embedding
     based on Graph Factorization (Ahmed et al., 2013).
