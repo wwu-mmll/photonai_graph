@@ -3,6 +3,7 @@ import stellargraph
 from scipy import sparse
 import networkx as nx
 import numpy as np
+import dgl
 import os
 
 output_formats = {
@@ -49,17 +50,17 @@ sparse_types = {
 }
 
 
-def save_networkx_to_file(Graphs, path, output_format="dot", IDs=None):
+def save_networkx_to_file(graphs, path, output_format="dot", ids=None):
     # Case 1: a list of networkx graphs as input
-    if isinstance(Graphs, list):
+    if isinstance(graphs, list):
         # Check if we have got a list of ids
-        if IDs is None or not isinstance(IDs, list):
-            IDs = np.arange(len(Graphs))
+        if ids is None or not isinstance(ids, list):
+            ids = np.arange(len(graphs))
         # check if id and graphs they have equal length
-        if len(Graphs) == len(IDs):
+        if len(graphs) == len(ids):
             # run graph_writing with IDs
             if output_format in output_formats:
-                for graph, i in zip(Graphs, IDs):
+                for graph, i in zip(graphs, ids):
                     graph_filename = "graph_" + str(i)
                     graph_path = os.path.join(path, graph_filename)
                     output_formats[output_format](graph, graph_path)
@@ -72,9 +73,9 @@ def save_networkx_to_file(Graphs, path, output_format="dot", IDs=None):
                 'Please ensure that they have equal length.')
 
     # Case 2: the input is just a single photonai_graph
-    if isinstance(Graphs, nx.classes.graph.Graph):
+    if isinstance(graphs, nx.classes.graph.Graph):
         if output_format in output_formats:
-            output_formats[output_format](Graphs, path)
+            output_formats[output_format](graphs, path)
         else:
             raise Exception("Output format not implemented or recognized. Please check your desired output format.")
 
@@ -129,15 +130,15 @@ def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
     if isinstance(graphs, list):
         graph_list = []
         for graph in graphs:
-            g = dgl.DGLGraph.from_networkx(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
+            g = dgl.DGLGraph().from_networkx(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
             graph_list.append(g)
     elif isinstance(graphs, np.ndarray):
         graph_list = []
         for graph in range(graphs.shape[0]):
-            g = dgl.DGLGraph.from_networkx(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
+            g = dgl.DGLGraph().from_networkx(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
             graph_list.append(g)
     elif isinstance(graphs, nx.classes.graph.Graph):
-        graph_list = dgl.DGLGraph.from_networkx(graphs)
+        graph_list = dgl.DGLGraph().from_networkx(graphs)
     else:
         raise Exception('networkx_to_dgl only implemented for list, ndarrays or single networkx graph')
 
@@ -202,7 +203,7 @@ def dense_to_networkx(X, adjacency_axis=0, feature_axis=1, feature_construction=
         graph_list = []
 
         for i in X:
-            networkx_graph = nx.from_numpy_matrix(A = i[:, :, adjacency_axis])
+            networkx_graph = nx.from_numpy_matrix(A=i[:, :, adjacency_axis])
             # todo: duplicated code
             if feature_construction == "collapse":
                 features = np.sum(i[:, :, feature_axis], axis=1)
