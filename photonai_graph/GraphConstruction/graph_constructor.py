@@ -1,4 +1,5 @@
 import os
+from abc import ABC
 import numpy as np
 import sklearn
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -6,7 +7,7 @@ from scipy import sparse
 from photonai_graph.GraphUtilities import individual_ztransform, individual_fishertransform
 
 
-class GraphConstructor(BaseEstimator, TransformerMixin):
+class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
     _estimator_type = "transformer"
 
     """
@@ -53,7 +54,7 @@ class GraphConstructor(BaseEstimator, TransformerMixin):
             self.logs = logs
         else:
             self.logs = os.getcwd()
-        self.mean_matrix = None  # todo: attributes of self should be defined in the __init__
+        self.mean_matrix = None
 
     def fit(self, X, y):
         """implements a mean matrix construction"""

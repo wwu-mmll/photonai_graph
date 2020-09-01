@@ -5,6 +5,7 @@ import networkx
 import os
 
 
+# todo: why does this class not inherit from GraphEmbeddingBase?
 class GraphEmbeddingHOPE(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
@@ -56,23 +57,30 @@ class GraphEmbeddingHOPE(BaseEstimator, TransformerMixin):
 
     def transform(self, X):
 
+        embedding_list = None
+        # todo: any other sanity checks?
+        if X.shape[0] == 0:
+            raise ValueError("Check the shape of your input.\nReceived X.shape[0]==0..?")
+
         for i in range(X.shape[0]):
             # take matrix and transform it into photonai_graph
-            G = networkx.convert_matrix.from_numpy_matrix(X[i, :, :, self.adjacency_axis])
+            g = networkx.convert_matrix.from_numpy_matrix(X[i, :, :, self.adjacency_axis])
 
             # transform this photonai_graph with a photonai_graph embedding
             if self.embedding_dimension == 1:
                 embedding = HOPE(d=2, beta=self.decay_factor)
-                embedding.learn_embedding(graph=G, edge_f=None, is_weighted=True, no_python=True)
+                embedding.learn_embedding(graph=g, edge_f=None, is_weighted=True, no_python=True)
                 embedding_representation = embedding.get_embedding()
                 embedding_representation = np.reshape(embedding_representation, (-1, 1))
 
             else:
                 embedding = HOPE(d=self.embedding_dimension, beta=self.decay_factor)
-                embedding.learn_embedding(graph=G, edge_f=None, is_weighted=True, no_python=True)
+                embedding.learn_embedding(graph=g, edge_f=None, is_weighted=True, no_python=True)
                 embedding_representation = embedding.get_embedding()
                 embedding_representation = np.reshape(embedding_representation,
-                (embedding_representation.shape[0], embedding_representation.shape[1], -1))
+                                                      (embedding_representation.shape[0],
+                                                       embedding_representation.shape[1],
+                                                       -1))
 
             if 'embedding_list' not in locals():
                 embedding_list = embedding_representation

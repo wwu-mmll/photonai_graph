@@ -77,7 +77,6 @@ class GraphConstructorSpatial(GraphConstructor):
 
     @staticmethod
     def distance_scipy_spatial(z, k, metric='euclidean'):
-        # todo: check if this function could be static
         """Compute exact pairwise distances."""
         d = scipy.spatial.distance.pdist(z, metric)
         d = scipy.spatial.distance.squareform(d)
@@ -90,7 +89,6 @@ class GraphConstructorSpatial(GraphConstructor):
 
     @staticmethod
     def get_atlas_coords(atlas_name, root_folder):
-        # todo: check if this function could be static
         """
             atlas_name   : name of the atlas used
         returns:

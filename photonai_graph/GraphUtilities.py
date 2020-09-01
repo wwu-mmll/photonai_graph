@@ -347,7 +347,7 @@ def get_random_labels(type="classification", number_of_labels=10):
     return y
 
 
-def save_graphs(graphs, path="", input_format="networkx", output_format="dot", IDs=None):
+def save_graphs(graphs, path="", input_format="networkx", output_format="dot", ids=None):
     """save graphs to file.
 
         Parameters
@@ -364,6 +364,9 @@ def save_graphs(graphs, path="", input_format="networkx", output_format="dot", I
         output_format : str, default="dot"
             the output format in which to save the graphs
 
+        ids :
+            a list containing the ids of the graphs. Must have same length as the graph list or np.ndarray.
+
 
         Examples
         --------
@@ -374,7 +377,7 @@ def save_graphs(graphs, path="", input_format="networkx", output_format="dot", I
         """
     # check input format
     if input_format == "networkx":
-        save_networkx_to_file(graphs, path, output_format=output_format, IDs=IDs)
+        save_networkx_to_file(graphs, path, output_format=output_format, ids=ids)
     else:
         raise Exception("Your desired output format is not supported yet.")
 
