@@ -5,16 +5,16 @@ from dgl.nn.pytorch import GraphConv, SAGEConv
 from photonai_graph.NeuralNets.NNLayers import GATLayer
 
 
-class GCNClassifier(nn.Module):
+class GCNRegressor(nn.Module):
     def __init__(self, in_dim, hidden_dim, n_classes, hidden_layers):
-        super(GCNClassifier, self).__init__()
+        super(GCNRegressor, self).__init__()
         self.layers = nn.ModuleList()
         # input layers
         self.layers.append(GraphConv(in_dim, hidden_dim))
         # hidden layers
         for layer in range(1, hidden_layers):
             self.layers.append(GraphConv(hidden_dim, hidden_dim))
-        self.classify = nn.Linear(hidden_dim, n_classes)
+        self.regress = nn.Linear(hidden_dim, 1)
 
     def forward(self, g):
         # Use node degree as the initial node feature. For undirected graphs, the in-degree
@@ -26,22 +26,22 @@ class GCNClassifier(nn.Module):
         g.ndata['h'] = h
         # Calculate graph representation by averaging all the node representations.
         hg = dgl.mean_nodes(g, 'h')
-        return self.classify(hg)
+        return self.regress(hg)
 
 
-class GATClassifier(nn.Module):
+class GATRegressor(nn.Module):
     def __init__(self, in_dim, hidden_dim, num_heads, n_classes, hidden_layers):
-        super(GATClassifier, self).__init__()
+        super(GATRegressor, self).__init__()
 
         self.layers = nn.ModuleList()
         # append gat layer according to inputs
         self.layers.append(GATLayer(in_dim, hidden_dim, num_heads[0]))
         # hidden layers
         for layer in range(1, hidden_layers):
-            self.layers.append(GATLayer(
+            self.gat_layers.append(GATLayer(
                 hidden_dim * num_heads[layer - 1], hidden_dim, num_heads[layer]))
         # output layer
-        self.classify = nn.Linear(hidden_dim * num_heads[-1], n_classes)
+        self.regress = nn.Linear(hidden_dim * num_heads, 1)
 
     def forward(self, bg):
         # For undirected graphs, in_degree is the same as
@@ -51,10 +51,10 @@ class GATClassifier(nn.Module):
             h = gnn(h, bg)
         bg.ndata['h'] = h
         hg = dgl.mean_nodes(bg, 'h')
-        return self.classify(hg)
+        return self.regress(hg)
 
 
-class GraphSAGEClassifier(nn.Module):
+class GraphSAGERegressor(nn.Module):
     def __init__(self,
                  in_feats,
                  n_hidden,
@@ -63,7 +63,7 @@ class GraphSAGEClassifier(nn.Module):
                  activation,
                  dropout,
                  aggregator_type):
-        super(GraphSAGEClassifier, self).__init__()
+        super(GraphSAGERegressor, self).__init__()
         self.layers = nn.ModuleList()
         self.dropout = nn.Dropout(dropout)
         self.activation = activation
@@ -74,21 +74,16 @@ class GraphSAGEClassifier(nn.Module):
         for i in range(n_layers - 1):
             self.layers.append(SAGEConv(n_hidden, n_hidden, aggregator_type))
         # output layer
-        self.layers.append(SAGEConv(n_hidden, n_hidden, aggregator_type))  # activation None
+        self.layers.append(SAGEConv(n_hidden, n_classes, aggregator_type))  # activation None
         # classification layer
-        self.classify = nn.Linear(n_hidden, n_classes)
-        self.classify2 = nn.Linear(n_classes, n_classes)
+        self.regress = nn.Linear(n_hidden, 1)
 
-    def forward(self, graph):
-        inputs = graph.in_degrees().view(-1, 1).float()
+    def forward(self, graph, inputs):
         h = self.dropout(inputs)
         for l, layer in enumerate(self.layers):
             h = layer(graph, h)
             if l != len(self.layers) - 1:
-                if self.activation is not None:
-                    h = self.activation(h)
+                h = self.activation(h)
                 h = self.dropout(h)
-        h = self.classify(h)
-        h = self.classify2(h)
 
-        return h
+        return self.regress(h)
