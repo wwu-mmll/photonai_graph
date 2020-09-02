@@ -1,7 +1,7 @@
 import dgl
 import torch.nn as nn
 import torch.nn.functional as F
-from dgl.nn.pytorch import GraphConv, SAGEConv
+from dgl.nn.pytorch import GraphConv, SGConv
 from photonai_graph.NeuralNets.NNLayers import GATLayer
 
 
@@ -54,41 +54,29 @@ class GATClassifier(nn.Module):
         return self.classify(hg)
 
 
-class GraphSAGEClassifier(nn.Module):
-    def __init__(self,
-                 in_feats,
-                 n_hidden,
-                 n_classes,
-                 n_layers,
-                 activation,
-                 dropout,
-                 aggregator_type):
-        super(GraphSAGEClassifier, self).__init__()
+class SGConvClassifier(nn.Module):
+    def __init__(self, in_dim, hidden_dim, n_classes, hidden_layers):
+        super(SGConvClassifier, self).__init__()
+        self.in_dim = in_dim
+        self.hidden_dim = hidden_dim
+        self.n_classes = n_classes
+        self.hidden_layers = hidden_layers
         self.layers = nn.ModuleList()
-        self.dropout = nn.Dropout(dropout)
-        self.activation = activation
 
         # input layer
-        self.layers.append(SAGEConv(in_feats, n_hidden, aggregator_type))
+        self.layers.append(SGConv(in_dim, hidden_dim))
         # hidden layers
-        for i in range(n_layers - 1):
-            self.layers.append(SAGEConv(n_hidden, n_hidden, aggregator_type))
+        for lr in range(1, hidden_layers):
+            self.layers.append(SGConv(hidden_dim, hidden_dim))
         # output layer
-        self.layers.append(SAGEConv(n_hidden, n_hidden, aggregator_type))  # activation None
-        # classification layer
-        self.classify = nn.Linear(n_hidden, n_classes)
-        self.classify2 = nn.Linear(n_classes, n_classes)
+        self.classify = nn.Linear(hidden_dim, n_classes)
 
-    def forward(self, graph):
-        inputs = graph.in_degrees().view(-1, 1).float()
-        h = self.dropout(inputs)
-        for l, layer in enumerate(self.layers):
-            h = layer(graph, h)
-            if l != len(self.layers) - 1:
-                if self.activation is not None:
-                    h = self.activation(h)
-                h = self.dropout(h)
-        h = self.classify(h)
-        h = self.classify2(h)
+    def forward(self, bg):
+        h = bg.in_degrees().view(-1, 1).float()
+        for lr, layer in enumerate(self.layers):
+            h = layer(bg, h)
+        bg.ndata['h'] = h
+        # Calculate graph representation by averaging all the node representations.
+        hg = dgl.mean_nodes(bg, 'h')
 
-        return h
+        return self.classify(hg)
