@@ -53,7 +53,7 @@ class GraphEmbeddingBase(BaseEstimator, TransformerMixin, ABC):
             else:
                 embedding_list.append(embedding_representation)
 
-        embedding_list = np.asarray(embedding_list)
+        embedding_list = np.squeeze(np.asarray(embedding_list))
 
         return embedding_list
 
