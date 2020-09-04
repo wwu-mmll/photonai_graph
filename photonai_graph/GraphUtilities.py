@@ -499,11 +499,11 @@ def visualize_networkx(graphs, layout=nx.spring_layout, colorscheme="Blues"):
         Parameters
         ----------
         graphs : 
-        a list or of networkx graphs or a single networkx graph
+            a list or of networkx graphs or a single networkx graph
         layout :
-        layout of the graph, default is spring layout
+            layout of the graph, default is spring layout
         colorscheme:
-        colormap for the nodes, default is Blues
+            colormap for the nodes, default is Blues
 
 
         Examples

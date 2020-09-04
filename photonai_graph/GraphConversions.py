@@ -5,6 +5,7 @@ import networkx as nx
 import numpy as np
 import dgl
 import os
+import warnings
 
 output_formats = {
     "dot": write_dot,
@@ -147,6 +148,8 @@ def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
 
 def networkx_to_stellargraph(graphs, node_features=None):
     # convert networkx graphs to stellargraph graphs
+    warnings.warn('This method will be removed in the next version of photonai-graph.')
+    # Todo: remove this function
     if isinstance(graphs, list):
         graph_list = []
         for graph in graphs:
@@ -183,6 +186,8 @@ def sparse_to_networkx(graphs):
 
 
 def stellargraph_to_networkx(graphs):
+    warnings.warn('This method will be removed in the next version of photonai-graph')
+    # Todo: remove this function
     if isinstance(graphs, list):
         graph_list = []
         for graph in graphs:
@@ -363,6 +368,8 @@ def sparse_to_dense(graphs, features=None):
 
 
 def dense_to_stellargraph(graphs):
+    # Todo: remove function
+    warnings.warn("This function will be removed in the next version of photonai-graph")
     # first port to networkx, then to stellargraph
     nx_graphs = dense_to_networkx(graphs)
     sg_graphs = networkx_to_stellargraph(nx_graphs)
@@ -371,6 +378,8 @@ def dense_to_stellargraph(graphs):
 
 
 def stellargraph_to_dense(graphs):
+    # Todo: remove function
+    warnings.warn("This function will be removed in the next version of photonai-graph")
     # first port to networkx, then to dense
     nx_graphs = stellargraph_to_networkx(graphs)
     matrices = networkx_to_dense(nx_graphs)
@@ -379,6 +388,8 @@ def stellargraph_to_dense(graphs):
 
 
 def sparse_to_stellargraph(graphs):
+    # Todo: remove function
+    warnings.warn("This function will be removed in the next version of photonai-graph")
     # first port to networkx, then to stellargraph
     nx_graphs = sparse_to_networkx(graphs)
     sg_graphs = networkx_to_stellargraph(nx_graphs)
@@ -400,6 +411,8 @@ def sparse_to_dgl(graphs, adjacency_axis=0):
 
 
 def stellargraph_to_sparse(graphs, format="csr"):
+    # Todo: remove function
+    warnings.warn("This function will be removed in the next version of photonai-graph")
     # first port to networkx, then to sparse
     nx_graphs = stellargraph_to_networkx(graphs)
     sparse_matrices = networkx_to_sparse(nx_graphs, m_format=format)
