@@ -7,12 +7,9 @@ import os
 
 class GraphEmbeddingBase(BaseEstimator, TransformerMixin, ABC):
     _estimator_type = "transformer"
-    # todo: is this docstring correct?
     """
-    Transformer class for calculating a Graph Embedding
-    based on Graph Factorization (Ahmed et al., 2013).
-    Graph Factorization factorizes the adjacency matrix
-    with regularization. Implementation based on gem
+    Base class for all embeddings. Implements helper functions
+    used by other embeddings. Implementation based on gem
     python package.
 
 
@@ -20,25 +17,11 @@ class GraphEmbeddingBase(BaseEstimator, TransformerMixin, ABC):
     ----------
     * `embedding_dimension` [int, default=1]:
         the number of dimensions that the final embedding will have
-    * `maximum_iterations` [int, default=10000]
-        the number of iterations used in sgd, when learning the embedding
-    * `learning_rate` [float, default=1 * 10 ** -4]
-        the learning rate of sgd
-    * `regularization_coefficient` [float, default=1.0]
-        the regularization coefficient for regulating the magnitude of the weights
     * `adjacency_axis` [int, default=0]:
         position of the adjacency matrix, default being zero
-    * `verbosity` [int, default=0]:
-        The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
     * `logs` [str, default=None]:
         Path to the log data
 
-
-
-    Example
-    -------
-        constructor = GraphEmbeddingGraphFactorization(maximum_iterations=20000,
-                                                        regularization_coefficient=0.5)
     """
 
     def __init__(self,
