@@ -58,7 +58,7 @@ class GraphConstructorThresholdWindow(GraphConstructor):
         self.threshold_lower = threshold_lower
         self.retain_weights = retain_weights
 
-    def transform_test(self, X):
+    def transform(self, X):
         """Transform input matrices accordingly"""
         adj, feat = self.get_mtrx(X)
         # do preparatory matrix transformations

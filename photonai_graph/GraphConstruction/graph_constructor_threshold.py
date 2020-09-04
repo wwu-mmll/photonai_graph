@@ -53,7 +53,7 @@ class GraphConstructorThreshold(GraphConstructor):
     def threshold_matrix(self, adjacency):
         """Threshold matrix"""
         if self.retain_weights == 0:
-            adjacency[adjacency > self.threshold] = 1
+            adjacency[adjacency >= self.threshold] = 1
             adjacency[adjacency < self.threshold] = 0
         elif self.retain_weights == 1:
             adjacency[adjacency < self.threshold] = 0
