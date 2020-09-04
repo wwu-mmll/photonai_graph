@@ -10,7 +10,7 @@ and even create some random data to run some tests
 Version
 -------
 Created:        15-08-2019
-Last updated:   17-07-2020
+Last updated:   04-09-2020
 
 
 Author
@@ -20,7 +20,6 @@ Translationale Psychiatrie
 Universitaetsklinikum Muenster
 """
 
-# TODO: make photonai_graph utility with 1. converter for GCNs, 2. converter for networkx, 3. ?
 from networkx.convert_matrix import from_numpy_matrix
 from networkx.drawing.nx_pylab import draw
 import networkx.drawing as drawx
@@ -29,8 +28,11 @@ import networkx as nx
 import numpy as np
 import pydot
 from scipy import stats
+from scipy import sparse
+import os
 import matplotlib.pyplot as plt
-from photonai_graph.GraphConversions import save_networkx_to_file, networkx_to_dense, networkx_to_sparse, networkx_to_stellargraph
+from photonai_graph.GraphConversions import save_networkx_to_file, networkx_to_dense, networkx_to_sparse, \
+    networkx_to_stellargraph
 from photonai_graph.GraphConversions import dense_to_networkx as dnx, dense_to_stellargraph, dense_to_sparse
 from photonai_graph.GraphConversions import sparse_to_networkx, sparse_to_dense, sparse_to_stellargraph
 from photonai_graph.GraphConversions import stellargraph_to_networkx, stellargraph_to_dense, stellargraph_to_sparse
@@ -42,13 +44,14 @@ def DenseToNetworkx(X, adjacency_axis=0, feature_axis=1, feature_construction="c
     warnings.warn("This function is renamed to dense_to_networkx", DeprecationWarning)
     return dense_to_networkx(X, adjacency_axis, feature_axis, feature_construction)
 
-def dense_to_networkx(X, adjacency_axis=0, feature_axis=1, feature_construction="collapse"):
-    # convert if Dense is a list of ndarrays
-    if isinstance(X, list):
+
+def dense_to_networkx(mtrx, adjacency_axis=0, feature_axis=1, feature_construction="collapse"):
+    """converts an array or list of arrays to a list of networkx graphs"""
+    if isinstance(mtrx, list):
         graph_list = []
 
-        for i in X:
-            networkx_graph = from_numpy_matrix(A = i[:, :, adjacency_axis])
+        for i in mtrx:
+            networkx_graph = from_numpy_matrix(A=i[:, :, adjacency_axis])
             if feature_construction == "collapse":
                 features = np.sum(i[:, :, feature_axis], axis=1)
                 features = features.reshape((features.shape[0], -1))
@@ -62,52 +65,75 @@ def dense_to_networkx(X, adjacency_axis=0, feature_axis=1, feature_construction=
                 nx.set_node_attributes(networkx_graph, features)
             graph_list.append(networkx_graph)
 
-        X_converted = graph_list
+        mtrx_conv = graph_list
 
     # convert if Dense is just a single ndarray
-    elif isinstance(X, nx.classes.graph.Graph):
-        X_converted = from_numpy_matrix(A=X[:, :, adjacency_axis])
+    elif isinstance(mtrx, nx.classes.graph.Graph):
+        mtrx_conv = from_numpy_matrix(A=mtrx[:, :, adjacency_axis])
 
     # convert if Dense is an ndarray consisting of multiple arrays
-    elif isinstance(X, np.ndarray):
+    elif isinstance(mtrx, np.ndarray):
         graph_list = []
 
-        for i in range(X.shape[0]):
-            networkx_graph = from_numpy_matrix(A=X[i, :, :, adjacency_axis])
+        for i in range(mtrx.shape[0]):
+            networkx_graph = from_numpy_matrix(A=mtrx[i, :, :, adjacency_axis])
             if feature_construction == "collapse":
-                features = np.sum(X[i, :, :, feature_axis], axis=1)
+                features = np.sum(mtrx[i, :, :, feature_axis], axis=1)
                 features = features.reshape((features.shape[0], -1))
                 features = dict(enumerate(features, 0))
                 nx.set_node_attributes(networkx_graph, features, name="collapsed_weight")
             elif feature_construction == "collapse2":
-                sum_features = np.sum(X[i, :, :, feature_axis], axis=1)
-                var_features = np.var(X[i, :, :, feature_axis], axis=1)
+                sum_features = np.sum(mtrx[i, :, :, feature_axis], axis=1)
+                var_features = np.var(mtrx[i, :, :, feature_axis], axis=1)
                 features = np.column_stack((sum_features, var_features))
                 features = dict(enumerate(features, 0))
                 nx.set_node_attributes(networkx_graph, features, name="collapsed_weight")
             graph_list.append(networkx_graph)
 
-        X_converted = graph_list
+        mtrx_conv = graph_list
     else:
         raise ValueError("X has unsupported format. Please check input")
 
-    return X_converted
+    return mtrx_conv
 
 
-def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=200,
+def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=None,
                       node_shape='o', weight=None, path=None):
-    """This functions draws a connectogram, from a graph."""
+    """This functions draws a connectogram, from a graph.
+
+    Parameters
+    ----------
+    graph: nx.class.graph.Graph
+        input graph, a single networkx graph
+    edge_rad:
+        edge radius, controlling the curvature of the drawn edges
+    colorscheme:
+        colormap for drawing the connectogram
+    nodesize: int
+        controls size of the drawn nodes
+    node_shape: str, default='o'
+        shape of the drawn nodes
+    weight: float
+        threshold below which edges are coloured differently than above
+    path: str, default=None
+        path where to save the plots as string, if no path is declared, plots are not saved.
+        Path needs to be the full path including file name and ending, unlike in draw_connectograms
+    """
 
     pos = nx.circular_layout(graph)
-    nx.draw_networkx_nodes(graph, pos, node_size=nodesize, node_shape=node_shape, cmap=colorscheme)
+    if colorscheme is not None:
+        nx.draw_networkx_nodes(graph, pos, node_size=nodesize, node_color=range(nx.number_of_nodes(graph)),
+                               node_shape=node_shape, cmap=plt.get_cmap(colorscheme))
+    else:
+        nx.draw_networkx_nodes(graph, pos, node_size=nodesize, node_shape=node_shape, cmap=plt.get_cmap(colorscheme))
 
     if weight is not None:
         elarge = [(u, v) for (u, v, d) in graph.edges(data=True) if d['weight'] > weight]
         esmall = [(u, v) for (u, v, d) in graph.edges(data=True) if d['weight'] <= weight]
         nx.draw_networkx_edges(graph, pos, edgelist=elarge,
-                               width=6, connectionstyle=edge_rad)
+                               connectionstyle=edge_rad)
         nx.draw_networkx_edges(graph, pos, edgelist=esmall,
-                               width=6, alpha=0.5, edge_color='b', style='dashed', connectionstyle=edge_rad)
+                               alpha=0.5, edge_color='b', style='dashed', connectionstyle=edge_rad)
 
     else:
         nx.draw_networkx_edges(graph, pos, connectionstyle=edge_rad)
@@ -118,23 +144,54 @@ def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=200,
         plt.savefig(path)
 
 
-def draw_connectograms(graphs, curved_edge=False, colorscheme=None, path=None, ids=None, format=None):
-    """This function draws multiple connectograms, from graph lists."""
+def draw_connectograms(graphs, curved_edge=False, colorscheme=None,
+                       nodesize=None, node_shape='o', weight=None,
+                       path=None, ids=None, out_format=None):
+    """This function draws multiple connectograms, from graph lists.
+
+    Parameters
+    ----------
+    graphs
+        input graphs, a list of networkx graphs or a single networkx graph
+    curved_edge: bool, default=False
+        whether to draw straight or curved edges
+    colorscheme:
+        colormap for drawing the connectogram
+    nodesize: int
+        controls size of the drawn nodes
+    node_shape: str, default='o'
+        shape of the drawn nodes
+    weight: float
+        threshold below which edges are coloured differently than above
+    path: str, default=None
+        path where to save the plots as string, if no path is declared, plots are not saved
+    ids: list, default=None
+        list of ids, after which to name the plots
+    out_format: str, default=None
+        output format for the graphs, as a string
+    """
     if isinstance(graphs, list):
         if ids is not None:
             if len(ids) == len(graphs):
                 for graph, ID in zip(graphs, ids):
-                    save_path = os.path.join(path, ID, format)
+                    if None in [path, out_format]:
+                        raise Exception('To save graphs, declare a path and an output format.')
+                    save_path = os.path.join(path, ID, out_format)
                     draw_connectogram(graph, curved_edge, colorscheme, path=save_path)
             else:
                 raise Exception('Number of IDs must match number of graphs.')
         # if no IDs are provided graphs are just numbered
         else:
             counter = 0
-            for graph in graphs:
-                save_path = os.path.join(path, str(counter), format)
-                draw_connectogram(graph, curved_edge, colorscheme, path=save_path)
-                counter += 1
+            if None in [path, out_format]:
+                for graph in graphs:
+                    draw_connectogram(graph, curved_edge, colorscheme, nodesize, node_shape, weight)
+                    counter += 1
+            else:
+                for graph in graphs:
+                    save_path = os.path.join(path, str(counter), out_format)
+                    draw_connectogram(graph, curved_edge, colorscheme, nodesize, node_shape, weight, path=save_path)
+                    counter += 1
 
     # if the it is only a single graph
     elif isinstance(graphs, nx.classes.graph.Graph):
@@ -144,8 +201,8 @@ def draw_connectograms(graphs, curved_edge=False, colorscheme=None, path=None, i
     else:
         raise Exception('Input needs to be a single networkx graph or a list of those.')
 
-        
-def draw_connectivity_matrix(matrix, colorbar=False, adjacency_axis=None):
+
+def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adjacency_axis=None):
     """Draw connectivity matrix.
 
         Parameters
@@ -155,6 +212,9 @@ def draw_connectivity_matrix(matrix, colorbar=False, adjacency_axis=None):
             
         colorbar : boolean, default=False
             Whether to use a colorbar in the drawn plot
+
+        colorscheme: str, default="viridis"
+            colorscheme for plotting the connectivity matrix
 
         adjacency_axis : int, default=None
         position of the the adjacency axis, if specified the array is assumed to
@@ -173,32 +233,58 @@ def draw_connectivity_matrix(matrix, colorbar=False, adjacency_axis=None):
         >>> draw_connectivity_matrix(adjacency_axis=0)
                
         """
-    # todo: colorbar not used
     # check input format
     if isinstance(matrix, np.ndarray) or isinstance(matrix, np.matrix):
         if adjacency_axis is not None:
             if np.ndim(matrix) == 4:
                 for i in range(matrix.shape[0]):
-                    plt.imshow(matrix[i, :, :, adjacency_axis])
+                    plt.imshow(matrix[i, :, :, adjacency_axis], cmap=plt.get_cmap(colorscheme))
+                    if colorbar:
+                        plt.colorbar()
+                    plt.show()
             elif np.ndim(matrix) == 3:
-                plt.imshow(matrix[:, :, adjacency_axis])
+                plt.imshow(matrix[:, :, adjacency_axis], cmap=plt.get_cmap(colorscheme))
+                if colorbar:
+                    plt.colorbar()
+                plt.show()
             else:
-                raise Exception('Matrix dimension might not be specified correctlty.')
+                raise Exception('Matrix dimension might not be specified correctly.')
         else:
             if np.ndim(matrix) == 4:
                 raise Exception('You have 4 dimension, please specify axis to plot')
             elif np.ndim(matrix) == 3:
                 for i in range(matrix.shape[0]):
                     plt.imshow(matrix[i, :, :])
+                    if colorbar:
+                        plt.colorbar()
+                    plt.show()
             elif np.ndim(matrix) == 2:
                 plt.imshow(matrix)
+                if colorbar:
+                    plt.colorbar()
+                plt.show()
             else:
-                raise Exception('Matrix dimension might not be specified correctlty.')
+                raise Exception('Matrix dimension might not be specified correctly.')
     elif isinstance(matrix, list):
-        for single_matrix in matrix:
-            if adjacency_axis is not None:
-                plt.imshow(matrix[:, :, adjacency_axis])
-    # TODO: implement a method for scipy sparse matrices if possible
+        if isinstance(matrix[0], np.ndarray) or isinstance(matrix[0], np.matrix):
+            for single_matrix in matrix:
+                if adjacency_axis is not None:
+                    plt.imshow(single_matrix[:, :, adjacency_axis])
+                    if colorbar:
+                        plt.colorbar()
+                    plt.show()
+        elif isinstance(matrix[0], sparse.spmatrix) \
+                or isinstance(matrix[0], sparse.bsr_matrix) \
+                or isinstance(matrix[0], sparse.lil_matrix) \
+                or isinstance(matrix[0], sparse.csc_matrix) \
+                or isinstance(matrix[0], sparse.coo_matrix) \
+                or isinstance(matrix[0], sparse.csr_matrix) \
+                or isinstance(matrix[0], sparse.dok_matrix) \
+                or isinstance(matrix[0], sparse.dia_matrix):
+            for single_matrix in matrix:
+                plt.spy(matrix[single_matrix])
+        else:
+            raise TypeError('List elements need to be numpy arrays/matrices or scipy sparse matrices')
     else:
         raise TypeError('draw_connectivity_matrix only takes numpy arrays, matrices or lists as input.')
 
@@ -235,8 +321,8 @@ def convert_graphs(graphs, input_format="networkx", output_format="stellargraph"
     # check input format
     if input_format == "networkx":
         if output_format == "networkx":
-            # todo: why not only return the graphs? Or raise a warning
-            raise Exception('Graphs already in networkx format.')
+            warnings.warn('Graphs already in networkx format.')
+            trans_graphs = graphs
         elif output_format == "dense":
             trans_graphs = networkx_to_dense(graphs)
         elif output_format == "sparse":
@@ -289,27 +375,46 @@ def convert_graphs(graphs, input_format="networkx", output_format="stellargraph"
     return trans_graphs
 
 
-def get_random_connectivity_data(type="dense",
+def get_random_connectivity_data(out_type="dense",
                                  number_of_nodes=114,
                                  number_of_individuals=10,
                                  number_of_modalities=2):
-    # make random connectivity photonai_graph data
-    if type == "dense":
+    """generate random connectivity matrices for testing and debugging
+
+        Parameters
+        ----------
+        out_type: str, default="dense"
+            output type for connectivity data, default="dense"
+        number_of_nodes: int, default=114
+            number of nodes in the matrix/graph
+        number_of_individuals: int, default=10
+            number of individual graphs/matrices
+        number_of_modalities: int, default=2
+            number of modalities as per matrix/graph
+    """
+    if out_type == "dense":
         random_matrices = np.random.rand(number_of_individuals, number_of_nodes, number_of_nodes, number_of_modalities)
+    elif out_type == "sparse":
+        random_matrices = []
+        for i in range(number_of_individuals):
+            modality_list = []
+            for m in range(number_of_modalities):
+                random_matrix = sparse.random(number_of_nodes, number_of_nodes, density=0.1)
+                modality_list.append(random_matrix)
+            random_matrices.append(modality_list)
     else:
-        # todo what else
-        raise NotImplementedError("This function is not supported yet")
+        raise NotImplementedError("Only dense and sparse matrices are supported as output type.")
 
     return random_matrices
 
 
-def get_random_labels(type="classification", number_of_labels=10):
+def get_random_labels(l_type="classification", number_of_labels=10):
     """get random labels for testing and debugging functions.
 
         Parameters
         ----------
-        type : str, default="classification"
-        controls the type labels. "classification" outputs binary labels 0 and 1, "regression" outputs random float values.
+        l_type : str, default="classification"
+            controls the type labels. "classification" outputs binary labels 0 and 1, "regression" outputs random float.
             
         number_of_labels : int, default=10
             number of labels to generate
@@ -331,12 +436,12 @@ def get_random_labels(type="classification", number_of_labels=10):
           
         """
 
-    if type == "classification" or type == "Classification":
+    if l_type == "classification" or l_type == "Classification":
         y = np.random.rand(number_of_labels)
         y[y > 0.5] = 1
         y[y < 0.5] = 0
 
-    if type == "regression" or type == "Regression":
+    elif l_type == "regression" or l_type == "Regression":
         y = np.random.rand(number_of_labels)
 
     else:
@@ -388,13 +493,17 @@ def VisualizeNetworkx(graphs):
     return visualize_networkx(graphs)
 
 
-def visualize_networkx(graphs):
+def visualize_networkx(graphs, layout=nx.spring_layout, colorscheme="Blues"):
     """Visualize a networkx graph or graphs using networkx built-in visualization.
 
         Parameters
         ----------
         graphs : 
         a list or of networkx graphs or a single networkx graph
+        layout :
+        layout of the graph, default is spring layout
+        colorscheme:
+        colormap for the nodes, default is Blues
 
 
         Examples
@@ -408,22 +517,21 @@ def visualize_networkx(graphs):
     # check format in which graphs are presented or ordered
     if isinstance(graphs, list):
         for graph in graphs:
-            draw(graph)
+            draw(graph, pos=layout(graph), node_color=range(nx.number_of_nodes(graph)), cmap=plt.get_cmap(colorscheme))
             plt.show()
     elif isinstance(graphs, nx.classes.graph.Graph):
-        draw(graphs)
+        draw(graphs, pos=layout(graphs), node_color=range(nx.number_of_nodes(graphs)), cmap=plt.get_cmap(colorscheme))
         plt.show()
     else:
         raise ValueError("graphs has unexpected format")
-    # use networkx visualization function
 
 
-def individual_ztransform(X, adjacency_axis=0):
+def individual_ztransform(matrx, adjacency_axis=0):
     """applies a z-score transformation individually to each connectivity matrix in an array
 
         Parameters
         ----------
-        X : np.ndarray
+        matrx : np.ndarray
             a list or of networkx graphs or a single networkx graph
 
         adjacency_axis: int, default=0
@@ -443,14 +551,14 @@ def individual_ztransform(X, adjacency_axis=0):
         """
     # check dimensions
     transformed_matrices = []
-    if np.ndim(X) == 3:
-        for i in range(X.shape[0]):
-            matrix = X[i, :, :].copy()
+    if np.ndim(matrx) == 3:
+        for i in range(matrx.shape[0]):
+            matrix = matrx[i, :, :].copy()
             matrix = stats.zscore(matrix)
             transformed_matrices.append(matrix)
-    elif np.ndim(X) == 4:
-        for i in X.shape[0]:
-            matrix = X[i, :, :, adjacency_axis].copy()
+    elif np.ndim(matrx) == 4:
+        for i in matrx.shape[0]:
+            matrix = matrx[i, :, :, adjacency_axis].copy()
             matrix = stats.zscore(matrix)
             transformed_matrices.append(matrix)
 
@@ -459,12 +567,12 @@ def individual_ztransform(X, adjacency_axis=0):
     return transformed_matrices
 
 
-def individual_fishertransform(X, adjacency_axis=0):
+def individual_fishertransform(matrx, adjacency_axis=0):
     """applies a fisher transformation individually to each connectivity matrix in an array
 
         Parameters
         ----------
-        X : np.ndarray
+        matrx : np.ndarray
             a list or of networkx graphs or a single networkx graph
         adjacency_axis: int, default=0
             the position of the adjacency matrix
@@ -479,19 +587,18 @@ def individual_fishertransform(X, adjacency_axis=0):
         --------
         >>> X = get_random_connectivity_data()
         >>> X_transformed = individual_fishertransform(X)
-       
-        
+
         """
     # check dimensions
     transformed_matrices = []
-    if np.ndim(X) == 3:
-        for i in range(X.shape[0]):
-            matrix = X[i, :, :].copy()
+    if np.ndim(matrx) == 3:
+        for i in range(matrx.shape[0]):
+            matrix = matrx[i, :, :].copy()
             matrix = np.arctanh(matrix)
             transformed_matrices.append(matrix)
-    elif np.ndim(X) == 4:
-        for i in X.shape[0]:
-            matrix = X[i, :, :, adjacency_axis].copy()
+    elif np.ndim(matrx) == 4:
+        for i in matrx.shape[0]:
+            matrix = matrx[i, :, :, adjacency_axis].copy()
             matrix = np.arctanh(matrix)
             transformed_matrices.append(matrix)
 
@@ -574,160 +681,3 @@ def check_asteroidal(graph, return_boolean=True):
                              'Please check your inputs.')
 
     return graph_answer
-
-
-'''
-class DenseToNetworkxTransformer(BaseEstimator, TransformerMixin):
-    _estimator_type = "transformer"
-
-    # turns a dense adjacency matrix coming from a photonai_graph constructor into a networkx photonai_graph
-
-    def __init__(self, adjacency_axis = 0,
-                 logs=''):
-        self.adjacency_axis = adjacency_axis
-        if logs:
-            self.logs = logs
-        else:
-            self.logs = os.getcwd()
-
-    def fit(self, X, y):
-        return self
-
-    def transform(self, X):
-
-        graph_list = []
-
-        for i in range(X.shape[0]):
-            networkx_graph = from_numpy_matrix(A=X[i, :, :, self.adjacency_axis])
-            graph_list.append(networkx_graph)
-
-        X = graph_list
-
-        return X
-
-
-class DenseToTorchGeometricTransformer(BaseEstimator, TransformerMixin):
-    _estimator_type = "transformer"
-
-    # turns a dense adjacency and feature matrix coming 
-    # from a photonai_graph constructor into a pytorch geometric data object
-
-    def __init__(self, adjacency_axis = 0,
-                 concatenation_axis = 3, data_as_list = 1,
-                 logs=''):
-        self.adjacency_axis = adjacency_axis
-        self.concatenation_axis = concatenation_axis
-        self.data_as_list = data_as_list
-        if logs:
-            self.logs = logs
-        else:
-            self.logs = os.getcwd()
-
-    def fit(self, X, y):
-        return self
-
-    def transform(self, X, y):
-
-        if self.data_as_list == 1:
-
-            # transform y to long format
-            y = y.long()
-
-            # disentangle adjacency matrix and photonai_graph
-            adjacency = X[:, :, :, 1]
-            feature_matrix = X[:, :, :, 0]
-
-            # make torch tensor
-            feature_matrix = torch.from_numpy(feature_matrix)
-            feature_matrix = feature_matrix.float()
-
-            # make data list for the Data_loader
-            data_list = []
-
-            # to scipy_sparse_matrix and to COO format
-            for matrix in range(adjacency.shape[0]):
-                # tocoo is already called in from from_scipy_sparse_matrix
-                adjacency_matrix = coo_matrix(adjacency[matrix, :, :])
-                edge_index, edge_attributes = from_scipy_sparse_matrix(adjacency_matrix)
-                # call the right X matrix
-                X_matrix = X[matrix, :, :]
-                # initialize the right y value
-                y_value = y[matrix]
-                # build data object
-                data_list.append(Data(x=X_matrix, edge_index=edge_index, edge_attr=edge_attributes, y=y_value))
-
-            X = data_list
-
-        return X
-
-
-
-def GraphConverter(X, y, conversion_type = 'DenseToNetworkx', adjacency_axis = 0):
-
-    # Convert a Dense Graph format to a Networkx format
-    if conversion_type == 'DenseToNetworkx':
-        #print('converting Dense to Networkx')
-        graph_list = []
-
-        for i in range(X.shape[0]):
-            networkx_graph = from_numpy_matrix(A=X[i, :, :, adjacency_axis])
-            graph_list.append(networkx_graph)
-
-        X_converted = graph_list
-
-    elif conversion_type == 'NetworkxToNumpyDense':
-        #print('converting Networkx to Numpy Dense')
-        graph_list = []
-
-        for i in X:
-            numpy_matrix = to_numpy_matrix(i)
-            graph_list.append(numpy_matrix)
-
-        X_converted = graph_list
-
-    elif conversion_type == 'DenseToTorchGeometric':
-        #print('converting Dense to Torch Geometric')
-        if isinstance(X, list):
-
-            # transform y to long format
-            y = y.long()
-
-            # disentangle adjacency matrix and photonai_graph
-            adjacency = X[:, :, :, 1]
-            feature_matrix = X[:, :, :, 0]
-
-            # make torch tensor
-            feature_matrix = torch.as_tensor(feature_matrix)
-            feature_matrix = feature_matrix.float()
-
-            # make data list for the Data_loader
-            data_list = []
-
-            # to scipy_sparse_matrix and to COO format
-            for matrix in range(adjacency.shape[0]):
-                # tocoo is already called in from from_scipy_sparse_matrix
-                adjacency_matrix = coo_matrix(adjacency[matrix, :, :])
-                edge_index, edge_attributes = from_scipy_sparse_matrix(adjacency_matrix)
-                # call the right X matrix
-                X_matrix = X[matrix, :, :]
-                # initialize the right y value
-                y_value = y[matrix]
-                # build data object
-                data_list.append(Data(x=X_matrix, edge_index=edge_index, edge_attr=edge_attributes, y=y_value))
-
-            X_converted = data_list
-
-    elif conversion_type == 'TorchGeometricToDense':
-        # Convert Dense to Torch Geometric
-        print('Not implemented yet')
-    elif conversion_type == 'NetworkxToTorchGeometric':
-        # Convert Networkx to Torch Geometric
-        print('Not implemented yet')
-    elif conversion_type == 'TorchGeometricToNetworkx':
-        # Convert Torch Geometric to Networkx
-        print('Not implemented yet')
-    elif conversion_type == 'GraphEmbeddings':
-        # Convert GraphEmbeddings?
-        print('Not implemented yet')
-        
-'''

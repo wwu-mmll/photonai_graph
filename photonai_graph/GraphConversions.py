@@ -110,15 +110,15 @@ def networkx_to_dense(graphs):
     return graph_list
 
 
-def networkx_to_sparse(graphs, format='csr'):
+def networkx_to_sparse(graphs, m_format='csr'):
     # convert networkx graphs to sparse output
     if isinstance(graphs, list):
         graph_list = []
         for graph in graphs:
-            sparse_graph = nx.to_scipy_sparse_matrix(graph, format=format)
+            sparse_graph = nx.to_scipy_sparse_matrix(graph, format=m_format)
             graph_list.append(sparse_graph)
     if isinstance(graphs, nx.classes.graph.Graph):
-        graph_list = nx.to_scipy_sparse_matrix(graphs, format=format)
+        graph_list = nx.to_scipy_sparse_matrix(graphs, format=m_format)
     else:
         raise Exception('Input needs to be a list of networkx graphs or a networkx photonai_graph.')
 
@@ -196,71 +196,76 @@ def stellargraph_to_networkx(graphs):
     return graph_list
 
 
-def dense_to_networkx(X, adjacency_axis=0, feature_axis=1, feature_construction="collapse"):
-
-    # convert if Dense is a list of ndarrays
-    if isinstance(X, list):
+def dense_to_networkx(mtrx, adjacency_axis=0, feature_axis=1, feature_construction="features"):
+    """converts an array or list of arrays to a list of networkx graphs"""
+    if isinstance(mtrx, list):
         graph_list = []
 
-        for i in X:
+        for i in mtrx:
             networkx_graph = nx.from_numpy_matrix(A=i[:, :, adjacency_axis])
-            # todo: duplicated code
-            if feature_construction == "collapse":
-                features = np.sum(i[:, :, feature_axis], axis=1)
-                features = features.reshape((features.shape[0], -1))
-                features = dict(enumerate(features, 0))
-                nx.set_node_attributes(networkx_graph, features)
-            elif feature_construction == "collapse2":
-                sum_features = np.sum(i[:, :, feature_axis], axis=1)
-                var_features = np.var(i[:, :, feature_axis], axis=1)
-                features = np.concatenate((sum_features, var_features))
-                features = dict(enumerate(features, 0))
-                nx.set_node_attributes(networkx_graph, features)
+            features = get_dense_feature(i, adjacency_axis, feature_axis, aggregation=feature_construction)
+            nx.set_node_attributes(networkx_graph, features, name="feat")
             graph_list.append(networkx_graph)
 
-        X_converted = graph_list
-
-    # convert if Dense is just a single ndarray
-    if isinstance(X, nx.classes.graph.Graph):
-        X_converted = nx.from_numpy_matrix(A=X[:, :, adjacency_axis])
+        mtrx_conv = graph_list
 
     # convert if Dense is an ndarray consisting of multiple arrays
-    if isinstance(X, np.ndarray):
-        graph_list = []
+    elif isinstance(mtrx, np.ndarray):
+        # if dense is just a single array
+        if mtrx.shape[0] == 1:
+            mtrx_conv = nx.from_numpy_matrix(A=mtrx[:, :, adjacency_axis])
+            features = get_dense_feature(mtrx, adjacency_axis, feature_axis, feature_construction)
+            nx.set_node_attributes(mtrx, features, name="feat")
+        # if dense consists of multiple arrays
+        else:
+            graph_list = []
+            # loop over each graph
+            for i in range(mtrx.shape[0]):
+                i_graph = mtrx[i, :, :, :]
+                networkx_graph = nx.from_numpy_matrix(A=i_graph[:, :, adjacency_axis])
+                features = get_dense_feature(i_graph, adjacency_axis, feature_axis, aggregation=feature_construction)
+                nx.set_node_attributes(networkx_graph, features, name="feat")
+                graph_list.append(networkx_graph)
 
-        for i in range(X.shape[0]):
-            networkx_graph = nx.from_numpy_matrix(A=X[i, :, :, adjacency_axis])
-            # todo: duplicated code
-            if feature_construction == "collapse":
-                features = np.sum(X[i, :, :, feature_axis], axis=1)
-                features = features.reshape((features.shape[0], -1))
-                features = dict(enumerate(features, 0))
-                nx.set_node_attributes(networkx_graph, features, name="collapsed_weight")
-            elif feature_construction == "collapse2":
-                sum_features = np.sum(X[i, :, :, feature_axis], axis=1)
-                var_features = np.var(X[i, :, :, feature_axis], axis=1)
-                features = np.column_stack((sum_features, var_features))
-                features = dict(enumerate(features, 0))
-                nx.set_node_attributes(networkx_graph, features, name="collapsed_weight")
-            graph_list.append(networkx_graph)
+            mtrx_conv = graph_list
 
-        X_converted = graph_list
+    else:
+        raise Exception('input needs to be list of arrays or ndarray')
 
-    return X_converted
+    return mtrx_conv
 
 
-def dense_to_sparse(graphs, type="coo_matrix", adjacency_axis=None, feature_axis=None):
+def get_dense_feature(matrix, adjacency_axis, feature_axis, aggregation="sum"):
+    """returns the features for a networkx graph"""
+    if aggregation == "sum":
+        features = np.sum(matrix[:, :, feature_axis], axis=1)
+    elif aggregation == "mean":
+        features = (np.sum(matrix[:, :, feature_axis], axis=1)) / matrix.shape[0]
+    elif aggregation == "node_degree":
+        features = np.count_nonzero(matrix[:, :, adjacency_axis], axis=1, keepdims=True)
+    elif aggregation == "features":
+        features = matrix[:, :, feature_axis]
+    else:
+        raise KeyError('Only sum, mean, node_degree and all features are supported')
+
+    features = features.reshape((features.shape[0], -1))
+    features = dict(enumerate(features, 0))
+
+    return features
+
+
+def dense_to_sparse(graphs, m_type="coo_matrix", adjacency_axis=None, feature_axis=None):
     if isinstance(graphs, list):
         graph_list = []
         feature_list = []
-        if type in sparse_types:
+        if m_type in sparse_types:
             for graph in graphs:
                 if np.ndim(graph) == 2:
-                    sparse_graph = sparse_types[type](graph)
+                    sparse_graph = sparse_types[m_type](graph)
                     graph_list.append(sparse_graph)
                 if np.ndim(graph) == 3:
-                    sparse_adjacency = sparse_types[type](graph[:, :, adjacency_axis])
-                    sparse_features = sparse_types[type](graph[:, :, feature_axis])
+                    sparse_adjacency = sparse_types[m_type](graph[:, :, adjacency_axis])
+                    sparse_features = sparse_types[m_type](graph[:, :, feature_axis])
                     graph_list.append(sparse_adjacency)
                     feature_list.append(sparse_features)
         else:
@@ -270,28 +275,28 @@ def dense_to_sparse(graphs, type="coo_matrix", adjacency_axis=None, feature_axis
         graph_list = []
         feature_list = []
         if adjacency_axis is not None and feature_axis is not None:
-            if type in sparse_types:
+            if m_type in sparse_types:
                 # if 4 dimensions you have subjects x values x values x adjacency/features
                 if np.ndim(graphs) == 4:
                     for i in range(graphs.shape[0]):
-                        adjacency = sparse_types[type](graphs[i, :, :, adjacency_axis])
+                        adjacency = sparse_types[m_type](graphs[i, :, :, adjacency_axis])
                         graph_list.append(adjacency)
-                        feature = sparse_types[type](graphs[i, :, :, feature_axis])
+                        feature = sparse_types[m_type](graphs[i, :, :, feature_axis])
                         feature_list.append(feature)
                 elif np.ndim(graphs) == 3:
-                    graph_list = sparse_types[type](graphs[:, :, adjacency_axis])
-                    feature_list = sparse_types[type](graphs[:, :, feature_axis])
+                    graph_list = sparse_types[m_type](graphs[:, :, adjacency_axis])
+                    feature_list = sparse_types[m_type](graphs[:, :, feature_axis])
                 else:
                     raise Exception("Matrix needs to have 4 or 3 dimensions when axis arguments are given.")
 
         else:
-            if type in sparse_types:
+            if m_type in sparse_types:
                 if np.ndim(graphs) == 3:
                     for i in range(graphs.shape[0]):
-                        adjacency = sparse_types[type](graphs[i, :, :])
+                        adjacency = sparse_types[m_type](graphs[i, :, :])
                         graph_list.append(adjacency)
                 if np.ndim(graphs) == 2:
-                    graph_list = sparse_types[type](graphs)
+                    graph_list = sparse_types[m_type](graphs)
                 else:
                     raise Exception("Matrix needs to have 3 or 2 dimension when no axis arguments are given.")
 
@@ -360,7 +365,7 @@ def sparse_to_dense(graphs, features=None):
 def dense_to_stellargraph(graphs):
     # first port to networkx, then to stellargraph
     nx_graphs = dense_to_networkx(graphs)
-    sg_graphs = networkx_to_stellargraph(graphs)
+    sg_graphs = networkx_to_stellargraph(nx_graphs)
 
     return sg_graphs
 
@@ -397,7 +402,7 @@ def sparse_to_dgl(graphs, adjacency_axis=0):
 def stellargraph_to_sparse(graphs, format="csr"):
     # first port to networkx, then to sparse
     nx_graphs = stellargraph_to_networkx(graphs)
-    sparse_matrices = networkx_to_sparse(nx_graphs, format=format)
+    sparse_matrices = networkx_to_sparse(nx_graphs, m_format=format)
 
     return sparse_matrices
 
