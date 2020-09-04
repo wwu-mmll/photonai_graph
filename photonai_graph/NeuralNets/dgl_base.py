@@ -58,13 +58,15 @@ class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
         epoch_losses = []
         for epoch in range(epochs):
             epoch_loss = 0
-            for iteration, (bg, label) in enumerate(data_loader):
+            iteration = 0
+            for it, (bg, label) in enumerate(data_loader):
                 prediction = model(bg)
                 loss = loss_func(prediction, label)
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
                 epoch_loss += loss.detach().item()
+                iteration = it
             epoch_loss /= (iteration + 1)
             print('Epoch {}, loss {:.4f}'.format(epoch, epoch_loss))
             epoch_losses.append(epoch_loss)
