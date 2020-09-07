@@ -1,4 +1,3 @@
-import os
 import numpy as np
 from photonai_graph.GraphConstruction.graph_constructor import GraphConstructor
 

@@ -1,5 +1,4 @@
 from networkx.drawing.nx_agraph import write_dot, read_dot
-import stellargraph
 from scipy import sparse
 import networkx as nx
 import numpy as np
@@ -146,23 +145,6 @@ def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
     return graph_list
 
 
-def networkx_to_stellargraph(graphs, node_features=None):
-    # convert networkx graphs to stellargraph graphs
-    warnings.warn('This method will be removed in the next version of photonai-graph.')
-    # Todo: remove this function
-    if isinstance(graphs, list):
-        graph_list = []
-        for graph in graphs:
-            sg_graph = stellargraph.StellarGraph.from_networkx(graph, node_features=node_features)
-            graph_list.append(sg_graph)
-    elif isinstance(graphs, nx.classes.graph.Graph):
-        graph_list = stellargraph.StellarGraph.from_networkx(graphs, node_features=node_features)
-    else:
-        raise Exception('Input needs to be a list of networkx graphs or a networkx photonai_graph.')
-
-    return graph_list
-
-
 def sparse_to_networkx(graphs):
     # convert scipy sparse matrices to networkx graphs
     if isinstance(graphs, list):
@@ -181,22 +163,6 @@ def sparse_to_networkx(graphs):
         graph_list = nx.from_scipy_sparse_matrix(graphs)
     else:
         raise Exception('Input needs to be a list of sparse matrices or a single sparse matrix.')
-
-    return graph_list
-
-
-def stellargraph_to_networkx(graphs):
-    warnings.warn('This method will be removed in the next version of photonai-graph')
-    # Todo: remove this function
-    if isinstance(graphs, list):
-        graph_list = []
-        for graph in graphs:
-            nx_graph = graph.to_networkx()
-            graph_list.append(nx_graph)
-    elif isinstance(graphs, stellargraph.StellarGraph) or isinstance(graphs, stellargraph.StellarDiGraph):
-        graph_list = graphs.to_networkx()
-    else:
-        raise Exception('Input needs to be a list of stellargraph objects or a single stellargraph object.')
 
     return graph_list
 
@@ -367,57 +333,65 @@ def sparse_to_dense(graphs, features=None):
     return matrices
 
 
-def dense_to_stellargraph(graphs):
-    # Todo: remove function
-    warnings.warn("This function will be removed in the next version of photonai-graph")
-    # first port to networkx, then to stellargraph
-    nx_graphs = dense_to_networkx(graphs)
-    sg_graphs = networkx_to_stellargraph(nx_graphs)
-
-    return sg_graphs
-
-
-def stellargraph_to_dense(graphs):
-    # Todo: remove function
-    warnings.warn("This function will be removed in the next version of photonai-graph")
-    # first port to networkx, then to dense
-    nx_graphs = stellargraph_to_networkx(graphs)
-    matrices = networkx_to_dense(nx_graphs)
-
-    return matrices
-
-
-def sparse_to_stellargraph(graphs):
-    # Todo: remove function
-    warnings.warn("This function will be removed in the next version of photonai-graph")
-    # first port to networkx, then to stellargraph
-    nx_graphs = sparse_to_networkx(graphs)
-    sg_graphs = networkx_to_stellargraph(nx_graphs)
-
-    return sg_graphs
-
-
-def sparse_to_dgl(graphs, adjacency_axis=0):
+def sparse_to_dgl(graphs, adjacency_axis=0, feature_axis=1):
     # take dense and make them long
     if isinstance(graphs, tuple):
         graph_list = []
-        for adj, feat in zip(graphs[0], graphs[1]):
+        for adj, feat in zip(graphs[adjacency_axis], graphs[feature_axis]):
             g = dgl.DGLGraph()
             g.from_scipy_sparse_matrix(spmat=adj)
             graph_list.append(g)
     else:
         raise Exception('Expected tuple as input.')
+
     return graph_list
 
 
-def stellargraph_to_sparse(graphs, format="csr"):
-    # Todo: remove function
-    warnings.warn("This function will be removed in the next version of photonai-graph")
-    # first port to networkx, then to sparse
-    nx_graphs = stellargraph_to_networkx(graphs)
-    sparse_matrices = networkx_to_sparse(nx_graphs, m_format=format)
+def dgl_to_dense(graphs, in_fmt="csr"):
+    """turns dgl graphs into dense matrices"""
+    if isinstance(graphs, list):
+        sp_graphs = dgl_to_sparse(graphs, in_fmt)
+        graph_list = sparse_to_dense(sp_graphs)
 
-    return sparse_matrices
+    else:
+        raise Exception('Input graphs need to be in list format')
+
+    return graph_list
+
+
+def dgl_to_sparse(graphs, fmt="csr"):
+    """turns dgl graphs into sparse matrices"""
+    if isinstance(graphs, list):
+        graph_list = []
+        for graph in graphs:
+            scp_graph = dgl.DGLGraph.adjacency_matrix_scipy(graph, fmt=fmt)
+            graph_list.append(scp_graph)
+
+    else:
+        raise Exception("Input type needs to be a list")
+
+    return graph_list
+
+
+def dgl_to_networkx(graphs, node_attrs=None, edge_attrs=None):
+    """turns dgl graph into networkx graphs"""
+    # redefine node and edge attribute names
+    if node_attrs is None:
+        node_attrs = ["feat"]
+    if edge_attrs is None:
+        edge_attrs = ["weight"]
+
+    # check input type
+    if isinstance(graphs, list):
+        graph_list = []
+        for graph in graphs:
+            nx_graph = dgl.DGLGraph.to_networkx(graph, node_attrs, edge_attrs)
+            graph_list.append(nx_graph)
+
+    else:
+        raise Exception('Input graphs need to be in list format')
+
+    return graph_list
 
 
 def check_dgl(graphs, adjacency_axis=None, feature_axis=None):
@@ -463,3 +437,84 @@ def check_dgl(graphs, adjacency_axis=None, feature_axis=None):
         raise TypeError('can only handle np arrays of lists as input')
 
     return dgl_graphs
+
+
+def convert_graphs(graphs, input_format="networkx", output_format="stellargraph"):
+    """Convert graphs from one format to the other.
+
+        Parameters
+        ----------
+        graphs : graphs
+            list of graphs, or np.ndarray/np.matrix
+
+        input_format : str, default="networkx"
+            format of the graphs to be transformed
+
+        output_format : str, default="stellargraph"
+            desired output format of the graph(s)
+
+        Returns
+        -------
+        list, np.ndarray, np.matrix
+            The transformed matrices as a list
+
+        Notes
+        -----
+        Output format is referenced by package name, written in lowercase letters
+
+        """
+    # check input format
+    if input_format == "networkx":
+        if output_format == "networkx":
+            warnings.warn('Graphs already in networkx format.')
+            trans_graphs = graphs
+        elif output_format == "dense":
+            trans_graphs = networkx_to_dense(graphs)
+        elif output_format == "sparse":
+            trans_graphs = networkx_to_sparse(graphs)
+        elif output_format == "dgl":
+            trans_graphs = networkx_to_dgl(graphs)
+        else:
+            raise KeyError('Your specified output format is not supported.'
+                           'Please check your output format.')
+    elif input_format == "dense":
+        if output_format == "networkx":
+            trans_graphs = dense_to_networkx(graphs)  # dense_to_networkx is redefined above, so we imported it as dnx
+        elif output_format == "dense":
+            raise Exception('Graphs already in dense format.')
+        elif output_format == "sparse":
+            trans_graphs = dense_to_sparse(graphs)
+        elif output_format == "dgl":
+            trans_graphs = dense_to_dgl(graphs)
+        else:
+            raise KeyError('Your specified output format is not supported.'
+                           'Please check your output format.')
+    elif input_format == "sparse":
+        if output_format == "networkx":
+            trans_graphs = sparse_to_networkx(graphs)
+        elif output_format == "dense":
+            trans_graphs = sparse_to_dense(graphs)
+        elif output_format == "sparse":
+            raise Exception('Graphs already in sparse format.')
+        elif output_format == "dgl":
+            trans_graphs = sparse_to_dgl(graphs)
+        else:
+            raise KeyError('Your specified output format is not supported.'
+                           'Please check your output format.')
+    elif input_format == "dgl":
+        if output_format == "networkx":
+            trans_graphs = dgl_to_networkx(graphs)
+        elif output_format == "dense":
+            trans_graphs = dgl_to_dense(graphs)
+        elif output_format == "sparse":
+            trans_graphs = dgl_to_sparse(graphs)
+        elif output_format == "stellargraph":
+            raise Exception('Graphs already in stellargraph format.')
+        else:
+            raise KeyError('Your specified output format is not supported.'
+                           'Please check your output format.')
+    else:
+        raise KeyError('Your specified input format is not supported.'
+                       'Please check your input format.')
+
+    return trans_graphs

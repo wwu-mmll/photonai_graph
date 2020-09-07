@@ -20,7 +20,6 @@ Translationale Psychiatrie
 Universitaetsklinikum Muenster
 """
 
-from networkx.convert_matrix import from_numpy_matrix
 from networkx.drawing.nx_pylab import draw
 import networkx.drawing as drawx
 from networkx.algorithms import asteroidal
@@ -31,70 +30,7 @@ from scipy import stats
 from scipy import sparse
 import os
 import matplotlib.pyplot as plt
-from photonai_graph.GraphConversions import save_networkx_to_file, networkx_to_dense, networkx_to_sparse, \
-    networkx_to_stellargraph
-from photonai_graph.GraphConversions import dense_to_networkx as dnx, dense_to_stellargraph, dense_to_sparse
-from photonai_graph.GraphConversions import sparse_to_networkx, sparse_to_dense, sparse_to_stellargraph
-from photonai_graph.GraphConversions import stellargraph_to_networkx, stellargraph_to_dense, stellargraph_to_sparse
-import warnings
-
-
-def DenseToNetworkx(X, adjacency_axis=0, feature_axis=1, feature_construction="collapse"):
-    # todo: I have renamed this function. Use dense_to_networkx in the future
-    warnings.warn("This function is renamed to dense_to_networkx", DeprecationWarning)
-    return dense_to_networkx(X, adjacency_axis, feature_axis, feature_construction)
-
-
-def dense_to_networkx(mtrx, adjacency_axis=0, feature_axis=1, feature_construction="collapse"):
-    """converts an array or list of arrays to a list of networkx graphs"""
-    if isinstance(mtrx, list):
-        graph_list = []
-
-        for i in mtrx:
-            networkx_graph = from_numpy_matrix(A=i[:, :, adjacency_axis])
-            if feature_construction == "collapse":
-                features = np.sum(i[:, :, feature_axis], axis=1)
-                features = features.reshape((features.shape[0], -1))
-                features = dict(enumerate(features, 0))
-                nx.set_node_attributes(networkx_graph, features)
-            elif feature_construction == "collapse2":
-                sum_features = np.sum(i[:, :, feature_axis], axis=1)
-                var_features = np.var(i[:, :, feature_axis], axis=1)
-                features = np.concatenate((sum_features, var_features))
-                features = dict(enumerate(features, 0))
-                nx.set_node_attributes(networkx_graph, features)
-            graph_list.append(networkx_graph)
-
-        mtrx_conv = graph_list
-
-    # convert if Dense is just a single ndarray
-    elif isinstance(mtrx, nx.classes.graph.Graph):
-        mtrx_conv = from_numpy_matrix(A=mtrx[:, :, adjacency_axis])
-
-    # convert if Dense is an ndarray consisting of multiple arrays
-    elif isinstance(mtrx, np.ndarray):
-        graph_list = []
-
-        for i in range(mtrx.shape[0]):
-            networkx_graph = from_numpy_matrix(A=mtrx[i, :, :, adjacency_axis])
-            if feature_construction == "collapse":
-                features = np.sum(mtrx[i, :, :, feature_axis], axis=1)
-                features = features.reshape((features.shape[0], -1))
-                features = dict(enumerate(features, 0))
-                nx.set_node_attributes(networkx_graph, features, name="collapsed_weight")
-            elif feature_construction == "collapse2":
-                sum_features = np.sum(mtrx[i, :, :, feature_axis], axis=1)
-                var_features = np.var(mtrx[i, :, :, feature_axis], axis=1)
-                features = np.column_stack((sum_features, var_features))
-                features = dict(enumerate(features, 0))
-                nx.set_node_attributes(networkx_graph, features, name="collapsed_weight")
-            graph_list.append(networkx_graph)
-
-        mtrx_conv = graph_list
-    else:
-        raise ValueError("X has unsupported format. Please check input")
-
-    return mtrx_conv
+from photonai_graph.GraphConversions import save_networkx_to_file
 
 
 def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=None,
@@ -289,92 +225,6 @@ def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adja
         raise TypeError('draw_connectivity_matrix only takes numpy arrays, matrices or lists as input.')
 
 
-def convert_graphs(graphs, input_format="networkx", output_format="stellargraph"):
-    """Convert graphs from one format to the other.
-
-        Parameters
-        ----------
-        graphs : graphs
-            list of graphs, or np.ndarray/np.matrix
-            
-        input_format : str, default="networkx"
-            format of the graphs to be transformed
-
-        output_format : str, default="stellargraph"
-            desired output format of the graph(s)
-
-        Returns
-        -------
-        list, np.ndarray, np.matrix
-            The transformed matrices as a list
-
-        Notes
-        -----
-        Output format is referenced by package name, written in lowercase letters
-
-        Examples
-        --------
-        >>> g = get_random_connectivity_data()
-        >>> draw_connectivity_matrix(g, adjacency_axis=0)
-               
-        """
-    # check input format
-    if input_format == "networkx":
-        if output_format == "networkx":
-            warnings.warn('Graphs already in networkx format.')
-            trans_graphs = graphs
-        elif output_format == "dense":
-            trans_graphs = networkx_to_dense(graphs)
-        elif output_format == "sparse":
-            trans_graphs = networkx_to_sparse(graphs)
-        elif output_format == "stellargraph":
-            trans_graphs = networkx_to_stellargraph(graphs)
-        else:
-            raise KeyError('Your specified output format is not supported.'
-                           'Please check your output format.')
-    elif input_format == "dense":
-        if output_format == "networkx":
-            trans_graphs = dnx(graphs)  # dense_to_networkx is redefined above, so we imported it as dnx
-        elif output_format == "dense":
-            raise Exception('Graphs already in dense format.')
-        elif output_format == "sparse":
-            trans_graphs = dense_to_sparse(graphs)
-        elif output_format == "stellargraph":
-            trans_graphs = dense_to_stellargraph(graphs)
-        else:
-            raise KeyError('Your specified output format is not supported.'
-                           'Please check your output format.')
-    elif input_format == "sparse":
-        if output_format == "networkx":
-            trans_graphs = sparse_to_networkx(graphs)
-        elif output_format == "dense":
-            trans_graphs = sparse_to_dense(graphs)
-        elif output_format == "sparse":
-            raise Exception('Graphs already in sparse format.')
-        elif output_format == "stellargraph":
-            trans_graphs = sparse_to_stellargraph(graphs)
-        else:
-            raise KeyError('Your specified output format is not supported.'
-                           'Please check your output format.')
-    elif input_format == "stellargraph":
-        if output_format == "networkx":
-            trans_graphs = stellargraph_to_networkx(graphs)
-        elif output_format == "dense":
-            trans_graphs = stellargraph_to_dense(graphs)
-        elif output_format == "sparse":
-            trans_graphs = stellargraph_to_sparse(graphs)
-        elif output_format == "stellargraph":
-            raise Exception('Graphs already in stellargraph format.')
-        else:
-            raise KeyError('Your specified output format is not supported.'
-                           'Please check your output format.')
-    else:
-        raise KeyError('Your specified input format is not supported.'
-                       'Please check your input format.')
-
-    return trans_graphs
-
-
 def get_random_connectivity_data(out_type="dense",
                                  number_of_nodes=114,
                                  number_of_individuals=10,
@@ -485,12 +335,6 @@ def save_graphs(graphs, path="", input_format="networkx", output_format="dot", i
         save_networkx_to_file(graphs, path, output_format=output_format, ids=ids)
     else:
         raise Exception("Your desired output format is not supported yet.")
-
-
-def VisualizeNetworkx(graphs):
-    # todo: I have moved this function
-    warnings.warn("This function is renamed to visualize_networkx", DeprecationWarning)
-    return visualize_networkx(graphs)
 
 
 def visualize_networkx(graphs, layout=nx.spring_layout, colorscheme="Blues"):
