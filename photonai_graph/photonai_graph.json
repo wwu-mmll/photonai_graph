@@ -76,7 +76,7 @@
       "Estimator"
    ],
    "GrakelAdapter": [
-      "photonai_graph.GraphKernels.grakel_adpater.GrakelAdapter"
+      "photonai_graph.GraphKernels.grakel_adpater.GrakelAdapter",
       "Transformer"
    ],
    "VertexHistogram": [
