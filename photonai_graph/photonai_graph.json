@@ -4,56 +4,80 @@
       "Transformer"
    ],
    "GraphConstructorKNN":[
-      "photonai_graph.GraphConstruction.GraphConstructorKNN",
+      "photonai_graph.GraphConstruction.graph_constructor_knn.GraphConstructorKNN",
       "Transformer"
    ],
    "GraphConstructorSpatial":[
-      "photonai_graph.GraphConstruction.GraphConstructorSpatial",
+      "photonai_graph.GraphConstruction.graph_constructor_spatial.GraphConstructorSpatial",
+      "Transformer"
+   ],
+   "GraphConstructorRandomWalks": [
+      "photonai_graph.GraphConstruction.graph_constructor_random_walks.GraphConstructorRandomWalks",
       "Transformer"
    ],
    "GraphConstructorThreshold":[
-      "photonai_graph.GraphConstruction.GraphConstructorThreshold",
+      "photonai_graph.GraphConstruction.graph_constructor_threshold.GraphConstructorThreshold",
       "Transformer"
    ],
    "GraphConstructorPercentage":[
-      "photonai_graph.GraphConstruction.GraphConstructorPercentage",
+      "photonai_graph.GraphConstruction.graph_constructor_percentage.GraphConstructorPercentage",
+      "Transformer"
+   ],
+    "GraphConstructorThresholdWindow":[
+      "photonai_graph.GraphConstruction.graph_constructor_threshold_window.GraphConstructorThreshold",
+      "Transformer"
+   ],
+   "GraphConstructorPercentageWindow":[
+      "photonai_graph.GraphConstruction.graph_constructor_percentage_window.GraphConstructorPercentage",
       "Transformer"
    ],
    "GraphEmbeddingGraphFactorization":[
-      "photonai_graph.GraphEmbedding.GraphEmbeddingGraphFactorization",
+      "photonai_graph.GraphEmbedding.graph_embedding_graph_factorization.GraphEmbeddingGraphFactorization",
       "Transformer"
    ],
    "GraphEmbeddingHOPE":[
-      "photonai_graph.GraphEmbedding.GraphEmbeddingHOPE",
+      "photonai_graph.GraphEmbedding.graph_embedding_hope.GraphEmbeddingHOPE",
       "Transformer"
    ],
    "GraphEmbeddingLaplacianEigenmaps":[
-      "photonai_graph.GraphEmbedding.GraphEmbeddingLaplacianEigenmaps",
+      "photonai_graph.GraphEmbedding.graph_embedding_laplacian_eigenmaps.GraphEmbeddingLaplacianEigenmaps",
       "Transformer"
    ],
    "GraphEmbeddingLocallyLinearEmbedding":[
-      "photonai_graph.GraphEmbedding.GraphEmbeddingLocallyLinearEmbedding",
+      "photonai_graph.GraphEmbedding.graph_embedding_locally_linear_embedding.GraphEmbeddingLocallyLinearEmbedding",
       "Transformer"
    ],
    "GraphEmbeddingSDNE":[
-      "photonai_graph.GraphEmbedding.GraphEmbeddingSDNE",
+      "photonai_graph.GraphEmbedding.graph_embedding_sdne.GraphEmbeddingSDNE",
       "Transformer"
    ],
-   "GraphConvNet_Classifier":[
-      "photonai_graph.GraphConvNet.GraphConvNet_Classifier",
+   "GATClassifier":[
+      "photonai_graph.NeuralNets.NNClassifier.gat_classifier.GATClassifierModel",
       "Estimator"
    ],
-   "GraphConvNet_Regressor":[
-      "photonai_graph.GraphConvNet.GraphConvNet_Regressor",
+   "GCNClassifier":[
+      "photonai_graph.NeuralNets.NNClassifier.gcn_classifier.GCNClassifierModel",
       "Estimator"
    ],
-   "DeepGraphCNN_Classifier": [
-      "photonai_graph.GraphConvNet.DeepGraphCNN_Classifier",
+   "SGCClassifier":[
+      "photonai_graph.NeuralNets.NNClassifier.sgc_classifier.SGConvClassifierModel",
       "Estimator"
    ],
-   "DeepGraphCNN_Regressor": [
-      "photonai_graph.GraphConvNet.DeepGraphCNN_Regressor",
+   "GATRegressor": [
+      "photonai_graph.Neural_Nets.NNRegressor.gat_regressor.GATRegressorModel",
       "Estimator"
+   ],
+   "GCNRegressor": [
+      "photonai_graph.Neural_Nets.NNRegressor.gcn_regressor.GCNRegressorModel",
+      "Estimator"
+   ],
+   "SGCRegressor": [
+      "photonai_graph.Neural_Nets.NNRegressor.sgc_regressor.SGCRegressorModel",
+      "Estimator"
+   ],
+   "GrakelAdapter": [
+      "photonai_graph.GraphKernels.grakel_adpater.GrakelAdapter"
+      "Transformer"
    ],
    "VertexHistogram": [
       "grakel.VertexHistogram",

@@ -3,7 +3,7 @@ from photonai_graph.NeuralNets.dgl_base import DGLmodel
 from photonai_graph.NeuralNets.NNModels import SGConvClassifier
 
 
-class SGConvlassifierModel(DGLmodel):
+class SGConvClassifierModel(DGLmodel):
     """
     Graph convolutional network for graph classification. Simple Graph
     convolutional layers from Wu, Felix, et al., 2018.
