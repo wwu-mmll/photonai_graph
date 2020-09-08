@@ -456,7 +456,7 @@ def sparse_to_dgl(graphs, adjacency_axis=0, feature_axis=1):
 
         Parameters
         ---------
-        graphs: tuple
+        graphs: tuple, list, np.ndarray or np.matrix
             tuple consisting of two lists
         adjacency_axis: int, default=0
             position of the adjacency matrix
@@ -469,8 +469,23 @@ def sparse_to_dgl(graphs, adjacency_axis=0, feature_axis=1):
             g = dgl.DGLGraph()
             g.from_scipy_sparse_matrix(spmat=adj)
             graph_list.append(g)
+    elif isinstance(graphs, list):
+        graph_list = []
+        for adj in graphs:
+            g = dgl.DGLGraph()
+            g.from_scipy_sparse_matrix(spmat=adj)
+            graph_list.append(g)
+    elif isinstance(graphs, np.ndarray) or isinstance(graphs, np.matrix):
+        if np.ndim(graphs) == 1:
+            graph_list = []
+            for adj in range(graphs.shape[0]):
+                g = dgl.DGLGraph()
+                g.from_scipy_sparse_matrix(spmat=graphs[adj])
+                graph_list.append(g)
+        else:
+            raise Exception('Input needs to be 1d array if it is a numpy array')
     else:
-        raise Exception('Expected tuple as input.')
+        raise Exception('Expected tuple, list or 1d-array as input.')
 
     return graph_list
 
