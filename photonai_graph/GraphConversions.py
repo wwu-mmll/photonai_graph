@@ -11,7 +11,7 @@ output_formats = {
     "AdjacencyList": nx.write_adjlist,
     "MultilineAdjacencyList": nx.write_multiline_adjlist,
     "EdgeList": nx.write_edgelist,
-    "WeightedEdgeList": nx.write_edgelist,  # todo: is this intended?
+    "WeightedEdgeList": nx.write_weighted_edgelist,
     "GEXF":  nx.write_gexf,
     "pickle": nx.write_gpickle,
     "GLM": nx.write_gml,
@@ -51,6 +51,22 @@ sparse_types = {
 
 
 def save_networkx_to_file(graphs, path, output_format="dot", ids=None):
+    """Saves networkx graph(s) to a file
+
+        Parameters
+        ----------
+        graphs: a list of networkx graphs or single networkx graph
+            list of graphs you want to save
+        path: str
+            path where to save the data as a string
+        output_format: str
+            output format in which the graphs should be saved. See output_formats
+            at top of the file for more information on valid output formats
+        ids: list, default=None
+            a list of ids after which to name each graph in the file. If no list is
+            specified the graphs are just numbered as graph_x
+
+    """
     # Case 1: a list of networkx graphs as input
     if isinstance(graphs, list):
         # Check if we have got a list of ids
@@ -81,6 +97,15 @@ def save_networkx_to_file(graphs, path, output_format="dot", ids=None):
 
 
 def load_file_to_networkx(path, input_format="dot"):
+    """load graph into networkx from a file
+
+        Parameters
+        ----------
+        path: list, str
+            path(s) where graphs are stored
+        input_format:
+            format in which these graphs are stored
+    """
     if isinstance(path, str):
         path = [path]
 
@@ -96,7 +121,15 @@ def load_file_to_networkx(path, input_format="dot"):
 
 
 def networkx_to_dense(graphs):
-    # convert networkx graphs to dense output
+    """convert a networkx graph to a numpy array
+
+        Parameters
+        ----------
+            graphs: list of graphs
+
+        :returns
+            list of numpy arrays of a single numpy array
+    """
     if isinstance(graphs, list):
         graph_list = []
         for graph in graphs:
@@ -110,15 +143,23 @@ def networkx_to_dense(graphs):
     return graph_list
 
 
-def networkx_to_sparse(graphs, m_format='csr'):
-    # convert networkx graphs to sparse output
+def networkx_to_sparse(graphs, fmt='csr'):
+    """converts networkx graph to sparse graphs
+
+        Parameters
+        ---------
+        graphs: list or single nx.classes.graph.Graph
+            list of graphs or single to be converted to scipy sparse matrix/matrices
+        fmt: str, default="csr"
+            format of the scipy sparse matrix
+    """
     if isinstance(graphs, list):
         graph_list = []
         for graph in graphs:
-            sparse_graph = nx.to_scipy_sparse_matrix(graph, format=m_format)
+            sparse_graph = nx.to_scipy_sparse_matrix(graph, format=fmt)
             graph_list.append(sparse_graph)
     if isinstance(graphs, nx.classes.graph.Graph):
-        graph_list = nx.to_scipy_sparse_matrix(graphs, format=m_format)
+        graph_list = nx.to_scipy_sparse_matrix(graphs, format=fmt)
     else:
         raise Exception('Input needs to be a list of networkx graphs or a networkx photonai_graph.')
 
@@ -126,7 +167,17 @@ def networkx_to_sparse(graphs, m_format='csr'):
 
 
 def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
-    # convert networkx graphs to dgl graphs
+    """convert networkx graphs to dgl graphs
+
+        Parameters
+        --------
+        graphs: list,
+            list or ndarray of networkx graphs to be converted
+        node_attrs: list, default=None
+            name of node attributes as list
+        edge_attrs: list, default=None
+            name of edge attributes as list
+    """
     if isinstance(graphs, list):
         graph_list = []
         for graph in graphs:
@@ -135,7 +186,7 @@ def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
     elif isinstance(graphs, np.ndarray):
         graph_list = []
         for graph in range(graphs.shape[0]):
-            g = dgl.DGLGraph().from_networkx(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
+            g = dgl.DGLGraph().from_networkx(graphs[graph], node_attrs=node_attrs, edge_attrs=edge_attrs)
             graph_list.append(g)
     elif isinstance(graphs, nx.classes.graph.Graph):
         graph_list = dgl.DGLGraph().from_networkx(graphs)
@@ -146,7 +197,13 @@ def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
 
 
 def sparse_to_networkx(graphs):
-    # convert scipy sparse matrices to networkx graphs
+    """convert scipy sparse matrices to networkx graphs
+
+        Parameters
+        ---------
+        graphs:
+            list of sparse matrices or single sparse matrix
+    """
     if isinstance(graphs, list):
         graph_list = []
         for graph in graphs:
@@ -168,7 +225,20 @@ def sparse_to_networkx(graphs):
 
 
 def dense_to_networkx(mtrx, adjacency_axis=0, feature_axis=1, feature_construction="features"):
-    """converts an array or list of arrays to a list of networkx graphs"""
+    """converts an array or list of arrays to a list of networkx graphs
+
+        Parameters
+        ---------
+        mtrx: list or np.ndarray
+            numpy matrices to be converted
+        adjacency_axis: int, default=0
+            position of the adjacency matrices
+        feature_axis: int, default=1
+            position of the feature matrices
+        feature_construction: str, default="features"
+            method of node feature construction, for more information see
+            get_dense_feature function
+    """
     if isinstance(mtrx, list):
         graph_list = []
 
@@ -207,7 +277,21 @@ def dense_to_networkx(mtrx, adjacency_axis=0, feature_axis=1, feature_constructi
 
 
 def get_dense_feature(matrix, adjacency_axis, feature_axis, aggregation="sum"):
-    """returns the features for a networkx graph"""
+    """returns the features for a networkx graph
+
+        Parameters
+        ---------
+        matrix: np.matrix/np.ndarray
+            feature matrix
+        adjacency_axis: int
+            position of the adjacency matrix
+        feature_axis: int
+            position of the feature matrix
+        aggregation:
+            method of feature construction, sum gives a row-wise sum,
+            "mean" gives a row-wise mean, "node_degree" give a row-wise node-degree,
+            features returns the entire row as the feature vector
+    """
     if aggregation == "sum":
         features = np.sum(matrix[:, :, feature_axis], axis=1)
     elif aggregation == "mean":
@@ -226,6 +310,20 @@ def get_dense_feature(matrix, adjacency_axis, feature_axis, aggregation="sum"):
 
 
 def dense_to_sparse(graphs, m_type="coo_matrix", adjacency_axis=None, feature_axis=None):
+    """converts numpy dense matrices to scipy sparse matrices
+
+        Parameters
+        ---------
+        graphs: list or np.ndarray or np.matrix
+            graphs in dense format which are to be converted
+        m_type: str, default="coo_matrix"
+            matrix format for the scipy sparse matrices
+        adjacency_axis: int, default=None
+            position of the adjacency matrix
+        feature_axis: int, default=None
+            position of the feature matrix
+
+    """
     if isinstance(graphs, list):
         graph_list = []
         feature_list = []
@@ -278,7 +376,17 @@ def dense_to_sparse(graphs, m_type="coo_matrix", adjacency_axis=None, feature_ax
 
 
 def dense_to_dgl(graphs, adjacency_axis=None, feature_axis=None):
-    # this function converts dense matrices to dgl graphs
+    """Converts dense matrices to dgl graphs
+
+        Parameters
+        ---------
+        graphs: list, np.ndarray or np.matrix
+            graphs represented in dense format
+        adjacency_axis: int, default=None
+            position of the adjacency matrix
+        feature_axis: int, default=None
+            position of the feature matrix
+    """
     if adjacency_axis is None:
         raise Exception('dense to dgl not implemented without adjacency axis')
     else:
@@ -288,6 +396,16 @@ def dense_to_dgl(graphs, adjacency_axis=None, feature_axis=None):
 
 
 def sparse_to_dense(graphs, features=None):
+    """convert sparse matrices to numpy array
+
+        Parameters
+        ---------
+        graphs: list or scipy matrix
+            a list of scipy sparse matrices or a single sparse matrix
+        features: list or scipy matrix, default=None
+            if a feature matrix or a list of those is specified they are
+            incorporated into the numpy array
+    """
     if features is not None:
         if isinstance(graphs, list):
             matrices = []
@@ -334,7 +452,17 @@ def sparse_to_dense(graphs, features=None):
 
 
 def sparse_to_dgl(graphs, adjacency_axis=0, feature_axis=1):
-    # take dense and make them long
+    """convert sparse matrices to dgl graphs
+
+        Parameters
+        ---------
+        graphs: tuple
+            tuple consisting of two lists
+        adjacency_axis: int, default=0
+            position of the adjacency matrix
+        feature_axis: int, default=1
+            position of the feature matrix
+    """
     if isinstance(graphs, tuple):
         graph_list = []
         for adj, feat in zip(graphs[adjacency_axis], graphs[feature_axis]):
@@ -348,7 +476,15 @@ def sparse_to_dgl(graphs, adjacency_axis=0, feature_axis=1):
 
 
 def dgl_to_dense(graphs, in_fmt="csr"):
-    """turns dgl graphs into dense matrices"""
+    """turns dgl graphs into dense matrices
+
+        Parameters
+        ---------
+        graphs: list
+            list of dgl graphs
+        in_fmt: str, default="csr"
+            format of the scipy sparse matrix used in the intermediary step
+    """
     if isinstance(graphs, list):
         sp_graphs = dgl_to_sparse(graphs, in_fmt)
         graph_list = sparse_to_dense(sp_graphs)
@@ -360,7 +496,15 @@ def dgl_to_dense(graphs, in_fmt="csr"):
 
 
 def dgl_to_sparse(graphs, fmt="csr"):
-    """turns dgl graphs into sparse matrices"""
+    """turns dgl graphs into sparse matricesParameters
+
+        Parameters
+        ---------
+        graphs: list
+            list of dgl graphs
+        fmt: str, default="csr"
+            format of the scipy sparse matrix used in the intermediary step
+    """
     if isinstance(graphs, list):
         graph_list = []
         for graph in graphs:
@@ -374,8 +518,17 @@ def dgl_to_sparse(graphs, fmt="csr"):
 
 
 def dgl_to_networkx(graphs, node_attrs=None, edge_attrs=None):
-    """turns dgl graph into networkx graphs"""
-    # redefine node and edge attribute names
+    """turns dgl graph into networkx graphs
+
+        Parameters
+        ---------
+        graphs: list
+            list of dgl graphs to be converted to networkx graphs
+        node_attrs: list, default=None
+            Node attributes as a list of strings
+        edge_attrs: list, default=None
+            Edge attributes as a list of strings
+    """
     if node_attrs is None:
         node_attrs = ["feat"]
     if edge_attrs is None:
@@ -395,7 +548,17 @@ def dgl_to_networkx(graphs, node_attrs=None, edge_attrs=None):
 
 
 def check_dgl(graphs, adjacency_axis=None, feature_axis=None):
-    # this functions checks the input and converts it to dgl format
+    """Checks the input and converts it to dgl format
+
+        Parameters
+        ---------
+        graphs: list, np.ndarray or np.matrix
+            graphs to be converted
+        adjacency_axis: int, default=None
+            position of the adjacency matrix
+        feature_axis: int, default=None
+            position of the feature matrix
+    """
     if isinstance(graphs, list):
         if isinstance(graphs[0], nx.classes.graph.Graph):
             dgl_graphs = networkx_to_dgl(graphs)

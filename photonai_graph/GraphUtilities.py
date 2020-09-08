@@ -295,8 +295,6 @@ def get_random_labels(l_type="classification", number_of_labels=10):
         y = np.random.rand(number_of_labels)
 
     else:
-        # todo: If we simply print this message, the execution will not be aborted.
-        # todo: In this case y is not defined in the return statement below.
         raise ValueError('random labels only implemented for classification and regression. Please check your spelling')
 
     return y
