@@ -26,7 +26,7 @@ Universitaetsklinikum Muenster
 
 import networkx
 from sklearn.base import BaseEstimator, TransformerMixin
-from photonai_graph.GraphUtilities import dense_to_networkx
+from photonai_graph.GraphConversions import dense_to_networkx
 import pandas as pd
 import numpy as np
 import json
