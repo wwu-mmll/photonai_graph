@@ -26,13 +26,26 @@ class GraphConstructorThreshold(GraphConstructor):
                                                 use_abs=1)
    """
 
-    def __init__(self, threshold=0.1,
-                 concatenation_axis=3,
-                 return_adjacency_only=0,
-                 retain_weights=0,
-                 *args,
-                 **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, threshold: float = 0.1,
+                 concatenation_axis: int = 3,
+                 return_adjacency_only: int = 0,
+                 retain_weights: int = 0,
+                 transform_style: str = "individual",
+                 one_hot_nodes: int = 0,
+                 fisher_transform: int = 0,
+                 use_abs: int = 0,
+                 zscore: int = 0,
+                 use_abs_zscore: int = 0,
+                 adjacency_axis: int = 0,
+                 logs: str = ''):
+        super(GraphConstructorThreshold, self).__init__(transform_style=transform_style,
+                                                        one_hot_nodes=one_hot_nodes,
+                                                        fisher_transform=fisher_transform,
+                                                        use_abs=use_abs,
+                                                        zscore=zscore,
+                                                        use_abs_zscore=use_abs_zscore,
+                                                        adjacency_axis=adjacency_axis,
+                                                        logs=logs)
         self.threshold = threshold
         self.concatenation_axis = concatenation_axis
         self.return_adjacency_only = return_adjacency_only
