@@ -21,7 +21,7 @@ class GrakelAdapter(BaseEstimator, ClassifierMixin):
 
     Example
     ----------
-        converter = GrakelAdpater(node_labels=list(range(X.shape[1])))
+        converter = GrakelAdapter(node_labels=list(range(X.shape[1])))
     """
 
     def __init__(self,
@@ -37,6 +37,7 @@ class GrakelAdapter(BaseEstimator, ClassifierMixin):
 
     def transform(self, X):
         """sklearn compatible graph conversion"""
+        self.get_node_labels(X)
         X_transformed = self.convert_grakel(X, self.input_type, self.node_labels, self.adjacency_axis)
 
         return X_transformed
@@ -58,3 +59,8 @@ class GrakelAdapter(BaseEstimator, ClassifierMixin):
             raise ValueError("Only networkx or dense conversions are supported.")
 
         return g_trans
+
+    def get_node_labels(self, graphs):
+        """adds node labels if no labels are specified"""
+        if self.node_labels is None:
+            self.node_labels = list(range(graphs.shape[1]))
