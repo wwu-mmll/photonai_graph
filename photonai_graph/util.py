@@ -8,6 +8,6 @@ def delete_photonai_graph():
 
 
 def register_photonai_graph():
-    current_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "photonai_neuro/photonai_graph.json")
+    current_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "photonai_graph/photonai_graph.json")
     reg = PhotonRegistry()
     reg.add_module(current_path)
