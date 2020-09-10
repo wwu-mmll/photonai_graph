@@ -25,7 +25,7 @@ class GraphEmbeddingBase(BaseEstimator, TransformerMixin, ABC):
     """
 
     def __init__(self,
-                 embedding_dimension=1,
+                 embedding_dimension: int = 1,
                  adjacency_axis: int = 0,
                  logs: str = ''):
         self.embedding_dimension = embedding_dimension

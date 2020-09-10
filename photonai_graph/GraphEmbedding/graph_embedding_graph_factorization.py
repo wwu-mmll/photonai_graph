@@ -36,9 +36,11 @@ class GraphEmbeddingGraphFactorization(GraphEmbeddingBase):
                  learning_rate=1 * 10 ** -4,
                  regularization_coefficient=1.0,
                  construction_axis=0,
-                 *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.embedding_dimension = embedding_dimension
+                 adjacency_axis: int = 0,
+                 logs: str = ''):
+        super(GraphEmbeddingGraphFactorization, self).__init__(embedding_dimension=embedding_dimension,
+                                                               adjacency_axis=adjacency_axis,
+                                                               logs=logs)
         self.maximum_iterations = maximum_iterations
         self.learning_rate = learning_rate
         self.regularization_coefficient = regularization_coefficient
