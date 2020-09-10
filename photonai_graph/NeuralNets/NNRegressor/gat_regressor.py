@@ -26,8 +26,19 @@ class GATRegressorModel(DGLmodel):
                  in_dim: int = 1,
                  hidden_layers: int = 2,
                  hidden_dim: int = 256,
-                 heads=None):
-        super().__init__()
+                 heads=None,
+                 nn_epochs: int = 200,
+                 learning_rate: float = 0.001,
+                 batch_size: int = 32,
+                 adjacency_axis: int = 0,
+                 feature_axis: int = 1,
+                 logs: str = ''):
+        super(GATRegressorModel, self).__init__(nn_epochs=nn_epochs,
+                                                learning_rate=learning_rate,
+                                                batch_size=batch_size,
+                                                adjacency_axis=adjacency_axis,
+                                                feature_axis=feature_axis,
+                                                logs=logs)
         if heads is None:
             heads = [2, 2]
             # Todo: if heads is not length of hidden layers +1 (bc of the first layer)
