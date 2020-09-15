@@ -34,7 +34,7 @@ from photonai_graph.GraphConversions import save_networkx_to_file
 
 
 def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=None,
-                      node_shape='o', weight=None, path=None):
+                      node_shape='o', weight=None, path=None, show=True):
     """This functions draws a connectogram, from a graph.
 
     Parameters
@@ -54,6 +54,8 @@ def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=None,
     path: str, default=None
         path where to save the plots as string, if no path is declared, plots are not saved.
         Path needs to be the full path including file name and ending, unlike in draw_connectograms
+    show: bool, default=True
+        whether to plot the graph or not. Set it to false in headless environments
     """
 
     pos = nx.circular_layout(graph)
@@ -74,7 +76,8 @@ def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=None,
     else:
         nx.draw_networkx_edges(graph, pos, connectionstyle=edge_rad)
 
-    plt.show()
+    if show:
+        plt.show()
 
     if path is not None:
         plt.savefig(path)
@@ -82,7 +85,7 @@ def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=None,
 
 def draw_connectograms(graphs, curved_edge=False, colorscheme=None,
                        nodesize=None, node_shape='o', weight=None,
-                       path=None, ids=None, out_format=None):
+                       path=None, ids=None, out_format=None, show=True):
     """This function draws multiple connectograms, from graph lists.
 
     Parameters
@@ -105,6 +108,8 @@ def draw_connectograms(graphs, curved_edge=False, colorscheme=None,
         list of ids, after which to name the plots
     out_format: str, default=None
         output format for the graphs, as a string
+    show: bool, default=True
+        whether to plot the connectograms or not. Set it to false in headless environments
     """
     if isinstance(graphs, list):
         if ids is not None:
@@ -113,7 +118,7 @@ def draw_connectograms(graphs, curved_edge=False, colorscheme=None,
                     if None in [path, out_format]:
                         raise Exception('To save graphs, declare a path and an output format.')
                     save_path = os.path.join(path, ID, out_format)
-                    draw_connectogram(graph, curved_edge, colorscheme, path=save_path)
+                    draw_connectogram(graph, curved_edge, colorscheme, path=save_path, show=show)
             else:
                 raise Exception('Number of IDs must match number of graphs.')
         # if no IDs are provided graphs are just numbered
@@ -121,24 +126,24 @@ def draw_connectograms(graphs, curved_edge=False, colorscheme=None,
             counter = 0
             if None in [path, out_format]:
                 for graph in graphs:
-                    draw_connectogram(graph, curved_edge, colorscheme, nodesize, node_shape, weight)
+                    draw_connectogram(graph, curved_edge, colorscheme, nodesize, node_shape, weight, show=show)
                     counter += 1
             else:
                 for graph in graphs:
                     save_path = os.path.join(path, str(counter), out_format)
-                    draw_connectogram(graph, curved_edge, colorscheme, nodesize, node_shape, weight, path=save_path)
+                    draw_connectogram(graph, curved_edge, colorscheme, nodesize, node_shape, weight, path=save_path, show=show)
                     counter += 1
 
     # if the it is only a single graph
     elif isinstance(graphs, nx.classes.graph.Graph):
-        draw_connectogram(graphs, curved_edge, colorscheme, path=path)
+        draw_connectogram(graphs, curved_edge, colorscheme, path=path, show=show)
 
     # input should be list or single graph
     else:
         raise Exception('Input needs to be a single networkx graph or a list of those.')
 
 
-def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adjacency_axis=None):
+def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adjacency_axis=None, show=True):
     """Draw connectivity matrix.
 
         Parameters
@@ -155,6 +160,9 @@ def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adja
         adjacency_axis : int, default=None
         position of the the adjacency axis, if specified the array is assumed to
         have an additional axis where the matrix is stored.
+
+        show: bool, default=True
+            whether to show the connectivity matrix or not.
 
         Notes
         -----
@@ -177,12 +185,14 @@ def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adja
                     plt.imshow(matrix[i, :, :, adjacency_axis], cmap=plt.get_cmap(colorscheme))
                     if colorbar:
                         plt.colorbar()
-                    plt.show()
+                    if show:
+                        plt.show()
             elif np.ndim(matrix) == 3:
                 plt.imshow(matrix[:, :, adjacency_axis], cmap=plt.get_cmap(colorscheme))
                 if colorbar:
                     plt.colorbar()
-                plt.show()
+                if show:
+                    plt.show()
             else:
                 raise Exception('Matrix dimension might not be specified correctly.')
         else:
@@ -193,12 +203,14 @@ def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adja
                     plt.imshow(matrix[i, :, :])
                     if colorbar:
                         plt.colorbar()
-                    plt.show()
+                    if show:
+                        plt.show()
             elif np.ndim(matrix) == 2:
                 plt.imshow(matrix)
                 if colorbar:
                     plt.colorbar()
-                plt.show()
+                if show:
+                    plt.show()
             else:
                 raise Exception('Matrix dimension might not be specified correctly.')
     elif isinstance(matrix, list):
@@ -208,7 +220,8 @@ def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adja
                     plt.imshow(single_matrix[:, :, adjacency_axis])
                     if colorbar:
                         plt.colorbar()
-                    plt.show()
+                    if show:
+                        plt.show()
         elif isinstance(matrix[0], sparse.spmatrix) \
                 or isinstance(matrix[0], sparse.bsr_matrix) \
                 or isinstance(matrix[0], sparse.lil_matrix) \
@@ -219,6 +232,8 @@ def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adja
                 or isinstance(matrix[0], sparse.dia_matrix):
             for single_matrix in matrix:
                 plt.spy(matrix[single_matrix])
+                if show:
+                    plt.show()
         else:
             raise TypeError('List elements need to be numpy arrays/matrices or scipy sparse matrices')
     else:
@@ -335,7 +350,7 @@ def save_graphs(graphs, path="", input_format="networkx", output_format="dot", i
         raise Exception("Your desired output format is not supported yet.")
 
 
-def visualize_networkx(graphs, layout=nx.spring_layout, colorscheme="Blues"):
+def visualize_networkx(graphs, layout=nx.spring_layout, colorscheme="Blues", show=True):
     """Visualize a networkx graph or graphs using networkx built-in visualization.
 
         Parameters
@@ -344,9 +359,10 @@ def visualize_networkx(graphs, layout=nx.spring_layout, colorscheme="Blues"):
             a list or of networkx graphs or a single networkx graph
         layout :
             layout of the graph, default is spring layout
-        colorscheme:
+        colorscheme: str, default="Blues"
             colormap for the nodes, default is Blues
-
+        show: bool, default=True
+            whether to show the plot or not. Set it to False in headless environments
 
         Examples
         --------
@@ -360,10 +376,12 @@ def visualize_networkx(graphs, layout=nx.spring_layout, colorscheme="Blues"):
     if isinstance(graphs, list):
         for graph in graphs:
             draw(graph, pos=layout(graph), node_color=range(nx.number_of_nodes(graph)), cmap=plt.get_cmap(colorscheme))
-            plt.show()
+            if show:
+                plt.show()
     elif isinstance(graphs, nx.classes.graph.Graph):
         draw(graphs, pos=layout(graphs), node_color=range(nx.number_of_nodes(graphs)), cmap=plt.get_cmap(colorscheme))
-        plt.show()
+        if show:
+            plt.show()
     else:
         raise ValueError("graphs has unexpected format")
 
