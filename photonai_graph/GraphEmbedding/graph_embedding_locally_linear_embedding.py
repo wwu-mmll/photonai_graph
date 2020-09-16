@@ -23,10 +23,13 @@ class GraphEmbeddingLocallyLinearEmbedding(GraphEmbeddingBase):
         constructor = GraphEmbeddingLocallyLinearEmbedding(embedding_dimension=1)
     """
 
-    def __init__(self, embedding_dimension=1,
-                 *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.embedding_dimension = embedding_dimension
+    def __init__(self,
+                 embedding_dimension: int = 1,
+                 adjacency_axis: int = 0,
+                 logs: str = ''):
+        super(GraphEmbeddingLocallyLinearEmbedding, self).__init__(embedding_dimension=embedding_dimension,
+                                                                   adjacency_axis=adjacency_axis,
+                                                                   logs=logs)
 
     def transform(self, X):
         """Transform graph using Locally Linear Embedding"""

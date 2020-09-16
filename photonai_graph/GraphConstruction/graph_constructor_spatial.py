@@ -42,9 +42,23 @@ class GraphConstructorSpatial(GraphConstructor):
                  k_distance: int = 10,
                  atlas_name: str = 'ho',
                  atlas_folder: str = "",
-                 *args,
-                 **kwargs):
-        super().__init__(*args, **kwargs)
+                 transform_style: str = "individual",
+                 one_hot_nodes: int = 0,
+                 fisher_transform: int = 0,
+                 use_abs: int = 0,
+                 zscore: int = 0,
+                 use_abs_zscore: int = 0,
+                 adjacency_axis: int = 0,
+                 logs: str = ''
+                 ):
+        super(GraphConstructorSpatial, self).__init__(transform_style=transform_style,
+                                                      one_hot_nodes=one_hot_nodes,
+                                                      fisher_transform=fisher_transform,
+                                                      use_abs=use_abs,
+                                                      zscore=zscore,
+                                                      use_abs_zscore=use_abs_zscore,
+                                                      adjacency_axis=adjacency_axis,
+                                                      logs=logs)
         self.k_distance = k_distance
         self.atlas_name = atlas_name
         self.atlas_folder = atlas_folder

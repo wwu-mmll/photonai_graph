@@ -25,7 +25,7 @@ class GraphEmbeddingBase(BaseEstimator, TransformerMixin, ABC):
     """
 
     def __init__(self,
-                 embedding_dimension=1,
+                 embedding_dimension: int = 1,
                  adjacency_axis: int = 0,
                  logs: str = ''):
         self.embedding_dimension = embedding_dimension
@@ -51,7 +51,9 @@ class GraphEmbeddingBase(BaseEstimator, TransformerMixin, ABC):
                 embedding_list = embedding_representation
 
             else:
-                embedding_list = np.concatenate((embedding_list, embedding_representation), axis=-1)
+                embedding_list.append(embedding_representation)
 
-        return embedding_list.swapaxes(0, 1)
+        embedding_list = np.squeeze(np.asarray(embedding_list))
+
+        return embedding_list
 

@@ -48,8 +48,22 @@ class GraphConstructorRandomWalks(GraphConstructor):
                  window_size: int = 5,
                  no_edge_weight: int = 1,
                  feature_axis=1,
-                 *args, **kwargs):
-        super().__init__(*args, **kwargs)
+                 transform_style: str = "individual",
+                 one_hot_nodes: int = 0,
+                 fisher_transform: int = 0,
+                 use_abs: int = 0,
+                 zscore: int = 0,
+                 use_abs_zscore: int = 0,
+                 adjacency_axis: int = 0,
+                 logs: str = ''):
+        super(GraphConstructorRandomWalks, self).__init__(transform_style=transform_style,
+                                                          one_hot_nodes=one_hot_nodes,
+                                                          fisher_transform=fisher_transform,
+                                                          use_abs=use_abs,
+                                                          zscore=zscore,
+                                                          use_abs_zscore=use_abs_zscore,
+                                                          adjacency_axis=adjacency_axis,
+                                                          logs=logs)
         self.k_distance = k_distance
         self.number_of_walks = number_of_walks
         self.walk_length = walk_length

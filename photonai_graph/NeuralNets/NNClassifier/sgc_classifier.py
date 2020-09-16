@@ -3,7 +3,7 @@ from photonai_graph.NeuralNets.dgl_base import DGLmodel
 from photonai_graph.NeuralNets.NNModels import SGConvClassifier
 
 
-class SGConvlassifierModel(DGLmodel):
+class SGConvClassifierModel(DGLmodel):
     """
     Graph convolutional network for graph classification. Simple Graph
     convolutional layers from Wu, Felix, et al., 2018.
@@ -24,8 +24,19 @@ class SGConvlassifierModel(DGLmodel):
     def __init__(self,
                  in_dim: int = 1,
                  hidden_layers: int = 2,
-                 hidden_dim: int = 256):
-        super().__init__()
+                 hidden_dim: int = 256,
+                 nn_epochs: int = 200,
+                 learning_rate: float = 0.001,
+                 batch_size: int = 32,
+                 adjacency_axis: int = 0,
+                 feature_axis: int = 1,
+                 logs: str = ''):
+        super(SGConvClassifierModel, self).__init__(nn_epochs=nn_epochs,
+                                                    learning_rate=learning_rate,
+                                                    batch_size=batch_size,
+                                                    adjacency_axis=adjacency_axis,
+                                                    feature_axis=feature_axis,
+                                                    logs=logs)
         self.in_dim = in_dim
         self.hidden_layers = hidden_layers
         self.hidden_dim = hidden_dim

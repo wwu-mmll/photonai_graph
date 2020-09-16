@@ -1,4 +1,3 @@
-import os
 import numpy as np
 from photonai_graph.GraphConstruction.graph_constructor import GraphConstructor
 
@@ -30,14 +29,28 @@ class GraphConstructorPercentageWindow(GraphConstructor):
                  percentage_upper: float = 50,
                  percentage_lower: float = 10,
                  retain_weights: int = 0,
-                 *args,
-                 **kwargs):
-        super().__init__(*args, **kwargs)
+                 transform_style: str = "individual",
+                 one_hot_nodes: int = 0,
+                 fisher_transform: int = 0,
+                 use_abs: int = 0,
+                 zscore: int = 0,
+                 use_abs_zscore: int = 0,
+                 adjacency_axis: int = 0,
+                 logs: str = ''
+                 ):
+        super(GraphConstructorPercentageWindow, self).__init__(transform_style=transform_style,
+                                                               one_hot_nodes=one_hot_nodes,
+                                                               fisher_transform=fisher_transform,
+                                                               use_abs=use_abs,
+                                                               zscore=zscore,
+                                                               use_abs_zscore=use_abs_zscore,
+                                                               adjacency_axis=adjacency_axis,
+                                                               logs=logs)
         self.percentage_upper = percentage_upper
         self.percentage_lower = percentage_lower
         self.retain_weights = retain_weights
 
-    def transform_test(self, X):
+    def transform(self, X):
         """Select percent strongest connections"""
         adj, feat = self.get_mtrx(X)
         # prepare matrices

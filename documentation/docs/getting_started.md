@@ -13,7 +13,7 @@ pip install photonai-graph
 
 ## Loading your matrices
 
-If you are using dense matrices, photonai-graph assumes that they have a certain shape: They should come as numpy matrices or array with the dimensions **Subjects x nodes x nodes x modalities (optional)**. If you are using matlab files, from CONN or other popular neuroimaging connectivity toolboxes, you will have to import them. An example function on how to import matlab data matrices can be seen [here](https://github.com/BenisFarmen/connectivity_loading/blob/master/load_functions.py). 
+If you are using dense matrices, photonai-graph assumes that they have a certain shape: They should come as numpy matrices or array with the dimensions **Subjects x nodes x nodes x modalities (optional)**. If you are using matlab files, from NBS, CONN or other popular neuroimaging connectivity toolboxes, you will have to import them. An example function on how to import matlab data matrices can be seen [here](https://github.com/BenisFarmen/connectivity_loading/blob/master/load_functions.py). 
 
 With such a function you can then load your data.
 

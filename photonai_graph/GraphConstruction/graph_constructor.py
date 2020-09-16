@@ -99,9 +99,9 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
 
         elif self.transform_style == "mean":
             adjacency_matrix = self.mean_matrix.copy()
-            if np.dim(X) == 4:
+            if np.ndim(X) == 4:
                 feature_matrix = X.copy()
-            elif np.dim(X) == 3:
+            elif np.ndim(X) == 3:
                 feature_matrix = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
             else:
                 raise Exception('input matrix needs to have 3 or 4 dimensions')

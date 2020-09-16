@@ -23,10 +23,13 @@ class GraphEmbeddingLaplacianEigenmaps(GraphEmbeddingBase):
                                                        decay_factor=0.1)
     """
 
-    def __init__(self, embedding_dimension: int = 1,
-                 *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.embedding_dimension = embedding_dimension
+    def __init__(self,
+                 embedding_dimension: int = 1,
+                 adjacency_axis: int = 0,
+                 logs: str = ''):
+        super(GraphEmbeddingLaplacianEigenmaps, self).__init__(embedding_dimension=embedding_dimension,
+                                                               adjacency_axis=adjacency_axis,
+                                                               logs=logs)
 
     def fit(self, X, y):
         return self

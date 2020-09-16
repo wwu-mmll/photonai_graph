@@ -51,14 +51,27 @@ class GraphConstructorThresholdWindow(GraphConstructor):
                  threshold_upper: float = 1,
                  threshold_lower: float = 0.8,
                  retain_weights: int = 0,
-                 *args,
-                 **kwargs):
-        super().__init__(*args, **kwargs)
+                 transform_style: str = "individual",
+                 one_hot_nodes: int = 0,
+                 fisher_transform: int = 0,
+                 use_abs: int = 0,
+                 zscore: int = 0,
+                 use_abs_zscore: int = 0,
+                 adjacency_axis: int = 0,
+                 logs: str = ''):
+        super(GraphConstructorThresholdWindow, self).__init__(transform_style=transform_style,
+                                                              one_hot_nodes=one_hot_nodes,
+                                                              fisher_transform=fisher_transform,
+                                                              use_abs=use_abs,
+                                                              zscore=zscore,
+                                                              use_abs_zscore=use_abs_zscore,
+                                                              adjacency_axis=adjacency_axis,
+                                                              logs=logs)
         self.threshold_upper = threshold_upper
         self.threshold_lower = threshold_lower
         self.retain_weights = retain_weights
 
-    def transform_test(self, X):
+    def transform(self, X):
         """Transform input matrices accordingly"""
         adj, feat = self.get_mtrx(X)
         # do preparatory matrix transformations

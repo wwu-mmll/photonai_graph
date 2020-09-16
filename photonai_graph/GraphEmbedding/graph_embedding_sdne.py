@@ -57,11 +57,13 @@ class GraphEmbeddingSDNE(GraphEmbeddingBase):
                  num_iterations=50,
                  learning_rate=0.01,
                  batch_size=500,
-                 *args, **kwargs):
-        super().__init__(*args, **kwargs)
+                 adjacency_axis: int = 0,
+                 logs: str = ''):
+        super(GraphEmbeddingSDNE, self).__init__(embedding_dimension=embedding_dimension,
+                                                 adjacency_axis=adjacency_axis,
+                                                 logs=logs)
         if layer_sizes is None:
             layer_sizes = [50, 15, ]
-        self.embedding_dimension = embedding_dimension
         self.seen_edge_reconstruction_weight = seen_edge_reconstruction_weight
         self.first_order_proximity_weight = first_order_proximity_weight
         self.lasso_regularization_coefficient = lasso_regularization_coefficient
