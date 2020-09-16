@@ -4,12 +4,12 @@ from sklearn.model_selection import KFold
 
 # make random matrices to simulate connectivity matrices
 X = get_random_connectivity_data(number_of_nodes=50, number_of_individuals=100)
-y = get_random_labels(type="regression", number_of_labels=100)
+y = get_random_labels(l_type="regression", number_of_labels=100)
 
 # Design your Pipeline
 my_pipe = Hyperpipe('basic_gembedding_pipe',
                     inner_cv=KFold(n_splits=5),
-                    outer_cv=KFold(n_splits=3),
+                    outer_cv=KFold(n_splits=5),
                     optimizer='sk_opt',
                     optimizer_params={'n_configurations': 25},
                     metrics=['mean_absolute_error'],
@@ -18,7 +18,7 @@ my_pipe = Hyperpipe('basic_gembedding_pipe',
 my_pipe.add(PipelineElement('GraphConstructorThreshold',
                             hyperparameters={'threshold': 0.95}))
 
-my_pipe.add(PipelineElement('GraphEmbeddingHOPE'))
+my_pipe.add(PipelineElement('GraphEmbeddingLaplacianEigenmaps'))
 
 my_pipe.add(PipelineElement('SVR'))
 
