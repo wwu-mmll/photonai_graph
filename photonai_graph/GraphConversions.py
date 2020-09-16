@@ -585,6 +585,22 @@ def check_dgl(graphs, adjacency_axis=None, feature_axis=None):
     return dgl_graphs
 
 
+conversion_functions = {
+    ("networkx", "dense"): networkx_to_dense,
+    ("networkx", "sparse"): networkx_to_sparse,
+    ("networkx", "dgl"): networkx_to_dgl,
+    ("dense", "networkx"): dense_to_networkx,
+    ("dense", "sparse"): dense_to_sparse,
+    ("dense", "dgl"): dense_to_dgl,
+    ("sparse", "networkx"): sparse_to_networkx,
+    ("sparse", "dense"): sparse_to_dense,
+    ("sparse", "dgl"): sparse_to_dgl,
+    ("dgl", "networkx"): dgl_to_networkx,
+    ("dgl", "dense"): dgl_to_dense,
+    ("dgl", "sparse"): dgl_to_sparse
+}
+
+
 def convert_graphs(graphs, input_format="networkx", output_format="stellargraph"):
     """Convert graphs from one format to the other.
 
@@ -609,67 +625,15 @@ def convert_graphs(graphs, input_format="networkx", output_format="stellargraph"
         Output format is referenced by package name, written in lowercase letters
 
         """
-    #if input_format == output_format:
-    #    warnings.warn('Graphs already in desired format.')
-    #    return
-    #
-    #if (input_format, output_format) not in dict.keys():
-    #    raise TypeError('')
-    #
-    #trans_grpahs = dict[(input_format, output_format)](graphs)
+    if input_format == output_format:
+        warnings.warn('Graphs already in desired format.')
 
-    # check input format
-    if input_format == "networkx":
-        if output_format == "networkx":
-            warnings.warn('Graphs already in networkx format.')
-            trans_graphs = graphs
-        elif output_format == "dense":
-            trans_graphs = networkx_to_dense(graphs)
-        elif output_format == "sparse":
-            trans_graphs = networkx_to_sparse(graphs)
-        elif output_format == "dgl":
-            trans_graphs = networkx_to_dgl(graphs)
-        else:
-            raise KeyError('Your specified output format is not supported.'
-                           'Please check your output format.')
-    elif input_format == "dense":
-        if output_format == "networkx":
-            trans_graphs = dense_to_networkx(graphs)  # dense_to_networkx is redefined above, so we imported it as dnx
-        elif output_format == "dense":
-            raise Exception('Graphs already in dense format.')
-        elif output_format == "sparse":
-            trans_graphs = dense_to_sparse(graphs)
-        elif output_format == "dgl":
-            trans_graphs = dense_to_dgl(graphs)
-        else:
-            raise KeyError('Your specified output format is not supported.'
-                           'Please check your output format.')
-    elif input_format == "sparse":
-        if output_format == "networkx":
-            trans_graphs = sparse_to_networkx(graphs)
-        elif output_format == "dense":
-            trans_graphs = sparse_to_dense(graphs)
-        elif output_format == "sparse":
-            raise Exception('Graphs already in sparse format.')
-        elif output_format == "dgl":
-            trans_graphs = sparse_to_dgl(graphs)
-        else:
-            raise KeyError('Your specified output format is not supported.'
-                           'Please check your output format.')
-    elif input_format == "dgl":
-        if output_format == "networkx":
-            trans_graphs = dgl_to_networkx(graphs)
-        elif output_format == "dense":
-            trans_graphs = dgl_to_dense(graphs)
-        elif output_format == "sparse":
-            trans_graphs = dgl_to_sparse(graphs)
-        elif output_format == "stellargraph":
-            raise Exception('Graphs already in stellargraph format.')
-        else:
-            raise KeyError('Your specified output format is not supported.'
-                           'Please check your output format.')
-    else:
-        raise KeyError('Your specified input format is not supported.'
-                       'Please check your input format.')
+        return graphs
+
+    if (input_format, output_format) not in conversion_functions.keys():
+        raise TypeError('Your desired conversion is not supported.'
+                        'Please check your in- and output format')
+
+    trans_graphs = conversion_functions[(input_format, output_format)](graphs)
 
     return trans_graphs
