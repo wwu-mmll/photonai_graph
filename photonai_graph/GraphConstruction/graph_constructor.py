@@ -99,6 +99,8 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
 
         elif self.transform_style == "mean":
             adjacency_matrix = self.mean_matrix.copy()
+            adjacency_matrix = adjacency_matrix[np.newaxis, :, :, np.newaxis]
+            adjacency_matrix = np.repeat(adjacency_matrix, X.shape[0], axis=0)
             if np.ndim(X) == 4:
                 feature_matrix = X.copy()
             elif np.ndim(X) == 3:
