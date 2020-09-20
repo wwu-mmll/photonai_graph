@@ -183,9 +183,23 @@ def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
     if isinstance(graphs, list):
         graph_list = []
         for graph in graphs:
-            g = dgl.DGLGraph().from_networkx(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
+            if not nx.is_directed(graph):
+                graph = graph.to_directed()
+            if node_attrs or edge_attrs is None:
+                g = dgl.DGLGraph()
+                g.from_networkx(graph)
+            else:
+                g = dgl.DGLGraph()
+                g.from_networkx(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
+            graph_list.append(g)
+    elif isinstance(graphs, np.ndarray):
+        graph_list = []
+        for graph in range(graphs.shape[0]):
+            g = dgl.DGLGraph().from_networkx(graphs[graph], node_attrs=node_attrs, edge_attrs=edge_attrs)
             graph_list.append(g)
     elif isinstance(graphs, nx.classes.graph.Graph):
+        if not nx.is_directed(graphs):
+            graphs = graphs.to_directed()
         graph_list = dgl.DGLGraph().from_networkx(graphs)
     else:
         raise ValueError('networkx_to_dgl only implemented for list or single networkx graph')
@@ -287,19 +301,47 @@ def get_dense_feature(matrix, adjacency_axis, feature_axis, aggregation="sum"):
     """
     if aggregation == "sum":
         features = np.sum(matrix[:, :, feature_axis], axis=1)
+        features = features.tolist()
     elif aggregation == "mean":
         features = (np.sum(matrix[:, :, feature_axis], axis=1)) / matrix.shape[0]
+        features = features.tolist()
     elif aggregation == "node_degree":
         features = np.count_nonzero(matrix[:, :, adjacency_axis], axis=1, keepdims=True)
+        features = features.tolist()
     elif aggregation == "features":
         features = matrix[:, :, feature_axis]
+        features = features.reshape((features.shape[0], -1))
     else:
         raise KeyError('Only sum, mean, node_degree and all features are supported')
 
-    features = features.reshape((features.shape[0], -1))
     features = dict(enumerate(features, 0))
 
+    # features = {str(key): value for key, value in features.items()}
+
     return features
+
+
+def get_dense_edge_features(matrix, adjacency_axis, feature_axis):
+    """returns the features for an edge label dictionary
+
+        Parameters
+        ---------
+        matrix: np.matrix/np.ndarray
+            feature matrix
+        adjacency_axis: int
+            position of the adjacency matrix
+        feature_axis: int
+            position of the feature matrix
+    """
+    edge_feat = {}
+    for index, value in np.ndenumerate(matrix[:, :, adjacency_axis]):
+        conn_key = (str(index[0]), str(index[1]))
+        key_val = {conn_key: value}
+        edge_feat.update(key_val)
+
+    # edge_feat = dict(np.ndenumerate(matrix[:, :, adjacency_axis]))
+
+    return edge_feat
 
 
 def dense_to_sparse(graphs, m_type="coo_matrix", adjacency_axis=None, feature_axis=None):
