@@ -11,7 +11,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 
 
 class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
-    _estimator_type = "predictor"
+    _estimator_type = "classifier"
     """
     Base class for DGL based graph neural networks. Implements 
     helper functions and shared paramtersused by other models. 
@@ -79,6 +79,13 @@ class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
         return batched_graph, torch.tensor(labels, dtype=torch.long)
 
     @staticmethod
+    def collate_regression(samples):
+        """returns a batched graph, the input (samples) is a list of pairs"""
+        graphs, labels = map(list, zip(*samples))
+        batched_graph = dgl.batch(graphs)
+        return batched_graph, torch.tensor(labels, dtype=torch.float32)
+
+    @staticmethod
     def handle_inputs(x, adjacency_axis, feature_axis):
         """checks the format of the input and transforms them for dgl models"""
         x_trans = check_dgl(x, adjacency_axis=adjacency_axis, feature_axis=feature_axis)
@@ -88,6 +95,14 @@ class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
         """returns data in a data loader format"""
         data = DGLData(zip_data(x_trans, y))
         data_loader = DataLoader(data, batch_size=self.batch_size, shuffle=True, collate_fn=self.collate)
+
+        return data_loader
+
+    def get_data_loader_regression(self, x_trans, y):
+        """returns data in a regression data loader format"""
+        y = y.reshape(y.shape[0], 1)
+        data = DGLData(zip_data(x_trans, y))
+        data_loader = DataLoader(data, batch_size=self.batch_size, shuffle=True, collate_fn=self.collate_regression)
 
         return data_loader
 
@@ -106,8 +121,10 @@ class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
         self.model.eval()
         x_trans = self.handle_inputs(x, self.adjacency_axis, self.feature_axis)
         test_bg = dgl.batch(x_trans)
+        probs = self.model(test_bg)
+        probs = probs.detach().numpy()
 
-        return torch.softmax(self.model(test_bg), 1)
+        return probs
 
     def get_classifier(self):
         """returns the loss and optimizer for classification"""

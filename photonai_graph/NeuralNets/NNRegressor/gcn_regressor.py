@@ -48,9 +48,9 @@ class GCNRegressorModel(DGLmodel):
         # handle inputs
         X_trans = self.handle_inputs(X, self.adjacency_axis, self.feature_axis)
         # get data loader
-        data_loader = self.get_data_loader(X_trans, y)
+        data_loader = self.get_data_loader_regression(X_trans, y)
         # specify model with optimizer etc
-        self.model = GCNClassifier(self.in_dim, self.hidden_dim, 1, self.hidden_layers)
+        self.model = GCNClassifier(self.in_dim, self.hidden_dim, 1, self.hidden_layers).float()
         # get optimizers
         loss_func, optimizer = self.get_regressor()
         # train model
