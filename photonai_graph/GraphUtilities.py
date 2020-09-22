@@ -118,7 +118,6 @@ def draw_connectograms(graphs, curved_edge=False, colorscheme=None,
                     if None in [path, out_format]:
                         raise Exception('To save graphs, declare a path and an output format.')
                     save_path = os.path.join(path, str(ID) + out_format)
-                    print(save_path)
                     draw_connectogram(graph, curved_edge, colorscheme, path=save_path, show=show)
             else:
                 raise Exception('Number of IDs must match number of graphs.')
