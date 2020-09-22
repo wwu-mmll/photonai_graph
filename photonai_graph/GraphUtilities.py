@@ -130,7 +130,7 @@ def draw_connectograms(graphs, curved_edge=False, colorscheme=None,
                     counter += 1
             else:
                 for graph in graphs:
-                    save_path = os.path.join(path, str(counter), out_format)
+                    save_path = os.path.join(path, str(counter) + out_format)
                     draw_connectogram(graph, curved_edge, colorscheme, nodesize, node_shape, weight, path=save_path, show=show)
                     counter += 1
 
@@ -140,7 +140,7 @@ def draw_connectograms(graphs, curved_edge=False, colorscheme=None,
 
     # input should be list or single graph
     else:
-        raise Exception('Input needs to be a single networkx graph or a list of those.')
+        raise TypeError('Input needs to be a single networkx graph or a list of those.')
 
 
 def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adjacency_axis=None, show=True):
