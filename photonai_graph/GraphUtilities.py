@@ -231,7 +231,7 @@ def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adja
                 or isinstance(matrix[0], sparse.dok_matrix) \
                 or isinstance(matrix[0], sparse.dia_matrix):
             for single_matrix in matrix:
-                plt.spy(matrix[single_matrix])
+                plt.spy(single_matrix)
                 if show:
                     plt.show()
         else:
@@ -347,7 +347,7 @@ def save_graphs(graphs, path="", input_format="networkx", output_format="dot", i
     if input_format == "networkx":
         save_networkx_to_file(graphs, path, output_format=output_format, ids=ids)
     else:
-        raise Exception("Your desired output format is not supported yet.")
+        raise NotImplementedError("Your desired output format is not supported yet.")
 
 
 def visualize_networkx(graphs, layout=nx.spring_layout, colorscheme="Blues", show=True):
@@ -417,7 +417,7 @@ def individual_ztransform(matrx, adjacency_axis=0):
             matrix = stats.zscore(matrix)
             transformed_matrices.append(matrix)
     elif np.ndim(matrx) == 4:
-        for i in matrx.shape[0]:
+        for i in range(matrx.shape[0]):
             matrix = matrx[i, :, :, adjacency_axis].copy()
             matrix = stats.zscore(matrix)
             transformed_matrices.append(matrix)
