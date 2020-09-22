@@ -1,4 +1,4 @@
-from networkx.drawing.nx_agraph import write_dot, read_dot
+from networkx.drawing.nx_pydot import write_dot, read_dot
 from scipy import sparse
 import networkx as nx
 import numpy as np
