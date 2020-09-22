@@ -457,7 +457,7 @@ def individual_fishertransform(matrx, adjacency_axis=0):
             matrix = np.arctanh(matrix)
             transformed_matrices.append(matrix)
     elif np.ndim(matrx) == 4:
-        for i in matrx.shape[0]:
+        for i in range(matrx.shape[0]):
             matrix = matrx[i, :, :, adjacency_axis].copy()
             matrix = np.arctanh(matrix)
             transformed_matrices.append(matrix)
