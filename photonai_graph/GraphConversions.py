@@ -195,7 +195,14 @@ def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
     elif isinstance(graphs, np.ndarray):
         graph_list = []
         for graph in range(graphs.shape[0]):
-            g = dgl.DGLGraph().from_networkx(graphs[graph], node_attrs=node_attrs, edge_attrs=edge_attrs)
+            if not nx.is_directed(graphs[graph]):
+                graph = graphs[graph].to_directed()
+            if node_attrs or edge_attrs is None:
+                g = dgl.DGLGraph()
+                g.from_networkx(graphs[graph])
+            else:
+                g = dgl.DGLGraph()
+                g.from_networkx(graphs[graph], node_attrs=node_attrs, edge_attrs=edge_attrs)
             graph_list.append(g)
     elif isinstance(graphs, nx.classes.graph.Graph):
         if not nx.is_directed(graphs):
@@ -263,9 +270,9 @@ def dense_to_networkx(mtrx, adjacency_axis=0, feature_axis=1, feature_constructi
     elif isinstance(mtrx, np.ndarray):
         # if dense is just a single array
         if mtrx.shape[0] == 1:
-            mtrx_conv = nx.from_numpy_matrix(A=mtrx[:, :, adjacency_axis])
+            mtrx_conv = nx.from_numpy_matrix(A=mtrx[0, :, :, adjacency_axis])
             features = get_dense_feature(mtrx, adjacency_axis, feature_axis, feature_construction)
-            nx.set_node_attributes(mtrx, features, name="feat")
+            nx.set_node_attributes(mtrx_conv, features, name="feat")
         # if dense consists of multiple arrays
         else:
             graph_list = []
