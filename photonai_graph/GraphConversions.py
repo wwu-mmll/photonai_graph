@@ -459,9 +459,9 @@ def sparse_to_dense(graphs, features=None):
         """
         Helper function
         """
-        current_graph_mtrx = np.reshape((current_graph_mtrx.shape[0], current_graph_mtrx.shape[1], -1))
+        current_graph_mtrx = np.reshape(current_graph_mtrx, (current_graph_mtrx.shape[0], current_graph_mtrx.shape[1], -1))
         current_features = current_features.toarray()
-        current_features = np.reshape((current_features.shape[0], current_features.shape[1], -1))
+        current_features = np.reshape(current_features, (current_features.shape[0], current_features.shape[1], -1))
         return np.concatenate((current_graph_mtrx, current_features), axis=2)
 
     if features is not None:
@@ -472,7 +472,7 @@ def sparse_to_dense(graphs, features=None):
                 matrices.append(convert_matrix(graph_mtrx, feature))
         else:
             try:
-                graph_mtrx = graphs.to_array()
+                graph_mtrx = graphs.toarray()
                 matrices = convert_matrix(graph_mtrx, features)
             except Exception as e:
                 print('Could not convert matrices.'
