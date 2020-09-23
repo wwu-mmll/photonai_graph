@@ -315,11 +315,12 @@ def get_dense_feature(matrix, adjacency_axis, feature_axis, aggregation="sum"):
         features = (np.sum(matrix[:, :, feature_axis], axis=1)) / matrix.shape[0]
         features = features.tolist()
     elif aggregation == "node_degree":
-        features = np.count_nonzero(matrix[:, :, adjacency_axis], axis=1, keepdims=True)
+        features = np.count_nonzero(matrix[:, :, adjacency_axis], axis=1, keepdims=False)
         features = features.tolist()
     elif aggregation == "features":
         features = matrix[:, :, feature_axis]
         features = features.reshape((features.shape[0], -1))
+        features = features.tolist()
     else:
         raise KeyError('Only sum, mean, node_degree and all features are supported')
 
