@@ -160,7 +160,7 @@ def networkx_to_sparse(graphs, fmt='csr'):
         for graph in graphs:
             sparse_graph = nx.to_scipy_sparse_matrix(graph, format=fmt)
             graph_list.append(sparse_graph)
-    if isinstance(graphs, nx.classes.graph.Graph):
+    elif isinstance(graphs, nx.classes.graph.Graph):
         graph_list = nx.to_scipy_sparse_matrix(graphs, format=fmt)
     else:
         raise ValueError('Input needs to be a list of networkx graphs or a networkx photonai_graph.')
@@ -200,7 +200,9 @@ def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
     elif isinstance(graphs, nx.classes.graph.Graph):
         if not nx.is_directed(graphs):
             graphs = graphs.to_directed()
-        graph_list = dgl.DGLGraph().from_networkx(graphs)
+        g = dgl.DGLGraph()
+        g.from_networkx(graphs)
+        graph_list = g
     else:
         raise ValueError('networkx_to_dgl only implemented for list or single networkx graph')
 
