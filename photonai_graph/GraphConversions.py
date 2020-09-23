@@ -413,7 +413,7 @@ def dense_to_sparse(graphs, m_type="coo_matrix", adjacency_axis=None, feature_ax
                 for i in range(graphs.shape[0]):
                     adjacency = sparse_types[m_type](graphs[i, :, :])
                     graph_list.append(adjacency)
-            if np.ndim(graphs) == 2:
+            elif np.ndim(graphs) == 2:
                 graph_list = sparse_types[m_type](graphs)
             else:
                 raise ValueError("Matrix needs to have 3 or 2 dimension when no axis arguments are given.")
