@@ -380,7 +380,7 @@ def dense_to_sparse(graphs, m_type="coo_matrix", adjacency_axis=None, feature_ax
                 if np.ndim(graph) != 2:
                     raise ValueError('All graphs must have same shape.')
                 graph_list.append(sparse_types[m_type](graph))
-        if np.ndim(graphs[0]) == 3:
+        elif np.ndim(graphs[0]) == 3:
             for graph in graphs:
                 if np.ndim(graph) != 3:
                     raise ValueError('All graphs must have same shape.')
