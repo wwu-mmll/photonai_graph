@@ -57,8 +57,8 @@ class GraphEmbeddingHOPE(BaseEstimator, TransformerMixin):
 
     def transform(self, X):
 
-        embedding_list = None
-        # todo: any other sanity checks?
+        embedding_list = []
+
         if X.shape[0] == 0:
             raise ValueError("Check the shape of your input.\nReceived X.shape[0]==0..?")
 
@@ -82,9 +82,6 @@ class GraphEmbeddingHOPE(BaseEstimator, TransformerMixin):
                                                        embedding_representation.shape[1],
                                                        -1))
 
-            if 'embedding_list' not in locals():
-                embedding_list = embedding_representation
-            else:
-                embedding_list = np.concatenate((embedding_list, embedding_representation), axis=-1)
+            embedding_list.append(embedding_representation)
 
-        return embedding_list.swapaxes(0, 1)
+        return np.asarray(embedding_list)
