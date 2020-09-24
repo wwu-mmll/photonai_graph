@@ -570,7 +570,7 @@ def dgl_to_sparse(graphs, fmt="csr"):
 
     graph_list = []
     for graph in graphs:
-        scp_graph = dgl.DGLGraph.adjacency_matrix_scipy(graph, fmt=fmt)
+        scp_graph = graph.adjacency_matrix_scipy(fmt=fmt)
         graph_list.append(scp_graph)
     return graph_list
 
@@ -615,8 +615,8 @@ def check_dgl(graphs, adjacency_axis=None, feature_axis=None):
         feature_axis: int, default=None
             position of the feature matrix
     """
-    if not isinstance(graphs, np.ndarray) or not isinstance(graphs, np.matrix) or not isinstance(graphs, list):
-        raise TypeError('can only handle np arrays of lists as input')
+    if not isinstance(graphs, np.ndarray) and not isinstance(graphs, np.matrix) and not isinstance(graphs, list):
+        raise TypeError('can only handle np arrays or lists as input')
 
     if isinstance(graphs, list) or np.ndim(graphs) == 1:
         if isinstance(graphs[0], nx.classes.graph.Graph):
