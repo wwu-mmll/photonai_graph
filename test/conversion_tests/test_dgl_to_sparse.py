@@ -29,7 +29,3 @@ class DglToSparseTest(unittest.TestCase):
     def test_output_format_coo(self):
         g = dgl_to_sparse(self.graphs, fmt="coo")
         self.assertEqual(type(g[0]), sparse.coo_matrix)
-
-
-if __name__ == '__main__':
-    unittest.main()

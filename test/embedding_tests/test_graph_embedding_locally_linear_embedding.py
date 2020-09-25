@@ -32,7 +32,3 @@ class LocallyLinearEmbeddingTest(unittest.TestCase):
         g_embedding.fit(self.X, self.y)
         gembed = g_embedding.transform(self.X)
         self.assertEqual(np.shape(gembed), (20, 20, 3))
-
-
-if __name__ == '__main__':
-    unittest.main()

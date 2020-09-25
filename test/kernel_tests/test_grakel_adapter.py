@@ -43,7 +43,3 @@ class GrakelAdapterTests(unittest.TestCase):
         x_trans = g_adapter.transform(self.X_nx)
         x_kern = g_kernel.fit_transform(x_trans)
         self.assertEqual(x_kern.shape, (20, 20))
-
-
-if __name__ == '__main__':
-    unittest.main()

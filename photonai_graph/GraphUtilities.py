@@ -522,7 +522,7 @@ def check_asteroidal(graph, return_boolean=True):
             for i in graph:
                 answer = asteroidal.is_at_free(i)
                 graph_answer.append(answer)
-        if isinstance(graph, nx.classes.graph.Graph):
+        elif isinstance(graph, nx.classes.graph.Graph):
             graph_answer = asteroidal.is_at_free(graph)
         else:
             raise ValueError('Your input is not a networkx photonai_graph or a list of networkx graphs. '
@@ -534,7 +534,7 @@ def check_asteroidal(graph, return_boolean=True):
             for i in graph:
                 answer = asteroidal.find_asteroidal_triple(i)
                 graph_answer.append(answer)
-        if isinstance(graph, nx.classes.graph.Graph):
+        elif isinstance(graph, nx.classes.graph.Graph):
             graph_answer = asteroidal.find_asteroidal_triple(graph)
         else:
             raise ValueError('Your input is not a networkx photonai_graph or a list of networkx graphs. '

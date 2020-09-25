@@ -39,7 +39,3 @@ class NetworkxToSparseTest(unittest.TestCase):
     def test_check_nonsense_input(self):
         with self.assertRaises(ValueError):
             mtrx = networkx_to_sparse(self.check_matrix)
-
-
-if __name__ == '__main__':
-    unittest.main()

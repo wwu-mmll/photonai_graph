@@ -77,7 +77,3 @@ class ThresholdTests(unittest.TestCase):
         expected_elements = [80, 81, 82, 83, 84, 85, 86, 87, 88, 89]
         for element in expected_elements:
             self.assertNotIn(element, trans[0, :, :, 0])
-
-
-if __name__ == '__main__':
-    unittest.main()

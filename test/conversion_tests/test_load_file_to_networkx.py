@@ -29,7 +29,3 @@ class LoadFileTNetworkxTest(unittest.TestCase):
                 "/spm-data/Scratch/spielwiese_vincent/tmp/graph_3"]
         graphs = load_file_to_networkx(path, in_format)
         self.assertEqual(type(graphs[0]), nx.classes.MultiGraph)
-
-
-if __name__ == '__main__':
-    unittest.main()

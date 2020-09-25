@@ -26,7 +26,3 @@ class GetDenseEdgeFeaturesTest(unittest.TestCase):
     def test_dict_content(self):
         feat = get_dense_edge_features(self.check_matrix, adjacency_axis=0, feature_axis=1)
         self.assertTrue(feat == self.control_dict)
-
-
-if __name__ == '__main__':
-    unittest.main()

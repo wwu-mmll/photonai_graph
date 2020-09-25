@@ -43,7 +43,3 @@ class GetDenseFeatureTest(unittest.TestCase):
         with self.assertRaises(KeyError):
             get_dense_feature(self.check_matrix, adjacency_axis=0, feature_axis=1,
                               aggregation="weight")
-
-
-if __name__ == '__main__':
-    unittest.main()

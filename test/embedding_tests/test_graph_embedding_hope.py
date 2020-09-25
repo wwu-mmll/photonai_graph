@@ -28,7 +28,3 @@ class HOPETest(unittest.TestCase):
         g_embedding.fit(self.X, self.y)
         gembed = g_embedding.transform(self.X)
         self.assertEqual(np.shape(gembed), (20, 20, 4, 1))
-
-
-if __name__ == '__main__':
-    unittest.main()

@@ -21,40 +21,40 @@ class DrawConnectivityMatrixTest(unittest.TestCase):
         self.nx_graphs = [nx.erdos_renyi_graph(20, p=0.3)] * 10
 
     def test_2d_dense(self):
-        draw_connectivity_matrix(self.m2d_dense)
+        draw_connectivity_matrix(self.m2d_dense, show=False)
 
     def test_2d_colorbar(self):
-        draw_connectivity_matrix(self.m2d_dense, colorbar=True)
+        draw_connectivity_matrix(self.m2d_dense, colorbar=True, show=False)
 
     def test_2d_adjacency_axis(self):
         with self.assertRaises(Exception):
-            draw_connectivity_matrix(self.m2d_dense, adjacency_axis=0)
+            draw_connectivity_matrix(self.m2d_dense, adjacency_axis=0, show=False)
 
     def test_3d_dense(self):
-        draw_connectivity_matrix(self.m3d_dense)
+        draw_connectivity_matrix(self.m3d_dense, show=False)
 
     def test_3d_dense_colorbar(self):
-        draw_connectivity_matrix(self.m3d_dense, colorbar=True)
+        draw_connectivity_matrix(self.m3d_dense, colorbar=True, show=False)
 
     def test_3d_dense_adjacency(self):
-        draw_connectivity_matrix(self.m3d_dense_adjacency, adjacency_axis=0)
+        draw_connectivity_matrix(self.m3d_dense_adjacency, adjacency_axis=0, show=False)
 
     def test_3d_dense_adjacency_list(self):
-        draw_connectivity_matrix(self.m3d_dense_adjacency_list)
+        draw_connectivity_matrix(self.m3d_dense_adjacency_list, show=False)
 
     def test_4d_dense(self):
         with self.assertRaises(Exception):
-            draw_connectivity_matrix(self.m4d_dense)
+            draw_connectivity_matrix(self.m4d_dense, show=False)
 
     def test_4d_dense_adjacency(self):
-        draw_connectivity_matrix(self.m4d_dense, adjacency_axis=0)
+        draw_connectivity_matrix(self.m4d_dense, adjacency_axis=0, show=False)
 
     def test_4d_dense_colorbar(self):
-        draw_connectivity_matrix(self.m4d_dense, colorbar=True, adjacency_axis=0)
+        draw_connectivity_matrix(self.m4d_dense, colorbar=True, adjacency_axis=0, show=False)
 
     def test_2d_sparse(self):
-        draw_connectivity_matrix(self.m2d_sparse)
+        draw_connectivity_matrix(self.m2d_sparse, show=False)
 
     def test_wrong_type(self):
         with self.assertRaises(Exception):
-            draw_connectivity_matrix(self.nx_graphs)
+            draw_connectivity_matrix(self.nx_graphs, show=False)

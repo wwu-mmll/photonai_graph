@@ -37,7 +37,3 @@ class SparseToDglTest(unittest.TestCase):
     def test_nonsense(self):
         with self.assertRaises(Exception):
             sparse_to_dgl(self.edge_dict)
-
-
-if __name__ == '__main__':
-    unittest.main()

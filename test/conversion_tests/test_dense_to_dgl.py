@@ -21,7 +21,3 @@ class DenseToDglTest(unittest.TestCase):
     def test_nonsense_input(self):
         with self.assertRaises(ValueError):
             dense_to_dgl(self.edge_dict, adjacency_axis=0, feature_axis=1)
-
-
-if __name__ == '__main__':
-    unittest.main()

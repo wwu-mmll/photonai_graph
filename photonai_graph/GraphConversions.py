@@ -186,8 +186,7 @@ def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
             if not nx.is_directed(graph):
                 graph = graph.to_directed()
             if node_attrs or edge_attrs is None:
-                g = dgl.DGLGraph()
-                g.from_networkx(graph)
+                g = dgl.from_networkx(graph)
             else:
                 g = dgl.DGLGraph()
                 g.from_networkx(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
@@ -207,8 +206,7 @@ def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
     elif isinstance(graphs, nx.classes.graph.Graph):
         if not nx.is_directed(graphs):
             graphs = graphs.to_directed()
-        g = dgl.DGLGraph()
-        g.from_networkx(graphs)
+        g = dgl.from_networkx(graphs)
         graph_list = g
     else:
         raise ValueError('networkx_to_dgl only implemented for list or single networkx graph')
@@ -513,22 +511,19 @@ def sparse_to_dgl(graphs, adjacency_axis=0, feature_axis=1):
     if isinstance(graphs, tuple):
         graph_list = []
         for adj, feat in zip(graphs[adjacency_axis], graphs[feature_axis]):
-            g = dgl.DGLGraph()
-            g.from_scipy_sparse_matrix(spmat=adj)
+            g = dgl.from_scipy(sp_mat=adj)
             graph_list.append(g)
     elif isinstance(graphs, list):
         graph_list = []
         for adj in graphs:
-            g = dgl.DGLGraph()
-            g.from_scipy_sparse_matrix(spmat=adj)
+            g = dgl.from_scipy(sp_mat=adj)
             graph_list.append(g)
     elif isinstance(graphs, np.ndarray) or isinstance(graphs, np.matrix):
         if np.ndim(graphs) != 1:
             raise Exception('Input needs to be 1d array if it is a numpy array')
         graph_list = []
         for adj in range(graphs.shape[0]):
-            g = dgl.DGLGraph()
-            g.from_scipy_sparse_matrix(spmat=graphs[adj])
+            g = dgl.from_scipy(sp_mat=graphs[adj])
             graph_list.append(g)
 
     else:

@@ -74,7 +74,3 @@ class DenseToSparseTest(unittest.TestCase):
     def test_nonsense_input(self):
         with self.assertRaises(ValueError):
             dense_to_sparse(self.edge_dict)
-
-
-if __name__ == '__main__':
-    unittest.main()

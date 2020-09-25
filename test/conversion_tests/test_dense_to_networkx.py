@@ -31,7 +31,3 @@ class DenseToNetworkxTest(unittest.TestCase):
     def test_input_nonsense(self):
         with self.assertRaises(ValueError):
             dense_to_networkx(self.edge_dict)
-
-
-if __name__ == '__main__':
-    unittest.main()

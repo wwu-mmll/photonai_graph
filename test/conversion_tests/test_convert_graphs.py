@@ -33,6 +33,3 @@ class ConvertGraphsTest(unittest.TestCase):
                            output_format="dgl")
         self.assertEqual(type(g[0]), dgl.DGLGraph)
 
-
-if __name__ == '__main__':
-    unittest.main()

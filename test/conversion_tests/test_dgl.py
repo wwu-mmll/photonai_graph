@@ -110,7 +110,3 @@ class DglToNetworkxTest(unittest.TestCase):
     def test_np5d_error(self):
         with self.assertRaises(ValueError):
             check_dgl(self.np_5d_array, adjacency_axis=0, feature_axis=1)
-
-
-if __name__ == '__main__':
-    unittest.main()

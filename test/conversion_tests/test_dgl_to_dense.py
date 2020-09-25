@@ -21,7 +21,3 @@ class DglToDenseTest(unittest.TestCase):
     def test_list_type(self):
         g = dgl_to_dense(self.graphs)
         self.assertEqual(np.shape(g), (10, 3, 3))
-
-
-if __name__ == '__main__':
-    unittest.main()

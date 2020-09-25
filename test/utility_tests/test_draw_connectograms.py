@@ -15,38 +15,38 @@ class DrawConnectogramTests(unittest.TestCase):
         self.ids_wrong = list(range(1, 11))
 
     def test_drawing_single(self):
-        draw_connectograms(self.cyc_graph)
+        draw_connectograms(self.cyc_graph, show=False)
 
     def test_drawing_list(self):
-        draw_connectograms(self.cyc_graphs)
+        draw_connectograms(self.cyc_graphs, show=False)
 
     def test_drawing_len_ids(self):
-        directory = '/spm-data/Scratch/spielwiese_vincent/tmp/'
+        directory = '/tmp/'
         output_format = ".svg"
         draw_connectograms(self.cyc_graphs, path=directory,
-                           ids=self.ids, out_format=output_format)
+                           ids=self.ids, out_format=output_format, show=False)
         self.assertTrue(os.path.exists(directory + str(6) + output_format))
 
     def test_drawing_len_ids_wrong(self):
         with self.assertRaises(Exception):
-            draw_connectograms(self.cyc_graphs, path='/spm-data/Scratch/spielwiese_vincent/tmp/',
-                               ids=self.ids_wrong, out_format='.svg')
+            draw_connectograms(self.cyc_graphs, path='/tmp/',
+                               ids=self.ids_wrong, out_format='.svg', show=False)
 
     def test_drawing_path(self):
         with self.assertRaises(Exception):
-            draw_connectograms(self.cyc_graphs, ids=self.ids, out_format='.svg')
+            draw_connectograms(self.cyc_graphs, ids=self.ids, out_format='.svg', show=False)
 
     def test_drawing_outformat(self):
         with self.assertRaises(Exception):
-            draw_connectograms(self.cyc_graphs, path='/spm-data/Scratch/spielwiese_vincent/tmp/',
-                               ids=self.ids)
+            draw_connectograms(self.cyc_graphs, path='/tmp/',
+                               ids=self.ids, show=False)
 
     def test_save_no_ids(self):
-        directory = '/spm-data/Scratch/spielwiese_vincent/tmp/'
+        directory = '/tmp/'
         output_format = ".png"
-        draw_connectograms(self.cyc_graphs, path=directory, out_format=output_format)
+        draw_connectograms(self.cyc_graphs, path=directory, out_format=output_format, show=False)
         self.assertTrue(os.path.exists(directory + str(0) + output_format))
 
     def test_format(self):
         with self.assertRaises(TypeError):
-            draw_connectograms(self.matrix)
+            draw_connectograms(self.matrix, show=False)

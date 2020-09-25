@@ -36,7 +36,3 @@ class NetworkxToDglTest(unittest.TestCase):
     def test_check_nonsense_input(self):
         with self.assertRaises(ValueError):
             mtrx = networkx_to_dgl(self.edge_dict)
-
-
-if __name__ == '__main__':
-    unittest.main()

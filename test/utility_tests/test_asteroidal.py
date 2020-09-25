@@ -36,7 +36,3 @@ class CheckAsteroidalTest(unittest.TestCase):
     def test_nonsense_nobool(self):
         with self.assertRaises(ValueError):
             g = check_asteroidal(self.nonsense, return_boolean=False)
-
-
-if __name__ == '__main__':
-    unittest.main()

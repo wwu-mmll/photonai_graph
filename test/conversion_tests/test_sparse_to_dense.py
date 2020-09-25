@@ -38,7 +38,3 @@ class SparseToDenseTest(unittest.TestCase):
     def test_nonsense_feat(self):
         with self.assertRaises(Exception):
             sparse_to_dense(self.edge_dict, features=self.edge_dict)
-
-
-if __name__ == '__main__':
-    unittest.main()

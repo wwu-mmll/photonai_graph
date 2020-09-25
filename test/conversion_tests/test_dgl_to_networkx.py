@@ -35,7 +35,3 @@ class DglToNetworkxTest(unittest.TestCase):
         g = dgl_to_networkx(self.graphs, node_attrs=[], edge_attrs=[])
         graph = g[0]
         self.assertEqual(graph.number_of_edges(), 6)
-
-
-if __name__ == '__main__':
-    unittest.main()
