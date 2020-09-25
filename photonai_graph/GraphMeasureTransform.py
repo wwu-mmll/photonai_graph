@@ -180,14 +180,14 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                         if measure['Output'] == "dict":
                             for rskey, rsval in results.items():
                                 if measure['node_or_edge'] == 'node':
-                                    list_to_append = [i, rsval, key, rskey, "None", "None"]
+                                    list_to_append = [i, rsval, key, rskey, "None"]
                                     measure_list.append(list_to_append)
                                 elif measure['node_or_edge'] == 'edge':
-                                    list_to_append = [i, rsval, key, "None", rskey, "None"]
+                                    list_to_append = [i, rsval, key, "None", rskey]
                                     measure_list.append(list_to_append)
                         # if the values are tuples
                         elif measure['Output'] == "tuple":
-                            list_to_append = [i, results[0], key, "None", "None", "None"]
+                            list_to_append = [i, results[0], key, "None", "None"]
                             measure_list.append(list_to_append)
                         # if the output is a dict of dicts
                         elif measure['Output'] == "dict_dict":
@@ -200,13 +200,14 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                             if isinstance(results, float):
                                 list_to_append = [i, results, key, "None", "None"]
                                 measure_list.append(list_to_append)
-                            if isinstance(results, dict):
-                                if measure['node_or_edge'] == 'node':
-                                    list_to_append = [i, rsval, key, rskey, "None", "None"]
-                                    measure_list.append(list_to_append)
-                                if measure['node_or_edge'] == 'edge':
-                                    list_to_append = [i, rsval, key, "None", rskey, "None"]
-                                    measure_list.append(list_to_append)
+                            elif isinstance(results, dict):
+                                for rskey, rsval in results.items():
+                                    if measure['node_or_edge'] == "node":
+                                        list_to_append = [i, rsval, key, rskey, "None"]
+                                        measure_list.append(list_to_append)
+                                    elif measure['node_or_edge'] == "edge":
+                                        list_to_append = [i, rsval, key, "None", rskey]
+                                        measure_list.append(list_to_append)
                         # if output is dual_tuple
                         elif measure['Output'] == "dual_tuple":
                             raise NotImplementedError("Dual tuple outputs are not implemented.")
