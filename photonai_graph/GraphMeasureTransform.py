@@ -40,7 +40,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                  logs=''):
 
         if graph_functions is None:
-            graph_functions = {"global_efficiency": {}, "sigma": {}}
+            graph_functions = {"global_efficiency": {}, "average_node_connectivity": {}}
         self.graph_functions = graph_functions
 
         if logs:
