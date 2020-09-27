@@ -195,13 +195,11 @@ def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
         graph_list = []
         for graph in range(graphs.shape[0]):
             if not nx.is_directed(graphs[graph]):
-                graph = graphs[graph].to_directed()
+                graphs[graph] = graphs[graph].to_directed()
             if node_attrs or edge_attrs is None:
-                g = dgl.DGLGraph()
-                g.from_networkx(graphs[graph])
+                g = dgl.from_networkx(graphs[graph])
             else:
-                g = dgl.DGLGraph()
-                g.from_networkx(graphs[graph], node_attrs=node_attrs, edge_attrs=edge_attrs)
+                g = dgl.from_networkx(graphs[graph], node_attrs=node_attrs, edge_attrs=edge_attrs)
             graph_list.append(g)
     elif isinstance(graphs, nx.classes.graph.Graph):
         if not nx.is_directed(graphs):
