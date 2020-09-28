@@ -12,6 +12,8 @@ class NetworkxToDglTest(unittest.TestCase):
         self.graphs = [nx.cycle_graph(20)] * 10
         self.check_graph = nx.cycle_graph(5)
         self.edge_dict = {(1, 0): 1, (2, 0): 1}
+        # create 1d array of networkx graphs
+        self.nx_array = np.array([nx.cycle_graph(20), nx.cycle_graph(15), nx.cycle_graph(20)])
 
     def test_list(self):
         mtrx = networkx_to_dgl(self.graphs)
@@ -36,3 +38,7 @@ class NetworkxToDglTest(unittest.TestCase):
     def test_check_nonsense_input(self):
         with self.assertRaises(ValueError):
             mtrx = networkx_to_dgl(self.edge_dict)
+
+    def test_nx_array(self):
+        mtrx = networkx_to_dgl(self.nx_array)
+        self.assertEqual(type(mtrx[0]), dgl.DGLGraph)
