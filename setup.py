@@ -8,7 +8,7 @@ except ImportError:
 __version__ = '0.1.1'
 
 setup(
-    name='photonai-graph',
+    name='photonai_graph',
     packages=find_packages(),
     include_package_data=True,
     version=__version__,
