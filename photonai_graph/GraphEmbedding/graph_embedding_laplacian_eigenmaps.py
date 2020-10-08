@@ -1,5 +1,6 @@
 from photonai_graph.GraphEmbedding.graph_embedding_base import GraphEmbeddingBase
 from gem.embedding.lap import LaplacianEigenmaps
+import numpy as np
 
 
 class GraphEmbeddingLaplacianEigenmaps(GraphEmbeddingBase):
