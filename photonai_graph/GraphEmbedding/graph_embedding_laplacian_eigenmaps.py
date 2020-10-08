@@ -39,5 +39,7 @@ class GraphEmbeddingLaplacianEigenmaps(GraphEmbeddingBase):
         embedding = LaplacianEigenmaps(d=self.embedding_dimension)
 
         X_transformed = self.calculate_embedding(embedding, X)
+        
+        X_transformed = np.real(X_transformed)
 
         return X_transformed
