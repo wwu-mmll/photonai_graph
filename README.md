@@ -9,7 +9,7 @@ You can find a detailed documentation here: https://wwu-mmll.github.io/photonai_
 To install photonai-graph create a dedicated conda/python environment and activate it. Then install photonai-graph via
 
 ```bash
-pip install git+https://github.com/wwu-mmll/photonai_graph/edit/unit_tests
+pip install git+https://github.com/wwu-mmll/photonai_graph.git@unit_tests
 ```
 
 To be able to use all modules of the toolbox you will still need to install tensorflow and dgl according to your system configuration, for example with
