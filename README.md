@@ -16,6 +16,7 @@ To be able to use all modules of the toolbox you will still need to install tens
 
 ```bash
 pip install tensorflow
+pip install torch
 pip install dgl
 ```
 
