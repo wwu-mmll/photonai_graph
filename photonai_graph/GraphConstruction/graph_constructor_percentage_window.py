@@ -72,8 +72,8 @@ class GraphConstructorPercentageWindow(GraphConstructor):
                 adjacency[matrix, :, :, :][(adjacency[matrix, :, :, :] <= thresh_upper) & (adjacency[matrix, :, :, :] >= thresh_lower)] = 1
                 adjacency[matrix, :, :, :][adjacency[matrix, :, :, :] <= thresh_lower] = 0
             elif self.retain_weights == 1:
-                adjacency[adjacency[matrix, :, :, :][matrix, :, :, :] >= thresh_upper] = 0
-                adjacency[adjacency[matrix, :, :, :][matrix, :, :, :] <= thresh_lower] = 0
+                adjacency[matrix, :, :, :][adjacency[matrix, :, :, :] >= thresh_upper] = 0
+                adjacency[matrix, :, :, :][adjacency[matrix, :, :, :] <= thresh_lower] = 0
             else:
                 raise ValueError('retain weights needs to be 0 or 1')
 

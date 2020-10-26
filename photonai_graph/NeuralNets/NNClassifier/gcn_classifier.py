@@ -63,9 +63,9 @@ class GCNClassifierModel(DGLmodel):
 
     def predict(self, X):
 
-        self.model.eval()
-        test_bg = dgl.batch(X)
-        probs_y = torch.softmax(self.model(test_bg), 1)
-        argmax_y = torch.max(probs_y, 1)[1].view(-1, 1)
+        # self.model.eval()
+        # test_bg = dgl.batch(X)
+        # probs_y = torch.softmax(self.model(test_bg), 1)
+        # argmax_y = torch.max(probs_y, 1)[1].view(-1, 1)
 
-        return argmax_y
+        return self.predict_classifier(X)

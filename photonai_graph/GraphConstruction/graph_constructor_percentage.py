@@ -63,10 +63,10 @@ class GraphConstructorPercentage(GraphConstructor):
         for matrix in range(X.shape[0]):
             thresh = np.percentile(X[matrix, :, :, :], self.percentage)
             if self.retain_weights == 0:
-                X[matrix, :, :, :][X[matrix, :, :, :] > thresh] = 1
-                X[matrix, :, :, :][X[matrix, :, :, :] <= thresh] = 0
+                X[matrix, :, :, :][X[matrix, :, :, :] >= thresh] = 1
+                X[matrix, :, :, :][X[matrix, :, :, :] < thresh] = 0
             elif self.retain_weights == 1:
-                X[matrix, :, :, :][X[matrix, :, :, :] <= thresh] = 0
+                X[matrix, :, :, :][X[matrix, :, :, :] < thresh] = 0
             else:
                 raise ValueError('retain weights needs to be 0 or 1')
 

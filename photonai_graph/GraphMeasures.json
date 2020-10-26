@@ -373,13 +373,15 @@
     "path": "networkx.algorithms.cluster.clustering",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "float_or_dict"
+    "Output": "float_or_dict",
+    "node_or_edge": "node"
   },
   "average_clustering" : {
     "path": "networkx.algorithms.cluster.average_clustering",
     "self_loops_allowed": false,
     "Undirected": true,
-    "Output": "number"
+    "Output": "number",
+    "node_or_edge": "node"
   },
   "square_clustering" : {
     "path": "networkx.algorithms.cluster.square_clustering",

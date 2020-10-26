@@ -117,7 +117,7 @@ def draw_connectograms(graphs, curved_edge=False, colorscheme=None,
                 for graph, ID in zip(graphs, ids):
                     if None in [path, out_format]:
                         raise Exception('To save graphs, declare a path and an output format.')
-                    save_path = os.path.join(path, ID, out_format)
+                    save_path = os.path.join(path, str(ID) + out_format)
                     draw_connectogram(graph, curved_edge, colorscheme, path=save_path, show=show)
             else:
                 raise Exception('Number of IDs must match number of graphs.')
@@ -130,7 +130,7 @@ def draw_connectograms(graphs, curved_edge=False, colorscheme=None,
                     counter += 1
             else:
                 for graph in graphs:
-                    save_path = os.path.join(path, str(counter), out_format)
+                    save_path = os.path.join(path, str(counter) + out_format)
                     draw_connectogram(graph, curved_edge, colorscheme, nodesize, node_shape, weight, path=save_path, show=show)
                     counter += 1
 
@@ -140,7 +140,7 @@ def draw_connectograms(graphs, curved_edge=False, colorscheme=None,
 
     # input should be list or single graph
     else:
-        raise Exception('Input needs to be a single networkx graph or a list of those.')
+        raise TypeError('Input needs to be a single networkx graph or a list of those.')
 
 
 def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adjacency_axis=None, show=True):
@@ -231,7 +231,7 @@ def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adja
                 or isinstance(matrix[0], sparse.dok_matrix) \
                 or isinstance(matrix[0], sparse.dia_matrix):
             for single_matrix in matrix:
-                plt.spy(matrix[single_matrix])
+                plt.spy(single_matrix)
                 if show:
                     plt.show()
         else:
@@ -347,7 +347,7 @@ def save_graphs(graphs, path="", input_format="networkx", output_format="dot", i
     if input_format == "networkx":
         save_networkx_to_file(graphs, path, output_format=output_format, ids=ids)
     else:
-        raise Exception("Your desired output format is not supported yet.")
+        raise NotImplementedError("Your desired output format is not supported yet.")
 
 
 def visualize_networkx(graphs, layout=nx.spring_layout, colorscheme="Blues", show=True):
@@ -417,7 +417,7 @@ def individual_ztransform(matrx, adjacency_axis=0):
             matrix = stats.zscore(matrix)
             transformed_matrices.append(matrix)
     elif np.ndim(matrx) == 4:
-        for i in matrx.shape[0]:
+        for i in range(matrx.shape[0]):
             matrix = matrx[i, :, :, adjacency_axis].copy()
             matrix = stats.zscore(matrix)
             transformed_matrices.append(matrix)
@@ -457,7 +457,7 @@ def individual_fishertransform(matrx, adjacency_axis=0):
             matrix = np.arctanh(matrix)
             transformed_matrices.append(matrix)
     elif np.ndim(matrx) == 4:
-        for i in matrx.shape[0]:
+        for i in range(matrx.shape[0]):
             matrix = matrx[i, :, :, adjacency_axis].copy()
             matrix = np.arctanh(matrix)
             transformed_matrices.append(matrix)
@@ -522,7 +522,7 @@ def check_asteroidal(graph, return_boolean=True):
             for i in graph:
                 answer = asteroidal.is_at_free(i)
                 graph_answer.append(answer)
-        if isinstance(graph, nx.classes.graph.Graph):
+        elif isinstance(graph, nx.classes.graph.Graph):
             graph_answer = asteroidal.is_at_free(graph)
         else:
             raise ValueError('Your input is not a networkx photonai_graph or a list of networkx graphs. '
@@ -534,7 +534,7 @@ def check_asteroidal(graph, return_boolean=True):
             for i in graph:
                 answer = asteroidal.find_asteroidal_triple(i)
                 graph_answer.append(answer)
-        if isinstance(graph, nx.classes.graph.Graph):
+        elif isinstance(graph, nx.classes.graph.Graph):
             graph_answer = asteroidal.find_asteroidal_triple(graph)
         else:
             raise ValueError('Your input is not a networkx photonai_graph or a list of networkx graphs. '

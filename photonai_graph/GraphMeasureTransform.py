@@ -21,7 +21,6 @@ Universitaetsklinikum Muenster
 """
 
 # TODO: make error messages for possible errors
-# TODO: make the import section a bit more "airy"
 # TODO: make documentation for every single method
 
 import networkx
@@ -37,10 +36,11 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
     def __init__(self,
-                 graph_functions = {"global_efficiency": {},
-                                    "sigma": {}},
+                 graph_functions: dict = None,
                  logs=''):
 
+        if graph_functions is None:
+            graph_functions = {"global_efficiency": {}, "average_node_connectivity": {}}
         self.graph_functions = graph_functions
 
         if logs:
@@ -55,88 +55,102 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
 
         X_transformed = []
 
-        graphs = dense_to_networkx(X, adjacency_axis=0)
+        if isinstance(X, np.ndarray) or isinstance(X, np.matrix):
+            graphs = dense_to_networkx(X, adjacency_axis=0)
+        elif isinstance(X, list):
+            graphs = X
+        else:
+            raise TypeError("Input needs to be list of networkx graphs or numpy array.")
 
         # load json file
         base_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        measureJSON = os.path.join(base_folder, 'photonai_graph/GraphMeasures.json')
-        with open(measureJSON, 'r') as measure_json_file:
+        measure_json = os.path.join(base_folder, 'photonai_graph/GraphMeasures.json')
+        with open(measure_json, 'r') as measure_json_file:
             measure_j = json.load(measure_json_file)
 
         for i in graphs:
 
             measure_list = []
 
-            for key, value in self.graph_functions.items():
+            if networkx.classes.function.is_empty(i):
+                measure_list = [0] * len(X_transformed[0])
+                print("Graph is empty")
 
-                if key in measure_j:
+            else:
+                for key, value in self.graph_functions.items():
 
-                    measure = measure_j[key]
-                    # remove self loops if not allowed
-                    if measure['self_loops_allowed'] == False:
-                        i.remove_edges_from(networkx.selfloop_edges(i))
-                    # make photonai_graph directed or undirected depending on what is needed
-                    if measure['Undirected'] == True:
-                        i.to_undirected()
-                    elif measure['Undirected'] == False:
-                        i.to_directed()
-                     # call function
-                    results = getattr(networkx, key)(i, **value)
+                    if key in measure_j:
 
-                    # handle results
-                    if measure['Output'] == "dict":
-                        for rskey, rsval in results.items():
-                            measure_list.append(rsval)
-                    elif measure['Output'] == "number":
-                        measure_list.append(results)
-                    elif measure['Output'] == "tuple":
-                        measure_list.append(results[0])
-                    elif measure['Output'] == "dict_dict":
-                        for rskey, rsval in sorted(results.items()):
-                            for rs2key, rs2val in sorted(rsval.items()):
-                                measure_list.append(rs2val)
-                    elif measure['Output'] == "list":
-                        measure_list.extend(results)
-                    elif measure['Output'] == "float_or_dict":
-                        if hasattr(results, float):
-                            measure_list.append(results)
-                        if hasattr(results, dict):
-                            for rskey, rsval in sorted(results.items()):
+                        measure = measure_j[key]
+                        # remove self loops if not allowed
+                        if not measure['self_loops_allowed']:
+                            i.remove_edges_from(networkx.selfloop_edges(i))
+                        # make photonai_graph directed or undirected depending on what is needed
+                        if measure['Undirected']:
+                            i.to_undirected()
+                        elif not measure['Undirected']:
+                            i.to_directed()
+                        # call function
+                        results = getattr(networkx, key)(i, **value)
+
+                        # handle results
+                        if measure['Output'] == "dict":
+                            for rskey, rsval in results.items():
                                 measure_list.append(rsval)
-                    elif measure['Output'] == "dual_tuple":
-                        measure_list.append(results[0])
-                        measure_list.append(results[1])
-                    elif measure['Output'] == "tuple_dict":
-                        for rskey, rsval in sorted(results[0].items()):
-                            measure_list.append(rsval)
-                        for rskey, rsval in sorted(results[1].items()):
-                            measure_list.append(rsval)
-
+                        elif measure['Output'] == "number":
+                            measure_list.append(results)
+                        elif measure['Output'] == "tuple":
+                            measure_list.append(results[0])
+                        elif measure['Output'] == "dict_dict":
+                            for rskey, rsval in sorted(results.items()):
+                                for rs2key, rs2val in sorted(rsval.items()):
+                                    measure_list.append(rs2val)
+                        elif measure['Output'] == "list":
+                            measure_list.extend(results)
+                        elif measure['Output'] == "float_or_dict":
+                            if isinstance(results, float):
+                                measure_list.append(results)
+                            if isinstance(results, dict):
+                                for rskey, rsval in sorted(results.items()):
+                                    measure_list.append(rsval)
+                        elif measure['Output'] == "dual_tuple":
+                            measure_list.append(results[0])
+                            measure_list.append(results[1])
+                        elif measure['Output'] == "tuple_dict":
+                            for rskey, rsval in sorted(results[0].items()):
+                                measure_list.append(rsval)
+                            for rskey, rsval in sorted(results[1].items()):
+                                measure_list.append(rsval)
 
             X_transformed.append(measure_list)
 
-        np.asarray(X_transformed)
+        X_transformed = np.asarray(X_transformed)
 
         return X_transformed
 
     def get_measure_info(self):
         pass
 
-    def extract_measures(self, X, path="", IDs=None):
+    def extract_measures(self, x_graphs, path="", ids=None):
 
         measure_list = []
-        # turn graphs into networkx format
-        graphs = dense_to_networkx(X, adjacency_axis=0)
+        # check that graphs have networkx format
+        if isinstance(x_graphs, np.ndarray) or isinstance(x_graphs, np.matrix):
+            graphs = dense_to_networkx(x_graphs, adjacency_axis=0)
+        elif isinstance(x_graphs, list):
+            graphs = x_graphs
+        else:
+            raise TypeError("Input needs to be list of networkx graphs or numpy array.")
 
         # load json file
         base_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        measureJSON = os.path.join(base_folder, 'photonai_graph/GraphMeasures.json')
-        with open(measureJSON, 'r') as measure_json_file:
+        measure_json = os.path.join(base_folder, 'photonai_graph/GraphMeasures.json')
+        with open(measure_json, 'r') as measure_json_file:
             measure_j = json.load(measure_json_file)
 
-        if not type(IDs) == None:
+        if ids is not None:
 
-            for graph, i in zip(graphs, IDs):
+            for graph, i in zip(graphs, ids):
 
                 for key, value in self.graph_functions.items():
 
@@ -145,57 +159,61 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
 
                         measure = measure_j[key]
                         # remove self loops if not allowed
-                        if measure['self_loops_allowed'] == False:
+                        if not measure['self_loops_allowed']:
                             graph.remove_edges_from(networkx.selfloop_edges(graph))
                         # make photonai_graph directed or undirected depending on what is needed
-                        if measure['Undirected'] == True:
+                        if measure['Undirected']:
                             graph.to_undirected()
-                        elif measure['Undirected'] == False:
+                        elif not measure['Undirected']:
                             graph.to_directed()
                         # call function
                         results = getattr(networkx, key)(graph, **value)
 
-                        # if the values are numbers: make a list of Subject ID, value, measure_name, edge=None, node=None
+                        # if the values are numbers:
+                        # make a list of Subject ID, value, measure_name, edge=None, node=None
                         if measure['Output'] == "number":
                             list_to_append = [i, results, key, "None", "None"]
                             measure_list.append(list_to_append)
-                        # if the values are dicts: for every value in the dict make a list with subject ID, value, measure name, edge=None if it isn't an edge_method
+                        # if the values are dicts:
+                        # for every value in the dict make a list with:
+                        # subject ID, value, measure name, edge=None if it isn't an edge_method
                         if measure['Output'] == "dict":
                             for rskey, rsval in results.items():
                                 if measure['node_or_edge'] == 'node':
-                                    list_to_append = [i, rsval, key, rskey, "None", "None"]
+                                    list_to_append = [i, rsval, key, rskey, "None"]
                                     measure_list.append(list_to_append)
                                 elif measure['node_or_edge'] == 'edge':
-                                    list_to_append = [i, rsval, key, "None", rskey, "None"]
+                                    list_to_append = [i, rsval, key, "None", rskey]
                                     measure_list.append(list_to_append)
                         # if the values are tuples
                         elif measure['Output'] == "tuple":
-                            list_to_append = [i, results[0], key, "None", "None", "None"]
+                            list_to_append = [i, results[0], key, "None", "None"]
                             measure_list.append(list_to_append)
                         # if the output is a dict of dicts
                         elif measure['Output'] == "dict_dict":
-                            raise Exception("Dictionary of dictionary outputs are not implemented.")
+                            raise NotImplementedError("Dictionary of dictionary outputs are not implemented.")
                         # if output is list: list outputs are not implemented
                         elif measure['Output'] == "list":
-                            raise Exception("List outputs are not implemented")
+                            raise NotImplementedError("List outputs are not implemented")
                         # if the output is float or dict based output
                         elif measure['Output'] == "float_or_dict":
-                            if hasattr(results, float):
+                            if isinstance(results, float):
                                 list_to_append = [i, results, key, "None", "None"]
                                 measure_list.append(list_to_append)
-                            if hasattr(results, dict):
-                                if measure['node_or_edge'] == 'node':
-                                    list_to_append = [i, rsval, key, rskey, "None", "None"]
-                                    measure_list.append(list_to_append)
-                                if measure['node_or_edge'] == 'edge':
-                                    list_to_append = [i, rsval, key, "None", rskey, "None"]
-                                    measure_list.append(list_to_append)
+                            elif isinstance(results, dict):
+                                for rskey, rsval in results.items():
+                                    if measure['node_or_edge'] == "node":
+                                        list_to_append = [i, rsval, key, rskey, "None"]
+                                        measure_list.append(list_to_append)
+                                    elif measure['node_or_edge'] == "edge":
+                                        list_to_append = [i, rsval, key, "None", rskey]
+                                        measure_list.append(list_to_append)
                         # if output is dual_tuple
                         elif measure['Output'] == "dual_tuple":
-                            raise Exception("Dual tuple outputs are not implemented.")
+                            raise NotImplementedError("Dual tuple outputs are not implemented.")
                         # if output is tuple_dict
                         elif measure['Output'] == "tuple_dict":
-                            raise Exception("Tuple-Dict outputs are not implemented.")
+                            raise NotImplementedError("Tuple-Dict outputs are not implemented.")
 
         else:
             raise Exception('no ID provided')
@@ -204,4 +222,4 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         
         col_names = ["ID", "value", "measure", "nodes", "edges"]
         
-        df.to_csv(path_or_buf=path, names=col_names, index=None)
+        df.to_csv(path_or_buf=path, header=col_names, index=None)

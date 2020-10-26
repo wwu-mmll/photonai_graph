@@ -136,7 +136,7 @@ class GraphConstructorRandomWalks(GraphConstructor):
 
         return ho_adjacency
 
-    def transform_test(self, X):
+    def transform(self, X):
         """Transforms the matrix using random walks"""
         adj, feat = self.get_mtrx(X)
         # do preparatory matrix transformations
@@ -145,68 +145,6 @@ class GraphConstructorRandomWalks(GraphConstructor):
         adj = self.get_ho_adjacency(adj)
         # get feature matrix
         X_transformed = self.get_features(adj, feat)
-
-        return X_transformed
-
-    def transform(self, X):
-        # transform each individual or make a mean matrix
-        if self.transform_style == "mean":
-            # use the mean 2d image of all samples for creating the different photonai_graph structures
-            X_mean = np.squeeze(np.mean(X, axis=0))
-
-            # select the proper matrix in case you have multiple
-            if np.ndim(X_mean) == 3:
-                X_mean = X_mean[:, :, self.adjacency_axis]
-            elif np.ndim(X_mean) == 2:
-                X_mean = X_mean
-            else:
-                raise ValueError('The input matrices need to have 3 or 4 dimensions. Please check your input matrix.')
-
-            d, idx = self.distance_sklearn_metrics(X_mean, k=self.k_distance, metric='euclidean')
-            adjacency = self.adjacency(d, idx).astype(np.float32)
-
-            adjacency = adjacency.toarray()
-            if self.no_edge_weight == 1:
-                adjacency[adjacency > 0] = 1
-
-            higherorder_adjacency = self.__adjacency_to_dense(adjacency)
-
-            # convert this adjacency matrix to dense format
-            higherorder_adjacency = higherorder_adjacency.toarray()
-
-            # reshape X to add the new adjacency
-            X_transformed = X[:, :, :, self.feature_axis]
-            X_transformed = np.reshape(X_transformed, (X_transformed.shape[0],
-                                                       X_transformed.shape[1],
-                                                       X_transformed.shape[2],
-                                                       -1))
-            # X = X[..., None] + adjacency[None, None, :] #use broadcasting to speed up computation
-            adjacency = np.repeat(higherorder_adjacency[np.newaxis, :, :, np.newaxis], X.shape[0], axis=0)
-            X_transformed = np.concatenate((adjacency, X_transformed), axis=3)
-
-        elif self.transform_style == "individual":
-            X_rw = X.copy()
-            # select the proper matrix in case you have multiple
-            if np.ndim(X_rw) == 4:
-                X_features = X_rw[:, :, :, self.feature_axis]
-                X_features = X_features.reshape((X_features.shape[0], X_features.shape[1], X_features.shape[2], -1))
-                X_rw = X_rw[:, :, :, self.adjacency_axis]
-            elif np.ndim(X_rw) == 3:
-                X_rw = X_rw
-                X_features = X_rw.copy()
-                X_features = X_features.reshape((X_features.shape[0], X_features.shape[1], X_features.shape[2], -1))
-            else:
-                raise ValueError('The input matrices need to have 3 or 4 dimensions. Please check your input matrix.')
-
-            adjacency_list = self.__adjacency_to_list(X, X_rw)
-
-            adjacency_list = adjacency_list.reshape((adjacency_list.shape[0], adjacency_list.shape[1],
-                                                     adjacency_list.shape[2], -1))
-            X_transformed = np.concatenate((adjacency_list, X_features), axis=3)
-
-        else:
-            raise KeyError('Only mean and individual transform are supported. '
-                           'Please check your spelling for the parameter transform_style.')
 
         return X_transformed
 

@@ -1,8 +1,8 @@
 import os
 from abc import ABC
 import numpy as np
-import sklearn
 from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.metrics import pairwise_distances
 from scipy import sparse
 from photonai_graph.GraphUtilities import individual_ztransform, individual_fishertransform
 
@@ -183,8 +183,7 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
     @staticmethod
     def distance_sklearn_metrics(z, k, metric='euclidean'):
         """Compute exact pairwise distances."""
-        d = sklearn.metrics.pairwise.pairwise_distances(
-            z, metric=metric, n_jobs=-2)
+        d = pairwise_distances(z, metric=metric, n_jobs=-2)
         # k-NN photonai_graph.
         idx = np.argsort(d)[:, 1:k + 1]
         d.sort()

@@ -1,4 +1,4 @@
-from networkx.drawing.nx_agraph import write_dot, read_dot
+from networkx.drawing.nx_pydot import write_dot, read_dot
 from scipy import sparse
 import networkx as nx
 import numpy as np
@@ -160,7 +160,7 @@ def networkx_to_sparse(graphs, fmt='csr'):
         for graph in graphs:
             sparse_graph = nx.to_scipy_sparse_matrix(graph, format=fmt)
             graph_list.append(sparse_graph)
-    if isinstance(graphs, nx.classes.graph.Graph):
+    elif isinstance(graphs, nx.classes.graph.Graph):
         graph_list = nx.to_scipy_sparse_matrix(graphs, format=fmt)
     else:
         raise ValueError('Input needs to be a list of networkx graphs or a networkx photonai_graph.')
@@ -183,10 +183,29 @@ def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
     if isinstance(graphs, list):
         graph_list = []
         for graph in graphs:
-            g = dgl.DGLGraph().from_networkx(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
+            if not nx.is_directed(graph):
+                graph = graph.to_directed()
+            if node_attrs or edge_attrs is None:
+                g = dgl.from_networkx(graph)
+            else:
+                g = dgl.DGLGraph()
+                g.from_networkx(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
+            graph_list.append(g)
+    elif isinstance(graphs, np.ndarray):
+        graph_list = []
+        for graph in range(graphs.shape[0]):
+            if not nx.is_directed(graphs[graph]):
+                graphs[graph] = graphs[graph].to_directed()
+            if node_attrs or edge_attrs is None:
+                g = dgl.from_networkx(graphs[graph])
+            else:
+                g = dgl.from_networkx(graphs[graph], node_attrs=node_attrs, edge_attrs=edge_attrs)
             graph_list.append(g)
     elif isinstance(graphs, nx.classes.graph.Graph):
-        graph_list = dgl.DGLGraph().from_networkx(graphs)
+        if not nx.is_directed(graphs):
+            graphs = graphs.to_directed()
+        g = dgl.from_networkx(graphs)
+        graph_list = g
     else:
         raise ValueError('networkx_to_dgl only implemented for list or single networkx graph')
 
@@ -247,9 +266,9 @@ def dense_to_networkx(mtrx, adjacency_axis=0, feature_axis=1, feature_constructi
     elif isinstance(mtrx, np.ndarray):
         # if dense is just a single array
         if mtrx.shape[0] == 1:
-            mtrx_conv = nx.from_numpy_matrix(A=mtrx[:, :, adjacency_axis])
+            mtrx_conv = nx.from_numpy_matrix(A=mtrx[0, :, :, adjacency_axis])
             features = get_dense_feature(mtrx, adjacency_axis, feature_axis, feature_construction)
-            nx.set_node_attributes(mtrx, features, name="feat")
+            nx.set_node_attributes(mtrx_conv, features, name="feat")
         # if dense consists of multiple arrays
         else:
             graph_list = []
@@ -287,19 +306,48 @@ def get_dense_feature(matrix, adjacency_axis, feature_axis, aggregation="sum"):
     """
     if aggregation == "sum":
         features = np.sum(matrix[:, :, feature_axis], axis=1)
+        features = features.tolist()
     elif aggregation == "mean":
         features = (np.sum(matrix[:, :, feature_axis], axis=1)) / matrix.shape[0]
+        features = features.tolist()
     elif aggregation == "node_degree":
-        features = np.count_nonzero(matrix[:, :, adjacency_axis], axis=1, keepdims=True)
+        features = np.count_nonzero(matrix[:, :, adjacency_axis], axis=1, keepdims=False)
+        features = features.tolist()
     elif aggregation == "features":
         features = matrix[:, :, feature_axis]
+        features = features.reshape((features.shape[0], -1))
+        features = features.tolist()
     else:
         raise KeyError('Only sum, mean, node_degree and all features are supported')
 
-    features = features.reshape((features.shape[0], -1))
     features = dict(enumerate(features, 0))
 
+    # features = {str(key): value for key, value in features.items()}
+
     return features
+
+
+def get_dense_edge_features(matrix, adjacency_axis, feature_axis):
+    """returns the features for an edge label dictionary
+
+        Parameters
+        ---------
+        matrix: np.matrix/np.ndarray
+            feature matrix
+        adjacency_axis: int
+            position of the adjacency matrix
+        feature_axis: int
+            position of the feature matrix
+    """
+    edge_feat = {}
+    for index, value in np.ndenumerate(matrix[:, :, adjacency_axis]):
+        conn_key = (str(index[0]), str(index[1]))
+        key_val = {conn_key: value}
+        edge_feat.update(key_val)
+
+    # edge_feat = dict(np.ndenumerate(matrix[:, :, adjacency_axis]))
+
+    return edge_feat
 
 
 def dense_to_sparse(graphs, m_type="coo_matrix", adjacency_axis=None, feature_axis=None):
@@ -328,7 +376,7 @@ def dense_to_sparse(graphs, m_type="coo_matrix", adjacency_axis=None, feature_ax
                 if np.ndim(graph) != 2:
                     raise ValueError('All graphs must have same shape.')
                 graph_list.append(sparse_types[m_type](graph))
-        if np.ndim(graphs[0]) == 3:
+        elif np.ndim(graphs[0]) == 3:
             for graph in graphs:
                 if np.ndim(graph) != 3:
                     raise ValueError('All graphs must have same shape.')
@@ -361,7 +409,7 @@ def dense_to_sparse(graphs, m_type="coo_matrix", adjacency_axis=None, feature_ax
                 for i in range(graphs.shape[0]):
                     adjacency = sparse_types[m_type](graphs[i, :, :])
                     graph_list.append(adjacency)
-            if np.ndim(graphs) == 2:
+            elif np.ndim(graphs) == 2:
                 graph_list = sparse_types[m_type](graphs)
             else:
                 raise ValueError("Matrix needs to have 3 or 2 dimension when no axis arguments are given.")
@@ -407,9 +455,9 @@ def sparse_to_dense(graphs, features=None):
         """
         Helper function
         """
-        current_graph_mtrx = np.reshape((current_graph_mtrx.shape[0], current_graph_mtrx.shape[1], -1))
+        current_graph_mtrx = np.reshape(current_graph_mtrx, (current_graph_mtrx.shape[0], current_graph_mtrx.shape[1], -1))
         current_features = current_features.toarray()
-        current_features = np.reshape((current_features.shape[0], current_features.shape[1], -1))
+        current_features = np.reshape(current_features, (current_features.shape[0], current_features.shape[1], -1))
         return np.concatenate((current_graph_mtrx, current_features), axis=2)
 
     if features is not None:
@@ -420,7 +468,7 @@ def sparse_to_dense(graphs, features=None):
                 matrices.append(convert_matrix(graph_mtrx, feature))
         else:
             try:
-                graph_mtrx = graphs.to_array()
+                graph_mtrx = graphs.toarray()
                 matrices = convert_matrix(graph_mtrx, features)
             except Exception as e:
                 print('Could not convert matrices.'
@@ -461,22 +509,19 @@ def sparse_to_dgl(graphs, adjacency_axis=0, feature_axis=1):
     if isinstance(graphs, tuple):
         graph_list = []
         for adj, feat in zip(graphs[adjacency_axis], graphs[feature_axis]):
-            g = dgl.DGLGraph()
-            g.from_scipy_sparse_matrix(spmat=adj)
+            g = dgl.from_scipy(sp_mat=adj)
             graph_list.append(g)
     elif isinstance(graphs, list):
         graph_list = []
         for adj in graphs:
-            g = dgl.DGLGraph()
-            g.from_scipy_sparse_matrix(spmat=adj)
+            g = dgl.from_scipy(sp_mat=adj)
             graph_list.append(g)
     elif isinstance(graphs, np.ndarray) or isinstance(graphs, np.matrix):
         if np.ndim(graphs) != 1:
             raise Exception('Input needs to be 1d array if it is a numpy array')
         graph_list = []
         for adj in range(graphs.shape[0]):
-            g = dgl.DGLGraph()
-            g.from_scipy_sparse_matrix(spmat=graphs[adj])
+            g = dgl.from_scipy(sp_mat=graphs[adj])
             graph_list.append(g)
 
     else:
@@ -518,7 +563,7 @@ def dgl_to_sparse(graphs, fmt="csr"):
 
     graph_list = []
     for graph in graphs:
-        scp_graph = dgl.DGLGraph.adjacency_matrix_scipy(graph, fmt=fmt)
+        scp_graph = graph.adjacency_matrix_scipy(fmt=fmt)
         graph_list.append(scp_graph)
     return graph_list
 
@@ -563,8 +608,8 @@ def check_dgl(graphs, adjacency_axis=None, feature_axis=None):
         feature_axis: int, default=None
             position of the feature matrix
     """
-    if not isinstance(graphs, np.ndarray) or not isinstance(graphs, np.matrix) or not isinstance(graphs, list):
-        raise TypeError('can only handle np arrays of lists as input')
+    if not isinstance(graphs, np.ndarray) and not isinstance(graphs, np.matrix) and not isinstance(graphs, list):
+        raise TypeError('can only handle np arrays or lists as input')
 
     if isinstance(graphs, list) or np.ndim(graphs) == 1:
         if isinstance(graphs[0], nx.classes.graph.Graph):
