@@ -1,6 +1,4 @@
 import numpy as np
-import dgl
-import torch
 from photonai_graph.NeuralNets.dgl_base import DGLmodel
 from photonai_graph.NeuralNets.NNModels import GCNClassifier
 

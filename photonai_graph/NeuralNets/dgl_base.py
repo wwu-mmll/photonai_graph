@@ -1,13 +1,17 @@
 from abc import ABC
 import os
-import dgl
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from torch.utils.data import DataLoader
-from photonai_graph.GraphConversions import check_dgl
-from photonai_graph.NeuralNets.NNUtilities import DGLData, zip_data
+from photonai_graph.util import assert_imported
 from sklearn.base import BaseEstimator, ClassifierMixin
+try:
+    import dgl
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+    from torch.utils.data import DataLoader
+    from photonai_graph.GraphConversions import check_dgl
+    from photonai_graph.NeuralNets.NNUtilities import DGLData, zip_data
+except ImportError:
+    pass
 
 
 class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
@@ -51,6 +55,7 @@ class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
             self.logs = logs
         else:
             self.logs = os.getcwd()
+        assert_imported(["dgl", "pytorch"])
 
     @staticmethod
     def train_model(epochs, model, optimizer, loss_func, data_loader):
