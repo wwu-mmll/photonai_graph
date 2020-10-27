@@ -1,6 +1,9 @@
 from photonai_graph.GraphEmbedding.graph_embedding_base import GraphEmbeddingBase
-from gem.embedding.lap import LaplacianEigenmaps
 import numpy as np
+try:
+    from gem.embedding.lap import LaplacianEigenmaps
+except ImportError:
+    pass
 
 
 class GraphEmbeddingLaplacianEigenmaps(GraphEmbeddingBase):
@@ -40,7 +43,6 @@ class GraphEmbeddingLaplacianEigenmaps(GraphEmbeddingBase):
         embedding = LaplacianEigenmaps(d=self.embedding_dimension)
 
         X_transformed = self.calculate_embedding(embedding, X)
-        
         X_transformed = np.real(X_transformed)
 
         return X_transformed

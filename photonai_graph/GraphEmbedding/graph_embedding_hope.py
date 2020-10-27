@@ -1,8 +1,12 @@
 from sklearn.base import BaseEstimator, TransformerMixin
-from gem.embedding.hope import HOPE
+from photonai_graph.util import assert_imported
 import numpy as np
 import networkx
 import os
+try:
+    from gem.embedding.hope import HOPE
+except ImportError:
+    pass
 
 
 # todo: why does this class not inherit from GraphEmbeddingBase?
@@ -51,6 +55,7 @@ class GraphEmbeddingHOPE(BaseEstimator, TransformerMixin):
             self.logs = logs
         else:
             self.logs = os.getcwd()
+        assert_imported(["gem"])
 
     def fit(self, X, y):
         return self
@@ -84,4 +89,4 @@ class GraphEmbeddingHOPE(BaseEstimator, TransformerMixin):
 
             embedding_list.append(embedding_representation)
 
-        return np.asarray(embedding_list)
+        return np.squeeze(np.asarray(embedding_list))
