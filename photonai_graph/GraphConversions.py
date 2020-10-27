@@ -2,9 +2,13 @@ from networkx.drawing.nx_pydot import write_dot, read_dot
 from scipy import sparse
 import networkx as nx
 import numpy as np
-import dgl
 import os
 import warnings
+from photonai_graph.util import assert_imported
+try:
+    import dgl
+except ImportError:
+    pass
 
 output_formats = {
     "dot": write_dot,
@@ -180,6 +184,8 @@ def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
         edge_attrs: list, default=None
             name of edge attributes as list
     """
+    assert_imported(["dgl"])
+
     if isinstance(graphs, list):
         graph_list = []
         for graph in graphs:
@@ -432,6 +438,8 @@ def dense_to_dgl(graphs, adjacency_axis=None, feature_axis=None):
         feature_axis: int, default=None
             position of the feature matrix
     """
+    assert_imported(["dgl"])
+
     if adjacency_axis is None:
         raise NotImplementedError('dense to dgl not implemented without adjacency axis')
     else:
@@ -506,6 +514,8 @@ def sparse_to_dgl(graphs, adjacency_axis=0, feature_axis=1):
         feature_axis: int, default=1
             position of the feature matrix
     """
+    assert_imported(["dgl"])
+
     if isinstance(graphs, tuple):
         graph_list = []
         for adj, feat in zip(graphs[adjacency_axis], graphs[feature_axis]):
@@ -540,6 +550,8 @@ def dgl_to_dense(graphs, in_fmt="csr"):
         in_fmt: str, default="csr"
             format of the scipy sparse matrix used in the intermediary step
     """
+    assert_imported(["dgl"])
+
     if not isinstance(graphs, list):
         raise Exception('Input graphs need to be in list format')
 
@@ -558,6 +570,8 @@ def dgl_to_sparse(graphs, fmt="csr"):
         fmt: str, default="csr"
             format of the scipy sparse matrix used in the intermediary step
     """
+    assert_imported(["dgl"])
+
     if not isinstance(graphs, list):
         raise Exception("Input type needs to be a list")
 
@@ -580,6 +594,8 @@ def dgl_to_networkx(graphs, node_attrs=None, edge_attrs=None):
         edge_attrs: list, default=None
             Edge attributes as a list of strings
     """
+    assert_imported(["dgl"])
+
     if node_attrs is None:
         node_attrs = ["feat"]
     if edge_attrs is None:
@@ -608,6 +624,8 @@ def check_dgl(graphs, adjacency_axis=None, feature_axis=None):
         feature_axis: int, default=None
             position of the feature matrix
     """
+    assert_imported(["dgl"])
+
     if not isinstance(graphs, np.ndarray) and not isinstance(graphs, np.matrix) and not isinstance(graphs, list):
         raise TypeError('can only handle np arrays or lists as input')
 
