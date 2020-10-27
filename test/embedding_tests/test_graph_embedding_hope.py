@@ -15,16 +15,16 @@ class HOPETest(unittest.TestCase):
         g_embedding = GraphEmbeddingHOPE(embedding_dimension=1)
         g_embedding.fit(self.X, self.y)
         gembed = g_embedding.transform(self.X)
-        self.assertEqual(np.shape(gembed), (20, 40, 1))
+        self.assertEqual(np.shape(gembed), (20, 40))
 
     def test_embedding_hope_2d(self):
         g_embedding = GraphEmbeddingHOPE(embedding_dimension=2)
         g_embedding.fit(self.X, self.y)
         gembed = g_embedding.transform(self.X)
-        self.assertEqual(np.shape(gembed), (20, 20, 2, 1))
+        self.assertEqual(np.shape(gembed), (20, 20, 2))
 
     def test_embedding_hope_4d(self):
         g_embedding = GraphEmbeddingHOPE(embedding_dimension=4)
         g_embedding.fit(self.X, self.y)
         gembed = g_embedding.transform(self.X)
-        self.assertEqual(np.shape(gembed), (20, 20, 4, 1))
+        self.assertEqual(np.shape(gembed), (20, 20, 4))
