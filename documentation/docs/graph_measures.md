@@ -23,7 +23,7 @@ measuretrans = GraphMeasureTransform(graph_functions={"large_clique_size": {}, "
 The following measures are available. They are different networkx functions that calculate these measures. Be warned that, depending on your graph, these measures might take very long to calculate. Also some measures are only available as part of a pipeline, while some are also available for extraction (see accompanying table).
 
 | Measure | Name in Dict | available for extract |
-| ----- | ----- | ----- | ----- |
+| ----- | ----- | ----- |
 | Node connectivity for all pairs | all_pairs_node_connectivity | Yes |
 | Local node connectivity | local_node_connectivity | Yes |
 | Node connectivity | node_connectivity | Yes |
