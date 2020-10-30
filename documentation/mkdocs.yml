@@ -43,8 +43,10 @@ nav:
        'graph_construction.md'
     - Examples:
        'examples/graph_construction_examples.md'
+- Dynamic Utilities: 'dynamic_utils.md'
 - Graph Measures: 'graph_measures.md'
 - Graph Embeddings: 'graph_embeddings.md'
+- Graph Kernels: 'graph_kernels.md'
 - Graph Neural Networks: 'graph_convnets.md'
 - Graph Utilities: 'graph_utilities.md'
 
