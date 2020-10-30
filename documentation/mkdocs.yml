@@ -8,7 +8,7 @@ site_dir: '../docs'
 # Social media
 extra:
   social:
-    - type: 'brands/twitter'
+    - icon: 'brands/twitter'
       link: 'https://twitter.com/medicalmachinelearninglab'
 
 # Theme configuration
