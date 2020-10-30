@@ -6,7 +6,7 @@ A module focused on functions and constructors for dynamic graph data.
 
 ## CofluctTransform
 
-Cofluctuation transformer, that takes a timeseries of node signals and calculates the cofluctuation between nodes for a selected quantile. Returns an adjacency matrix. Can also return edge time series.
+Cofluctuation transformer, that takes a timeseries of node signals and calculates the cofluctuation between nodes for a selected quantile. Returns an adjacency matrix. Can also return edge time series. Uses cofluct function.
 
 | Parameter | type | Description |
 | -----     | ----- | ----- |
