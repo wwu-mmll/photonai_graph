@@ -679,5 +679,21 @@
     "self_loops_allowed": false,
     "Undirected": true,
     "Output": "dict"
+  },
+  "average_degree_centrality" : {
+    "path": "networkx.algorithms.centrality.degree_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict",
+    "node_or_edge": "node",
+    "compute_average": true
+  },
+  "average_betweenness_centrality" : {
+    "path": "networkx.algorithms.centrality.betweenness_centrality",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "dict",
+    "node_or_edge": "node",
+    "compute_average": true
   }
 }
