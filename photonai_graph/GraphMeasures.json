@@ -695,5 +695,11 @@
     "Output": "dict",
     "node_or_edge": "node",
     "compute_average": true
+  },
+  "number_of_edges": {
+    "path": "networkx.classes.function.number_of_edges",
+    "self_loops_allowed": false,
+    "Undirected": true,
+    "Output": "number"
   }
 }
