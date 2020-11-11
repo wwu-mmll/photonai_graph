@@ -92,7 +92,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                         elif not measure['Undirected']:
                             graph.to_directed()
                         # call function
-                        results = getattr(networkx, key)(graph, **value)
+                        results = getattr(networkx, measure["path"].split(".")[-1])(graph, **value)
 
                         # handle results
                         if measure['Output'] == "dict":
@@ -122,8 +122,8 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                                 measure_list.append(rsval)
                             for rskey, rsval in sorted(results[1].items()):
                                 measure_list.append(rsval)
-                        if hasattr(measure, 'compute_average') and measure['compute_average']:
-                            measure_list_graph.extend(np.mean(measure_list))
+                        if "compute_average" in measure.keys() and measure['compute_average']:
+                            measure_list_graph.append(np.mean(measure_list))
                         else:
                             measure_list_graph.extend(measure_list)
             X_transformed.append(measure_list_graph)

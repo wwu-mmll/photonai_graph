@@ -181,12 +181,12 @@ class GraphMeasureTransformTests(unittest.TestCase):
         g_transform = GraphMeasureTransform(graph_functions={"degree_centrality": {}})
         g_transform.fit(self.X_nx, self.y)
         X_nodes = g_transform.transform(self.X_nx)
-        # X_nodes_average = np.mean(X_nodes)
+        X_nodes_average = np.mean(X_nodes, axis=1).reshape(-1, 1)
 
         g_transform = GraphMeasureTransform(graph_functions={"average_degree_centrality": {}})
         g_transform.fit(self.X_nx, self.y)
         X_average = g_transform.transform(self.X_nx)
 
-        # self.assertEqual(X_average, X_nodes_average)
+        np.testing.assert_array_equal(X_average, X_nodes_average)
         debug = True
 
