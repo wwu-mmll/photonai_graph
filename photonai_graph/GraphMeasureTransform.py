@@ -68,30 +68,35 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         with open(measure_json, 'r') as measure_json_file:
             measure_j = json.load(measure_json_file)
 
-        for i in graphs:
+        for graph in graphs:
 
-            measure_list = []
+            measure_list_graph = []
 
-            if networkx.classes.function.is_empty(i):
-                measure_list = [0] * len(X_transformed[0])
+            if networkx.classes.function.is_empty(graph):
+                measure_list_graph = [0] * len(X_transformed[0])
                 print("Graph is empty")
 
             else:
                 for key, value in self.graph_functions.items():
+                    measure_list = list()
 
                     if key in measure_j:
 
                         measure = measure_j[key]
                         # remove self loops if not allowed
                         if not measure['self_loops_allowed']:
-                            i.remove_edges_from(networkx.selfloop_edges(i))
+                            graph.remove_edges_from(networkx.selfloop_edges(graph))
                         # make photonai_graph directed or undirected depending on what is needed
                         if measure['Undirected']:
-                            i.to_undirected()
+                            graph.to_undirected()
                         elif not measure['Undirected']:
-                            i.to_directed()
+                            graph.to_directed()
+                        # check if undirected graph is connected (networkx function does not support directed graphs)
+                        if not networkx.is_directed(graph) and not networkx.is_connected(graph):
+                            raise TypeError("Undirected graph is not connected.")
+
                         # call function
-                        results = getattr(networkx, key)(i, **value)
+                        results = getattr(networkx, measure["path"].split(".")[-1])(graph, **value)
 
                         # handle results
                         if measure['Output'] == "dict":
@@ -121,8 +126,11 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                                 measure_list.append(rsval)
                             for rskey, rsval in sorted(results[1].items()):
                                 measure_list.append(rsval)
-
-            X_transformed.append(measure_list)
+                        if "compute_average" in measure.keys() and measure['compute_average']:
+                            measure_list_graph.append(np.mean(measure_list))
+                        else:
+                            measure_list_graph.extend(measure_list)
+            X_transformed.append(measure_list_graph)
 
         X_transformed = np.asarray(X_transformed)
 
