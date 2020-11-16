@@ -91,9 +91,6 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                             graph.to_undirected()
                         elif not measure['Undirected']:
                             graph.to_directed()
-                        # check if undirected graph is connected (networkx function does not support directed graphs)
-                        if not networkx.is_directed(graph) and not networkx.is_connected(graph):
-                            raise TypeError("Undirected graph is not connected.")
 
                         # call function
                         results = getattr(networkx, measure["path"].split(".")[-1])(graph, **value)
