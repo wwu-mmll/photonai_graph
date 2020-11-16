@@ -188,5 +188,3 @@ class GraphMeasureTransformTests(unittest.TestCase):
         X_average = g_transform.transform(self.X_nx)
 
         np.testing.assert_array_equal(X_average, X_nodes_average)
-        debug = True
-
