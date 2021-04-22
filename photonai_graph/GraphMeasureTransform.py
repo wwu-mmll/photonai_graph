@@ -84,7 +84,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                 tmp = dask.delayed(self._compute_graph_metrics)(graph, self.graph_functions, measure_j, n_measures=None)
                 task_list.append(tmp)
             with ProgressBar():
-                X_transformed = list(dask.compute(*task_list, num_workers=self.n_processes, scheduler='processes'))
+                X_transformed = list(dask.compute(*task_list, num_workers=self.n_processes, scheduler='threads'))
         else:
 
             for graph in graphs:
