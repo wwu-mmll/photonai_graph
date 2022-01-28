@@ -8,6 +8,7 @@ try:
     import torch.nn as nn
     import torch.optim as optim
     from torch.utils.data import DataLoader
+    from dgl.dataloading.pytorch import GraphDataLoader
     from photonai_graph.GraphConversions import check_dgl
     from photonai_graph.NeuralNets.NNUtilities import DGLData, zip_data
 except ImportError:
@@ -99,7 +100,7 @@ class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
     def get_data_loader(self, x_trans, y):
         """returns data in a data loader format"""
         data = DGLData(zip_data(x_trans, y))
-        data_loader = DataLoader(data, batch_size=self.batch_size, shuffle=True, collate_fn=self.collate)
+        data_loader = GraphDataLoader(data, batch_size=self.batch_size, shuffle=True, collate_fn=self.collate)
 
         return data_loader
 
