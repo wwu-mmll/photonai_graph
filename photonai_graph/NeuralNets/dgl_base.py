@@ -99,7 +99,10 @@ class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
 
     def get_data_loader(self, x_trans, y):
         """returns data in a data loader format"""
-        data = DGLData(zip_data(x_trans, y))
+        # add a self loop for 0-in-degree nodes
+        x_san = [dgl.add_self_loop(x) for x in x_trans]
+        # create dataloader
+        data = DGLData(zip_data(x_san, y))
         data_loader = GraphDataLoader(data, batch_size=self.batch_size, shuffle=True, collate_fn=self.collate)
 
         return data_loader

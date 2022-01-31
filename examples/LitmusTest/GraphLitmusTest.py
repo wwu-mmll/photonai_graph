@@ -17,7 +17,7 @@ dense_labels = [1] * 500
 labels = sparse_labels + dense_labels
 
 # visualize the edge count for the graphs
-plot_nx_edge_count(sparse_graphs, dense_graphs)
+# plot_nx_edge_count(sparse_graphs, dense_graphs)
 
 # Design your Pipeline
 my_pipe = Hyperpipe('basic_gcn_pipe',
@@ -28,9 +28,8 @@ my_pipe = Hyperpipe('basic_gcn_pipe',
                     metrics=['accuracy', 'balanced_accuracy', 'recall', 'precision'],
                     best_config_metric='accuracy')
 
-my_pipe.add(PipelineElement('GraphConstructorThreshold',
-                            hyperparameters={'threshold': 0.95}))
+my_pipe.add(PipelineElement('GraphConstructorThreshold', threshold=0.95))
 
-my_pipe.add(PipelineElement('GCNClassifier', hyperparameters={"feature_axis": 0}))
+my_pipe.add(PipelineElement('GCNClassifier', feature_axis=0))
 
 my_pipe.fit(graphs, labels)
