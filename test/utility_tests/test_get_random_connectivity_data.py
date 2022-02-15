@@ -42,5 +42,5 @@ class DrawConnectogramTests(unittest.TestCase):
 
     def test_wrong_type(self):
         with self.assertRaises(NotImplementedError):
-            mtrx = get_random_connectivity_data(out_type="networkx", number_of_nodes=20,
-                                                number_of_individuals=20, number_of_modalities=2)
+            get_random_connectivity_data(out_type="networkx", number_of_nodes=20,
+                                         number_of_individuals=20, number_of_modalities=2)

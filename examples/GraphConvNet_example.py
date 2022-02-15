@@ -21,4 +21,3 @@ my_pipe.add(PipelineElement('GraphConstructorThreshold',
 my_pipe.add(PipelineElement('GraphConvNet_Classifier'))
 
 my_pipe.fit(X, y)
-

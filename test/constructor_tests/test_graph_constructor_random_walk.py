@@ -26,4 +26,4 @@ class RWTests(unittest.TestCase):
         with self.assertRaises(AssertionError):
             g_constr = GraphConstructorRandomWalks(transform_style="individual")
             g_constr.fit(self.X4d, self.y)
-            trans = g_constr.transform(self.X4d)
+            g_constr.transform(self.X4d)

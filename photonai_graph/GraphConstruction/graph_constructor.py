@@ -123,7 +123,7 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
             adjacency = individual_ztransform(adjacency)
         if self.use_abs_zscore == 1:
             adjacency = np.abs(adjacency)
-            
+
         return adjacency
 
     def get_features(self, adjacency, features):
@@ -153,8 +153,8 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
     @staticmethod
     def adjacency(dist, idx):
         """Return the adjacency matrix of a kNN photonai_graph."""
-        M, k = dist.shape
-        assert M, k == idx.shape
+        m, k = dist.shape
+        assert m, k == idx.shape
         assert dist.min() >= 0
 
         # Weights.
@@ -162,23 +162,23 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
         dist = np.exp(- dist ** 2 / sigma2)
 
         # Weight matrix.
-        I = np.arange(0, M).repeat(k)
-        J = idx.reshape(M * k)
-        V = dist.reshape(M * k)
-        W = sparse.coo_matrix((V, (I, J)), shape=(M, M))
+        i = np.arange(0, m).repeat(k)
+        j = idx.reshape(m * k)
+        v = dist.reshape(m * k)
+        w = sparse.coo_matrix((v, (i, j)), shape=(m, m))
 
         # No self-connections.
-        W.setdiag(0)
+        w.setdiag(0)
 
         # Non-directed photonai_graph.
-        bigger = W.T > W
-        W = W - W.multiply(bigger) + W.T.multiply(bigger)
+        bigger = w.T > w
+        w = w - w.multiply(bigger) + w.T.multiply(bigger)
 
-        assert W.nnz % 2 == 0
-        assert np.abs(W - W.T).mean() < 1e-10
-        assert type(W) is sparse.csr.csr_matrix
+        assert w.nnz % 2 == 0
+        assert np.abs(w - w.T).mean() < 1e-10
+        assert type(w) is sparse.csr.csr_matrix
 
-        return W
+        return w
 
     @staticmethod
     def distance_sklearn_metrics(z, k, metric='euclidean'):

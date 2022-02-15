@@ -34,7 +34,7 @@ class KNNTests(unittest.TestCase):
         with self.assertRaises(AssertionError):
             g_constr = GraphConstructorKNN(transform_style="individual")
             g_constr.fit(self.X4d, self.y)
-            trans = g_constr.transform(self.X4d)
+            g_constr.transform(self.X4d)
 
     def test_knn_mechanism(self):
         g_constr = GraphConstructorKNN(k_distance=2, transform_style="individual")

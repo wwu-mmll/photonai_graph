@@ -32,4 +32,3 @@ class ConvertGraphsTest(unittest.TestCase):
         g = convert_graphs(self.nx_graph_list, input_format="networkx",
                            output_format="dgl")
         self.assertEqual(type(g[0]), dgl.DGLGraph)
-

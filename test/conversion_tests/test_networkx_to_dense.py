@@ -38,4 +38,4 @@ class NetworkxToDenseTest(unittest.TestCase):
 
     def test_check_nonsense_input(self):
         with self.assertRaises(ValueError):
-            mtrx = networkx_to_dense(self.check_matrix)
+            networkx_to_dense(self.check_matrix)

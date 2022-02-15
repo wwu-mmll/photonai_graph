@@ -13,8 +13,8 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
     _estimator_type = "classifier"
     """
-    Base class for DGL based graph neural networks. Implements 
-    helper functions and shared paramtersused by other models. 
+    Base class for DGL based graph neural networks. Implements
+    helper functions and shared paramtersused by other models.
     Implementation based on gem python package.
 
 

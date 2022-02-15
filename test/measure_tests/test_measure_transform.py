@@ -164,7 +164,6 @@ class GraphMeasureTransformTests(unittest.TestCase):
             g_transform.extract_measures(self.X_nx, path, self.ids)
 
     def test_extract_no_id(self):
-        path = "/tmp/test.csv"
         g_transform = GraphMeasureTransform()
         with self.assertRaises(Exception):
             g_transform.extract_measures(self.X_nx)

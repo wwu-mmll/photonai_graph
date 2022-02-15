@@ -33,8 +33,8 @@ class CheckAsteroidalTest(unittest.TestCase):
 
     def test_nonsense_bool(self):
         with self.assertRaises(ValueError):
-            g = check_asteroidal(self.nonsense, return_boolean=True)
+            check_asteroidal(self.nonsense, return_boolean=True)
 
     def test_nonsense_nobool(self):
         with self.assertRaises(ValueError):
-            g = check_asteroidal(self.nonsense, return_boolean=False)
+            check_asteroidal(self.nonsense, return_boolean=False)

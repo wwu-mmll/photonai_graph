@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import dgl.function as fn
-from dgl.nn.pytorch import *
+from dgl.nn.pytorch import edge_softmax
 
 
 class GATLayer(nn.Module):
@@ -25,7 +25,7 @@ class GATLayer(nn.Module):
         self.activation = nn.LeakyReLU(alpha)
         self.softmax = edge_softmax
 
-        self.agg_activation=agg_activation
+        self.agg_activation = agg_activation
 
     def clean_data(self):
         ndata_names = ['ft', 'a1', 'a2']
@@ -44,7 +44,7 @@ class GATLayer(nn.Module):
         head_ft = ft.transpose(0, 1)                              # K x V x F'
         a1 = torch.bmm(head_ft, self.attn_l).transpose(0, 1)      # V x K x 1
         a2 = torch.bmm(head_ft, self.attn_r).transpose(0, 1)      # V x K x 1
-        self.g.ndata.update({'ft' : ft, 'a1' : a1, 'a2' : a2})
+        self.g.ndata.update({'ft': ft, 'a1': a1, 'a2': a2})
         # 1. compute edge attention
         self.g.apply_edges(self.edge_attention)
         # 2. compute softmax in two parts: exp(x - max(x)) and sum(exp(x - max(x)))
@@ -67,7 +67,7 @@ class GATLayer(nn.Module):
     def edge_attention(self, edges):
         # an edge UDF to compute un-normalized attention values from src and dst
         a = self.activation(edges.src['a1'] + edges.dst['a2'])
-        return {'a' : a}
+        return {'a': a}
 
     def edge_softmax(self):
         attention = self.softmax(self.g, self.g.edata.pop('a'))

@@ -246,9 +246,9 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
 
         else:
             raise Exception('no ID provided')
-        
+
         df = pd.DataFrame(measure_list)
-        
+
         col_names = ["ID", "value", "measure", "nodes", "edges"]
-        
+
         df.to_csv(path_or_buf=path, header=col_names, index=None)

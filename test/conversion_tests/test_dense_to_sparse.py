@@ -12,7 +12,7 @@ class DenseToSparseTest(unittest.TestCase):
         id_array = id_matrix[:, :, np.newaxis]
         id_3d_no_adj = id_matrix[np.newaxis, :, :]
         id_3d = np.repeat(id_array, 2, axis=2)
-        id_3d_no_adj = np.repeat(id_3d_no_adj, 5, axis = 0)
+        id_3d_no_adj = np.repeat(id_3d_no_adj, 5, axis=0)
         id_4d = np.repeat(id_3d[np.newaxis, :, :, :], 5, axis=0)
         self.matrix_2d = id_matrix
         self.matrix_2d_list = [id_matrix] * 10
@@ -60,7 +60,7 @@ class DenseToSparseTest(unittest.TestCase):
 
     def test_4d_no_adj(self):
         with self.assertRaises(ValueError):
-            mtrx = dense_to_sparse(self.matrix_4d)
+            dense_to_sparse(self.matrix_4d)
 
     def test_4d_adj(self):
         mtrx = dense_to_sparse(self.matrix_4d, adjacency_axis=0, feature_axis=0)
@@ -69,7 +69,7 @@ class DenseToSparseTest(unittest.TestCase):
 
     def test_4d_list(self):
         with self.assertRaises(ValueError):
-            mtrx = dense_to_sparse(self.matrix_4d_list, adjacency_axis=0, feature_axis=1)
+            dense_to_sparse(self.matrix_4d_list, adjacency_axis=0, feature_axis=1)
 
     def test_nonsense_input(self):
         with self.assertRaises(ValueError):

@@ -5,7 +5,7 @@ class GraphConstructorThreshold(GraphConstructor):
     _estimator_type = "transformer"
 
     """
-    Transformer class for generating adjacency matrices 
+    Transformer class for generating adjacency matrices
     from connectivity matrices. Thresholds matrix based
     on a chosen threshold value.
 
@@ -17,7 +17,7 @@ class GraphConstructorThreshold(GraphConstructor):
     * `retain_weights` [int]:
         whether to retain weight values or not
     * `logs` [str, default=None]:
-        Path to the log data    
+        Path to the log data
 
     Example
     -------

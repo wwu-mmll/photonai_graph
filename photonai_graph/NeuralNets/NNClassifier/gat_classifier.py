@@ -55,7 +55,8 @@ class GATClassifierModel(DGLmodel):
         # get data loader
         data_loader = self.get_data_loader(X_trans, y)
         # specify model with optimizer etc
-        self.model = GATClassifier(self.in_dim, self.hidden_dim, self.heads, len(np.unique(y)), self.hidden_layers)  # set model class (import from NN.models)
+        # set model class (import from NN.models)
+        self.model = GATClassifier(self.in_dim, self.hidden_dim, self.heads, len(np.unique(y)), self.hidden_layers)
         # get optimizers
         loss_func, optimizer = self.get_classifier()
         # train model

@@ -7,7 +7,7 @@ class GraphEmbeddingLocallyLinearEmbedding(GraphEmbeddingBase):
 
     """
     Transformer class for calculating a Graph Embedding
-    based on Locally Linear Embedding (Roweis & Saul, 
+    based on Locally Linear Embedding (Roweis & Saul,
     2000).
     Implementation based on gem python package.
 
@@ -16,7 +16,7 @@ class GraphEmbeddingLocallyLinearEmbedding(GraphEmbeddingBase):
     ----------
     * `embedding_dimension` [int, default=1]:
         the number of dimensions that the final embedding will have
-    
+
 
     Example
     -------

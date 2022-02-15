@@ -16,7 +16,7 @@ class GraphEmbeddingLaplacianEigenmaps(GraphEmbeddingBase):
     ----------
     * `embedding_dimension` [int, default=1]:
         the number of dimensions that the final embedding will have
-        
+
 
     Example
     -------
@@ -40,7 +40,7 @@ class GraphEmbeddingLaplacianEigenmaps(GraphEmbeddingBase):
         embedding = LaplacianEigenmaps(d=self.embedding_dimension)
 
         X_transformed = self.calculate_embedding(embedding, X)
-        
+
         X_transformed = np.real(X_transformed)
 
         return X_transformed

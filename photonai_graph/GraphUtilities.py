@@ -150,7 +150,7 @@ def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adja
         ----------
         matrix : numpy.ndarray, numpy.matrix or a list of those
         the input matrix or matrices from which to draw the connectivity matrix
-            
+
         colorbar : boolean, default=False
             Whether to use a colorbar in the drawn plot
 
@@ -175,7 +175,7 @@ def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adja
         --------
         >>> g = get_random_connectivity_data()
         >>> draw_connectivity_matrix(adjacency_axis=0)
-               
+
         """
     # check input format
     if isinstance(matrix, np.ndarray) or isinstance(matrix, np.matrix):
@@ -280,7 +280,7 @@ def get_random_labels(l_type="classification", number_of_labels=10):
         ----------
         l_type : str, default="classification"
             controls the type labels. "classification" outputs binary labels 0 and 1, "regression" outputs random float.
-            
+
         number_of_labels : int, default=10
             number of labels to generate
 
@@ -298,7 +298,7 @@ def get_random_labels(l_type="classification", number_of_labels=10):
         Examples
         --------
         >>> labels = get_random_labels()
-          
+
         """
 
     if l_type == "classification" or l_type == "Classification":
@@ -320,7 +320,7 @@ def save_graphs(graphs, path="", input_format="networkx", output_format="dot", i
 
         Parameters
         ----------
-        graphs : 
+        graphs :
             a list or a np.ndarray of graphs to be saved
 
         input_format : str, default="networkx"
@@ -328,7 +328,7 @@ def save_graphs(graphs, path="", input_format="networkx", output_format="dot", i
 
         path : str, default=""
             path where to save the graphs
-            
+
         output_format : str, default="dot"
             the output format in which to save the graphs
 
@@ -340,8 +340,8 @@ def save_graphs(graphs, path="", input_format="networkx", output_format="dot", i
         --------
         >>> g1, g2 = nx.line_graph(10), nx.line_graph(7)
         >>> graphs = [g1, g2]
-        >>> save_graphs(graphs, path="path/to/your/data/")      
-        
+        >>> save_graphs(graphs, path="path/to/your/data/")
+
         """
     # check input format
     if input_format == "networkx":
@@ -355,7 +355,7 @@ def visualize_networkx(graphs, layout=nx.spring_layout, colorscheme="Blues", sho
 
         Parameters
         ----------
-        graphs : 
+        graphs :
             a list or of networkx graphs or a single networkx graph
         layout :
             layout of the graph, default is spring layout
@@ -369,8 +369,7 @@ def visualize_networkx(graphs, layout=nx.spring_layout, colorscheme="Blues", sho
         >>> g1, g2 = nx.line_graph(10), nx.line_graph(7)
         >>> graphs = [g1, g2]
         >>> visualize_networkx(graphs)
-       
-        
+
         """
     # check format in which graphs are presented or ordered
     if isinstance(graphs, list):
@@ -407,7 +406,7 @@ def individual_ztransform(matrx, adjacency_axis=0):
         --------
         >>> X = get_random_connectivity_data()
         >>> X_transformed = individual_ztransform(X)
-               
+
         """
     # check dimensions
     transformed_matrices = []
@@ -513,7 +512,7 @@ def check_asteroidal(graph, return_boolean=True):
         -------
         list or boolean
             A list of True/False values or a list of asteroidal triples, or a single boolean value
-            
+
         """
     # checks for asteroidal triples in the photonai_graph or in a list of networkx graphs
     if return_boolean:

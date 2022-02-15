@@ -6,7 +6,7 @@ class GraphConstructorPercentage(GraphConstructor):
     _estimator_type = "transformer"
 
     """
-    Transformer class for generating adjacency matrices 
+    Transformer class for generating adjacency matrices
     from connectivity matrices. Selects the top x percent
     of connections and sets all other connections to zero
 

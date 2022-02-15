@@ -1,6 +1,4 @@
 import numpy as np
-import dgl
-import torch
 from photonai_graph.NeuralNets.dgl_base import DGLmodel
 from photonai_graph.NeuralNets.NNModels import GCNClassifier
 
@@ -52,7 +50,8 @@ class GCNClassifierModel(DGLmodel):
         # get data loader
         data_loader = self.get_data_loader(X_trans, y)
         # specify model with optimizer etc
-        self.model = GCNClassifier(self.in_dim, self.hidden_dim, len(np.unique(y)), self.hidden_layers)  # set model class (import from NN.models)
+        # set model class (import from NN.models)
+        self.model = GCNClassifier(self.in_dim, self.hidden_dim, len(np.unique(y)), self.hidden_layers)
         # get optimizers
         loss_func, optimizer = self.get_classifier()
         # train model
