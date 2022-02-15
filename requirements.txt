@@ -6,3 +6,6 @@ grakel @ git+https://github.com/ysig/GraKeL.git@cfd14e0543075308d201327ac778a486
 pandas>=1.1.2
 numpy>=1.12.2
 scipy>=0.19.1
+tensorflow
+torch
+dgl
