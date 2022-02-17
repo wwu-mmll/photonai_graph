@@ -1,9 +1,9 @@
 #photonai
 git+https://github.com/wwu-mmll/photonai.git@develop
-networkx
+networkx~=2.4
 pydot
 dgl
-gem @ git+https://github.com/jernsting/GEM.git
+nxt_gem @ git+https://github.com/jernsting/nxt_gem.git
 grakel
 pandas
 numpy
