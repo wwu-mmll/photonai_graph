@@ -1,11 +1,12 @@
-photonai
+#photonai
+git+https://github.com/wwu-mmll/photonai.git@develop
 networkx
 pydot
-gem @ git+https://github.com/palash1992/GEM.git
+dgl
+gem @ git+https://github.com/jernsting/GEM.git
 grakel
 pandas
 numpy
 scipy
 tensorflow
 torch
-dgl
