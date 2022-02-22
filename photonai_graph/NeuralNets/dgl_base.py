@@ -26,30 +26,30 @@ class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
                  feature_axis: int = 1,
                  add_self_loops: bool = True,
                  allow_zero_in_degree: bool = False,
-                 logs=''):
+                 logs: str = None):
         """
         Base class for DGL based graph neural networks. Implements
-        helper functions and shared paramtersused by other models.
+        helper functions and shared parameters used by other models.
         Implementation based on gem python package.
 
 
         Parameters
         ----------
-        nn_epochs: int, default=200
+        nn_epochs: int,default=200
             the number of epochs which a model is trained
-        learning_rate: float, default=0.001
+        learning_rate: float,default=0.001
             the learning rate when training the model
-        batch_size: int, default=32
+        batch_size: int,default=32
             number of samples per training batch
-        adjacency_axis: int, default=0
+        adjacency_axis: int,default=0
             position of the adjacency matrix, default being zero
-        feature_axis: int, default=1
+        feature_axis: int,default=1
             position of the feature matrix
-        add_self_loops: bool, default=True
+        add_self_loops: bool,default=True
             self loops are added if true
-        allow_zero_in_degree: bool, default=False
+        allow_zero_in_degree: bool,default=False
             If true the zero in degree test of dgl is disabled
-        logs: str, default=None
+        logs: str,default=None
             Path to the log data
 
         """

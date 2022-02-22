@@ -4,22 +4,6 @@ from photonai_graph.NeuralNets.NNModels import SGConvClassifier
 
 
 class SGConvClassifierModel(DGLmodel):
-    """
-    Graph convolutional network for graph classification. Simple Graph
-    convolutional layers from Wu, Felix, et al., 2018.
-    Implementation based on dgl & pytorch.
-
-
-    Parameters
-    ----------
-    * `in_dim` [int, default=1]:
-        input dimension
-    * `hidden_layers` [int, default=2]:
-        number of hidden layers used by the model
-    * `hidden_dim` [int, default=256]:
-        dimensions in the hidden layers
-
-    """
 
     def __init__(self,
                  in_dim: int = 1,
@@ -31,6 +15,22 @@ class SGConvClassifierModel(DGLmodel):
                  adjacency_axis: int = 0,
                  feature_axis: int = 1,
                  logs: str = ''):
+        """
+        Graph convolutional network for graph classification. Simple Graph
+        convolutional layers from Wu, Felix, et al., 2018.
+        Implementation based on dgl & pytorch.
+
+
+        Parameters
+        ----------
+        in_dim: int,default=1
+            input dimension
+        hidden_layers: int,default=2
+            number of hidden layers used by the model
+        hidden_dim: int,default=256
+            dimensions in the hidden layers
+
+        """
         super(SGConvClassifierModel, self).__init__(nn_epochs=nn_epochs,
                                                     learning_rate=learning_rate,
                                                     batch_size=batch_size,

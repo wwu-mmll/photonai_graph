@@ -3,23 +3,6 @@ from photonai_graph.NeuralNets.NNModels import GCNClassifier
 
 
 class GCNRegressorModel(DGLmodel):
-    """
-    Graph convolutional Network for graph regression. GCN Layers
-    from Kipf & Welling, 2017. Implementation based on dgl & pytorch.
-
-
-    Parameters
-    ----------
-    * `in_dim` [int, default=1]:
-        input dimension
-    * `hidden_layers` [int, default=2]:
-        number of hidden layers used by the model
-    * `hidden_dim` [int, default=256]:
-        dimensions in the hidden layers
-    * `heads` [list, default=None]:
-        list with number of heads per hidden layer
-
-    """
 
     def __init__(self,
                  in_dim: int = 1,
@@ -32,6 +15,21 @@ class GCNRegressorModel(DGLmodel):
                  allow_zero_in_degree: bool = False,
                  feature_axis: int = 1,
                  logs: str = ''):
+        """
+        Graph convolutional Network for graph regression. GCN Layers
+        from Kipf & Welling, 2017. Implementation based on dgl & pytorch.
+
+
+        Parameters
+        ----------
+        in_dim: int,default=1
+            input dimension
+        hidden_layers: int,default=2
+            number of hidden layers used by the model
+        hidden_dim: int,default=256
+            dimensions in the hidden layers
+
+        """
         super(GCNRegressorModel, self).__init__(nn_epochs=nn_epochs,
                                                 learning_rate=learning_rate,
                                                 batch_size=batch_size,
