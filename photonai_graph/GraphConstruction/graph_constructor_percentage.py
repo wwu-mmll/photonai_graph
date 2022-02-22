@@ -14,7 +14,7 @@ class GraphConstructorPercentage(GraphConstructor):
     Parameters
     ----------
     * `percentage` [float]:
-        value of percent of connections to discard. A value of 0.9 keeps only the top 10%
+        value of percent of connections to discard. A value of 90 keeps only the top 10%
     * `retain_weights` [int]:
         whether to retain weight values or not
 
@@ -25,7 +25,7 @@ class GraphConstructorPercentage(GraphConstructor):
                                                  use_abs=1)
    """
 
-    def __init__(self, percentage: float = 0.8,
+    def __init__(self, percentage: float = 80,
                  retain_weights: int = 0,
                  transform_style: str = "individual",
                  one_hot_nodes: int = 0,

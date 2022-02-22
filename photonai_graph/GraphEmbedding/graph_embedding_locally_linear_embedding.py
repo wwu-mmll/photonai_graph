@@ -1,5 +1,8 @@
 from photonai_graph.GraphEmbedding.graph_embedding_base import GraphEmbeddingBase
-from gem.embedding.lle import LocallyLinearEmbedding
+try:
+    from gem.embedding.lle import LocallyLinearEmbedding
+except ImportError:
+    pass
 
 
 class GraphEmbeddingLocallyLinearEmbedding(GraphEmbeddingBase):

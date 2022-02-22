@@ -64,15 +64,15 @@
       "Estimator"
    ],
    "GATRegressor": [
-      "photonai_graph.Neural_Nets.NNRegressor.gat_regressor.GATRegressorModel",
+      "photonai_graph.NeuralNets.NNRegressor.gat_regressor.GATRegressorModel",
       "Estimator"
    ],
    "GCNRegressor": [
-      "photonai_graph.Neural_Nets.NNRegressor.gcn_regressor.GCNRegressorModel",
+      "photonai_graph.NeuralNets.NNRegressor.gcn_regressor.GCNRegressorModel",
       "Estimator"
    ],
    "SGCRegressor": [
-      "photonai_graph.Neural_Nets.NNRegressor.sgc_regressor.SGCRegressorModel",
+      "photonai_graph.NeuralNets.NNRegressor.sgc_regressor.SGCRegressorModel",
       "Estimator"
    ],
    "GrakelAdapter": [
@@ -145,6 +145,10 @@
    ],
    "CoreFramework": [
       "grakel.CoreFramework",
+      "Transformer"
+   ],
+   "CofluctTransform": [
+      "photonai_graph.DynamicUtils.cofluct_transform.CofluctTransform",
       "Transformer"
    ]
 }

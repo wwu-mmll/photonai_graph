@@ -4,24 +4,6 @@ from photonai_graph.NeuralNets.NNModels import GCNClassifier
 
 
 class GCNClassifierModel(DGLmodel):
-    """
-    Graph Attention Network for graph classification. GCN Layers
-    from Kipf & Welling, 2017.
-    Implementation based on dgl & pytorch.
-
-
-    Parameters
-    ----------
-    * `in_dim` [int, default=1]:
-        input dimension
-    * `hidden_layers` [int, default=2]:
-        number of hidden layers used by the model
-    * `hidden_dim` [int, default=256]:
-        dimensions in the hidden layers
-    * `heads` [list, default=None]:
-        list with number of heads per hidden layer
-
-    """
 
     def __init__(self,
                  in_dim: int = 1,
@@ -32,12 +14,30 @@ class GCNClassifierModel(DGLmodel):
                  batch_size: int = 32,
                  adjacency_axis: int = 0,
                  feature_axis: int = 1,
+                 allow_zero_in_degree: bool = False,
                  logs: str = ''):
+        """
+        Graph Attention Network for graph classification. GCN Layers
+        from Kipf & Welling, 2017.
+        Implementation based on dgl & pytorch.
+
+
+        Parameters
+        ----------
+        in_dim: int, default=1
+            input dimension
+        hidden_layers: int, default=2
+            number of hidden layers used by the model
+        hidden_dim: int, default=256
+            dimensions in the hidden layers
+
+        """
         super(GCNClassifierModel, self).__init__(nn_epochs=nn_epochs,
                                                  learning_rate=learning_rate,
                                                  batch_size=batch_size,
                                                  adjacency_axis=adjacency_axis,
                                                  feature_axis=feature_axis,
+                                                 allow_zero_in_degree=allow_zero_in_degree,
                                                  logs=logs)
         self.in_dim = in_dim
         self.hidden_dim = hidden_dim
@@ -51,7 +51,11 @@ class GCNClassifierModel(DGLmodel):
         data_loader = self.get_data_loader(X_trans, y)
         # specify model with optimizer etc
         # set model class (import from NN.models)
-        self.model = GCNClassifier(self.in_dim, self.hidden_dim, len(np.unique(y)), self.hidden_layers)
+        self.model = GCNClassifier(self.in_dim,
+                                   self.hidden_dim,
+                                   len(np.unique(y)),
+                                   self.hidden_layers,
+                                   allow_zero_in_degree=self.allow_zero_in_degree)
         # get optimizers
         loss_func, optimizer = self.get_classifier()
         # train model

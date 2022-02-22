@@ -1,5 +1,6 @@
 from sklearn.base import BaseEstimator, TransformerMixin
 from photonai_graph.GraphConversions import dense_to_networkx
+from photonai_graph.util import assert_imported
 from abc import ABC
 import numpy as np
 import os
@@ -34,6 +35,7 @@ class GraphEmbeddingBase(BaseEstimator, TransformerMixin, ABC):
             self.logs = logs
         else:
             self.logs = os.getcwd()
+        assert_imported(["gem"])
 
     def fit(self, X, y):
         return self

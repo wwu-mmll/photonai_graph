@@ -1,7 +1,11 @@
 from sklearn.base import BaseEstimator, ClassifierMixin
 from photonai_graph.GraphConversions import get_dense_feature, get_dense_edge_features
-from grakel import graph
-import grakel
+from photonai_graph.util import assert_imported
+try:
+    from grakel import graph
+    import grakel
+except ImportError:
+    pass
 
 
 class GrakelAdapter(BaseEstimator, ClassifierMixin):
@@ -39,6 +43,7 @@ class GrakelAdapter(BaseEstimator, ClassifierMixin):
         self.node_feature_construction = node_feature_construction
         self.feature_axis = feature_axis
         self.adjacency_axis = adjacency_axis
+        assert_imported(["grakel"])
 
     def fit(self, X, y):
         return self
