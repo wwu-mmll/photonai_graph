@@ -8,36 +8,6 @@ from photonai_graph.GraphConstruction.graph_constructor import GraphConstructor
 class GraphConstructorSpatial(GraphConstructor):
     _estimator_type = "transformer"
 
-    """
-    Transformer class for generating adjacency matrices
-    from connectivity matrices. Selects the k nearest
-    neighbours for each node based on spatial distance
-    of the coordinates in the chosen atlas.
-    Adapted from Ktena et al, 2017.
-
-
-    Parameters
-    ----------
-    * `k_distance` [int]:
-        the k nearest neighbours value, for the kNN algorithm.
-    * `transform_style` [str, default="mean"]:
-        generate an adjacency matrix based on the mean matrix like in Ktena et al.: "mean"
-        Or generate a different matrix for every individual: "individual"
-    * `atlas_name` [str, default="ho"]:
-        name of the atlas coordinate file
-    * `atlas_path` [str, default="ho"]:
-        path to the atlas coordinate file
-
-    Example
-    -------
-        constructor = GraphConstructorSpatial(k_distance=7,
-                                              transform_style="individual",
-                                              atlas_name="ho_coords.csv",
-                                              atlas_path="path/to/your/data/",
-                                              fisher_transform=1,
-                                              use_abs=1)
-   """
-
     def __init__(self,
                  k_distance: int = 10,
                  atlas_name: str = 'ho',
@@ -49,8 +19,62 @@ class GraphConstructorSpatial(GraphConstructor):
                  zscore: int = 0,
                  use_abs_zscore: int = 0,
                  adjacency_axis: int = 0,
-                 logs: str = ''
+                 logs: str = None
                  ):
+        """
+        Transformer class for generating adjacency matrices
+        from connectivity matrices. Selects the k nearest
+        neighbours for each node based on spatial distance
+        of the coordinates in the chosen atlas.
+        Adapted from Ktena et al, 2017.
+
+
+        Parameters
+        ----------
+        k_distance: int
+            the k nearest neighbours value, for the kNN algorithm.
+        transform_style: str, default="mean"
+            generate an adjacency matrix based on the mean matrix like in Ktena et al.: "mean"
+            Or generate a different matrix for every individual: "individual"
+        atlas_name: str,default="ho"
+            name of the atlas coordinate file
+        atlas_folder: str,default="ho"
+            path to the atlas coordinate file
+        adjacency_axis: int,default=0
+            position of the adjacency matrix, default being zero
+        one_hot_nodes: int,default=0
+            Whether to generate a one hot encoding of the nodes in the matrix (1) or not (0)
+        fisher_transform: int,default=0
+            whether to perform a fisher transform of each matrix (1) or not (0)
+        use_abs: int,default=0
+            changes the values to absolute values. Is applied after fisher transform and before z-score transformation
+        zscore: int,default=0
+            performs a zscore transformation of the data. Applied after fisher transform and np_abs
+        use_abs_zscore: int,default=0
+            whether to use the absolute values of the z-score transformation or allow for negative values
+
+
+        Example
+        -------
+        Use outside of a PHOTON pipeline
+
+        ```python
+        constructor = GraphConstructorSpatial(k_distance=7,
+                                              transform_style="individual",
+                                              atlas_name="ho_coords.csv",
+                                              atlas_path="path/to/your/data/",
+                                              fisher_transform=1,
+                                              use_abs=1)
+        ```
+
+        Or as part of a pipeline
+
+        ```python
+        my_pipe.add(PipelineElement('GraphConstructorSpatial',
+                                    hyperparameters={'k_distance': 7, 'transform_style': "individual",
+                                    'atlas_name': "ho_coords.csv", 'atlas_path': "path/to/your/data/"}))
+        ```
+       """
         super(GraphConstructorSpatial, self).__init__(transform_style=transform_style,
                                                       one_hot_nodes=one_hot_nodes,
                                                       fisher_transform=fisher_transform,

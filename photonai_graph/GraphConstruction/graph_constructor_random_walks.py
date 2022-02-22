@@ -6,41 +6,6 @@ from photonai_graph.GraphConstruction.graph_constructor import GraphConstructor
 class GraphConstructorRandomWalks(GraphConstructor):
     _estimator_type = "transformer"
 
-    """
-    Transformer class for generating adjacency matrices
-    from connectivity matrices. Generates a kNN matrix
-    and performs random walks on these. The coocurrence
-    of two nodes in those walks is then used to generate
-    a higher-order adjacency matrix, by applying the kNN
-    algorithm on the matrix again.
-    Adapted from Ma et al., 2019.
-
-
-    Parameters
-    ----------
-    * `k_distance` [int]:
-        the k nearest neighbours value, for the kNN algorithm.
-    * `transform_style` [str, default="mean"]:
-        generate an adjacency matrix based on the mean matrix like in Ktena et al.: "mean" or per person "individual"
-        Or generate a different matrix for every individual: "individual"
-    * `number_of_walks` [int, default=10]:
-        number of walks to take to sample the random walk matrix
-    * `walk_length` [int, default=10]:
-        length of the random walk, as the number of steps
-    * `window_size` [int, default=5]:
-        size of the sliding window from which to sample to coocurrence of two nodes
-    * `no_edge_weight` [int, default=1]:
-        whether to return an edge weight (0) or not (1)
-
-    Example
-    -------
-        constructor = GraphConstructorRandomWalks(k_distance=5,
-                          transform_style="individual",
-                          number_of_walks=25,
-                          fisher_transform=1,
-                          use_abs=1)
-   """
-
     def __init__(self,
                  k_distance: int = 10,
                  number_of_walks: int = 10,
@@ -55,7 +20,66 @@ class GraphConstructorRandomWalks(GraphConstructor):
                  zscore: int = 0,
                  use_abs_zscore: int = 0,
                  adjacency_axis: int = 0,
-                 logs: str = ''):
+                 logs: str = None):
+        """
+        Transformer class for generating adjacency matrices
+        from connectivity matrices. Generates a kNN matrix
+        and performs random walks on these. The coocurrence
+        of two nodes in those walks is then used to generate
+        a higher-order adjacency matrix, by applying the kNN
+        algorithm on the matrix again.
+        Adapted from Ma et al., 2019.
+
+
+        Parameters
+        ----------
+        k_distance: int
+            the k nearest neighbours value, for the kNN algorithm.
+        transform_style: str,default="mean"
+            generate an adjacency matrix based on the mean matrix like in Ktena et al.: "mean" or per person "individual"
+            Or generate a different matrix for every individual: "individual"
+        number_of_walks: int,default=10
+            number of walks to take to sample the random walk matrix
+        walk_length: int,default=10
+            length of the random walk, as the number of steps
+        window_size: int,default=5
+            size of the sliding window from which to sample to coocurrence of two nodes
+        no_edge_weight: int,default=1
+            whether to return an edge weight (0) or not (1)
+        adjacency_axis: int,default=0
+            position of the adjacency matrix, default being zero
+        one_hot_nodes: int,default=0
+            Whether to generate a one hot encoding of the nodes in the matrix (1) or not (0)
+        fisher_transform: int,default=0
+            whether to perform a fisher transform of each matrix (1) or not (0)
+        use_abs: int,default=0
+            changes the values to absolute values. Is applied after fisher transform and before z-score transformation
+        zscore: int,default=0
+            performs a zscore transformation of the data. Applied after fisher transform and np_abs
+        use_abs_zscore: int,default=0
+            whether to use the absolute values of the z-score transformation or allow for negative values
+
+
+        Example
+        -------
+        Use outside of a PHOTON pipeline
+
+        ```python
+        constructor = GraphConstructorRandomWalks(k_distance=5,
+                                                  transform_style="individual",
+                                                  number_of_walks=25,
+                                                  fisher_transform=1,
+                                                  use_abs=1)
+        ```
+
+        Or as part of a pipeline
+
+        ```python
+        my_pipe.add(PipelineElement('GraphConstructorRandomWalks',
+                                    hyperparameters={'k_distance': 5, 'transform_style': "individual",
+                                    'number_of_walks': 25}))
+        ```
+       """
         super(GraphConstructorRandomWalks, self).__init__(transform_style=transform_style,
                                                           one_hot_nodes=one_hot_nodes,
                                                           fisher_transform=fisher_transform,

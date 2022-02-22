@@ -10,33 +10,41 @@ except ImportError:
 
 class GrakelAdapter(BaseEstimator, ClassifierMixin):
 
-    """
-    A transformer class for transforming graphs into Grakel format.
-
-
-    Parameters
-    ----------
-    * `input_type` [str, default="dense"]
-        the type of the input, dense or networkx
-    * `node_labels` [list, default=None]
-        a list of the node labels, needed for shortest path kernel
-    * `adjacency_axis` [int, default=0]
-        position of the adjacency matrix, default being zero
-
-
-    Example
-    ----------
-        converter = GrakelAdapter(node_labels=list(range(X.shape[1])))
-    """
-
     def __init__(self,
                  input_type: str = "dense",
                  node_labels: dict = None,
                  edge_labels: dict = None,
                  node_feature_construction: str = "mean",
-                 return_type: str = "float",
                  feature_axis: int = 1,
                  adjacency_axis: int = 0):
+        """
+        A transformer class for transforming graphs into Grakel format.
+
+
+        Parameters
+        ----------
+        input_type: str,default="dense"
+            the type of the input, dense or networkx
+        node_labels: list,default=None
+            a list of the node labels, needed for shortest path kernel
+        edge_labels: dict,default=None
+            list of edge labels if graphs are constructed from networkx graphs
+        node_feature_construction: str,default="mean"
+            mode of feature construction for graphs constructed from adjacency matrices. "mean" takes the mean of the
+            nodes edge weights, "sum" takes the sum of the nodes edge weights, "degree" takes the node degree,
+             and "features" takes the nodes features as supplied in the feature matrix.
+        adjacency_axis: int,default=0
+            position of the adjacency matrix, default being zero
+        feature_axis: int,default=1
+            position of the feature axis, default being 1
+
+
+        Example
+        ----------
+        ```python
+        adapter = GrakelAdapter(input_type="dense", node_feature_construction="features")
+        ```
+        """
         self.input_type = input_type
         self.node_labels = node_labels
         self.edge_labels = edge_labels

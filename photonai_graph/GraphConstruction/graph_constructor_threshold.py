@@ -24,18 +24,46 @@ class GraphConstructorThreshold(GraphConstructor):
 
         Parameters
         ----------
-        threshold: float:
+        threshold: float
             threshold value below which to set matrix entries to zero
+        adjacency_axis: int, default=0
+            position of the adjacency matrix, default being zero
+        concatenation_axis: int
+            axis along which to concatenate the adjacency and feature matrix
+        one_hot_nodes: int
+            Whether to generate a one hot encoding of the nodes in the matrix (1) or not (0)
+        return_adjacency_only: int
+            whether to return the adjacency matrix only (1) or also a feature matrix (0)
+        fisher_transform: int
+            whether to perform a fisher transform of each matrix (1) or not (0)
+        use_abs: int, default=0
+            changes the values to absolute values. Is applied after fisher transform and before z-score transformation
+        zscore: int, default=0
+            performs a zscore transformation of the data. Applied after fisher transform and np_abs
+        use_abs_zscore:
+            whether to use the absolute values of the z-score transformation or allow for negative values
         retain_weights: int
             whether to retain weight values or not
         logs: str, default=None
             Path to the log data
 
+
         Example
         -------
-            constructor = GraphConstructorThreshold(threshold=0.5,
-                                                    fisher_transform=1,
-                                                    use_abs=1)
+        Use outside of a PHOTON pipeline
+
+        ```python
+        constructor = GraphConstructorThreshold(threshold=0.5,
+                                                fisher_transform=1,
+                                                use_abs=1)
+        ```
+
+        Or as part of a pipeline
+
+        ```python
+        my_pipe.add(PipelineElement('GraphConstructorThreshold',
+                                    hyperparameters={'threshold': 0.5}))
+        ```
        """
         super(GraphConstructorThreshold, self).__init__(transform_style=transform_style,
                                                         one_hot_nodes=one_hot_nodes,
