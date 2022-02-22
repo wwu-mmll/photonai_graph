@@ -6,14 +6,14 @@ from photonai_graph.NeuralNets.NNLayers import GATLayer
 
 
 class GCNClassifier(nn.Module):
-    def __init__(self, in_dim, hidden_dim, n_classes, hidden_layers):
+    def __init__(self, in_dim, hidden_dim, n_classes, hidden_layers, allow_zero_in_degree):
         super(GCNClassifier, self).__init__()
         self.layers = nn.ModuleList()
         # input layers
-        self.layers.append(GraphConv(in_dim, hidden_dim))
+        self.layers.append(GraphConv(in_dim, hidden_dim, allow_zero_in_degree=allow_zero_in_degree))
         # hidden layers
         for layer in range(1, hidden_layers):
-            self.layers.append(GraphConv(hidden_dim, hidden_dim))
+            self.layers.append(GraphConv(hidden_dim, hidden_dim, allow_zero_in_degree=allow_zero_in_degree))
         self.classify = nn.Linear(hidden_dim, n_classes)
 
     def forward(self, g):
