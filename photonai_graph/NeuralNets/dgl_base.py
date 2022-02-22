@@ -1,3 +1,4 @@
+import warnings
 from abc import ABC
 import os
 from photonai_graph.util import assert_imported
@@ -17,40 +18,50 @@ except ImportError:
 
 class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
     _estimator_type = "classifier"
-    """
-    Base class for DGL based graph neural networks. Implements 
-    helper functions and shared paramtersused by other models. 
-    Implementation based on gem python package.
-
-
-    Parameters
-    ----------
-    * `nn_epochs` [int, default=200]:
-        the number of epochs which a model is trained
-    * `learning_rate` [float, default=0.001]:
-        the learning rate when training the model
-    * `batch_size` [int, default=32]:
-        number of samples per training batch
-    * `adjacency_axis` [int, default=0]:
-        position of the adjacency matrix, default being zero
-    * `feature_axis` [int, default=1]
-        position of the feature matrix
-    * `logs` [str, default=None]:
-        Path to the log data
-
-    """
 
     def __init__(self, nn_epochs: int = 200,
                  learning_rate: float = 0.001,
                  batch_size: int = 32,
                  adjacency_axis: int = 0,
                  feature_axis: int = 1,
+                 add_self_loops: bool = True,
+                 allow_zero_in_degree: bool = False,
                  logs=''):
+        """
+        Base class for DGL based graph neural networks. Implements
+        helper functions and shared paramtersused by other models.
+        Implementation based on gem python package.
+
+
+        Parameters
+        ----------
+        nn_epochs: int, default=200
+            the number of epochs which a model is trained
+        learning_rate: float, default=0.001
+            the learning rate when training the model
+        batch_size: int, default=32
+            number of samples per training batch
+        adjacency_axis: int, default=0
+            position of the adjacency matrix, default being zero
+        feature_axis: int, default=1
+            position of the feature matrix
+        add_self_loops: bool, default=True
+            self loops are added if true
+        allow_zero_in_degree: bool, default=False
+            If true the zero in degree test of dgl is disabled
+        logs: str, default=None
+            Path to the log data
+
+        """
         self.nn_epochs = nn_epochs
         self.learning_rate = learning_rate
         self.batch_size = batch_size
         self.adjacency_axis = adjacency_axis
         self.feature_axis = feature_axis
+        self.add_self_loops = add_self_loops
+        self.allow_zero_in_degree = allow_zero_in_degree
+        if self.add_self_loops and not self.allow_zero_in_degree:
+            warnings.warn('If self loops are added allow_zero_in_degree should be false!')
         self.model = None
         if logs:
             self.logs = logs
@@ -100,7 +111,8 @@ class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
     def get_data_loader(self, x_trans, y):
         """returns data in a data loader format"""
         # add a self loop for 0-in-degree nodes
-        x_san = [dgl.add_self_loop(x) for x in x_trans]
+        if self.add_self_loops:
+            x_san = [dgl.add_self_loop(x) for x in x_trans]
         # create dataloader
         data = DGLData(zip_data(x_san, y))
         data_loader = GraphDataLoader(data, batch_size=self.batch_size, shuffle=True, collate_fn=self.collate)

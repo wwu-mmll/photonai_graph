@@ -30,6 +30,6 @@ my_pipe = Hyperpipe('basic_gcn_pipe',
 
 my_pipe.add(PipelineElement('GraphConstructorThreshold', threshold=0.95))
 
-my_pipe.add(PipelineElement('GCNClassifier', feature_axis=0))
+my_pipe.add(PipelineElement('GCNClassifier', feature_axis=0, allow_zero_in_degree=True))
 
 my_pipe.fit(graphs, labels)
