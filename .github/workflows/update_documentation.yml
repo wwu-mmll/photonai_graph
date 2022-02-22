@@ -1,0 +1,29 @@
+name: Publish docs via GitHub Pages
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Deploy docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v2
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install mkdocs requirements
+        run: pip install mkdocs mkdocs-material pymdown-extensions mkdocstrings-python
+
+      - name: Install photonai_graph requirements
+        run: pip install -r requirements.txt
+
+      - name: Deploy docs
+        run: |
+          cd documentation
+          PYTHONPATH=.. mkdocs gh-deploy --force

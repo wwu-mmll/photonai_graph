@@ -17,8 +17,8 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
                  use_abs: int = 0,
                  zscore: int = 0,
                  use_abs_zscore: int = 0,
-                 adjacency_axis=0,
-                 logs: str = ''):
+                 adjacency_axis: int = 0,
+                 logs: str = None):
         """
         Base class for all graph constructors. Implements
         methods shared by different constructors.
@@ -41,6 +41,8 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
             values. Applied after fisher transform, use_abs and zscore
         adjacency_axis: int, default=0
             position of the adjacency matrix, default being zero
+        logs: str, default=None
+            Path to the log data
         """
         self.transform_style = transform_style
         self.one_hot_nodes = one_hot_nodes

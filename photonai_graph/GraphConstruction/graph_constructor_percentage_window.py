@@ -5,26 +5,6 @@ from photonai_graph.GraphConstruction.graph_constructor import GraphConstructor
 class GraphConstructorPercentageWindow(GraphConstructor):
     _estimator_type = "transformer"
 
-    """
-    Transformer class for generating adjacency matrices
-    from connectivity matrices. Selects the top x percent
-    of connections and sets all other connections to zero
-
-
-    Parameters
-    ----------
-    * `percentage_upper` [float]:
-        upper limit of the percentage window
-    * `percentage_lower` [float]:
-        lower limit of the percentage window
-
-    Example
-    -------
-        constructor = GraphConstructorPercentageWindow(percentage=0.9,
-                                                       fisher_transform=1,
-                                                       use_abs=1)
-   """
-
     def __init__(self,
                  percentage_upper: float = 50,
                  percentage_lower: float = 10,
@@ -36,8 +16,51 @@ class GraphConstructorPercentageWindow(GraphConstructor):
                  zscore: int = 0,
                  use_abs_zscore: int = 0,
                  adjacency_axis: int = 0,
-                 logs: str = ''
+                 logs: str = None
                  ):
+        """
+        Transformer class for generating adjacency matrices
+        from connectivity matrices. Selects the top x percent
+        of connections and sets all other connections to zero
+
+
+        Parameters
+        ----------
+        percentage_upper: float
+            upper limit of the percentage window
+        percentage_lower: float
+            lower limit of the percentage window
+        adjacency_axis: int
+            position of the adjacency matrix, default being zero
+        one_hot_nodes: int
+            Whether to generate a one hot encoding of the nodes in the matrix (1) or not (0)
+        fisher_transform: int
+            whether to perform a fisher transform of each matrix (1) or not (0)
+        use_abs: int,default=0
+            changes the values to absolute values. Is applied after fisher transform and before z-score transformation
+        zscore: int,default=0
+            performs a zscore transformation of the data. Applied after fisher transform and np_abs
+        use_abs_zscore: int,default=0
+            whether to use the absolute values of the z-score transformation or allow for negative values
+
+        Example
+        -------
+        Use outside of a PHOTON pipeline
+
+        ```python
+        constructor = GraphConstructorPercentageWindow(percentage_upper=0.9,
+                                                       percentage_lower=0.7
+                                                       fisher_transform=1,
+                                                       use_abs=1)
+        ```
+
+        Or as part of a pipeline
+
+        ```python
+        my_pipe.add(PipelineElement('GraphConstructorPercentageWindow',
+                                    hyperparameters={'percentage_upper': 0.9, 'percentage_lower': 0.7}))
+        ```
+       """
         super(GraphConstructorPercentageWindow, self).__init__(transform_style=transform_style,
                                                                one_hot_nodes=one_hot_nodes,
                                                                fisher_transform=fisher_transform,

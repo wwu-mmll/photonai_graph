@@ -39,9 +39,32 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self,
                  graph_functions: dict = None,
-                 logs='',
+                 logs: str = None,
                  n_processes: int = 1):
+        """The GraphMeasureTransform class is a class for extracting graph measures from graphs.
+        A range of networkx graph measures is available and can be used in a PHOTON pipeline or extracted and
+        written to a csv file for further use.
 
+        Parameters
+        ----------
+        graph_functions: dict,default=None
+            a dict of graph functions to calculate with keys as the networkx function name and a dict of the arguments
+            as the value. In this second dictionary, the keys are the functions arguments and values are the desired
+            values for the argument.
+        logs: str,default=None
+            path to the log data
+        n_processes: str,default=None
+            Number of processes for multi processing
+
+        Examples
+        --------
+        ```python
+        measuretrans = GraphMeasureTransform(graph_functions={"large_clique_size": {},
+                                                              "global_efficiency": {},
+                                                              "overall_reciprocity": {},
+                                                              "local_efficiency": {}})
+        ```
+        """
         self.n_processes = n_processes
         if graph_functions is None:
             graph_functions = {"global_efficiency": {}, "average_node_connectivity": {}}

@@ -13,40 +13,37 @@ except ImportError:
 class GraphEmbeddingHOPE(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
-    """
-    Transformer class for calculating a Graph Embedding
-    based on Higher-order proximity preserved embedding
-    (Mingdong et al., 2016).
-    Implementation based on gem python package.
-
-
-    Parameters
-    ----------
-    * `embedding_dimension` [int, default=1]:
-        the number of dimensions that the final embedding will have
-    * `decay_factor` [ifloat, default=0.01]
-        the higher order coefficient beta
-    * `adjacency_axis` [int, default=0]:
-        position of the adjacency matrix, default being zero
-    * `verbosity` [int, default=0]:
-        The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
-    * `logs` [str, default=None]:
-        Path to the log data
-
-
-
-    Example
-    -------
-        constructor = GraphEmbeddingHOPE(embedding_dimension=1,
-                                          decay_factor=0.1)
-    """
-
     def __init__(self,
-                 embedding_dimension=1,
-                 decay_factor=0.01,
+                 embedding_dimension: int = 1,
+                 decay_factor: float = 0.01,
                  construction_axis=0,
-                 adjacency_axis=0,
-                 logs=''):
+                 adjacency_axis: int = 0,
+                 logs: str = None):
+        """
+        Transformer class for calculating a Graph Embedding
+        based on Higher-order proximity preserved embedding
+        (Mingdong et al., 2016).
+        Implementation based on gem python package.
+
+
+        Parameters
+        ----------
+        embedding_dimension: int,default=1
+            the number of dimensions that the final embedding will have
+        decay_factor: float,default=0.01
+            the higher order coefficient beta
+        adjacency_axis: int,default=0
+            position of the adjacency matrix, default being zero
+        logs: str,default=None
+            Path to the log data
+
+
+
+        Example
+        -------
+            constructor = GraphEmbeddingHOPE(embedding_dimension=1,
+                                             decay_factor=0.1)
+        """
         self.embedding_dimension = embedding_dimension
         self.decay_factor = decay_factor
         self.construction_axis = construction_axis
