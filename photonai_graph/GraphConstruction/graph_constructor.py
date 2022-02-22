@@ -10,30 +10,6 @@ from photonai_graph.GraphUtilities import individual_ztransform, individual_fish
 class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
     _estimator_type = "transformer"
 
-    """
-    Base class for all graph constructors. Implements
-    methods shared by different constructors.
-
-    Parameters
-    ----------
-    * `transform_style` [str, default="mean"]
-    * `one_hot_nodes` [int, default=0]
-        whether to return a one hot node encoding as feature or not
-    * `fisher_transform` [int, default=0]:
-        whether to perform a fisher transform of every matrix
-    * `use_abs` [int]:
-        Changes the values to absolute values. Is applied after fisher transform and before
-        z-score transformation
-    * `zscore` [int, default=0]:
-        performs a zscore transformation of the data. Applied after fisher transform and np_abs
-        eval_final_perfomance is set to True
-    * `use_abs_zscore` [int, default=0]:
-        whether to use the absolute values of the z-score transformation or allow for negative
-        values. Applied after fisher transform, use_abs and zscore
-    * `adjacency_axis` [int, default=0]:
-        position of the adjacency matrix, default being zero
-    """
-
     def __init__(self,
                  transform_style: str = "mean",
                  one_hot_nodes: int = 0,
@@ -43,6 +19,29 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
                  use_abs_zscore: int = 0,
                  adjacency_axis=0,
                  logs: str = ''):
+        """
+        Base class for all graph constructors. Implements
+        methods shared by different constructors.
+
+        Parameters
+        ----------
+        transform_style: str, default="mean"
+        one_hot_nodes: int, default=0
+            whether to return a one hot node encoding as feature or not
+        fisher_transform: int, default=0
+            whether to perform a fisher transform of every matrix
+        use_abs: int
+            Changes the values to absolute values. Is applied after fisher transform and before
+            z-score transformation
+        zscore: int, default=0
+            performs a zscore transformation of the data. Applied after fisher transform and np_abs
+            eval_final_perfomance is set to True
+        use_abs_zscore: int, default=0
+            whether to use the absolute values of the z-score transformation or allow for negative
+            values. Applied after fisher transform, use_abs and zscore
+        adjacency_axis: int, default=0
+            position of the adjacency matrix, default being zero
+        """
         self.transform_style = transform_style
         self.one_hot_nodes = one_hot_nodes
         self.fisher_transform = fisher_transform
