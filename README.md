@@ -24,7 +24,7 @@ pip install grakel
 For graph embeddings the gem python package is needed, along with tensorflow. Please install tensorflow according to your system.
 
 ```bash
-pip install git+https://github.com/palash1992/GEM.git@5da663255da28c433c42b296c8ceed7163f2d509
+pip install git+https://github.com/jernsting/nxt_gem.git
 pip install tensorflow
 ```
 
