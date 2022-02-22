@@ -24,11 +24,11 @@ class GCNClassifierModel(DGLmodel):
 
         Parameters
         ----------
-        in_dim: int, default=1
+        in_dim: int,default=1
             input dimension
-        hidden_layers: int, default=2
+        hidden_layers: int,default=2
             number of hidden layers used by the model
-        hidden_dim: int, default=256
+        hidden_dim: int,default=256
             dimensions in the hidden layers
 
         """
