@@ -29,6 +29,7 @@ class GCNRegressorModel(DGLmodel):
                  learning_rate: float = 0.001,
                  batch_size: int = 32,
                  adjacency_axis: int = 0,
+                 allow_zero_in_degree: bool = False,
                  feature_axis: int = 1,
                  logs: str = ''):
         super(GCNRegressorModel, self).__init__(nn_epochs=nn_epochs,
@@ -36,6 +37,7 @@ class GCNRegressorModel(DGLmodel):
                                                 batch_size=batch_size,
                                                 adjacency_axis=adjacency_axis,
                                                 feature_axis=feature_axis,
+                                                allow_zero_in_degree=allow_zero_in_degree,
                                                 logs=logs)
         self.in_dim = in_dim
         self.hidden_dim = hidden_dim
@@ -48,7 +50,10 @@ class GCNRegressorModel(DGLmodel):
         # get data loader
         data_loader = self.get_data_loader_regression(X_trans, y)
         # specify model with optimizer etc
-        self.model = GCNClassifier(self.in_dim, self.hidden_dim, 1, self.hidden_layers).float()
+        self.model = GCNClassifier(self.in_dim,
+                                   self.hidden_dim, 1,
+                                   self.hidden_layers,
+                                   allow_zero_in_degree=self.allow_zero_in_degree).float()
         # get optimizers
         loss_func, optimizer = self.get_regressor()
         # train model
