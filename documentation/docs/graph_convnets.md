@@ -11,79 +11,40 @@ The Graph Neural Network module consists of three parts. The Layer Module, where
 You can also write your own custom graph neural network architecture, and register them via the PHOTON register function (link here). When writing your own custom neural nets you are free to choose your own package, as long as they implement fit, transform and predict functions like the GraphConvNet module classes. These can also be used as a blueprint if you want to integrate your own graph neural network architectures into PHOTONAI.
 
 ## DglModel
-
-Abstract base class for all dgl based graph neural networks. Implements shared functions like training and input handlers for both regression and classification models.
-
-| Parameter | type | Description |
-| -----     | ----- | ----- |
-| nn_epochs | int, default=200 | the number of epochs which a model is trained |
-| learning_rate | float, default=0.001 | the learning rate when training the model |
-| batch_size | int, default=32 | number of samples per training batch |
-| adjacency_axis | int, default=0 | position of the adjacency matrix, default being zero |
-| feature_axis | int, default=1 | position of the feature matrix |
-| logs | str, default=None | path to the log data |
+::: photonai_graph.NeuralNets.dgl_base.DGLmodel.__init__
+    rendering:
+        show_root_toc_entry: False
 
 ## GCNClassifierModel
-
-Graph Attention Network for graph classification. GCN Layers from Kipf & Welling, 2017. Implementation based on dgl & pytorch.
-
-| Parameter | type | Description |
-| -----     | ----- | ----- |
-| in_dim | int, default=1 | input dimension |
-| hidden_layers | int, default=2 | number of hidden layers used by the model |
-| hidden_dim | int, default=256 | dimensions of the hidden layers |
+::: photonai_graph.NeuralNets.NNClassifier.gcn_classifier.GCNClassifierModel.__init__
+    rendering:
+        show_root_toc_entry: False
 
 
 ## SGConvClassifierModel
-
-Graph convolutional network for graph classification. Simple Graph convolutional layers from Wu, Felix, et al., 2018. Implementation based on dgl & pytorch.
-
-| Parameter | type | Description |
-| -----     | ----- | ----- |
-| in_dim | int, default=1 | input dimension |
-| hidden_layers | int, default=2 | number of hidden layers used by the model |
-| hidden_dim | int, default=256 | dimensions in the hidden layers |
+::: photonai_graph.NeuralNets.NNClassifier.sgc_classifier.SGConvClassifierModel.__init__
+    rendering:
+        show_root_toc_entry: False
 
 
 ## GATClassifierModel
 
-Graph Attention Network for graph classification. GAT Layers are modeled after Veličković et al., 2018. Implementation based on dgl & pytorch.
-
-| Parameter | type | Description |
-| -----     | ----- | ----- |
-| in_dim | int, default=1 | input dimension |
-| hidden_layers | int, default=2 | number of hidden layers used by the model |
-| hidden_dim | int, default=256 | dimensions in the hidden layers |
-| heads | list, default=None | list with number of heads per hidden layer |
+::: photonai_graph.NeuralNets.NNClassifier.gat_classifier.GATClassifierModel.__init__
+    rendering:
+        show_root_toc_entry: False
 
 
 ## GCNRegressorModel
-
-Graph convolutional Network for graph regression. GCN Layers from Kipf & Welling, 2017. Implementation based on dgl & pytorch.            
-
-| Parameter | type | Description |
-| -----     | ----- | ----- |
-| in_dim | int, default=1 | input dimension |
-| hidden_layers | int, default=2 | number of hidden layers used by the model |
-| hidden_dim | int, default=256 | dimensions of the hidden layers |
+::: photonai_graph.NeuralNets.NNRegressor.gcn_regressor.GCNRegressorModel.__init__
+    rendering:
+        show_root_toc_entry: False
 
 ## SGConvRegressorModel
-
-Graph convolutional network for graph regression. Simple Graph convolutional layers from Wu, Felix, et al., 2018. Implementation based on dgl & pytorch.
-
-| Parameter | type | Description |
-| -----     | ----- | ----- |
-| in_dim | int, default=1 | input dimension |
-| hidden_layers | int, default=2 | number of hidden layers used by the model |
-| hidden_dim | int, default=256 | dimensions in the hidden layers |
+::: photonai_graph.NeuralNets.NNRegressor.sgc_regressor.SGConvRegressorModel.__init__
+    rendering:
+        show_root_toc_entry: False
 
 ## GATRegressorModel
-
-Graph Attention Network for graph regression. GAT Layers are modeled after Veličković et al., 2018. Implementation based on dgl & pytorch.
-
-| Parameter | type | Description |
-| -----     | ----- | ----- |
-| in_dim | int, default=1 | input dimension |
-| hidden_layers | int, default=2 | number of hidden layers used by the model |
-| hidden_dim | int, default=256 | dimensions in the hidden layers |
-| heads | list, default=None | list with number of heads per hidden layer |
+::: photonai_graph.NeuralNets.NNRegressor.gat_regressor.GATRegressorModel.__init__
+    rendering:
+        show_root_toc_entry: False
