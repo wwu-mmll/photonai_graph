@@ -6,7 +6,7 @@ class GraphConstructorPercentageWindow(GraphConstructor):
     _estimator_type = "transformer"
 
     """
-    Transformer class for generating adjacency matrices 
+    Transformer class for generating adjacency matrices
     from connectivity matrices. Selects the top x percent
     of connections and sets all other connections to zero
 
@@ -17,7 +17,7 @@ class GraphConstructorPercentageWindow(GraphConstructor):
         upper limit of the percentage window
     * `percentage_lower` [float]:
         lower limit of the percentage window
-        
+
     Example
     -------
         constructor = GraphConstructorPercentageWindow(percentage=0.9,
@@ -69,7 +69,8 @@ class GraphConstructorPercentageWindow(GraphConstructor):
             thresh_lower = np.percentile(adjacency[matrix, :, :, :], self.percentage_lower)
             if self.retain_weights == 0:
                 adjacency[matrix, :, :, :][adjacency[matrix, :, :, :] >= thresh_upper] = 0
-                adjacency[matrix, :, :, :][(adjacency[matrix, :, :, :] <= thresh_upper) & (adjacency[matrix, :, :, :] >= thresh_lower)] = 1
+                adjacency[matrix, :, :, :][(adjacency[matrix, :, :, :] <= thresh_upper) &
+                                           (adjacency[matrix, :, :, :] >= thresh_lower)] = 1
                 adjacency[matrix, :, :, :][adjacency[matrix, :, :, :] <= thresh_lower] = 0
             elif self.retain_weights == 1:
                 adjacency[matrix, :, :, :][adjacency[matrix, :, :, :] >= thresh_upper] = 0

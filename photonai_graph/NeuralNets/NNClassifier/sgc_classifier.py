@@ -60,4 +60,3 @@ class SGConvClassifierModel(DGLmodel):
     def predict(self, x):
         """returns the argmax of the predictions"""
         return self.predict_classifier(x)
-

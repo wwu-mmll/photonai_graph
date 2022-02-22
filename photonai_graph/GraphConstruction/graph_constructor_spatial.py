@@ -9,7 +9,7 @@ class GraphConstructorSpatial(GraphConstructor):
     _estimator_type = "transformer"
 
     """
-    Transformer class for generating adjacency matrices 
+    Transformer class for generating adjacency matrices
     from connectivity matrices. Selects the k nearest
     neighbours for each node based on spatial distance
     of the coordinates in the chosen atlas.
@@ -21,7 +21,7 @@ class GraphConstructorSpatial(GraphConstructor):
     * `k_distance` [int]:
         the k nearest neighbours value, for the kNN algorithm.
     * `transform_style` [str, default="mean"]:
-        generate an adjacency matrix based on the mean matrix like in Ktena et al.: "mean" 
+        generate an adjacency matrix based on the mean matrix like in Ktena et al.: "mean"
         Or generate a different matrix for every individual: "individual"
     * `atlas_name` [str, default="ho"]:
         name of the atlas coordinate file

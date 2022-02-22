@@ -35,7 +35,7 @@ class GrakelAdapterTests(unittest.TestCase):
     def test_grakel_adapter_adjacency_shape(self):
         with self.assertRaises(Exception):
             g_adapter = GrakelAdapter()
-            x_trans = g_adapter.transform(self.Xrandom_missfit)
+            g_adapter.transform(self.Xrandom_missfit)
 
     def test_grakel_adapter_networkx(self):
         g_adapter = GrakelAdapter(input_type="networkx")

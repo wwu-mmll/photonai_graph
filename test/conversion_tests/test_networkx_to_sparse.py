@@ -34,8 +34,8 @@ class NetworkxToSparseTest(unittest.TestCase):
 
     def test_check_graph(self):
         mtrx = networkx_to_sparse(self.check_graph)
-        self.assertTrue((mtrx!=self.check_matrix).nnz==0)
+        self.assertTrue((mtrx != self.check_matrix).nnz == 0)
 
     def test_check_nonsense_input(self):
         with self.assertRaises(ValueError):
-            mtrx = networkx_to_sparse(self.check_matrix)
+            networkx_to_sparse(self.check_matrix)

@@ -47,7 +47,7 @@ class GraphEmbeddingBase(BaseEstimator, TransformerMixin, ABC):
         embedding_list = []
 
         for graph in graphs:
-            embedding.learn_embedding(graph=graph, edge_f=None, is_weighted=True, no_python=True)
+            embedding.learn_embedding(graph=graph, is_weighted=True, no_python=True)
             embedding_representation = embedding.get_embedding()
             if 'embedding_list' not in locals():
                 embedding_list = embedding_representation
@@ -58,4 +58,3 @@ class GraphEmbeddingBase(BaseEstimator, TransformerMixin, ABC):
         embedding_list = np.squeeze(np.asarray(embedding_list))
 
         return embedding_list
-

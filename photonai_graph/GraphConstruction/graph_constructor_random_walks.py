@@ -7,7 +7,7 @@ class GraphConstructorRandomWalks(GraphConstructor):
     _estimator_type = "transformer"
 
     """
-    Transformer class for generating adjacency matrices 
+    Transformer class for generating adjacency matrices
     from connectivity matrices. Generates a kNN matrix
     and performs random walks on these. The coocurrence
     of two nodes in those walks is then used to generate

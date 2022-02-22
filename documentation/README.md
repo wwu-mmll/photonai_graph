@@ -9,7 +9,7 @@ To make life easier, you can simply try and install everything inside your curre
 Install mkdocs (Python package) through PyPI (inside your Python environment, if you're using one). We also need to install the material theme https://squidfunk.github.io/mkdocs-material/ and some custom plugins we're using to render Latex and so on.
 
 ```bash
-pip install mkdocs mkdocs-material pymdown-extensions
+pip install mkdocs mkdocs-material pymdown-extensions mkdocstrings-python
 ```
 
 ### How to use it
@@ -17,7 +17,7 @@ pip install mkdocs mkdocs-material pymdown-extensions
 Within the terminal, navigate to the documentation folder and type:
 
 ```bash
-mkdocs serve
+PYTHONPATH=.. mkdocs serve
 ```
 
 If you were using a dedicated Python environment, make sure to activate it before. Once you've run make doc-serve, mkdocs will start a local webserver and host the documentation website under:

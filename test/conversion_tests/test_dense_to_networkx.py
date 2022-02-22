@@ -9,7 +9,7 @@ class DenseToNetworkxTest(unittest.TestCase):
     def setUp(self):
         self.random4d = np.random.rand(20, 20, 20, 2)
         self.single4d = np.random.rand(1, 20, 20, 2)
-        self.array_list = [np.random.rand(20, 20, 2)] *10
+        self.array_list = [np.random.rand(20, 20, 2)] * 10
         self.edge_dict = self.edge_dict = {(1, 0): 1, (2, 0): 1}
 
     def test_output_list(self):

@@ -74,13 +74,13 @@ class GraphEmbeddingHOPE(BaseEstimator, TransformerMixin):
             # transform this photonai_graph with a photonai_graph embedding
             if self.embedding_dimension == 1:
                 embedding = HOPE(d=2, beta=self.decay_factor)
-                embedding.learn_embedding(graph=g, edge_f=None, is_weighted=True, no_python=True)
+                embedding.learn_embedding(graph=g, is_weighted=True, no_python=True)
                 embedding_representation = embedding.get_embedding()
                 embedding_representation = np.reshape(embedding_representation, (-1, 1))
 
             else:
                 embedding = HOPE(d=self.embedding_dimension, beta=self.decay_factor)
-                embedding.learn_embedding(graph=g, edge_f=None, is_weighted=True, no_python=True)
+                embedding.learn_embedding(graph=g, is_weighted=True, no_python=True)
                 embedding_representation = embedding.get_embedding()
                 embedding_representation = np.reshape(embedding_representation,
                                                       (embedding_representation.shape[0],

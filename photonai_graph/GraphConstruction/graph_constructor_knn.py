@@ -6,7 +6,7 @@ class GraphConstructorKNN(GraphConstructor):
     _estimator_type = "transformer"
 
     """
-    Transformer class for generating adjacency matrices 
+    Transformer class for generating adjacency matrices
     from connectivity matrices. Selects the k nearest
     neighbours for each node based on pairwise distance.
     Recommended for functional connectivity.
@@ -16,7 +16,7 @@ class GraphConstructorKNN(GraphConstructor):
     Parameters
     ----------
     * `k_distance` [int]:
-        the k nearest neighbours value, for the kNN algorithm.   
+        the k nearest neighbours value, for the kNN algorithm.
 
     Example
     -------

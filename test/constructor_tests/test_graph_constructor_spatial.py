@@ -3,8 +3,6 @@ import os
 import numpy as np
 import pandas as pd
 from photonai_graph.GraphConstruction.graph_constructor_spatial import GraphConstructorSpatial
-from photonai_graph.GraphConversions import dense_to_networkx
-from photonai_graph.GraphUtilities import visualize_networkx
 
 
 class KNNTests(unittest.TestCase):

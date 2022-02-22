@@ -26,4 +26,4 @@ class DrawConnectogramTests(unittest.TestCase):
 
     def test_value_error(self):
         with self.assertRaises(ValueError):
-            y = get_random_labels(l_type="prediction", number_of_labels=20)
+            get_random_labels(l_type="prediction", number_of_labels=20)

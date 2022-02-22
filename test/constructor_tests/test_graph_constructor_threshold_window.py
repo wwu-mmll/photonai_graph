@@ -44,7 +44,7 @@ class ThresholdWindowTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             g_constr = GraphConstructorThresholdWindow(retain_weights=0.5)
             g_constr.fit(self.Xrandom4d, self.y)
-            trans = g_constr.transform(self.Xrandom4d)
+            g_constr.transform(self.Xrandom4d)
 
     def test_threshold_contains(self):
         # ensure that the threshold actually picks the right rows of the matrix

@@ -164,7 +164,6 @@ class GraphMeasureTransformTests(unittest.TestCase):
             g_transform.extract_measures(self.X_nx, path, self.ids)
 
     def test_extract_no_id(self):
-        path = "/tmp/test.csv"
         g_transform = GraphMeasureTransform()
         with self.assertRaises(Exception):
             g_transform.extract_measures(self.X_nx)
@@ -177,3 +176,14 @@ class GraphMeasureTransformTests(unittest.TestCase):
         self.assertTrue(os.path.exists(path))
         os.remove(path)
 
+    def test_compute_average(self):
+        g_transform = GraphMeasureTransform(graph_functions={"degree_centrality": {}})
+        g_transform.fit(self.X_nx, self.y)
+        X_nodes = g_transform.transform(self.X_nx)
+        X_nodes_average = np.mean(X_nodes, axis=1).reshape(-1, 1)
+
+        g_transform = GraphMeasureTransform(graph_functions={"average_degree_centrality": {}})
+        g_transform.fit(self.X_nx, self.y)
+        X_average = g_transform.transform(self.X_nx)
+
+        np.testing.assert_array_equal(X_average, X_nodes_average)

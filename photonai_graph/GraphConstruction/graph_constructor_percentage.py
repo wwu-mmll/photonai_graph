@@ -6,7 +6,7 @@ class GraphConstructorPercentage(GraphConstructor):
     _estimator_type = "transformer"
 
     """
-    Transformer class for generating adjacency matrices 
+    Transformer class for generating adjacency matrices
     from connectivity matrices. Selects the top x percent
     of connections and sets all other connections to zero
 
@@ -62,12 +62,15 @@ class GraphConstructorPercentage(GraphConstructor):
         """Finds the x percent strongest connections"""
         for matrix in range(X.shape[0]):
             thresh = np.percentile(X[matrix, :, :, :], self.percentage)
-            if self.retain_weights == 0:
-                X[matrix, :, :, :][X[matrix, :, :, :] >= thresh] = 1
-                X[matrix, :, :, :][X[matrix, :, :, :] < thresh] = 0
-            elif self.retain_weights == 1:
-                X[matrix, :, :, :][X[matrix, :, :, :] < thresh] = 0
+            if np.isnan(thresh):
+                raise ValueError('Input contains NaN -> can not threshold')
             else:
-                raise ValueError('retain weights needs to be 0 or 1')
+                if self.retain_weights == 0:
+                    X[matrix, :, :, :][X[matrix, :, :, :] >= thresh] = 1
+                    X[matrix, :, :, :][X[matrix, :, :, :] < thresh] = 0
+                elif self.retain_weights == 1:
+                    X[matrix, :, :, :][X[matrix, :, :, :] < thresh] = 0
+                else:
+                    raise ValueError('retain weights needs to be 0 or 1')
 
         return X

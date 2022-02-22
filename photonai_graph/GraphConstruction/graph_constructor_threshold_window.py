@@ -5,7 +5,7 @@ class GraphConstructorThresholdWindow(GraphConstructor):
     _estimator_type = "transformer"
 
     """
-    Transformer class for generating adjacency matrices 
+    Transformer class for generating adjacency matrices
     from connectivity matrices. Thresholds matrix based
     on a chosen threshold window.
 
@@ -38,7 +38,7 @@ class GraphConstructorThresholdWindow(GraphConstructor):
     * `verbosity` [int, default=0]:
         The level of verbosity, 0 is least talkative and gives only warn and error, 1 gives adds info and 2 adds debug
     * `logs` [str, default=None]:
-        Path to the log data    
+        Path to the log data
 
     Example
     -------

@@ -1,7 +1,6 @@
 from photonai.base import Hyperpipe, PipelineElement
 from photonai_graph.GraphUtilities import get_random_connectivity_data, get_random_labels
 from sklearn.model_selection import KFold
-from photonai_graph.GraphMeasureTransform import GraphMeasureTransform
 
 # make random matrices to simulate connectivity matrices
 X = get_random_connectivity_data(number_of_nodes=50, number_of_individuals=200)

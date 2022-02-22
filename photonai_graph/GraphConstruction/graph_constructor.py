@@ -10,30 +10,6 @@ from photonai_graph.GraphUtilities import individual_ztransform, individual_fish
 class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
     _estimator_type = "transformer"
 
-    """
-    Base class for all graph constructors. Implements
-    methods shared by different constructors.
-
-    Parameters
-    ----------
-    * `transform_style` [str, default="mean"]
-    * `one_hot_nodes` [int, default=0]
-        whether to return a one hot node encoding as feature or not
-    * `fisher_transform` [int, default=0]:
-        whether to perform a fisher transform of every matrix
-    * `use_abs` [int]:
-        Changes the values to absolute values. Is applied after fisher transform and before
-        z-score transformation
-    * `zscore` [int, default=0]:
-        performs a zscore transformation of the data. Applied after fisher transform and np_abs
-        eval_final_perfomance is set to True
-    * `use_abs_zscore` [int, default=0]:
-        whether to use the absolute values of the z-score transformation or allow for negative
-        values. Applied after fisher transform, use_abs and zscore
-    * `adjacency_axis` [int, default=0]:
-        position of the adjacency matrix, default being zero
-    """
-
     def __init__(self,
                  transform_style: str = "mean",
                  one_hot_nodes: int = 0,
@@ -43,6 +19,29 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
                  use_abs_zscore: int = 0,
                  adjacency_axis=0,
                  logs: str = ''):
+        """
+        Base class for all graph constructors. Implements
+        methods shared by different constructors.
+
+        Parameters
+        ----------
+        transform_style: str, default="mean"
+        one_hot_nodes: int, default=0
+            whether to return a one hot node encoding as feature or not
+        fisher_transform: int, default=0
+            whether to perform a fisher transform of every matrix
+        use_abs: int
+            Changes the values to absolute values. Is applied after fisher transform and before
+            z-score transformation
+        zscore: int, default=0
+            performs a zscore transformation of the data. Applied after fisher transform and np_abs
+            eval_final_perfomance is set to True
+        use_abs_zscore: int, default=0
+            whether to use the absolute values of the z-score transformation or allow for negative
+            values. Applied after fisher transform, use_abs and zscore
+        adjacency_axis: int, default=0
+            position of the adjacency matrix, default being zero
+        """
         self.transform_style = transform_style
         self.one_hot_nodes = one_hot_nodes
         self.fisher_transform = fisher_transform
@@ -123,7 +122,7 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
             adjacency = individual_ztransform(adjacency)
         if self.use_abs_zscore == 1:
             adjacency = np.abs(adjacency)
-            
+
         return adjacency
 
     def get_features(self, adjacency, features):
@@ -153,8 +152,8 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
     @staticmethod
     def adjacency(dist, idx):
         """Return the adjacency matrix of a kNN photonai_graph."""
-        M, k = dist.shape
-        assert M, k == idx.shape
+        m, k = dist.shape
+        assert m, k == idx.shape
         assert dist.min() >= 0
 
         # Weights.
@@ -162,23 +161,23 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
         dist = np.exp(- dist ** 2 / sigma2)
 
         # Weight matrix.
-        I = np.arange(0, M).repeat(k)
-        J = idx.reshape(M * k)
-        V = dist.reshape(M * k)
-        W = sparse.coo_matrix((V, (I, J)), shape=(M, M))
+        i = np.arange(0, m).repeat(k)
+        j = idx.reshape(m * k)
+        v = dist.reshape(m * k)
+        w = sparse.coo_matrix((v, (i, j)), shape=(m, m))
 
         # No self-connections.
-        W.setdiag(0)
+        w.setdiag(0)
 
         # Non-directed photonai_graph.
-        bigger = W.T > W
-        W = W - W.multiply(bigger) + W.T.multiply(bigger)
+        bigger = w.T > w
+        w = w - w.multiply(bigger) + w.T.multiply(bigger)
 
-        assert W.nnz % 2 == 0
-        assert np.abs(W - W.T).mean() < 1e-10
-        assert type(W) is sparse.csr.csr_matrix
+        assert w.nnz % 2 == 0
+        assert np.abs(w - w.T).mean() < 1e-10
+        assert type(w) is sparse.csr.csr_matrix
 
-        return W
+        return w
 
     @staticmethod
     def distance_sklearn_metrics(z, k, metric='euclidean'):

@@ -8,7 +8,7 @@ site_dir: '../docs'
 # Social media
 extra:
   social:
-    - type: 'brands/twitter'
+    - icon: fontawesome/brands/twitter
       link: 'https://twitter.com/medicalmachinelearninglab'
 
 # Theme configuration
@@ -50,9 +50,14 @@ nav:
 - Graph Neural Networks: 'graph_convnets.md'
 - Graph Utilities: 'graph_utilities.md'
 
+extra_css:
+  - stylesheets/material.css
 
-
-
-
-
-
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          selection:
+            docstring_style: numpy
+          rendering:
+            show_source: false
