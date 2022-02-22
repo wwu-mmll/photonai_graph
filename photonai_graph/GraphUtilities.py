@@ -1,25 +1,3 @@
-"""
-===========================================================
-Project: PHOTON Graph
-===========================================================
-Description
------------
-A collection of functions for converting photonai_graph structure formats, Visualize the different graphs,
-and even create some random data to run some tests
-
-Version
--------
-Created:        15-08-2019
-Last updated:   04-09-2020
-
-
-Author
-------
-Vincent Holstein
-Translationale Psychiatrie
-Universitaetsklinikum Muenster
-"""
-
 from networkx.drawing.nx_pylab import draw
 import networkx.drawing as drawx
 from networkx.algorithms import asteroidal

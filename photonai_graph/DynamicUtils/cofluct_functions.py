@@ -5,11 +5,24 @@ import warnings
 
 def cofluct(X, quantiles: tuple = (0, 1), return_mat=True):
     """
-    Computes cofluctuation time-series (per edge) for a nodes x timepoints matrix X
-    quantiles: list of lowest/highest quantile of edge events to use
-    [0, 1]: all events = pearson corr; [0, .05]: bottom 5% of events; [.95, 1]: top 5% of events
-    Returns edge cofluctuation time-series dict (pairs_of_nodes x timepoints) and event timeseries as dict
+    Computes cofluctuation time-series (per edge) for a nodes x timepoints matrix X.
     Based on https://www.pnas.org/content/early/2020/10/21/2005531117
+
+    Parameters
+    ----------
+    quantiles: tuple,default=(0,1)
+        list of lowest/highest quantile of edge events to use
+        [0, 1]: all events = pearson corr; [0, .05]: bottom 5% of events; [.95, 1]: top 5% of events
+    return_mat: bool,default=True
+        Whether to return a connectivity matrix (True) or dictionary (False). The dict edge contains cofluctuation
+        time-series (pairs_of_nodes x timepoints) and event timeseries.
+
+
+    Returns
+    -------
+    float
+        edge cofluctuation time-series dict (pairs_of_nodes x timepoints) and event timeseries as dict
+
     """
     X = np.float32(X)
     # get z-value time series (mean 0, std 1)

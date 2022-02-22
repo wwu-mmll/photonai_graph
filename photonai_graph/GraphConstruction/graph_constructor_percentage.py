@@ -5,26 +5,6 @@ from photonai_graph.GraphConstruction.graph_constructor import GraphConstructor
 class GraphConstructorPercentage(GraphConstructor):
     _estimator_type = "transformer"
 
-    """
-    Transformer class for generating adjacency matrices
-    from connectivity matrices. Selects the top x percent
-    of connections and sets all other connections to zero
-
-
-    Parameters
-    ----------
-    * `percentage` [float]:
-        value of percent of connections to discard. A value of 90 keeps only the top 10%
-    * `retain_weights` [int]:
-        whether to retain weight values or not
-
-    Example
-    -------
-        constructor = GraphConstructorPercentage(percentage=0.9,
-                                                 fisher_transform=1,
-                                                 use_abs=1)
-   """
-
     def __init__(self, percentage: float = 80,
                  retain_weights: int = 0,
                  transform_style: str = "individual",
@@ -35,6 +15,50 @@ class GraphConstructorPercentage(GraphConstructor):
                  use_abs_zscore: int = 0,
                  adjacency_axis: int = 0,
                  logs: str = ''):
+        """
+        Transformer class for generating adjacency matrices
+        from connectivity matrices. Selects the top x percent
+        of connections and sets all other connections to zero
+
+
+        Parameters
+        ----------
+        percentage: float
+            value of percent of connections to discard. A value of 90 keeps only the top 10%
+        adjacency_axis: int, default=0
+            position of the adjacency matrix, default being zero
+        one_hot_nodes: int, default=0
+            Whether to generate a one hot encoding of the nodes in the matrix (1) or not (0)
+        fisher_transform: int, default=0
+            whether to perform a fisher transform of each matrix (1) or not (0)
+        use_abs: int, default=0
+            changes the values to absolute values. Is applied after fisher transform and before z-score transformation
+        zscore: int, default=0
+            performs a zscore transformation of the data. Applied after fisher transform and np_abs
+        use_abs_zscore: int, default=0
+            whether to use the absolute values of the z-score transformation or allow for negative values
+        retain_weights: int
+            whether to retain weight values or not
+
+        Example
+        -------
+        Use outside of a PHOTON pipeline
+
+        ```python
+        constructor = GraphConstructorPercentage(percentage=0.9,
+                                                 fisher_transform=1,
+                                                 use_abs=1)
+        ```
+
+        Or as part of a pipeline
+
+        ```python
+        my_pipe.add(PipelineElement('GraphConstructorPercentage',
+                                    hyperparameters={'percentage': 0.9}))
+        ```
+
+
+       """
         super(GraphConstructorPercentage, self).__init__(transform_style=transform_style,
                                                          one_hot_nodes=one_hot_nodes,
                                                          fisher_transform=fisher_transform,

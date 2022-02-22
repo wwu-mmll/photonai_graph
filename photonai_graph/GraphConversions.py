@@ -4,6 +4,7 @@ import networkx as nx
 import numpy as np
 import os
 import warnings
+import yaml
 from photonai_graph.util import assert_imported
 try:
     import dgl
@@ -22,7 +23,7 @@ output_formats = {
     "GraphML": nx.write_graphml,
     "GraphML-XML": nx.write_graphml_xml,
     "GraphML-LXML": nx.write_graphml_lxml,
-    "YAML": nx.write_yaml,
+    "YAML": yaml.dump,
     "graph6": nx.write_graph6,
     "PAJEK": nx.write_pajek
 }
@@ -37,7 +38,7 @@ input_formats = {
     "pickle": nx.read_gpickle,
     "GML": nx.read_gml,
     "GraphML": nx.read_graphml,
-    "YAML": nx.read_yaml,
+    "YAML": yaml.load,
     "graph6": nx.read_graph6,
     "PAJEK": nx.read_pajek
 }

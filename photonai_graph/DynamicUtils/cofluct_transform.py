@@ -7,24 +7,30 @@ import os
 class CofluctTransform(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
-    """
-    Class for calculating time series co-activation. Based on
-    Esfahlani et al, 2020.
-
-    Parameters
-    ----------
-    * 'quantiles' [tuple, default = (0, 1)]:
-        lower and upper bound of connection strength quantile to look at.
-    * 'return_mat' [bool, default=True]:
-        Whether to return matrix (True) or vector (False).
-    * `adjacency_axis` [int, default=0]:
-        position of the adjacency matrix, default being zero
-    """
     def __init__(self,
                  quantiles: tuple = (0, 1),
                  return_mat: bool = True,
                  adjacency_axis: int = 0,
-                 logs = ""):
+                 logs=None):
+        """
+        Class for calculating time series co-activation. Based on
+        Esfahlani et al, 2020.
+
+        Parameters
+        ----------
+        quantiles: tuple,default=(0, 1)
+            lower and upper bound of connection strength quantile to look at.
+        return_mat: bool,default=True
+            Whether to return matrix (True) or vector (False).
+        adjacency_axis: int,default=0
+            position of the adjacency matrix, default being zero
+
+        Example
+        -------
+        ```python
+            transformer = CofluctTransform(quantiles=(0.95, 1), return_mat=True)
+        ```
+        """
         self.quantiles = quantiles
         self.return_mat = return_mat
         self.adjacency_axis = adjacency_axis
