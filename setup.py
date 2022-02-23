@@ -23,7 +23,7 @@ within the PHOTON framework. The module provides a range of graph machine learni
     download_url='https://github.com/wwu-mmll/photonai_graph/archive/' + __version__ + '.tar.gz',
     keywords=['machine learning', 'deep learning', 'graph convolutional neural networks', 'graphs'],
     classifiers=[],
-    install_requires=['git+https://github.com/wwu-mmll/photonai.git@develop',
+    install_requires=['photonai @ git+https://github.com/wwu-mmll/photonai.git@develop',
                       'networkx>=2.4',
                       'pydot>=1.4.1',
                       'nxt_gem @ git+https://github.com/jernsting/nxt_gem.git',
