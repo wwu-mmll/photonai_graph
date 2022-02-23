@@ -2,7 +2,7 @@
 
 A module focused on functions and constructors for dynamic graph data.
 
-!!! note "Warning" 
+!!! warning "Warning" 
     Currently under development and constantly evolving. Use with caution.
 
 ## CofluctTransform

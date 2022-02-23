@@ -2,7 +2,18 @@
 
 The starting point for PHOTON Graph can be either connectivity matrices or data that is already in a graph format (networkx, dgl, sparse/dense adjacency matrices). Depending on your starting point, there are different ways in which you will you will have set up your pipeline. In the case that you have connectivity matrices, you will need to use graph constructors to turn those connectivity matrices into adjacency matrices. After can choose from different options of doing machine learning with your graph data.
 
-![Pipeline Overview](img/Workflow.png)
+```mermaid
+graph TD
+    A[Connectivity Matrices] --> B(Graph Constructor)
+    B --> C{Graph Data}
+    C --> D[Graph Embedding]
+    C --> E[Graph Kernel]
+    C --> F[Graph Measures]
+    C --> G[Graph Neural Network]
+    D --> H["Classical" Machine Learning]
+    E --> H
+    F --> H
+```
 
 ### Connectivity matrices
 

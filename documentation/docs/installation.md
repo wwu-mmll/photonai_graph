@@ -1,5 +1,43 @@
-To install PHOTONAI Graph, you should create a new python/anaconda environment. After creating an environment activate it and install PHOTONAI Graph by simply executing:
+# Installation
+The bare installation of PHOTONAI Graph will get you up and running with machine learning graph analysis.
+Some analysis may require additional packages. PHOTONAI Graph will inform you about these requirements if needed.
 
-```bash
+
+## Prerequisites
+We recommend using [anaconda](https://www.anaconda.com/) environments. Alternatively you can simply use virtual environments or install PHOTONAI Graph system wide.
+
+## Installation via PIP
+
+The PHOTONAI Graph library can simply be installed via pip:
+
+```shell
 pip install photonai-graph
+```
+
+If you prefer to use the dev version of PHOTONAI Graph:
+
+!!! warning 
+    This Version could be unstable due to active development
+
+```shell
+pip install git+https://github.com/wwu-mmll/photonai_graph@dev
+```
+
+## Installation verification
+You can verify your installation by starting python and runnning:
+
+```python
+import photonai_graph
+print(photonai_graph.__version__)
+```
+
+This should not return an error but the currently installed version number of PHOTONAI Graph.
+
+## Additional packages
+To be able to use all modules of the toolbox you have to install these additional packages:
+```shell
+pip install tensorflow
+pip install torch
+pip install dgl
+pip install grakel
 ```
