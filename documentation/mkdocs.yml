@@ -3,6 +3,7 @@ site_name: PHOTONAI - Graph
 repo_name: 'photonai-graph'
 repo_url: 'https://github.com/wwu-mmll/photonai-graph'
 site_dir: '../docs'
+edit_uri: 'edit/master/documentation/docs'
 
 
 # Social media
@@ -15,11 +16,11 @@ extra:
 theme: 
   name: 'material'
   palette:
-    primary: 'deep orange'
-    accent: 'deep orange'
+    primary: 'teal'
+    accent: 'teal'
   font:
     text: 'Roboto'
-    code: 'Roboto Mono'
+    code: 'Space Mono'
 
 # Latex
 extra_javascript:
@@ -27,7 +28,15 @@ extra_javascript:
 
 # extensions
 markdown_extensions:
-  - pymdownx.arithmatex
+  - pymdownx.highlight:
+      auto_title: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - codehilite
   - admonition
 
@@ -37,18 +46,19 @@ nav:
 - Installation: 'installation.md'
 - Getting Started: 'getting_started.md'
 - Workflow: 'workflow.md'
-- API: 'API.md'
-- Graph Construction: 
-    - Theory: 
-       'graph_construction.md'
-    - Examples:
-       'examples/graph_construction_examples.md'
-- Dynamic Utilities: 'dynamic_utils.md'
-- Graph Measures: 'graph_measures.md'
-- Graph Embeddings: 'graph_embeddings.md'
-- Graph Kernels: 'graph_kernels.md'
-- Graph Neural Networks: 'graph_convnets.md'
-- Graph Utilities: 'graph_utilities.md'
+- API:
+  - Introduction: 'API.md'
+  - Graph Construction:
+      - Functions:
+         'graph_construction.md'
+      - Examples:
+         'examples/graph_construction_examples.md'
+  - Dynamic Utilities: 'dynamic_utils.md'
+  - Graph Measures: 'graph_measures.md'
+  - Graph Embeddings: 'graph_embeddings.md'
+  - Graph Kernels: 'graph_kernels.md'
+  - Graph Neural Networks: 'graph_convnets.md'
+  - Graph Utilities: 'graph_utilities.md'
 
 extra_css:
   - stylesheets/material.css
@@ -61,3 +71,4 @@ plugins:
             docstring_style: numpy
           rendering:
             show_source: false
+  - git-revision-date-localized

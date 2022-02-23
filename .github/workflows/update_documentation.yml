@@ -20,7 +20,8 @@ jobs:
           python-version: '3.9'
 
       - name: Install mkdocs requirements
-        run: pip install mkdocs mkdocs-material pymdown-extensions mkdocstrings-python
+        run: |
+        pip install mkdocs mkdocs-material pymdown-extensions mkdocstrings-python mkdocs-git-revision-date-localized-plugin
 
       - name: Install photonai_graph requirements
         run: pip install -r requirements.txt
