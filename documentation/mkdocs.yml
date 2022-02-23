@@ -39,29 +39,32 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
   - codehilite
   - admonition
+  - pymdownx.details
 
 # Site structure
 nav: 
 - Home: 'index.md'
 - Installation: 'installation.md'
 - Getting Started: 'getting_started.md'
-- Workflow: 'workflow.md'
+- PHOTONAI Graph Workflow: 'workflow.md'
+- Load and Save Graphs: 'load_and_save.md'
+- Extending PHOTONAI Graph: 'extending_photonai_graph.md'
 - API:
-  - Introduction: 'API.md'
+  - API Introduction: 'api/introduction.md'
   - Graph Construction:
       - Functions:
-         'graph_construction.md'
+         'api/graph_construction.md'
       - Examples:
-         'examples/graph_construction_examples.md'
-  - Dynamic Utilities: 'dynamic_utils.md'
-  - Graph Measures: 'graph_measures.md'
-  - Graph Embeddings: 'graph_embeddings.md'
-  - Graph Kernels: 'graph_kernels.md'
-  - Graph Neural Networks: 'graph_convnets.md'
-  - Graph Utilities: 'graph_utilities.md'
+         'api/examples/graph_construction_examples.md'
+  - Dynamic Utilities: 'api/dynamic_utils.md'
+  - Graph Measures: 'api/graph_measures.md'
+  - Graph Embeddings: 'api/graph_embeddings.md'
+  - Graph Kernels: 'api/graph_kernels.md'
+  - Graph Neural Networks: 'api/graph_convnets.md'
+  - Graph Utilities: 'api/graph_utilities.md'
 
 extra_css:
-  - stylesheets/material.css
+  - assets/stylesheets/material.css
 
 plugins:
   - mkdocstrings:
@@ -71,4 +74,3 @@ plugins:
             docstring_style: numpy
           rendering:
             show_source: false
-  - git-revision-date-localized
