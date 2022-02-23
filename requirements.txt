@@ -1,6 +1,6 @@
 #photonai
 git+https://github.com/wwu-mmll/photonai.git@develop
-networkx~=2.4
+networkx
 pydot
 dgl
 nxt_gem @ git+https://github.com/jernsting/nxt_gem.git
