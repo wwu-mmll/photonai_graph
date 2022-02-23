@@ -61,7 +61,7 @@ nav:
   - Graph Utilities: 'graph_utilities.md'
 
 extra_css:
-  - stylesheets/material.css
+  - assets/stylesheets/material.css
 
 plugins:
   - mkdocstrings:

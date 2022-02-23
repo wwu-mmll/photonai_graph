@@ -9,7 +9,7 @@ If you are using dense matrices, photonai-graph assumes that they have a certain
 With such a function you can then load your data.
 
 ```python
-from  connectivity_loading import load_conn
+from connectivity_loading import load_conn
 
 matrices = load_conn('/path/to/your/data.mat')
 ```
