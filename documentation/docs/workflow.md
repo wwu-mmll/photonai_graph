@@ -1,6 +1,14 @@
 # Workflow
 
-The starting point for PHOTON Graph can be either connectivity matrices or data that is already in a graph format (networkx, dgl, sparse/dense adjacency matrices). Depending on your starting point, there are different ways in which you will you will have set up your pipeline. In the case that you have connectivity matrices, you will need to use graph constructors to turn those connectivity matrices into adjacency matrices. After can choose from different options of doing machine learning with your graph data.
+The starting point for PHOTON Graph can be either connectivity matrices or data that is already in a graph 
+format. Depending on your starting point, there are different 
+ways in which you will you will have set up your pipeline. In the case that you have connectivity matrices, 
+you will need to use graph constructors to turn those connectivity matrices into adjacency matrices. 
+After that you can choose from different options of doing machine learning with your graph data.
+
+!!! info
+    PHOTONAI Graph offers various methods to load your graph data in existing formats. For example, you can simply
+    load nx or dgl graphs. For more information about supported formats see [load and save](load_and_save.md).
 
 ```mermaid
 graph TD
@@ -17,19 +25,90 @@ graph TD
 
 ### Connectivity matrices
 
-If you have connectivity matrices as your starting point, these might be noisy and densely connected, as for example in the case of resting state functional connectivity in the area of neuroscience. In order to reduce the amount connections and possibly reduce noise, one could threshold the graph so weak connections will be discarded. This is not the only possible way to construct adjacency matrices, and many more methods have been implemented, which can be found in the graph constructor section.
+If you have connectivity matrices as your starting point, these might be noisy and densely connected, 
+as for example in the case of resting state functional connectivity in the area of neuroscience. 
+In order to reduce the amount connections and possibly reduce noise, one could threshold the graph so 
+weak connections will be discarded. 
+
+```python
+import numpy as np
+from photonai_graph.GraphConstruction import GraphConstructorThreshold
+
+# Generate dummy data
+example_graph = np.ones((20, 20, 20))
+example_target = np.eye(20)
+
+# Init GraphConstructorThreshold object
+constructor = GraphConstructorThreshold(threshold=0.1)
+constructor.fit(example_graph, example_target)
+
+# Create graph from matrix
+graph = constructor.transform(example_graph)
+```
+
+!!! info
+    This is not the only possible way to construct adjacency matrices, 
+    and many more methods have been implemented, which can be found in the [graph constructor section](api/graph_construction.md).
 
 After transforming your matrix, using a graph constructor you can then use this matrix to do machine learning with it.
 
 ### Machine Learning on Graphs
 
-Once you have a graph structure, you can then use this graph structure to do machine learning on it in a variety of ways. One option would be to extract graph measures and use these graph measures to do classical machine learning on them. The measures preserve graph information, that would be lost if only looking at node values for example. Depending on the measure it might contain global or local graph information. A similar idea applies to graph embeddings and kernels. They provide lower-dimensional representations of the graph structure, while still preserving graph information. The resulting embedding/kernel transformation can then be used to do classical machine learning.
+Once you have a graph structure, you can then use this graph structure to do machine learning on it in a variety of ways.
 
-In contrast Graph Neural Nets are modified neural networks, that learn directly on graphs and make use of graph information. Here different architectures are available, and no transformation step is required prior to the network. Similar to classical machine learning algorithms
+!!! note
+    Before running the analysis make sure if it should run using classical machine learning or deep learning with graph
+    neural networks.
+
+#### Classical Machine Learning
+For classical Machine Learning approaches we have to extract features from the graphs.
+PHOTONAI Graph offers different options for extracting features:
+
+??? tip "[Graph Embeddings](api/graph_embeddings.md)"
+
+    Graph Embeddings are a way to learn a low dimensional representation of a graph. 
+    Through a graph embedding a graph can be represented in low dimensional form, while preserving graph
+    information. This low-dimensional representation can then be used for training classic machine learning algorithms
+    that would otherwise make no use of the graph information.
+??? tip "[Graph Measures](api/graph_measures.md)"
+
+    Graph measures or metrics are values that capture graph properties like efficiency. 
+    As these measures capture information across the entire graph, or for nodes, edges or subgraphs, 
+    they can be used to study graph properties. 
+    These measures can also be used as a low-dimensional representation of the graph in machine learning tasks.
+??? tip "[Graph Kernels](api/graph_kernels.md)"
+
+    Graph Kernels are learnable functions that map the graph structure into a lower dimensional representation 
+    and are commonly used to solve different problems in graph classification, or regression.
+
+After the data is transformed into a feature representation a standard PHOTONAI pipeline can be used to 
+predict on the graph data. For more details consult the <a href='https://wwu-mmll.github.io/photonai/' target='_blank'>PHOTONAI documentation</a>.
+
+!!! note 
+    All of the <a href='https://wwu-mmll.github.io/photonai/algorithms/estimators/' target='_blank'>PHOTONAI estimators</a>
+    can be used directly with PHOTONAI Graph.
+
+#### Deep Learning
+In contrast, Graph Neural Nets are modified neural networks, that learn directly on graphs and make use of graph 
+information. Here different architectures are available, and no transformation step is required prior to the network.
+
+!!! warning
+    If using Graph Neural Networks your data has to be in graph format. If you extract metadata from your graph
+    using a PHOTONAI Graph transformer, the application of Graph Neural Networks is not possible.
+
+PHOTONAI Graph already provides some [Graph Neural Networks](api/graph_convnets.md). However, additional models can
+be added by [extending PHOTONAI Graph](extending_photonai_graph.md).
 
 ### Building a pipeline
+When building a pipeline, the elements are highly dependent on your input data.
+If the input data is a connectivity matrix this has to be transformed into a graph at first.
+For illustrative purposes the example will consider the case where the input data is a connectivity matrix.
 
-Before building a pipeline, one has to determine the starting point. For illustrative purposes we will consider the case where one is starting with connectivity matrices. First you pick a graph constructor to turn your matrices into adjacency matrices. Then one has to choose whether transform the graph into a low dimensional representation or to directly use graph neural networks. Using PHOTON Graph this can be done in just a few lines of code.
+!!! info
+    PHOTONAI Graph provides functions for generation of dummy connectivity matrices.
+
+The next necessary decision is if the graph should be transformed into features for a subsequent classic
+machine learning pipeline or directly fed into a deep learning model.
 
 #### Example
 
