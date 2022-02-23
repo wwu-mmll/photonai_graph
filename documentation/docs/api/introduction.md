@@ -28,11 +28,31 @@ classDiagram-v2
 ## Predictor Classes
 Predictor objects are the actual learning algorithm of the respective pipeline.
 Therefore each predictor has to provide at least a `fit()` and a `predict()` function.
+
+PHOTONAI Graph provides predefined models for classification and regression.
+
+### Classification
 ```mermaid
 classDiagram-v2
     class Predictor{
     +fit()
     +predict()
     }
-    Predictor <|-- GraphNeuralNetwork  
+    Predictor <|-- DglModel  
+    DglModel <|-- GCNClassifierModel
+    DglModel <|-- SGConvClassifierModel
+    DglModel <|-- GATClassifierModel
+```
+
+### Regression
+```mermaid
+classDiagram-v2
+    class Predictor{
+    +fit()
+    +predict()
+    }
+    Predictor <|-- DglModel 
+    DglModel <|-- GCNRegressorModel
+    DglModel <|-- SGConvRegressorModel
+    DglModel <|-- GATRegressorModel
 ```
