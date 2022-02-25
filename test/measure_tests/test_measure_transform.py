@@ -41,6 +41,14 @@ class GraphMeasureTransformTests(unittest.TestCase):
         measures = g_transform.transform(self.X_nx)
         self.assertEqual(measures.shape, (10, 2))
 
+    def test_transform_own_measures_parallel(self):
+        g_transform = GraphMeasureTransform(graph_functions={"global_efficiency": {},
+                                                             "local_efficiency": {}},
+                                            n_processes=2)
+        g_transform.fit(self.X_nx, self.y)
+        measures = g_transform.transform(self.X_nx)
+        self.assertEqual(measures.shape, (10, 2))
+
     def test_transform_dict_node(self):
         g_transform = GraphMeasureTransform(graph_functions={"eigenvector_centrality": {}})
         g_transform.fit(self.X_nx, self.y)
