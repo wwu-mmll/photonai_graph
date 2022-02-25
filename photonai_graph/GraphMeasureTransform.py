@@ -79,8 +79,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
     def fit(self, X, y):
         pass
 
-    def transform(self, X):
-
+    def _inner_transform(self, X):
         X_transformed = []
 
         if isinstance(X, np.ndarray) or isinstance(X, np.matrix):
@@ -115,6 +114,11 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
             for graph in X_transformed:
                 if len(graph[c_measure]) < expected_values:
                     graph[c_measure] = [np.NAN] * expected_values
+
+        return X_transformed
+
+    def transform(self, X):
+        X_transformed = self._inner_transform(X)
 
         for graph_idx in range(len(X_transformed)):
             g_m = list()
@@ -185,93 +189,21 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
 
     def extract_measures(self, x_graphs, path="", ids=None):
 
-        measure_list = []
-        # check that graphs have networkx format
-        if isinstance(x_graphs, np.ndarray) or isinstance(x_graphs, np.matrix):
-            graphs = dense_to_networkx(x_graphs, adjacency_axis=0)
-        elif isinstance(x_graphs, list):
-            graphs = x_graphs
-        else:
-            raise TypeError("Input needs to be list of networkx graphs or numpy array.")
+        if id is None:
+            raise ValueError('No id provided')
+        x_graphs = [x_graphs[cid] for cid in ids]
+        X_transformed = self._inner_transform(x_graphs)
 
-        # load json file
-        base_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        measure_json = os.path.join(base_folder, 'photonai_graph/GraphMeasures.json')
-        with open(measure_json, 'r') as measure_json_file:
-            measure_j = json.load(measure_json_file)
+        measurements = []
+        for graph, gid in zip(X_transformed, ids):
+            for measurement_id, result in enumerate(graph):
+                for res in result:
+                    current_measurement = [gid, list(self.graph_functions.values())[measurement_id], res]
+                    measurements.append(current_measurement)
 
-        if ids is not None:
 
-            for graph, i in zip(graphs, ids):
+        df = pd.DataFrame(measurements)
 
-                for key, value in self.graph_functions.items():
-
-                    # do all the extraction steps
-                    if key in measure_j:
-
-                        measure = measure_j[key]
-                        # remove self loops if not allowed
-                        if not measure['self_loops_allowed']:
-                            graph.remove_edges_from(networkx.selfloop_edges(graph))
-                        # make photonai_graph directed or undirected depending on what is needed
-                        if measure['Undirected']:
-                            graph.to_undirected()
-                        elif not measure['Undirected']:
-                            graph.to_directed()
-                        # call function
-                        results = getattr(networkx, key)(graph, **value)
-
-                        # if the values are numbers:
-                        # make a list of Subject ID, value, measure_name, edge=None, node=None
-                        if measure['Output'] == "number":
-                            list_to_append = [i, results, key, "None", "None"]
-                            measure_list.append(list_to_append)
-                        # if the values are dicts:
-                        # for every value in the dict make a list with:
-                        # subject ID, value, measure name, edge=None if it isn't an edge_method
-                        if measure['Output'] == "dict":
-                            for rskey, rsval in results.items():
-                                if measure['node_or_edge'] == 'node':
-                                    list_to_append = [i, rsval, key, rskey, "None"]
-                                    measure_list.append(list_to_append)
-                                elif measure['node_or_edge'] == 'edge':
-                                    list_to_append = [i, rsval, key, "None", rskey]
-                                    measure_list.append(list_to_append)
-                        # if the values are tuples
-                        elif measure['Output'] == "tuple":
-                            list_to_append = [i, results[0], key, "None", "None"]
-                            measure_list.append(list_to_append)
-                        # if the output is a dict of dicts
-                        elif measure['Output'] == "dict_dict":
-                            raise NotImplementedError("Dictionary of dictionary outputs are not implemented.")
-                        # if output is list: list outputs are not implemented
-                        elif measure['Output'] == "list":
-                            raise NotImplementedError("List outputs are not implemented")
-                        # if the output is float or dict based output
-                        elif measure['Output'] == "float_or_dict":
-                            if isinstance(results, float):
-                                list_to_append = [i, results, key, "None", "None"]
-                                measure_list.append(list_to_append)
-                            elif isinstance(results, dict):
-                                for rskey, rsval in results.items():
-                                    if measure['node_or_edge'] == "node":
-                                        list_to_append = [i, rsval, key, rskey, "None"]
-                                        measure_list.append(list_to_append)
-                                    elif measure['node_or_edge'] == "edge":
-                                        list_to_append = [i, rsval, key, "None", rskey]
-                                        measure_list.append(list_to_append)
-                        # if output is dual_tuple
-                        elif measure['Output'] == "dual_tuple":
-                            raise NotImplementedError("Dual tuple outputs are not implemented.")
-                        # if output is tuple_dict
-                        elif measure['Output'] == "tuple_dict":
-                            raise NotImplementedError("Tuple-Dict outputs are not implemented.")
-
-        else:
-            raise Exception('no ID provided')
-
-        df = pd.DataFrame(measure_list)
-
-        col_names = ["ID", "value", "measure", "nodes", "edges"]
+        col_names = ["ID", "value", "measure"]
 
         df.to_csv(path_or_buf=path, header=col_names, index=None)
