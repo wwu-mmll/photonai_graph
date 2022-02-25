@@ -28,6 +28,7 @@ import dask
 from dask.diagnostics import ProgressBar
 from sklearn.base import BaseEstimator, TransformerMixin
 from photonai_graph.GraphConversions import dense_to_networkx
+import networkx as nx
 import pandas as pd
 import numpy as np
 import json
@@ -95,38 +96,39 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         with open(measure_json, 'r') as measure_json_file:
             measure_j = json.load(measure_json_file)
 
-        # compute graph metrics for first graph
-        # ToDo: will only work in case first graph in list is not empty
         # ToDo: write unit test for parallelization
-        measures_first_graph = self._compute_graph_metrics(graphs[0], self.graph_functions, measure_j)
-        n_measures_to_expect = len(measures_first_graph)
 
         if self.n_processes > 1:
             task_list = []
             for graph in graphs:
-                tmp = dask.delayed(self._compute_graph_metrics)(graph, self.graph_functions, measure_j, n_measures=None)
+                tmp = dask.delayed(self._compute_graph_metrics)(graph, self.graph_functions, measure_j)
                 task_list.append(tmp)
             with ProgressBar():
                 X_transformed = list(dask.compute(*task_list, num_workers=self.n_processes, scheduler='threads'))
         else:
-
             for graph in graphs:
-                measure_list_graph = self._compute_graph_metrics(graph, self.graph_functions, measure_j,
-                                                                 n_measures_to_expect)
+                measure_list_graph = self._compute_graph_metrics(graph, self.graph_functions, measure_j)
                 X_transformed.append(measure_list_graph)
+
+        for c_measure in range(len(self.graph_functions)):
+            expected_values = max([len(graph[c_measure]) for graph in X_transformed])
+            for graph in X_transformed:
+                if len(graph[c_measure]) < expected_values:
+                    graph[c_measure] = [np.NAN] * expected_values
+
+        for graph_idx in range(len(X_transformed)):
+            g_m = list()
+            for measure in X_transformed[graph_idx]:
+                g_m.extend(measure)
+            X_transformed[graph_idx] = g_m
 
         X_transformed = np.asarray(X_transformed)
 
         return X_transformed
 
-    @staticmethod
-    def _compute_graph_metrics(graph, graph_functions, measure_j, n_measures=None):
+    def _compute_graph_metrics(self, graph, graph_functions, measure_j):
         if networkx.classes.function.is_empty(graph):
             print("Graph is empty")
-            if n_measures is None:
-                return None
-            else:
-                return [np.nan] * n_measures
         measure_list_graph = []
         for key, value in graph_functions.items():
             measure_list = list()
@@ -145,40 +147,38 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
 
                 # call function
                 results = getattr(networkx, measure["path"].split(".")[-1])(graph, **value)
+                measure_list = self.handle_outputs(results, measure_list)
 
-                # handle results
-                if measure['Output'] == "dict":
-                    for rskey, rsval in results.items():
-                        measure_list.append(rsval)
-                elif measure['Output'] == "number":
-                    measure_list.append(results)
-                elif measure['Output'] == "tuple":
-                    measure_list.append(results[0])
-                elif measure['Output'] == "dict_dict":
-                    for rskey, rsval in sorted(results.items()):
-                        for rs2key, rs2val in sorted(rsval.items()):
-                            measure_list.append(rs2val)
-                elif measure['Output'] == "list":
-                    measure_list.extend(results)
-                elif measure['Output'] == "float_or_dict":
-                    if isinstance(results, float):
-                        measure_list.append(results)
-                    if isinstance(results, dict):
-                        for rskey, rsval in sorted(results.items()):
-                            measure_list.append(rsval)
-                elif measure['Output'] == "dual_tuple":
-                    measure_list.append(results[0])
-                    measure_list.append(results[1])
-                elif measure['Output'] == "tuple_dict":
-                    for rskey, rsval in sorted(results[0].items()):
-                        measure_list.append(rsval)
-                    for rskey, rsval in sorted(results[1].items()):
-                        measure_list.append(rsval)
                 if "compute_average" in measure.keys() and measure['compute_average']:
-                    measure_list_graph.append(np.mean(measure_list))
+                    measure_list_graph.append([np.mean(measure_list)])
                 else:
-                    measure_list_graph.extend(measure_list)
+                    measure_list_graph.append(measure_list)
         return measure_list_graph
+
+    @staticmethod
+    def handle_outputs(results, measure_list):
+        # handle results
+        if isinstance(results, dict):
+            for rskey, rsval in results.items():
+                GraphMeasureTransform.handle_outputs(rsval, measure_list)
+            return measure_list
+
+        if isinstance(results, list):
+            measure_list.extend(results)
+            return measure_list
+
+        # currently only networkx functions return tuples
+        # The second return value can be discarded in these functions
+        if isinstance(results, tuple):
+            for result in results:
+                GraphMeasureTransform.handle_outputs(result, measure_list)
+            return measure_list
+
+        if isinstance(results, nx.Graph):
+            return measure_list
+
+        measure_list.append(results)
+        return measure_list
 
     def get_measure_info(self):
         pass
