@@ -15,7 +15,7 @@ class ThresholdTests(unittest.TestCase):
 
     def test_threshold_individual_3d(self):
         # ensure that a individual transform style on a 3d matrix does not return values other than one
-        g_constr = GraphConstructorThreshold(threshold=0.5, transform_style="individual")
+        g_constr = GraphConstructorThreshold(threshold=0.5)
         g_constr.fit(self.X3d, self.y)
         trans = g_constr.transform(self.X3d)
         self.assertEqual(np.min(trans), 1)
@@ -23,7 +23,7 @@ class ThresholdTests(unittest.TestCase):
 
     def test_threshold_individual_4d(self):
         # ensure that a individual transform style on a 4d matrix does not return values other than one
-        g_constr = GraphConstructorThreshold(threshold=0.5, transform_style="individual")
+        g_constr = GraphConstructorThreshold(threshold=0.5)
         g_constr.fit(self.X4d, self.y)
         trans = g_constr.transform(self.X4d)
         self.assertEqual(np.min(trans), 1)
@@ -31,7 +31,7 @@ class ThresholdTests(unittest.TestCase):
 
     def test_threshold_mean_3d(self):
         # ensure that a individual transform style on a 3d matrix does not return values other than zero
-        g_constr = GraphConstructorThreshold(threshold=1.5, transform_style="individual")
+        g_constr = GraphConstructorThreshold(threshold=1.5)
         g_constr.fit(self.X3d, self.y)
         trans = g_constr.transform(self.X3d)
         self.assertEqual(np.min(trans[:, :, :, 0]), 0)
@@ -39,7 +39,7 @@ class ThresholdTests(unittest.TestCase):
 
     def test_threshold_mean_4d(self):
         # ensure that a individual transform style on a 4d matrix does not return values other than zero
-        g_constr = GraphConstructorThreshold(threshold=1.5, transform_style="individual")
+        g_constr = GraphConstructorThreshold(threshold=1.5)
         g_constr.fit(self.X4d, self.y)
         trans = g_constr.transform(self.X4d)
         self.assertEqual(np.min(trans[:, :, :, 0]), 0)
@@ -47,7 +47,7 @@ class ThresholdTests(unittest.TestCase):
 
     def test_threshold_retain_weights(self):
         # ensure that retain weights leads to a diverse set of weights (more than 0 and 1)
-        g_constr = GraphConstructorThreshold(threshold=0.5, transform_style="individual", retain_weights=1)
+        g_constr = GraphConstructorThreshold(threshold=0.5, retain_weights=1)
         g_constr.fit(self.Xrandom4d, self.y)
         trans = g_constr.transform(self.Xrandom4d)
         self.assertEqual(np.min(trans[:, :, :, 0]), 0)
@@ -56,13 +56,13 @@ class ThresholdTests(unittest.TestCase):
     def test_threshold_retain_weights_error(self):
         # ensure a Value error is being raised when retain weights is neither 0 or 1
         with self.assertRaises(ValueError):
-            g_constr = GraphConstructorThreshold(threshold=0.5, transform_style="individual", retain_weights=0.5)
+            g_constr = GraphConstructorThreshold(threshold=0.5, retain_weights=0.5)
             g_constr.fit(self.Xrandom4d, self.y)
             g_constr.transform(self.Xrandom4d)
 
     def test_threshold_contains(self):
         # ensure that the threshold actually picks the right rows of the matrix
-        g_constr = GraphConstructorThreshold(threshold=90, transform_style="individual", retain_weights=1)
+        g_constr = GraphConstructorThreshold(threshold=90, retain_weights=1)
         g_constr.fit(self.Xtest4d, self.y)
         trans = g_constr.transform(self.Xtest4d)
         expected_elements = [90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100]
@@ -71,7 +71,7 @@ class ThresholdTests(unittest.TestCase):
 
     def test_threshold_not_contains(self):
         # ensure that the threshold actually picks the right rows of the matrix
-        g_constr = GraphConstructorThreshold(threshold=90, transform_style="individual", retain_weights=1)
+        g_constr = GraphConstructorThreshold(threshold=90, retain_weights=1)
         g_constr.fit(self.Xtest4d, self.y)
         trans = g_constr.transform(self.Xtest4d)
         expected_elements = [80, 81, 82, 83, 84, 85, 86, 87, 88, 89]

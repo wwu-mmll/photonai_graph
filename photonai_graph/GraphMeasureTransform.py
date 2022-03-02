@@ -201,7 +201,6 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                     current_measurement = [gid, list(self.graph_functions.values())[measurement_id], res]
                     measurements.append(current_measurement)
 
-
         df = pd.DataFrame(measurements)
 
         col_names = ["ID", "value", "measure"]

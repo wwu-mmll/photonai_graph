@@ -11,9 +11,9 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
     _estimator_type = "transformer"
 
     def __init__(self,
-                 transform_style: str = "mean",
                  one_hot_nodes: int = 0,
                  fisher_transform: int = 0,
+                 discard_original_connectivity: bool = False,
                  use_abs: int = 0,
                  zscore: int = 0,
                  use_abs_zscore: int = 0,
@@ -25,11 +25,13 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
 
         Parameters
         ----------
-        transform_style: str, default="mean"
         one_hot_nodes: int, default=0
             whether to return a one hot node encoding as feature or not
         fisher_transform: int, default=0
             whether to perform a fisher transform of every matrix
+        discard_original_connectivity: bool,default=False
+            If true the second index of the last dimension will be the original connectivity.
+            Otherwise the original connectivity will be dropped from the matrix.
         use_abs: int
             Changes the values to absolute values. Is applied after fisher transform and before
             z-score transformation
@@ -44,9 +46,11 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
         logs: str, default=None
             Path to the log data
         """
-        self.transform_style = transform_style
+        if one_hot_nodes not in [0, 1]:
+            raise ValueError("one_hot_nodes must be in [0, 1]")
         self.one_hot_nodes = one_hot_nodes
         self.fisher_transform = fisher_transform
+        self.discard_original_connectivity = discard_original_connectivity
         self.use_abs = use_abs
         self.zscore = zscore
         self.use_abs_zscore = use_abs_zscore
@@ -58,85 +62,46 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
         self.mean_matrix = None
 
     def fit(self, X, y):
-        """implements a mean matrix construction"""
-
-        if self.transform_style == "mean" or self.transform_style == "Mean":
-            # generate mean matrix
-            X_mean = np.squeeze(np.mean(X, axis=0))
-            # select the proper matrix in case you have multiple
-            if np.ndim(X_mean) == 3:
-                X_mean = X_mean[:, :, self.adjacency_axis]
-            elif np.ndim(X_mean) == 2:
-                X_mean = X_mean
-            else:
-                raise ValueError('The input matrices need to have 3 or 4 dimensions. Please check your input matrix.')
-            # assign mean matrix for later use
-            self.mean_matrix = X_mean
-
-        elif self.transform_style == "individual" or self.transform_style == "Individual":
-            pass
-
-        else:
-            raise ValueError('transform_style needs to be individual or mean')
-
         return self
 
     def get_mtrx(self, X):
         """Returns a feature and adjacency matrix"""
 
-        if self.transform_style == "individual":
-
-            # ensure that the array has the "right" number of dimensions
-            if np.ndim(X) == 4:
-                adjacency_matrix = X[:, :, :, self.adjacency_axis].copy()
-                adjacency_matrix = adjacency_matrix[:, :, :, np.newaxis]  # return 4d
-                feature_matrix = X.copy()
-            # handle the case where there are 3 dimensions, meaning that there is no "adjacency axis"
-            elif np.ndim(X) == 3:
-                adjacency_matrix = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
-                feature_matrix = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
-            else:
-                raise Exception('input matrix needs to have 3 or 4 dimensions')
-
-        elif self.transform_style == "mean":
-            adjacency_matrix = self.mean_matrix.copy()
-            adjacency_matrix = adjacency_matrix[np.newaxis, :, :, np.newaxis]
-            adjacency_matrix = np.repeat(adjacency_matrix, X.shape[0], axis=0)
-            if np.ndim(X) == 4:
-                feature_matrix = X.copy()
-            elif np.ndim(X) == 3:
-                feature_matrix = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
-            else:
-                raise Exception('input matrix needs to have 3 or 4 dimensions')
-
+        # ensure that the array has the "right" number of dimensions
+        if np.ndim(X) == 4:
+            adjacency_matrix = X[:, :, :, self.adjacency_axis].copy()
+            adjacency_matrix = adjacency_matrix[:, :, :, np.newaxis]  # return 4d
+            feature_matrix = X.copy()
+        # handle the case where there are 3 dimensions, meaning that there is no "adjacency axis"
+        elif np.ndim(X) == 3:
+            adjacency_matrix = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
+            feature_matrix = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
         else:
-            raise ValueError('transform_style needs to be individual or mean')
+            raise ValueError('input matrix needs to have 3 or 4 dimensions')
 
         return adjacency_matrix, feature_matrix
 
     def prep_mtrx(self, adjacency):
         """transforms the matrix according to selected criteria"""
-        if self.fisher_transform == 1:
+        if self.fisher_transform:
             adjacency = individual_fishertransform(adjacency)
-        if self.use_abs == 1:
+        if self.use_abs:
             adjacency = np.abs(adjacency)
-        if self.zscore == 1:
+        if self.zscore:
             adjacency = individual_ztransform(adjacency)
-        if self.use_abs_zscore == 1:
+        if self.use_abs_zscore:
             adjacency = np.abs(adjacency)
 
         return adjacency
 
     def get_features(self, adjacency, features):
         """Returns a concatenated version of feature matrix and one hot nodes"""
-        if self.one_hot_nodes == 0:
-            X_transformed = np.concatenate((adjacency, features), axis=3)
-        elif self.one_hot_nodes == 1:
-            X_transformed = self.get_one_hot_nodes(adjacency)
-        else:
-            raise ValueError('one_hot_nodes needs to be 0 or 1.')
-
-        return X_transformed
+        if self.discard_original_connectivity:
+            features = features[..., 1:]
+        if self.one_hot_nodes:
+            adjacency = self.get_one_hot_nodes(adjacency)
+        transformed = np.concatenate((adjacency, features), axis=3)
+        return transformed
 
     @staticmethod
     def get_one_hot_nodes(X):
@@ -147,9 +112,8 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
         identity_matrix = identity_matrix[np.newaxis, :, :, np.newaxis]
         # repeat along first dimension and concatenate
         one_hot = np.repeat(identity_matrix, X.shape[0], 0)
-        X_concat = np.concatenate((X, one_hot), axis=3)
-
-        return X_concat
+        concat = np.concatenate((X, one_hot), axis=3)
+        return concat
 
     @staticmethod
     def adjacency(dist, idx):

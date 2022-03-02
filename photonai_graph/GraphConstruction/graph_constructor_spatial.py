@@ -12,7 +12,6 @@ class GraphConstructorSpatial(GraphConstructor):
                  k_distance: int = 10,
                  atlas_name: str = 'ho',
                  atlas_folder: str = "",
-                 transform_style: str = "individual",
                  one_hot_nodes: int = 0,
                  fisher_transform: int = 0,
                  use_abs: int = 0,
@@ -33,9 +32,6 @@ class GraphConstructorSpatial(GraphConstructor):
         ----------
         k_distance: int
             the k nearest neighbours value, for the kNN algorithm.
-        transform_style: str, default="mean"
-            generate an adjacency matrix based on the mean matrix like in Ktena et al.: "mean"
-            Or generate a different matrix for every individual: "individual"
         atlas_name: str,default="ho"
             name of the atlas coordinate file
         atlas_folder: str,default="ho"
@@ -60,7 +56,6 @@ class GraphConstructorSpatial(GraphConstructor):
 
         ```python
         constructor = GraphConstructorSpatial(k_distance=7,
-                                              transform_style="individual",
                                               atlas_name="ho_coords.csv",
                                               atlas_path="path/to/your/data/",
                                               fisher_transform=1,
@@ -71,12 +66,11 @@ class GraphConstructorSpatial(GraphConstructor):
 
         ```python
         my_pipe.add(PipelineElement('GraphConstructorSpatial',
-                                    hyperparameters={'k_distance': 7, 'transform_style': "individual",
+                                    hyperparameters={'k_distance': 7,
                                     'atlas_name': "ho_coords.csv", 'atlas_path': "path/to/your/data/"}))
         ```
        """
-        super(GraphConstructorSpatial, self).__init__(transform_style=transform_style,
-                                                      one_hot_nodes=one_hot_nodes,
+        super(GraphConstructorSpatial, self).__init__(one_hot_nodes=one_hot_nodes,
                                                       fisher_transform=fisher_transform,
                                                       use_abs=use_abs,
                                                       zscore=zscore,
