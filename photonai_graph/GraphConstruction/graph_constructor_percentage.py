@@ -6,8 +6,7 @@ class GraphConstructorPercentage(GraphConstructor):
     _estimator_type = "transformer"
 
     def __init__(self, percentage: float = 80,
-                 retain_weights: int = 0,
-                 transform_style: str = "individual",
+                 retain_weights: float = 0,
                  one_hot_nodes: int = 0,
                  fisher_transform: int = 0,
                  use_abs: int = 0,
@@ -37,7 +36,7 @@ class GraphConstructorPercentage(GraphConstructor):
             performs a zscore transformation of the data. Applied after fisher transform and np_abs
         use_abs_zscore: int, default=0
             whether to use the absolute values of the z-score transformation or allow for negative values
-        retain_weights: int
+        retain_weights: float
             whether to retain weight values or not
 
         Example
@@ -59,8 +58,7 @@ class GraphConstructorPercentage(GraphConstructor):
 
 
        """
-        super(GraphConstructorPercentage, self).__init__(transform_style=transform_style,
-                                                         one_hot_nodes=one_hot_nodes,
+        super(GraphConstructorPercentage, self).__init__(one_hot_nodes=one_hot_nodes,
                                                          fisher_transform=fisher_transform,
                                                          use_abs=use_abs,
                                                          zscore=zscore,

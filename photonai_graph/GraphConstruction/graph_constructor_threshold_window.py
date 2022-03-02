@@ -7,8 +7,7 @@ class GraphConstructorThresholdWindow(GraphConstructor):
     def __init__(self,
                  threshold_upper: float = 1,
                  threshold_lower: float = 0.8,
-                 retain_weights: int = 0,
-                 transform_style: str = "individual",
+                 retain_weights: float = 0,
                  one_hot_nodes: int = 0,
                  fisher_transform: int = 0,
                  use_abs: int = 0,
@@ -63,8 +62,7 @@ class GraphConstructorThresholdWindow(GraphConstructor):
                                     hyperparameters={'threshold_upper': 0.7, 'threshold_lower': 0.3}))
         ```
        """
-        super(GraphConstructorThresholdWindow, self).__init__(transform_style=transform_style,
-                                                              one_hot_nodes=one_hot_nodes,
+        super(GraphConstructorThresholdWindow, self).__init__(one_hot_nodes=one_hot_nodes,
                                                               fisher_transform=fisher_transform,
                                                               use_abs=use_abs,
                                                               zscore=zscore,

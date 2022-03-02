@@ -7,7 +7,6 @@ class GraphConstructorKNN(GraphConstructor):
 
     def __init__(self,
                  k_distance: int = 10,
-                 transform_style: str = "individual",
                  one_hot_nodes: int = 0,
                  fisher_transform: int = 0,
                  use_abs: int = 0,
@@ -59,8 +58,7 @@ class GraphConstructorKNN(GraphConstructor):
                                     hyperparameters={'k_distance': 6}))
         ```
        """
-        super(GraphConstructorKNN, self).__init__(transform_style=transform_style,
-                                                  one_hot_nodes=one_hot_nodes,
+        super(GraphConstructorKNN, self).__init__(one_hot_nodes=one_hot_nodes,
                                                   fisher_transform=fisher_transform,
                                                   use_abs=use_abs,
                                                   zscore=zscore,

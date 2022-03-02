@@ -16,12 +16,10 @@ class NetworkxToDglTest(unittest.TestCase):
         self.nx_array = np.array([nx.cycle_graph(20), nx.cycle_graph(15), nx.cycle_graph(20)])
 
     def test_list(self):
-        mtrx = networkx_to_dgl(self.graphs)
-        self.assertEqual(type(mtrx), list)
-
-    def test_dgl_type(self):
-        mtrx = networkx_to_dgl(self.graphs)
-        self.assertEqual(type(mtrx[0]), dgl.DGLGraph)
+        mtrxs = networkx_to_dgl(self.graphs)
+        self.assertEqual(type(mtrxs), list)
+        for mtrx in mtrxs:
+            self.assertEqual(type(mtrx), dgl.DGLGraph)
 
     def test_single_graph(self):
         mtrx = networkx_to_dgl(self.graph)
@@ -39,6 +37,15 @@ class NetworkxToDglTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             networkx_to_dgl(self.edge_dict)
 
+    def test_check_nonsense_list_input(self):
+        with self.assertRaises(ValueError):
+            networkx_to_dgl([self.edge_dict] * 10)
+
+    def test_check_nonsense_array_input(self):
+        with self.assertRaises(ValueError):
+            networkx_to_dgl(np.array([self.edge_dict] * 10))
+
     def test_nx_array(self):
-        mtrx = networkx_to_dgl(self.nx_array)
-        self.assertEqual(type(mtrx[0]), dgl.DGLGraph)
+        mtrxs = networkx_to_dgl(self.nx_array)
+        for mtrx in mtrxs:
+            self.assertEqual(type(mtrx), dgl.DGLGraph)

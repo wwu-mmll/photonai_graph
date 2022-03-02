@@ -8,7 +8,7 @@ class GraphConstructorThreshold(GraphConstructor):
                  concatenation_axis: int = 3,
                  return_adjacency_only: int = 0,
                  retain_weights: int = 0,
-                 transform_style: str = "individual",
+                 discard_original_connectivity: bool = False,
                  one_hot_nodes: int = 0,
                  fisher_transform: int = 0,
                  use_abs: int = 0,
@@ -30,6 +30,8 @@ class GraphConstructorThreshold(GraphConstructor):
             position of the adjacency matrix, default being zero
         concatenation_axis: int
             axis along which to concatenate the adjacency and feature matrix
+        discard_original_connectivity: bool,default=False
+            If true the original connectivity will be passed on. Otherwise it gets discarded
         one_hot_nodes: int
             Whether to generate a one hot encoding of the nodes in the matrix (1) or not (0)
         return_adjacency_only: int
@@ -65,9 +67,9 @@ class GraphConstructorThreshold(GraphConstructor):
                                     hyperparameters={'threshold': 0.5}))
         ```
        """
-        super(GraphConstructorThreshold, self).__init__(transform_style=transform_style,
-                                                        one_hot_nodes=one_hot_nodes,
+        super(GraphConstructorThreshold, self).__init__(one_hot_nodes=one_hot_nodes,
                                                         fisher_transform=fisher_transform,
+                                                        discard_original_connectivity=discard_original_connectivity,
                                                         use_abs=use_abs,
                                                         zscore=zscore,
                                                         use_abs_zscore=use_abs_zscore,

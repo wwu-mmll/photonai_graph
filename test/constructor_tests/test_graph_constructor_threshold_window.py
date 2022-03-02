@@ -20,7 +20,7 @@ class ThresholdWindowTests(unittest.TestCase):
         self.assertEqual(np.shape(trans), (20, 20, 20, 3))
 
     def test_threshold_window_individual(self):
-        g_constr = GraphConstructorThresholdWindow(transform_style="individual")
+        g_constr = GraphConstructorThresholdWindow()
         g_constr.fit(self.X4d, self.y)
         trans = g_constr.transform(self.X4d)
         self.assertEqual(np.shape(trans), (20, 20, 20, 3))
@@ -48,8 +48,9 @@ class ThresholdWindowTests(unittest.TestCase):
 
     def test_threshold_contains(self):
         # ensure that the threshold actually picks the right rows of the matrix
-        g_constr = GraphConstructorThresholdWindow(threshold_upper=80, threshold_lower=70,
-                                                   transform_style="individual", retain_weights=1)
+        g_constr = GraphConstructorThresholdWindow(threshold_upper=80,
+                                                   threshold_lower=70,
+                                                   retain_weights=1)
         g_constr.fit(self.Xtest4d, self.y)
         trans = g_constr.transform(self.Xtest4d)
         expected_elements = [70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80]
@@ -58,8 +59,9 @@ class ThresholdWindowTests(unittest.TestCase):
 
     def test_threshold_not_contains(self):
         # ensure that the threshold actually picks the right rows of the matrix
-        g_constr = GraphConstructorThresholdWindow(threshold_upper=80, threshold_lower=70,
-                                                   transform_style="individual", retain_weights=1)
+        g_constr = GraphConstructorThresholdWindow(threshold_upper=80,
+                                                   threshold_lower=70,
+                                                   retain_weights=1)
         g_constr.fit(self.Xtest4d, self.y)
         trans = g_constr.transform(self.Xtest4d)
         expected_elements = [90, 91, 92, 93, 94, 95, 96, 97, 98, 99]

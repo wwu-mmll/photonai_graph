@@ -50,3 +50,9 @@ class SaveNetworkxToFileTest(unittest.TestCase):
         path = "/tmp/graph25"
         with self.assertRaises(ValueError):
             save_networkx_to_file(self.nonsense, path=path, output_format=out_format)
+
+    def test_random_list_input(self):
+        out_format = "dot"
+        path = "/tmp/graph25"
+        with self.assertRaises(ValueError):
+            save_networkx_to_file([self.nonsense] * 20, path=path, output_format=out_format)

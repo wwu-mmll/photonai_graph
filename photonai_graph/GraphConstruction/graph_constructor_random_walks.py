@@ -13,7 +13,6 @@ class GraphConstructorRandomWalks(GraphConstructor):
                  window_size: int = 5,
                  no_edge_weight: int = 1,
                  feature_axis=1,
-                 transform_style: str = "individual",
                  one_hot_nodes: int = 0,
                  fisher_transform: int = 0,
                  use_abs: int = 0,
@@ -35,9 +34,6 @@ class GraphConstructorRandomWalks(GraphConstructor):
         ----------
         k_distance: int
             the k nearest neighbours value, for the kNN algorithm.
-        transform_style: str,default="mean"
-            generate an adjacency matrix based on the mean matrix like in Ktena et al.: "mean" or per person "individual"
-            Or generate a different matrix for every individual: "individual"
         number_of_walks: int,default=10
             number of walks to take to sample the random walk matrix
         walk_length: int,default=10
@@ -66,7 +62,6 @@ class GraphConstructorRandomWalks(GraphConstructor):
 
         ```python
         constructor = GraphConstructorRandomWalks(k_distance=5,
-                                                  transform_style="individual",
                                                   number_of_walks=25,
                                                   fisher_transform=1,
                                                   use_abs=1)
@@ -76,12 +71,11 @@ class GraphConstructorRandomWalks(GraphConstructor):
 
         ```python
         my_pipe.add(PipelineElement('GraphConstructorRandomWalks',
-                                    hyperparameters={'k_distance': 5, 'transform_style': "individual",
+                                    hyperparameters={'k_distance': 5,
                                     'number_of_walks': 25}))
         ```
        """
-        super(GraphConstructorRandomWalks, self).__init__(transform_style=transform_style,
-                                                          one_hot_nodes=one_hot_nodes,
+        super(GraphConstructorRandomWalks, self).__init__(one_hot_nodes=one_hot_nodes,
                                                           fisher_transform=fisher_transform,
                                                           use_abs=use_abs,
                                                           zscore=zscore,

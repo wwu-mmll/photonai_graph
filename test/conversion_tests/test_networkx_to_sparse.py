@@ -39,3 +39,7 @@ class NetworkxToSparseTest(unittest.TestCase):
     def test_check_nonsense_input(self):
         with self.assertRaises(ValueError):
             networkx_to_sparse(self.check_matrix)
+
+    def test_check_nonsense_list_input(self):
+        with self.assertRaises(ValueError):
+            networkx_to_sparse([self.check_matrix] * 10)
