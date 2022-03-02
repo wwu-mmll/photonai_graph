@@ -19,10 +19,8 @@ class SparseToNetworkxTest(unittest.TestCase):
     def test_list(self):
         lst = sparse_to_networkx(self.matrix_list)
         self.assertEqual(type(lst), list)
-
-    def test_list_element(self):
-        lst = sparse_to_networkx(self.matrix_list)
-        self.assertEqual(type(lst[0]), nx.classes.Graph)
+        for itm in lst:
+            self.assertEqual(type(itm), nx.classes.Graph)
 
     def test_single(self):
         single = sparse_to_networkx(self.single_matrix)
@@ -44,3 +42,7 @@ class SparseToNetworkxTest(unittest.TestCase):
     def test_nonsense(self):
         with self.assertRaises(Exception):
             sparse_to_networkx(self.edge_dict)
+
+    def test_nonsense_list(self):
+        with self.assertRaises(Exception):
+            sparse_to_networkx([self.edge_dict] * 10)

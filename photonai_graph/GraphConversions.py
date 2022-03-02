@@ -6,6 +6,7 @@ import os
 import warnings
 import yaml
 from photonai_graph.util import assert_imported
+
 try:
     import dgl
 except ImportError:
@@ -17,7 +18,7 @@ output_formats = {
     "MultilineAdjacencyList": nx.write_multiline_adjlist,
     "EdgeList": nx.write_edgelist,
     "WeightedEdgeList": nx.write_weighted_edgelist,
-    "GEXF":  nx.write_gexf,
+    "GEXF": nx.write_gexf,
     "pickle": nx.write_gpickle,
     "GLM": nx.write_gml,
     "GraphML": nx.write_graphml,
@@ -73,34 +74,32 @@ def save_networkx_to_file(graphs, path, output_format="dot", ids=None):
 
     """
 
-    # run graph_writing with IDs
     if output_format not in output_formats:
         raise ValueError("The output format is not supported. Please check your output format.")
 
-    # Case 1: a list of networkx graphs as input
-    if isinstance(graphs, list):
+    if not isinstance(graphs, list):
+        return save_single_networkx_to_file(graph=graphs, path=path, output_format=output_format)
 
-        # Check if we have got a list of ids
-        if ids is None or not isinstance(ids, list):
-            ids = np.arange(len(graphs))
+    # Check if we have got a list of ids
+    if ids is None or not isinstance(ids, list):
+        ids = np.arange(len(graphs))
 
-        # check if id and graphs they have equal length
-        if len(graphs) != len(ids):
-            raise ValueError(
-                'The photonai_graph ID list and the list of Graphs are not of equal length. '
-                'Please ensure that they have equal length.')
+    # check if id and graphs they have equal length
+    if len(graphs) != len(ids):
+        raise ValueError(
+            'The photonai_graph ID list and the list of Graphs are not of equal length. '
+            'Please ensure that they have equal length.')
 
-        for graph, i in zip(graphs, ids):
-            graph_filename = "graph_" + str(i)
-            graph_path = os.path.join(path, graph_filename)
-            output_formats[output_format](graph, graph_path)
+    for graph, i in zip(graphs, ids):
+        graph_filename = "graph_" + str(i)
+        graph_path = os.path.join(path, graph_filename)
+        save_single_networkx_to_file(graph=graph, path=graph_path, output_format=output_format)
 
-    # Case 2: the input is just a single photonai_graph
-    elif isinstance(graphs, nx.classes.graph.Graph):
-        output_formats[output_format](graphs, path)
 
-    else:
-        raise ValueError('Your input is not supported right now.\nPlease provide a list of graphs or a single graph')
+def save_single_networkx_to_file(graph, path, output_format="dot"):
+    if not isinstance(graph, nx.classes.graph.Graph):
+        raise ValueError(f"Got unknown object for serialization: {type(graph)}")
+    output_formats[output_format](graph, path)
 
 
 def load_file_to_networkx(path, input_format="dot"):
@@ -134,23 +133,35 @@ def networkx_to_dense(graphs):
         ----------
             graphs: list of graphs
 
-        :returns
-            list of numpy arrays of a single numpy array
+        Returns
+        -------
+            list of numpy arrays or a single numpy array
     """
-    if isinstance(graphs, list):
-        graph_list = []
-        for graph in graphs:
-            np_graph = nx.to_numpy_array(graph)
-            graph_list.append(np_graph)
-    elif isinstance(graphs, nx.classes.graph.Graph):
-        graph_list = nx.to_numpy_array(graphs)
-    else:
-        raise ValueError('Input needs to be either a list of networkx graphs or a networkx photonai_graph.')
+    if not isinstance(graphs, list):
+        return single_networkx_to_dense(graphs)
 
-    return graph_list
+    return [single_networkx_to_dense(graph) for graph in graphs]
 
 
-def networkx_to_sparse(graphs, fmt='csr'):
+def single_networkx_to_dense(graph):
+    """convert a networkx graph to a numpy array
+
+    Parameters
+    ----------
+    graph: nx.classes.graph.Graph
+        Input networkx graph object
+
+    Returns
+    -------
+    np.ndarray
+        Numpy representation of the input graph
+    """
+    if not isinstance(graph, nx.classes.graph.Graph):
+        raise ValueError("Non nx graph object was given as input")
+    return nx.to_numpy_array(graph)
+
+
+def networkx_to_sparse(graphs, fmt: str = 'csr'):
     """converts networkx graph to sparse graphs
 
         Parameters
@@ -160,17 +171,29 @@ def networkx_to_sparse(graphs, fmt='csr'):
         fmt: str, default="csr"
             format of the scipy sparse matrix
     """
-    if isinstance(graphs, list):
-        graph_list = []
-        for graph in graphs:
-            sparse_graph = nx.to_scipy_sparse_matrix(graph, format=fmt)
-            graph_list.append(sparse_graph)
-    elif isinstance(graphs, nx.classes.graph.Graph):
-        graph_list = nx.to_scipy_sparse_matrix(graphs, format=fmt)
-    else:
-        raise ValueError('Input needs to be a list of networkx graphs or a networkx photonai_graph.')
+    if not isinstance(graphs, list):
+        return single_networkx_to_sparse(graphs, fmt=fmt)
 
-    return graph_list
+    return [single_networkx_to_sparse(graph, fmt=fmt) for graph in graphs]
+
+
+def single_networkx_to_sparse(graph, fmt: str = 'csr'):
+    """converts a single networkx graph to a scipy sparse matrix
+
+    Parameters
+    ----------
+    graph: nx.classes.graph.Graph
+        Input networkx graph
+    fmt: str,default="fmt"
+        scipy sparse matrix format
+
+    Returns
+    -------
+    sparse scipy matrix
+    """
+    if not isinstance(graph, nx.classes.graph.Graph):
+        raise ValueError(f'Got unknown object for conversion: {type(graph)}')
+    return nx.to_scipy_sparse_matrix(graph, format=fmt)
 
 
 def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
@@ -184,39 +207,48 @@ def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
             name of node attributes as list
         edge_attrs: list, default=None
             name of edge attributes as list
+
+        Returns
+        -------
+        dgl.DGLGraph
     """
     assert_imported(["dgl"])
 
-    if isinstance(graphs, list):
-        graph_list = []
-        for graph in graphs:
-            if not nx.is_directed(graph):
-                graph = graph.to_directed()
-            if node_attrs or edge_attrs is None:
-                g = dgl.from_networkx(graph)
-            else:
-                g = dgl.DGLGraph()
-                g.from_networkx(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
-            graph_list.append(g)
-    elif isinstance(graphs, np.ndarray):
-        graph_list = []
-        for graph in range(graphs.shape[0]):
-            if not nx.is_directed(graphs[graph]):
-                graphs[graph] = graphs[graph].to_directed()
-            if node_attrs or edge_attrs is None:
-                g = dgl.from_networkx(graphs[graph])
-            else:
-                g = dgl.from_networkx(graphs[graph], node_attrs=node_attrs, edge_attrs=edge_attrs)
-            graph_list.append(g)
-    elif isinstance(graphs, nx.classes.graph.Graph):
-        if not nx.is_directed(graphs):
-            graphs = graphs.to_directed()
-        g = dgl.from_networkx(graphs)
-        graph_list = g
-    else:
-        raise ValueError('networkx_to_dgl only implemented for list or single networkx graph')
+    if isinstance(graphs, np.ndarray):
+        graphs = [graphs[graph] for graph in range(graphs.shape[0])]
+    if not isinstance(graphs, list):
+        return single_networkx_to_dgl(graph=graphs, node_attrs=node_attrs, edge_attrs=edge_attrs)
 
-    return graph_list
+    return [single_networkx_to_dgl(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
+            for graph in graphs]
+
+
+def single_networkx_to_dgl(graph: nx.classes.graph.Graph, node_attrs, edge_attrs):
+    """convert a single networkx graph to a dgl graph
+
+    Parameters
+    ----------
+    graph: nx.classes.graph.Graph
+        Input networkx graph
+    node_attrs: list,default=None
+        Note attributes
+    edge_attrs: list,default=None
+        Edge attributes
+
+    Returns
+    -------
+        dgl.DGLGraph
+    """
+    assert_imported(["dgl"])
+    if not isinstance(graph, nx.classes.graph.Graph):
+        raise ValueError(f"Got unexpected type {type(graph)} for conversion")
+    if not nx.is_directed(graph):
+        graph = graph.to_directed()
+    if node_attrs or edge_attrs is None:
+        g = dgl.from_networkx(graph)
+    else:
+        g = dgl.from_networkx(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
+    return g
 
 
 def sparse_to_networkx(graphs):
@@ -227,20 +259,30 @@ def sparse_to_networkx(graphs):
         graphs:
             list of sparse matrices or single sparse matrix
     """
-    if isinstance(graphs, list):
-        graph_list = []
-        for graph in graphs:
-            nx_graph = nx.from_scipy_sparse_matrix(graph)
-            graph_list.append(nx_graph)
-    else:
-        try:
-            graph_list = nx.from_scipy_sparse_matrix(graphs)
-        except Exception as e:
-            print("Please check your input.\n"
-                  "This function only takes a single sparese matrix or a list of sparse matrices.")
-            raise e
+    if not isinstance(graphs, list):
+        return single_sparse_to_networkx(graphs)
 
-    return graph_list
+    return [single_sparse_to_networkx(graph) for graph in graphs]
+
+
+def single_sparse_to_networkx(graph):
+    """convert single scipy sparse matrix to networkx graph
+
+    Parameters
+    ----------
+    graph:
+        Input graph as sparse scipy matrix
+
+    Returns
+    -------
+    nx.classes.graph.Graph
+    """
+    try:
+        return nx.from_scipy_sparse_matrix(graph)
+    except Exception as e:
+        print("Please check your input.\n"
+              "This function only takes a single sparse matrix or a list of sparse matrices.")
+        raise e
 
 
 def dense_to_networkx(mtrx, adjacency_axis=0, feature_axis=1, feature_construction="features"):
@@ -258,39 +300,22 @@ def dense_to_networkx(mtrx, adjacency_axis=0, feature_axis=1, feature_constructi
             method of node feature construction, for more information see
             get_dense_feature function
     """
-    if isinstance(mtrx, list):
-        graph_list = []
 
-        for i in mtrx:
-            networkx_graph = nx.from_numpy_matrix(A=i[:, :, adjacency_axis])
-            features = get_dense_feature(i, adjacency_axis, feature_axis, aggregation=feature_construction)
-            nx.set_node_attributes(networkx_graph, features, name="feat")
-            graph_list.append(networkx_graph)
+    if isinstance(mtrx, np.ndarray):
+        mtrx = [mtrx[idx] for idx in range(mtrx.shape[0])]
+    if not isinstance(mtrx, list):
+        raise ValueError(f"Expected np.ndarray or list as input, got {type(mtrx)}")
 
-        mtrx_conv = graph_list
+    graph_list = []
+    for item in mtrx:
+        if not isinstance(item, np.ndarray):
+            raise ValueError(f'Expected np.ndarray as input, got {type(mtrx)}')
+        networkx_graph = nx.from_numpy_matrix(A=item[:, :, adjacency_axis])
+        features = get_dense_feature(item, adjacency_axis, feature_axis, aggregation=feature_construction)
+        nx.set_node_attributes(networkx_graph, features, name="feat")
+        graph_list.append(networkx_graph)
 
-    # convert if Dense is an ndarray consisting of multiple arrays
-    elif isinstance(mtrx, np.ndarray):
-        # if dense is just a single array
-        if mtrx.shape[0] == 1:
-            mtrx_conv = nx.from_numpy_matrix(A=mtrx[0, :, :, adjacency_axis])
-            features = get_dense_feature(mtrx, adjacency_axis, feature_axis, feature_construction)
-            nx.set_node_attributes(mtrx_conv, features, name="feat")
-        # if dense consists of multiple arrays
-        else:
-            graph_list = []
-            # loop over each graph
-            for i in range(mtrx.shape[0]):
-                i_graph = mtrx[i, :, :, :]
-                networkx_graph = nx.from_numpy_matrix(A=i_graph[:, :, adjacency_axis])
-                features = get_dense_feature(i_graph, adjacency_axis, feature_axis, aggregation=feature_construction)
-                nx.set_node_attributes(networkx_graph, features, name="feat")
-                graph_list.append(networkx_graph)
-
-            mtrx_conv = graph_list
-
-    else:
-        raise ValueError('input needs to be list of arrays or ndarray')
+    mtrx_conv = graph_list
 
     return mtrx_conv
 
@@ -329,12 +354,10 @@ def get_dense_feature(matrix, adjacency_axis, feature_axis, aggregation="sum"):
 
     features = dict(enumerate(features, 0))
 
-    # features = {str(key): value for key, value in features.items()}
-
     return features
 
 
-def get_dense_edge_features(matrix, adjacency_axis, feature_axis):
+def get_dense_edge_features(matrix, adjacency_axis):
     """returns the features for an edge label dictionary
 
         Parameters
@@ -351,9 +374,6 @@ def get_dense_edge_features(matrix, adjacency_axis, feature_axis):
         conn_key = (str(index[0]), str(index[1]))
         key_val = {conn_key: value}
         edge_feat.update(key_val)
-
-    # edge_feat = dict(np.ndenumerate(matrix[:, :, adjacency_axis]))
-
     return edge_feat
 
 
@@ -371,58 +391,36 @@ def dense_to_sparse(graphs, m_type="coo_matrix", adjacency_axis=None, feature_ax
         feature_axis: int, default=None
             position of the feature matrix
 
+
+        Returns
+        -------
+        list,list
+
     """
     if m_type not in sparse_types:
-        raise KeyError('Youor desired output format is not supported.\nPlease check your output format.')
+        raise KeyError('Your desired output format is not supported.\nPlease check your output format.')
 
-    if isinstance(graphs, list):
-        graph_list = []
-        feature_list = []
-        if np.ndim(graphs[0]) == 2:
-            for graph in graphs:
-                if np.ndim(graph) != 2:
-                    raise ValueError('All graphs must have same shape.')
-                graph_list.append(sparse_types[m_type](graph))
-        elif np.ndim(graphs[0]) == 3:
-            for graph in graphs:
-                if np.ndim(graph) != 3:
-                    raise ValueError('All graphs must have same shape.')
-                sparse_graph = sparse_types[m_type](graph[:, :, adjacency_axis])
-                sparse_features = sparse_types[m_type](graph[:, :, feature_axis])
-                feature_list.append(sparse_features)
-                graph_list.append(sparse_graph)
-        else:
-            raise ValueError('Unsupported graph shape.')
+    if isinstance(graphs, np.ndarray):
+        graphs = [graphs[idx] for idx in range(graphs.shape[0])]
 
-    elif isinstance(graphs, np.matrix) or isinstance(graphs, np.ndarray):
-        graph_list = []
-        feature_list = []
-        if adjacency_axis is not None and feature_axis is not None:
-            # if 4 dimensions you have subjects x values x values x adjacency/features
-            if np.ndim(graphs) == 4:
-                for i in range(graphs.shape[0]):
-                    adjacency = sparse_types[m_type](graphs[i, :, :, adjacency_axis])
-                    graph_list.append(adjacency)
-                    feature = sparse_types[m_type](graphs[i, :, :, feature_axis])
-                    feature_list.append(feature)
-            elif np.ndim(graphs) == 3:
-                graph_list = sparse_types[m_type](graphs[:, :, adjacency_axis])
-                feature_list = sparse_types[m_type](graphs[:, :, feature_axis])
-            else:
-                raise ValueError("Matrix needs to have 4 or 3 dimensions when axis arguments are given.")
-
-        else:
-            if np.ndim(graphs) == 3:
-                for i in range(graphs.shape[0]):
-                    adjacency = sparse_types[m_type](graphs[i, :, :])
-                    graph_list.append(adjacency)
-            elif np.ndim(graphs) == 2:
-                graph_list = sparse_types[m_type](graphs)
-            else:
-                raise ValueError("Matrix needs to have 3 or 2 dimension when no axis arguments are given.")
-
-    else:
+    if not isinstance(graphs, list):
         raise ValueError("Input needs to be a numpy array or a list of arrays.")
+
+    graph_list = []
+    feature_list = []
+    initial_dim = np.ndim(graphs[0])
+    if initial_dim not in [2, 3]:
+        raise ValueError(f"Got unexpected graph shape: {initial_dim}")
+    for graph in graphs:
+        if np.ndim(graph) != initial_dim:
+            raise ValueError("All graphs must have same shape.")
+        if initial_dim == 2:
+            graph_list.append(sparse_types[m_type](graph))
+        else:
+            sparse_graph = sparse_types[m_type](graph[:, :, adjacency_axis])
+            sparse_features = sparse_types[m_type](graph[:, :, feature_axis])
+            feature_list.append(sparse_features)
+            graph_list.append(sparse_graph)
 
     return graph_list, feature_list
 
@@ -464,42 +462,31 @@ def sparse_to_dense(graphs, features=None):
         """
         Helper function
         """
-        current_graph_mtrx = np.reshape(current_graph_mtrx, (current_graph_mtrx.shape[0], current_graph_mtrx.shape[1], -1))
+        current_graph_mtrx = np.reshape(current_graph_mtrx,
+                                        (current_graph_mtrx.shape[0], current_graph_mtrx.shape[1], -1))
         current_features = current_features.toarray()
         current_features = np.reshape(current_features, (current_features.shape[0], current_features.shape[1], -1))
         return np.concatenate((current_graph_mtrx, current_features), axis=2)
 
-    if features is not None:
-        if isinstance(graphs, list):
-            matrices = []
-            for graph, feature in zip(graphs, features):
-                graph_mtrx = graph.toarray()
-                matrices.append(convert_matrix(graph_mtrx, feature))
-        else:
-            try:
-                graph_mtrx = graphs.toarray()
-                matrices = convert_matrix(graph_mtrx, features)
-            except Exception as e:
-                print('Could not convert matrices.'
-                      'Your matrices need to be a list or a single sparse matrix.')
-                raise e
-    # in this case there is only an adjacency matrix
-    else:
-        if isinstance(graphs, list):
-            matrices = []
-            for graph in graphs:
-                graph_mtrx = graph.toarray()
+    if isinstance(graphs, list):
+        matrices = []
+        for idx, graph in enumerate(graphs):
+            graph_mtrx = graph.toarray()
+            if features is not None:
+                matrices.append(convert_matrix(graph_mtrx, features[idx]))
+            else:
                 matrices.append(graph_mtrx)
-        else:
-            try:
-                matrices = graphs.toarray()
-            except Exception as e:
-                print('Could not convert matrices.'
-                      'Your matrices need to a list or a single sparse matrix.')
-                raise e
+    else:
+        try:
+            graph_mtrx = graphs.toarray()
+            if features is not None:
+                matrices = convert_matrix(graph_mtrx, features)
+        except Exception as e:
+            print('Could not convert matrices.'
+                  'Your matrices need to be a list or a single sparse matrix.')
+            raise e
 
     matrices = np.asarray(matrices)
-
     return matrices
 
 
@@ -517,6 +504,9 @@ def sparse_to_dgl(graphs, adjacency_axis=0, feature_axis=1):
     """
     assert_imported(["dgl"])
 
+    if isinstance(graphs, np.ndarray):
+        graphs = [graphs[idx] for idx in range(graphs.shape[0])]
+
     if isinstance(graphs, tuple):
         graph_list = []
         for adj, feat in zip(graphs[adjacency_axis], graphs[feature_axis]):
@@ -527,14 +517,6 @@ def sparse_to_dgl(graphs, adjacency_axis=0, feature_axis=1):
         for adj in graphs:
             g = dgl.from_scipy(sp_mat=adj)
             graph_list.append(g)
-    elif isinstance(graphs, np.ndarray) or isinstance(graphs, np.matrix):
-        if np.ndim(graphs) != 1:
-            raise Exception('Input needs to be 1d array if it is a numpy array')
-        graph_list = []
-        for adj in range(graphs.shape[0]):
-            g = dgl.from_scipy(sp_mat=graphs[adj])
-            graph_list.append(g)
-
     else:
         raise Exception('Expected tuple, list or 1d-array as input.')
 
