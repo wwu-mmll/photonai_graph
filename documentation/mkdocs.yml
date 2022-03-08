@@ -56,6 +56,7 @@ nav:
          'api/graph_construction.md'
       - Examples:
          'api/examples/graph_construction_examples.md'
+  - Graph Conversions: 'api/graph_conversions.md'
   - Dynamic Utilities: 'api/dynamic_utils.md'
   - Graph Measures: 'api/graph_measures.md'
   - Graph Embeddings: 'api/graph_embeddings.md'
