@@ -10,7 +10,7 @@ from photonai_graph.GraphMeasureTransform import GraphMeasureTransform
 class GraphMeasureTransformTests(unittest.TestCase):
 
     def setUp(self):
-        self.X_nx = [nx.erdos_renyi_graph(20, p=0.3)] * 10
+        self.X_nx = [nx.barabasi_albert_graph(20, 2)] * 10
         self.y = np.random.rand(10)
         self.ids = list(range(10))
         # generate random matrices
