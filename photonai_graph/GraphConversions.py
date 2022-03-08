@@ -73,6 +73,21 @@ def save_networkx_to_file(graphs, path, output_format="dot", ids=None):
             specified the graphs are just numbered as graph_x
 
     """
+    def save_single_networkx_to_file(graph, path, output_format="dot"):
+        """internal helper function
+
+        Parameters
+        ----------
+        graph
+            networkx graph object
+        path
+            path to save the graph to
+        output_format
+            desired output format
+        """
+        if not isinstance(graph, nx.classes.graph.Graph):
+            raise ValueError(f"Got unknown object for serialization: {type(graph)}")
+        output_formats[output_format](graph, path)
 
     if output_format not in output_formats:
         raise ValueError("The output format is not supported. Please check your output format.")
@@ -96,12 +111,6 @@ def save_networkx_to_file(graphs, path, output_format="dot", ids=None):
         save_single_networkx_to_file(graph=graph, path=graph_path, output_format=output_format)
 
 
-def save_single_networkx_to_file(graph, path, output_format="dot"):
-    if not isinstance(graph, nx.classes.graph.Graph):
-        raise ValueError(f"Got unknown object for serialization: {type(graph)}")
-    output_formats[output_format](graph, path)
-
-
 def load_file_to_networkx(path, input_format="dot"):
     """load graph into networkx from a file
 
@@ -111,6 +120,11 @@ def load_file_to_networkx(path, input_format="dot"):
             path(s) where graphs are stored
         input_format:
             format in which these graphs are stored
+
+        Returns
+        -------
+        list
+            List of loaded networkx graphs
     """
     if isinstance(path, str):
         path = [path]
@@ -137,28 +151,28 @@ def networkx_to_dense(graphs):
         -------
             list of numpy arrays or a single numpy array
     """
+
+    def single_networkx_to_dense(graph):
+        """INTERNAL HELPER FUNCTION
+        convert a networkx graph to a numpy array
+
+        Parameters
+        ----------
+        graph: nx.classes.graph.Graph
+            Input networkx graph object
+
+        Returns
+        -------
+        np.ndarray
+            Numpy representation of the input graph
+        """
+        if not isinstance(graph, nx.classes.graph.Graph):
+            raise ValueError("Non nx graph object was given as input")
+        return nx.to_numpy_array(graph)
     if not isinstance(graphs, list):
         return single_networkx_to_dense(graphs)
 
     return [single_networkx_to_dense(graph) for graph in graphs]
-
-
-def single_networkx_to_dense(graph):
-    """convert a networkx graph to a numpy array
-
-    Parameters
-    ----------
-    graph: nx.classes.graph.Graph
-        Input networkx graph object
-
-    Returns
-    -------
-    np.ndarray
-        Numpy representation of the input graph
-    """
-    if not isinstance(graph, nx.classes.graph.Graph):
-        raise ValueError("Non nx graph object was given as input")
-    return nx.to_numpy_array(graph)
 
 
 def networkx_to_sparse(graphs, fmt: str = 'csr'):
@@ -171,29 +185,29 @@ def networkx_to_sparse(graphs, fmt: str = 'csr'):
         fmt: str, default="csr"
             format of the scipy sparse matrix
     """
+    def single_networkx_to_sparse(graph, fmt: str = 'csr'):
+        """INTERNAL HELPER FUNCTION
+        converts a single networkx graph to a scipy sparse matrix
+
+        Parameters
+        ----------
+        graph: nx.classes.graph.Graph
+            Input networkx graph
+        fmt: str,default="fmt"
+            scipy sparse matrix format
+
+        Returns
+        -------
+        sparse scipy matrix
+        """
+        if not isinstance(graph, nx.classes.graph.Graph):
+            raise ValueError(f'Got unknown object for conversion: {type(graph)}')
+        return nx.to_scipy_sparse_matrix(graph, format=fmt)
+
     if not isinstance(graphs, list):
         return single_networkx_to_sparse(graphs, fmt=fmt)
 
     return [single_networkx_to_sparse(graph, fmt=fmt) for graph in graphs]
-
-
-def single_networkx_to_sparse(graph, fmt: str = 'csr'):
-    """converts a single networkx graph to a scipy sparse matrix
-
-    Parameters
-    ----------
-    graph: nx.classes.graph.Graph
-        Input networkx graph
-    fmt: str,default="fmt"
-        scipy sparse matrix format
-
-    Returns
-    -------
-    sparse scipy matrix
-    """
-    if not isinstance(graph, nx.classes.graph.Graph):
-        raise ValueError(f'Got unknown object for conversion: {type(graph)}')
-    return nx.to_scipy_sparse_matrix(graph, format=fmt)
 
 
 def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
@@ -212,6 +226,35 @@ def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
         -------
         dgl.DGLGraph
     """
+
+    def single_networkx_to_dgl(graph: nx.classes.graph.Graph, node_attrs, edge_attrs):
+        """INTERNAL HELPER FUNCTION
+        convert a single networkx graph to a dgl graph
+
+        Parameters
+        ----------
+        graph: nx.classes.graph.Graph
+            Input networkx graph
+        node_attrs: list,default=None
+            Note attributes
+        edge_attrs: list,default=None
+            Edge attributes
+
+        Returns
+        -------
+            dgl.DGLGraph
+        """
+        assert_imported(["dgl"])
+        if not isinstance(graph, nx.classes.graph.Graph):
+            raise ValueError(f"Got unexpected type {type(graph)} for conversion")
+        if not nx.is_directed(graph):
+            graph = graph.to_directed()
+        if node_attrs or edge_attrs is None:
+            g = dgl.from_networkx(graph)
+        else:
+            g = dgl.from_networkx(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
+        return g
+
     assert_imported(["dgl"])
 
     if isinstance(graphs, np.ndarray):
@@ -223,34 +266,6 @@ def networkx_to_dgl(graphs, node_attrs=None, edge_attrs=None):
             for graph in graphs]
 
 
-def single_networkx_to_dgl(graph: nx.classes.graph.Graph, node_attrs, edge_attrs):
-    """convert a single networkx graph to a dgl graph
-
-    Parameters
-    ----------
-    graph: nx.classes.graph.Graph
-        Input networkx graph
-    node_attrs: list,default=None
-        Note attributes
-    edge_attrs: list,default=None
-        Edge attributes
-
-    Returns
-    -------
-        dgl.DGLGraph
-    """
-    assert_imported(["dgl"])
-    if not isinstance(graph, nx.classes.graph.Graph):
-        raise ValueError(f"Got unexpected type {type(graph)} for conversion")
-    if not nx.is_directed(graph):
-        graph = graph.to_directed()
-    if node_attrs or edge_attrs is None:
-        g = dgl.from_networkx(graph)
-    else:
-        g = dgl.from_networkx(graph, node_attrs=node_attrs, edge_attrs=edge_attrs)
-    return g
-
-
 def sparse_to_networkx(graphs):
     """convert scipy sparse matrices to networkx graphs
 
@@ -259,30 +274,30 @@ def sparse_to_networkx(graphs):
         graphs:
             list of sparse matrices or single sparse matrix
     """
+
+    def single_sparse_to_networkx(graph):
+        """INTERNAL HELPER FUNCTION
+        convert single scipy sparse matrix to networkx graph
+
+        Parameters
+        ----------
+        graph:
+            Input graph as sparse scipy matrix
+
+        Returns
+        -------
+        nx.classes.graph.Graph
+        """
+        try:
+            return nx.from_scipy_sparse_matrix(graph)
+        except Exception as e:
+            print("Please check your input.\n"
+                  "This function only takes a single sparse matrix or a list of sparse matrices.")
+            raise e
     if not isinstance(graphs, list):
         return single_sparse_to_networkx(graphs)
 
     return [single_sparse_to_networkx(graph) for graph in graphs]
-
-
-def single_sparse_to_networkx(graph):
-    """convert single scipy sparse matrix to networkx graph
-
-    Parameters
-    ----------
-    graph:
-        Input graph as sparse scipy matrix
-
-    Returns
-    -------
-    nx.classes.graph.Graph
-    """
-    try:
-        return nx.from_scipy_sparse_matrix(graph)
-    except Exception as e:
-        print("Please check your input.\n"
-              "This function only takes a single sparse matrix or a list of sparse matrices.")
-        raise e
 
 
 def dense_to_networkx(mtrx, adjacency_axis=0, feature_axis=1, feature_construction="features"):
