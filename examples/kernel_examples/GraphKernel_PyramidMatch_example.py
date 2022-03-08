@@ -14,15 +14,12 @@ my_pipe = Hyperpipe('basic_kernel_pipe',
                     metrics=['accuracy', 'balanced_accuracy', 'recall', 'precision'],
                     best_config_metric='accuracy')
 
-my_pipe.add(PipelineElement('GraphConstructorThreshold',
-                            hyperparameters={'threshold': 0.95}))
+my_pipe.add(PipelineElement('GraphConstructorThreshold', threshold=0.95))
 
-my_pipe.add(PipelineElement('GrakelAdapter',
-                            hyperparameters={'node_feature_construction': "sum"}))
+my_pipe.add(PipelineElement('GrakelAdapter', node_feature_construction="sum"))
 
 my_pipe.add(PipelineElement('PyramidMatch'))
 
-my_pipe.add(PipelineElement("SVC",
-                            hyperparameters={'kernel': 'precomputed'}))
+my_pipe.add(PipelineElement("SVC", kernel='precomputed'))
 
 my_pipe.fit(X, y)

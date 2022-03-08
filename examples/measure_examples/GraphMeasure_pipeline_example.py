@@ -14,16 +14,14 @@ my_pipe = Hyperpipe('basic_measure_pipe',
                     metrics=['mean_absolute_error'],
                     best_config_metric='mean_absolute_error')
 
-my_pipe.add(PipelineElement('GraphConstructorThreshold',
-                            hyperparameters={'threshold': 0.95}))
+my_pipe.add(PipelineElement('GraphConstructorThreshold', threshold=0.95))
 
-my_pipe.add(PipelineElement('GraphMeasureTransform',
-                            hyperparameters={'graph_functions': {"global_efficiency": {},
-                                                                 "local_efficiency": {},
-                                                                 "average_clustering": {},
-                                                                 "degree_centrality": {},
-                                                                 "betweenness_centrality": {},
-                                                                 "overall_reciprocity": {}}}))
+my_pipe.add(PipelineElement('GraphMeasureTransform', graph_functions={"global_efficiency": {},
+                                                                      "local_efficiency": {},
+                                                                      "average_clustering": {},
+                                                                      "degree_centrality": {},
+                                                                      "betweenness_centrality": {},
+                                                                      "overall_reciprocity": {}}))
 
 my_pipe.add(PipelineElement("SVR"))
 

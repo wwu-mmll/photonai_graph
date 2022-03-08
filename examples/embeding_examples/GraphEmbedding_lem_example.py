@@ -15,8 +15,7 @@ my_pipe = Hyperpipe('basic_gembedding_pipe',
                     metrics=['mean_absolute_error'],
                     best_config_metric='mean_absolute_error')
 
-my_pipe.add(PipelineElement('GraphConstructorThreshold',
-                            hyperparameters={'threshold': 0.95}))
+my_pipe.add(PipelineElement('GraphConstructorThreshold', threshold=0.95))
 
 my_pipe.add(PipelineElement('GraphEmbeddingLaplacianEigenmaps'))
 
