@@ -31,6 +31,10 @@ class PopulationAveragingTransform(BaseEstimator, TransformerMixin):
         ```python
         my_pipe.add(PipelineElement('PopulationAveragingTransform'))
         ```
+
+        Notes
+        -----
+        Using the feature axis as additional feature is not implemented yet.
         """
         self.connectivtiy_axis = connectivity_axis
         self.adjacency_axis = adjacency_axis
