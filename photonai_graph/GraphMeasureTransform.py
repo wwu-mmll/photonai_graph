@@ -77,14 +77,14 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
             self.logs = os.getcwd()
 
     def fit(self, X, y):
-        pass
+        return self
 
     def _inner_transform(self, X):
         X_transformed = []
 
         if isinstance(X, np.ndarray) or isinstance(X, np.matrix):
             graphs = dense_to_networkx(X, adjacency_axis=0)
-        elif isinstance(X, list):
+        elif isinstance(X, list) and min([isinstance(g, nx.classes.graph.Graph) for g in X]):
             graphs = X
         else:
             raise TypeError("Input needs to be list of networkx graphs or numpy array.")
@@ -187,22 +187,26 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
     def get_measure_info(self):
         pass
 
-    def extract_measures(self, x_graphs, path="", ids=None):
-
-        if id is None:
+    def extract_measures(self, x_graphs_in, path="", ids=None):
+        x_graphs = x_graphs_in.copy()
+        if ids is None:
             raise ValueError('No id provided')
-        x_graphs = [x_graphs[cid] for cid in ids]
+        if isinstance(x_graphs, np.ndarray):
+            # [..., 0] because we are discarding the feature axis
+            x_graphs = [nx.from_numpy_array(x_graphs[cid][..., 0]) for cid in ids]
+        else:
+            x_graphs = [x_graphs[cid] for cid in ids]
         X_transformed = self._inner_transform(x_graphs)
 
         measurements = []
         for graph, gid in zip(X_transformed, ids):
             for measurement_id, result in enumerate(graph):
                 for res in result:
-                    current_measurement = [gid, list(self.graph_functions.values())[measurement_id], res]
+                    current_measurement = [gid, list(self.graph_functions.keys())[measurement_id], res]
                     measurements.append(current_measurement)
 
         df = pd.DataFrame(measurements)
 
-        col_names = ["ID", "value", "measure"]
+        col_names = ["graph_id", "measure", "value"]
 
         df.to_csv(path_or_buf=path, header=col_names, index=None)

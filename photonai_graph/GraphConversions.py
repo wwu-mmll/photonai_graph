@@ -372,7 +372,8 @@ def get_dense_feature(matrix, adjacency_axis, feature_axis, aggregation="sum"):
     return features
 
 
-def get_dense_edge_features(matrix, adjacency_axis):
+# todo: why is feature_axis needed here?
+def get_dense_edge_features(matrix, adjacency_axis, feature_axis):
     """returns the features for an edge label dictionary
 
         Parameters
