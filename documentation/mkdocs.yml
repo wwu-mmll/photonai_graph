@@ -21,6 +21,8 @@ theme:
   font:
     text: 'Roboto'
     code: 'Space Mono'
+  logo: assets/img/favicon.ico
+  favicon: assets/img/favicon.ico
 
 # Latex
 extra_javascript:
