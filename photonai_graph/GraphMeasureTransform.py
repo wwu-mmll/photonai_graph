@@ -137,26 +137,27 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         for key, value in graph_functions.items():
             measure_list = list()
 
-            if key in measure_j:
+            if key not in measure_j:
+                raise ValueError(f"Measure functino {key} not found")
 
-                measure = measure_j[key]
-                # remove self loops if not allowed
-                if not measure['self_loops_allowed']:
-                    graph.remove_edges_from(networkx.selfloop_edges(graph))
-                # make photonai_graph directed or undirected depending on what is needed
-                if measure['Undirected']:
-                    graph.to_undirected()
-                elif not measure['Undirected']:
-                    graph.to_directed()
+            measure = measure_j[key]
+            # remove self loops if not allowed
+            if not measure['self_loops_allowed']:
+                graph.remove_edges_from(networkx.selfloop_edges(graph))
+            # make photonai_graph directed or undirected depending on what is needed
+            if measure['Undirected']:
+                graph.to_undirected()
+            elif not measure['Undirected']:
+                graph.to_directed()
 
-                # call function
-                results = getattr(networkx, measure["path"].split(".")[-1])(graph, **value)
-                measure_list = self.handle_outputs(results, measure_list)
+            # call function
+            results = getattr(networkx, measure["path"].split(".")[-1])(graph, **value)
+            measure_list = self.handle_outputs(results, measure_list)
 
-                if "compute_average" in measure.keys() and measure['compute_average']:
-                    measure_list_graph.append([np.mean(measure_list)])
-                else:
-                    measure_list_graph.append(measure_list)
+            if "compute_average" in measure.keys() and measure['compute_average']:
+                measure_list_graph.append([np.mean(measure_list)])
+            else:
+                measure_list_graph.append(measure_list)
         return measure_list_graph
 
     @staticmethod
