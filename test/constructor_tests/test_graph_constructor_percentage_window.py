@@ -12,14 +12,8 @@ class PercentageWindowTests(unittest.TestCase):
         self.Xtest4d = np.repeat(test_array, 10, axis=0)
         self.y = np.ones((20))
 
-    def test_percentage_window_mean(self):
-        g_constr = GraphConstructorPercentageWindow(transform_style="mean")
-        g_constr.fit(self.X4d, self.y)
-        trans = g_constr.transform(self.X4d)
-        self.assertEqual(np.shape(trans), (20, 20, 20, 3))
-
     def test_percentage_window_individual(self):
-        g_constr = GraphConstructorPercentageWindow(transform_style="individual")
+        g_constr = GraphConstructorPercentageWindow()
         g_constr.fit(self.X4d, self.y)
         trans = g_constr.transform(self.X4d)
         self.assertEqual(np.shape(trans), (20, 20, 20, 3))
@@ -47,8 +41,9 @@ class PercentageWindowTests(unittest.TestCase):
 
     def test_percentage_contains(self):
         # ensure that the threshold actually picks the right rows of the matrix
-        g_constr = GraphConstructorPercentageWindow(percentage_upper=80, percentage_lower=60,
-                                                    transform_style="individual", retain_weights=1)
+        g_constr = GraphConstructorPercentageWindow(percentage_upper=80,
+                                                    percentage_lower=60,
+                                                    retain_weights=1)
         g_constr.fit(self.Xtest4d, self.y)
         trans = g_constr.transform(self.Xtest4d)
         expected_elements = [70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80]
@@ -57,8 +52,9 @@ class PercentageWindowTests(unittest.TestCase):
 
     def test_percentage_not_contains(self):
         # ensure that the threshold actually picks the right rows of the matrix
-        g_constr = GraphConstructorPercentageWindow(percentage_upper=80, percentage_lower=60,
-                                                    transform_style="individual", retain_weights=1)
+        g_constr = GraphConstructorPercentageWindow(percentage_upper=80,
+                                                    percentage_lower=60,
+                                                    retain_weights=1)
         g_constr.fit(self.Xtest4d, self.y)
         trans = g_constr.transform(self.Xtest4d)
         expected_elements = [50, 51, 52, 53, 54, 55, 56, 57, 58, 59]

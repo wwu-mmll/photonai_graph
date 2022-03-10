@@ -1,4 +1,8 @@
 {
+   "PopulationAveragingTransform": [
+      "photonai_graph.PopulationAveragingTransform.PopulationAveragingTransform",
+      "Transformer"
+   ],
    "GraphMeasureTransform":[
       "photonai_graph.GraphMeasureTransform.GraphMeasureTransform",
       "Transformer"

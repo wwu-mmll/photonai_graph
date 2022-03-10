@@ -8,8 +8,7 @@ class GraphConstructorPercentageWindow(GraphConstructor):
     def __init__(self,
                  percentage_upper: float = 50,
                  percentage_lower: float = 10,
-                 retain_weights: int = 0,
-                 transform_style: str = "individual",
+                 retain_weights: float = 0,
                  one_hot_nodes: int = 0,
                  fisher_transform: int = 0,
                  use_abs: int = 0,
@@ -61,8 +60,7 @@ class GraphConstructorPercentageWindow(GraphConstructor):
                                     hyperparameters={'percentage_upper': 0.9, 'percentage_lower': 0.7}))
         ```
        """
-        super(GraphConstructorPercentageWindow, self).__init__(transform_style=transform_style,
-                                                               one_hot_nodes=one_hot_nodes,
+        super(GraphConstructorPercentageWindow, self).__init__(one_hot_nodes=one_hot_nodes,
                                                                fisher_transform=fisher_transform,
                                                                use_abs=use_abs,
                                                                zscore=zscore,

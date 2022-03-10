@@ -36,8 +36,8 @@ class DenseToSparseTest(unittest.TestCase):
             dense_to_sparse(self.edge_dict)
 
     def test_2d_matrix(self):
-        mtrx = dense_to_sparse(self.matrix_2d)
-        self.assertTrue((mtrx[0] != self.sparse_2d).nnz == 0)
+        mtrx = dense_to_sparse([self.matrix_2d])
+        self.assertTrue((mtrx[0][0] != self.sparse_2d).nnz == 0)
 
     def test_2d_list(self):
         mtrx = dense_to_sparse(self.matrix_2d_list)
@@ -50,8 +50,8 @@ class DenseToSparseTest(unittest.TestCase):
         self.assertTrue((adj_list[0] != self.sparse_2d).nnz == 0)
 
     def test_3d_adj(self):
-        mtrx = dense_to_sparse(self.matrix_3d, adjacency_axis=0, feature_axis=1)
-        self.assertTrue((mtrx[0] != self.sparse_2d).nnz == 0)
+        mtrx = dense_to_sparse([self.matrix_3d], adjacency_axis=0, feature_axis=1)
+        self.assertTrue((mtrx[0][0] != self.sparse_2d).nnz == 0)
 
     def test_3d_matrix_list(self):
         mtrx = dense_to_sparse(self.matrix_3d_list, adjacency_axis=0, feature_axis=1)
@@ -60,7 +60,7 @@ class DenseToSparseTest(unittest.TestCase):
 
     def test_4d_no_adj(self):
         with self.assertRaises(ValueError):
-            dense_to_sparse(self.matrix_4d)
+            dense_to_sparse([self.matrix_4d])
 
     def test_4d_adj(self):
         mtrx = dense_to_sparse(self.matrix_4d, adjacency_axis=0, feature_axis=0)

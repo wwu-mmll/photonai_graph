@@ -17,12 +17,10 @@ class NetworkxToDenseTest(unittest.TestCase):
                                       [1, 0, 0, 1, 0]])
 
     def test_list(self):
-        mtrx = networkx_to_dense(self.graphs)
-        self.assertEqual(type(mtrx), list)
-
-    def test_np_type(self):
-        mtrx = networkx_to_dense(self.graphs)
-        self.assertEqual(type(mtrx[0]), np.ndarray)
+        mtrxs = networkx_to_dense(self.graphs)
+        self.assertEqual(type(mtrxs), list)
+        for mtrx in mtrxs:
+            self.assertEqual(type(mtrx), np.ndarray)
 
     def test_single_graph(self):
         mtrx = networkx_to_dense(self.graph)
@@ -39,3 +37,7 @@ class NetworkxToDenseTest(unittest.TestCase):
     def test_check_nonsense_input(self):
         with self.assertRaises(ValueError):
             networkx_to_dense(self.check_matrix)
+
+    def test_check_nonsense_list_input(self):
+        with self.assertRaises(ValueError):
+            networkx_to_dense([self.check_matrix] * 10)

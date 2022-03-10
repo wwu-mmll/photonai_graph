@@ -15,8 +15,7 @@ my_pipe = Hyperpipe('basic_gembedding_pipe',
                     metrics=['accuracy', 'balanced_accuracy', 'recall', 'precision'],
                     best_config_metric='accuracy')
 
-my_pipe.add(PipelineElement('GraphConstructorThreshold',
-                            hyperparameters={'threshold': 0.95}))
+my_pipe.add(PipelineElement('GraphConstructorThreshold', threshold=0.95))
 
 my_pipe.add(PipelineElement('GraphEmbeddingLocallyLinearEmbedding'))
 

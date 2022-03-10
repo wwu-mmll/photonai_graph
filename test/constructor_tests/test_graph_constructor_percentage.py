@@ -12,14 +12,8 @@ class PercentageTests(unittest.TestCase):
         self.Xtest4d = np.repeat(test_array, 10, axis=0)
         self.y = np.ones((20))
 
-    def test_percentage_mean(self):
-        g_constr = GraphConstructorPercentage(transform_style="mean")
-        g_constr.fit(self.X4d, self.y)
-        trans = g_constr.transform(self.X4d)
-        self.assertEqual(np.shape(trans), (20, 20, 20, 3))
-
     def test_percentage_individual(self):
-        g_constr = GraphConstructorPercentage(transform_style="individual")
+        g_constr = GraphConstructorPercentage()
         g_constr.fit(self.X4d, self.y)
         trans = g_constr.transform(self.X4d)
         self.assertEqual(np.shape(trans), (20, 20, 20, 3))
@@ -47,7 +41,7 @@ class PercentageTests(unittest.TestCase):
 
     def test_percentage_contains(self):
         # ensure that the threshold actually picks the right rows of the matrix
-        g_constr = GraphConstructorPercentage(percentage=90, transform_style="individual", retain_weights=1)
+        g_constr = GraphConstructorPercentage(percentage=90, retain_weights=1)
         g_constr.fit(self.Xtest4d, self.y)
         trans = g_constr.transform(self.Xtest4d)
         expected_elements = [91, 92, 93, 94, 95, 96, 97, 98, 99, 100]
@@ -56,7 +50,7 @@ class PercentageTests(unittest.TestCase):
 
     def test_percentage_not_contains(self):
         # ensure that the threshold actually picks the right rows of the matrix
-        g_constr = GraphConstructorPercentage(percentage=90, transform_style="individual", retain_weights=1)
+        g_constr = GraphConstructorPercentage(percentage=90, retain_weights=1)
         g_constr.fit(self.Xtest4d, self.y)
         trans = g_constr.transform(self.Xtest4d)
         expected_elements = [80, 81, 82, 83, 84, 85, 86, 87, 88, 89]

@@ -3,6 +3,12 @@
 In order to get started, you will need connectivity matrices or data, that is already graph data. 
 For this introduction we will assume that you are using connectivity matrices.
 
+!!! info "Connectivity matrix"
+    Connectivity matrices are simply adjacency matrics.
+    Most commonly those matrices have to be thresholded with a static threshold or a percentage.
+    If your input  adjacency matrices also require a thresholding, you can also simply use the
+    Thresholding technique described below.
+
 ## 1. Loading data
 PHOTONAI Graph offers a plethora of different methods for loading your data.
 

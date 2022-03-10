@@ -21,6 +21,8 @@ theme:
   font:
     text: 'Roboto'
     code: 'Space Mono'
+  logo: assets/img/favicon.ico
+  favicon: assets/img/favicon.ico
 
 # Latex
 extra_javascript:
@@ -56,6 +58,8 @@ nav:
          'api/graph_construction.md'
       - Examples:
          'api/examples/graph_construction_examples.md'
+  - Graph Conversions: 'api/graph_conversions.md'
+  - Population Averaging: 'api/population_averaging.md'
   - Dynamic Utilities: 'api/dynamic_utils.md'
   - Graph Measures: 'api/graph_measures.md'
   - Graph Embeddings: 'api/graph_embeddings.md'

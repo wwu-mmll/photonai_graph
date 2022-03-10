@@ -7,7 +7,7 @@ X = get_random_connectivity_data(number_of_nodes=50, number_of_individuals=200)
 
 
 # instantiate a constructor to threshold the graphs
-g_constructor = GraphConstructorThreshold(threshold=0.95, transform_style="individual")
+g_constructor = GraphConstructorThreshold(threshold=0.95)
 
 # instantiate the measure_transformer
 g_measure_transformer = GraphMeasureTransform(graph_functions={"global_efficiency": {},

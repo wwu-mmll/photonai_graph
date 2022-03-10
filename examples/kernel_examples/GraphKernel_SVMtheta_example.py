@@ -14,14 +14,12 @@ my_pipe = Hyperpipe('basic_kernel_pipe',
                     metrics=['mean_absolute_error'],
                     best_config_metric='mean_absolute_error')
 
-my_pipe.add(PipelineElement('GraphConstructorThreshold',
-                            hyperparameters={'threshold': 0.95}))
+my_pipe.add(PipelineElement('GraphConstructorThreshold', threshold=0.95))
 
 my_pipe.add(PipelineElement('GrakelAdapter'))
 
 my_pipe.add(PipelineElement('SvmTheta'))
 
-my_pipe.add(PipelineElement("SVR",
-                            hyperparameters={'kernel': 'precomputed'}))
+my_pipe.add(PipelineElement("SVR", kernel='precomputed'))
 
 my_pipe.fit(X, y)

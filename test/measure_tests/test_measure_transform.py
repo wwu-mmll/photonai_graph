@@ -1,4 +1,5 @@
 import unittest
+
 import numpy as np
 import networkx as nx
 import os
@@ -8,7 +9,7 @@ from photonai_graph.GraphMeasureTransform import GraphMeasureTransform
 class GraphMeasureTransformTests(unittest.TestCase):
 
     def setUp(self):
-        self.X_nx = [nx.erdos_renyi_graph(20, p=0.3)] * 10
+        self.X_nx = [nx.barabasi_albert_graph(20, 2)] * 10
         self.y = np.random.rand(10)
         self.ids = list(range(10))
         # generate random matrices
@@ -37,6 +38,14 @@ class GraphMeasureTransformTests(unittest.TestCase):
     def test_transform_own_measures(self):
         g_transform = GraphMeasureTransform(graph_functions={"global_efficiency": {},
                                                              "local_efficiency": {}})
+        g_transform.fit(self.X_nx, self.y)
+        measures = g_transform.transform(self.X_nx)
+        self.assertEqual(measures.shape, (10, 2))
+
+    def test_transform_own_measures_parallel(self):
+        g_transform = GraphMeasureTransform(graph_functions={"global_efficiency": {},
+                                                             "local_efficiency": {}},
+                                            n_processes=2)
         g_transform.fit(self.X_nx, self.y)
         measures = g_transform.transform(self.X_nx)
         self.assertEqual(measures.shape, (10, 2))
@@ -97,9 +106,9 @@ class GraphMeasureTransformTests(unittest.TestCase):
         self.assertTrue(os.path.exists(path))
         os.remove(path)
 
-    def test_extract_nonsense_input(self):
+    def test_extract_nonsense_input_no_ids(self):
         g_transform = GraphMeasureTransform()
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             g_transform.fit(self.edge_dict, self.y)
             g_transform.extract_measures(self.edge_dict)
 
@@ -132,36 +141,12 @@ class GraphMeasureTransformTests(unittest.TestCase):
         self.assertTrue(os.path.exists(path))
         os.remove(path)
 
-    def test_extract_list(self):
-        path = "/tmp/test.csv"
-        g_transform = GraphMeasureTransform(graph_functions={"voterank": {}})
-        with self.assertRaises(NotImplementedError):
-            g_transform.extract_measures(self.X_nx, path, self.ids)
-
-    def test_extract_dict_dict(self):
-        path = "/tmp/test.csv"
-        g_transform = GraphMeasureTransform(graph_functions={"communicability": {}})
-        with self.assertRaises(NotImplementedError):
-            g_transform.extract_measures(self.X_nx, path, self.ids)
-
     def test_extract_float_or_dict(self):
         path = "/tmp/test.csv"
         g_transform = GraphMeasureTransform(graph_functions={"clustering": {}})
         g_transform.extract_measures(self.X_nx, path, self.ids)
         self.assertTrue(os.path.exists(path))
         os.remove(path)
-
-    def test_extract_tuple_dict(self):
-        path = "/tmp/test.csv"
-        g_transform = GraphMeasureTransform(graph_functions={"hits": {}})
-        with self.assertRaises(NotImplementedError):
-            g_transform.extract_measures(self.X_nx, path, self.ids)
-
-    def test_extract_dual_tuple(self):
-        path = "/tmp/test.csv"
-        g_transform = GraphMeasureTransform(graph_functions={"non_randomness": {}})
-        with self.assertRaises(NotImplementedError):
-            g_transform.extract_measures(self.X_nx, path, self.ids)
 
     def test_extract_no_id(self):
         g_transform = GraphMeasureTransform()
@@ -187,3 +172,39 @@ class GraphMeasureTransformTests(unittest.TestCase):
         X_average = g_transform.transform(self.X_nx)
 
         np.testing.assert_array_equal(X_average, X_nodes_average)
+
+    # !!!
+    #   Below this line are legacy tests where
+    #   NotImplementedErrors are expected.
+    #   ---------------------------------------
+    #   todo: Reimplement all these tests!
+    # !!!
+
+    # todo: rewrite
+    """def test_extract_list(self):
+        path = "/tmp/test.csv"
+        g_transform = GraphMeasureTransform(graph_functions={"voterank": {}})
+        with self.assertRaises(NotImplementedError):
+            g_transform.extract_measures(self.X_nx, path, self.ids)"""
+
+    # todo: rewrite
+    """def test_extract_dict_dict(self):
+        path = "/tmp/test.csv"
+        g_transform = GraphMeasureTransform(graph_functions={"communicability": {}})
+        with self.assertRaises(NotImplementedError):
+            g_transform.extract_measures(self.X_nx, path, self.ids)"""
+
+    # todo: reimplement
+    """def test_extract_tuple_dict(self):
+        path = "/tmp/test.csv"
+        g_transform = GraphMeasureTransform(graph_functions={"hits": {}})
+        with self.assertRaises(NotImplementedError):
+            g_transform.extract_measures(self.X_nx, path, self.ids)"""
+
+    # todo: reimplement
+    """    
+    def test_extract_dual_tuple(self):
+        path = "/tmp/test.csv"
+        g_transform = GraphMeasureTransform(graph_functions={"non_randomness": {}})
+        with self.assertRaises(NotImplementedError):
+            g_transform.extract_measures(self.X_nx, path, self.ids)"""
