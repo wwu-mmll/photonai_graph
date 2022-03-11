@@ -10,7 +10,7 @@ edit_uri: 'edit/master/documentation/docs'
 extra:
   social:
     - icon: fontawesome/brands/twitter
-      link: 'https://twitter.com/medicalmachinelearninglab'
+      link: 'https://twitter.com/wwu_mmll'
 
 # Theme configuration
 theme: 
