@@ -14,6 +14,8 @@ class SGConvClassifierModel(DGLmodel):
                  batch_size: int = 32,
                  adjacency_axis: int = 0,
                  feature_axis: int = 1,
+                 add_self_loops: bool = True,
+                 allow_zero_in_degree: bool = False,
                  logs: str = ''):
         """
         Graph convolutional network for graph classification. Simple Graph
@@ -36,6 +38,8 @@ class SGConvClassifierModel(DGLmodel):
                                                     batch_size=batch_size,
                                                     adjacency_axis=adjacency_axis,
                                                     feature_axis=feature_axis,
+                                                    add_self_loops=add_self_loops,
+                                                    allow_zero_in_degree=allow_zero_in_degree,
                                                     logs=logs)
         self.in_dim = in_dim
         self.hidden_layers = hidden_layers
@@ -48,7 +52,9 @@ class SGConvClassifierModel(DGLmodel):
         # get data loader
         data_loader = self.get_data_loader(X_trans, y)
         # specify model with optimizer etc
-        self.model = SGConvClassifier(self.in_dim, self.hidden_dim, len(np.unique(y)), self.hidden_layers)
+        self.model = SGConvClassifier(self.in_dim, self.hidden_dim,
+                                      len(np.unique(y)), self.hidden_layers,
+                                      allow_zero_in_degree=self.allow_zero_in_degree)
         # get optimizers
         loss_func, optimizer = self.get_classifier()
         # train model

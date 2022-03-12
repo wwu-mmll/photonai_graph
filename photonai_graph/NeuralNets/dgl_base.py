@@ -62,6 +62,9 @@ class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
         self.allow_zero_in_degree = allow_zero_in_degree
         if self.add_self_loops and not self.allow_zero_in_degree:
             warnings.warn('If self loops are added allow_zero_in_degree should be false!')
+        if not self.add_self_loops and not self.allow_zero_in_degree:
+            warnings.warn('If no self loops are added and allow_zero_in_degree is set to false, '
+                          'all graphs should not contain 0-in-degree nodes')
         self.model = None
         if logs:
             self.logs = logs
@@ -113,8 +116,11 @@ class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
         # add a self loop for 0-in-degree nodes
         if self.add_self_loops:
             x_san = [dgl.add_self_loop(x) for x in x_trans]
+            data = DGLData(zip_data(x_san, y))
+        # create dataloader without adding self-loops
+        else:
+            data = DGLData(zip_data(x_trans, y))
         # create dataloader
-        data = DGLData(zip_data(x_san, y))
         data_loader = GraphDataLoader(data, batch_size=self.batch_size, shuffle=True, collate_fn=self.collate)
 
         return data_loader

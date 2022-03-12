@@ -12,8 +12,9 @@ class GCNRegressorModel(DGLmodel):
                  learning_rate: float = 0.001,
                  batch_size: int = 32,
                  adjacency_axis: int = 0,
-                 allow_zero_in_degree: bool = False,
                  feature_axis: int = 1,
+                 add_self_loops: bool = True,
+                 allow_zero_in_degree: bool = False,
                  logs: str = ''):
         """
         Graph convolutional Network for graph regression. GCN Layers
@@ -35,6 +36,7 @@ class GCNRegressorModel(DGLmodel):
                                                 batch_size=batch_size,
                                                 adjacency_axis=adjacency_axis,
                                                 feature_axis=feature_axis,
+                                                add_self_loops=add_self_loops,
                                                 allow_zero_in_degree=allow_zero_in_degree,
                                                 logs=logs)
         self.in_dim = in_dim

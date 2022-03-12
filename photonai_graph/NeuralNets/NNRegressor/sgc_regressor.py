@@ -13,6 +13,8 @@ class SGConvRegressorModel(DGLmodel):
                  batch_size: int = 32,
                  adjacency_axis: int = 0,
                  feature_axis: int = 1,
+                 add_self_loops: bool = True,
+                 allow_zero_in_degree: bool = False,
                  logs: str = ''):
         """
         Graph convolutional network for graph regression. Simple Graph
@@ -35,6 +37,8 @@ class SGConvRegressorModel(DGLmodel):
                                                    batch_size=batch_size,
                                                    adjacency_axis=adjacency_axis,
                                                    feature_axis=feature_axis,
+                                                   add_self_loops=add_self_loops,
+                                                   allow_zero_in_degree=allow_zero_in_degree,
                                                    logs=logs)
         self.in_dim = in_dim
         self.hidden_layers = hidden_layers
@@ -47,7 +51,8 @@ class SGConvRegressorModel(DGLmodel):
         # get data loader
         data_loader = self.get_data_loader_regression(X_trans, y)
         # specify model with optimizer etc
-        self.model = SGConvClassifier(self.in_dim, self.hidden_dim, 1, self.hidden_layers).float()
+        self.model = SGConvClassifier(self.in_dim, self.hidden_dim, 1, self.hidden_layers,
+                                      allow_zero_in_degree=self.allow_zero_in_degree).float()
         # get optimizers
         loss_func, optimizer = self.get_regressor()
         # train model
