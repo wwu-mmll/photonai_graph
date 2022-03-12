@@ -136,7 +136,11 @@ class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
     def predict_classifier(self, x):
         """returns the argmax of the predictions for classification tasks"""
         self.model.eval()
+        # handle data inputs
         x_trans = self.handle_inputs(x, self.adjacency_axis, self.feature_axis)
+        if self.add_self_loops:
+            x_trans = [dgl.add_self_loop(x) for x in x_trans]
+
         test_bg = dgl.batch(x_trans)
         probs_y = torch.softmax(self.model(test_bg), 1)
         argmax_y = torch.max(probs_y, 1)[1].view(-1, 1)
@@ -146,7 +150,11 @@ class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
     def predict_regressor(self, x):
         """returns the predictions for a regression model"""
         self.model.eval()
+        # handle data inputs
         x_trans = self.handle_inputs(x, self.adjacency_axis, self.feature_axis)
+        if self.add_self_loops:
+            x_trans = [dgl.add_self_loop(x) for x in x_trans]
+
         test_bg = dgl.batch(x_trans)
         probs = self.model(test_bg)
         probs = probs.detach().numpy()
