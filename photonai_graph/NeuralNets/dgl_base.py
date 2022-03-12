@@ -30,7 +30,7 @@ class DGLmodel(BaseEstimator, ClassifierMixin, ABC):
         """
         Base class for DGL based graph neural networks. Implements
         helper functions and shared parameters used by other models.
-        Implementation based on gem python package.
+        Implementation based on dgl python package.
 
 
         Parameters
