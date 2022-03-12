@@ -9,6 +9,7 @@ from photonai_graph.util import assert_imported
 
 try:
     import dgl
+    import torch
 except ImportError:
     pass
 
@@ -458,8 +459,21 @@ def dense_to_dgl(graphs, adjacency_axis=None, feature_axis=None):
     if adjacency_axis is None:
         raise NotImplementedError('dense to dgl not implemented without adjacency axis')
     else:
+        graph_list = []
+        for graph in range(graphs.shape[0]):
+            src, dst = np.nonzero(graphs[graph, :, :, adjacency_axis])
+            g = dgl.graph((src, dst))
+
+            feat = torch.tensor(graphs[graph, :, :, feature_axis])
+            g.ndata['feat'] = feat
+
+            graph_list.append(g)
+
+            #g.ndata['feat'] = node_feat
+        '''
         sparse_mtrx = dense_to_sparse(graphs, adjacency_axis=adjacency_axis, feature_axis=feature_axis)
         graph_list = sparse_to_dgl(sparse_mtrx)
+        '''
     return graph_list
 
 
