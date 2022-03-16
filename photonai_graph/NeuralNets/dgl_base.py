@@ -190,7 +190,7 @@ class DGLClassifierBaseModel(DGLmodel, ClassifierMixin, ABC):
         test_bg = dgl.batch(x_trans)
         probs_y = torch.softmax(self.model(test_bg), 1)
         argmax_y = torch.max(probs_y, 1)[1].view(-1, 1)
-        return argmax_y
+        return argmax_y.squeeze()
 
     def get_data_loader(self, x_trans, y):
         """returns data in a data loader format"""
