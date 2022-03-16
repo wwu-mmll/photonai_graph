@@ -2,7 +2,8 @@ import unittest
 import numpy as np
 import networkx as nx
 import os
-from photonai_graph.GraphConversions import save_networkx_to_file
+
+from photonai_graph.GraphIO import save_networkx_to_file
 
 
 class SaveNetworkxToFileTest(unittest.TestCase):
