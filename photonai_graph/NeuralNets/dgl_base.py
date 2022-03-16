@@ -118,23 +118,23 @@ class DGLModel(BaseEstimator, ABC):
     @staticmethod
     @abstractmethod
     def collate(samples):
-        raise NotImplementedError()
+        """Collate function"""
 
     @abstractmethod
     def get_data_loader(self, x_trans, y):
-        raise NotImplementedError()
+        """Data loader"""
 
     @abstractmethod
     def predict_model(self, X):
-        raise NotImplementedError()
+        """get model predictions"""
 
     @abstractmethod
     def setup_model(self):
-        raise NotImplementedError()
+        """Setup the model"""
 
     @abstractmethod
     def _init_model(self, X=None, y=None):
-        raise NotImplementedError()
+        """initialize model"""
 
 
 class DGLClassifierBaseModel(DGLModel, ClassifierMixin, ABC):
