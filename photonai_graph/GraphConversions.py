@@ -464,7 +464,7 @@ def dense_to_dgl(graphs, adjacency_axis=None, feature_axis=None):
     graph_list = []
     for graph in range(graphs.shape[0]):
         src, dst = np.nonzero(graphs[graph, :, :, adjacency_axis])
-        g = dgl.graph((src, dst))
+        g = dgl.graph((src, dst), num_nodes=graphs[graph, ...].shape[1])
         feat = torch.tensor(graphs[graph, :, :, feature_axis])
         g.ndata['feat'] = feat
         graph_list.append(g)
