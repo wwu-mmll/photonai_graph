@@ -259,7 +259,7 @@ class DGLRegressorBaseModel(DGLmodel, RegressorMixin, ABC):
         test_bg = dgl.batch(x_trans)
         probs = self.model(test_bg)
         probs = probs.detach().numpy()
-        return probs
+        return probs.squeeze()
 
     def get_data_loader(self, x_trans, y):
         """returns data in a regression data loader format"""

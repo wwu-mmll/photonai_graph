@@ -21,10 +21,10 @@ class SGCClassifierTests(unittest.TestCase):
         gat_clf = SGConvClassifierModel(nn_epochs=20)
         gat_clf.fit(self.Xrandom4d, self.y)
         output = gat_clf.predict(self.Xrandom4d)
-        self.assertEqual(output.shape, (20, 1))
+        self.assertEqual(output.shape, self.y.shape)
 
     def test_sgc_classifier_output_hidden_dim(self):
         gat_clf = SGConvClassifierModel(hidden_dim=128)
         gat_clf.fit(self.Xrandom4d, self.y)
         output = gat_clf.predict(self.Xrandom4d)
-        self.assertEqual(output.shape, (20, 1))
+        self.assertEqual(output.shape, self.y.shape)

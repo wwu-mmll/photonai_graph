@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 import networkx as nx
 from dgl.data import MiniGCDataset
-from photonai_graph.NeuralNets.GatModel import GATClassifierModel
+from photonai_graph.NeuralNets.GATModel import GATClassifierModel
 from photonai_graph.GraphUtilities import get_random_labels
 
 
@@ -25,22 +25,22 @@ class GATClassifierTests(unittest.TestCase):
         gat_clf = GATClassifierModel(nn_epochs=20)
         gat_clf.fit(self.Xrandom4d, self.y)
         output = gat_clf.predict(self.Xrandom4d)
-        self.assertEqual(output.shape, (20, 1))
+        self.assertEqual(output.shape, self.y.shape)
 
     def test_gat_classifier_output_hidden_dim(self):
         gat_clf = GATClassifierModel(hidden_dim=128)
         gat_clf.fit(self.Xrandom4d, self.y)
         output = gat_clf.predict(self.Xrandom4d)
-        self.assertEqual(output.shape, (20, 1))
+        self.assertEqual(output.shape, self.y.shape)
 
     def test_gat_classifier_nx_graphs(self):
         gat_clf = GATClassifierModel(nn_epochs=20)
         gat_clf.fit(self.X_nx, self.y)
         output = gat_clf.predict(self.X_nx)
-        self.assertEqual(output.shape, (20, 1))
+        self.assertEqual(output.shape, self.y.shape)
 
     def test_gat_classifier_dgl(self):
         gat_clf = GATClassifierModel(nn_epochs=20)
         gat_clf.fit(self.X_dgl, self.y)
         output = gat_clf.predict(self.X_dgl)
-        self.assertEqual(output.shape, (20, 1))
+        self.assertEqual(output.shape, self.y.shape)

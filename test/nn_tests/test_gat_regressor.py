@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import networkx as nx
-from photonai_graph.NeuralNets.GatModel import GATRegressorModel
+from photonai_graph.NeuralNets.GATModel import GATRegressorModel
 from photonai_graph.GraphUtilities import get_random_labels
 
 
@@ -18,10 +18,10 @@ class GATRegressorTests(unittest.TestCase):
         gat_clf = GATRegressorModel(nn_epochs=20)
         gat_clf.fit(self.Xrandom4d, self.y)
         output = gat_clf.predict(self.Xrandom4d)
-        self.assertEqual(output.shape, (20, 1))
+        self.assertEqual(output.shape, self.y.shape)
 
     def test_gat_regressor_output_hidden_dim(self):
         gat_clf = GATRegressorModel(hidden_dim=128)
         gat_clf.fit(self.Xrandom4d, self.y)
         output = gat_clf.predict(self.Xrandom4d)
-        self.assertEqual(output.shape, (20, 1))
+        self.assertEqual(output.shape, self.y.shape)
