@@ -9,7 +9,7 @@ class GATRegressorTests(unittest.TestCase):
 
     def setUp(self):
         mtrx = np.random.rand(20, 20, 20, 2)
-        mtrx[:, :, :, 0][mtrx[:, :, :, 0] <= 0.9] = 0
+        # mtrx[:, :, :, 0][mtrx[:, :, :, 0] <= 0.9] = 0
         self.Xrandom4d = mtrx
         self.X_nx = [nx.erdos_renyi_graph(20, p=0.3)] * 20
         self.y = get_random_labels(number_of_labels=20)
