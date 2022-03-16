@@ -8,7 +8,6 @@ from scipy import stats
 from scipy import sparse
 import os
 import matplotlib.pyplot as plt
-from photonai_graph.GraphIO import save_networkx_to_file
 
 
 def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=None,
@@ -291,41 +290,6 @@ def get_random_labels(l_type="classification", number_of_labels=10):
         raise ValueError('random labels only implemented for classification and regression. Please check your spelling')
 
     return y
-
-
-def save_graphs(graphs, path="", input_format="networkx", output_format="dot", ids=None):
-    """save graphs to file.
-
-        Parameters
-        ----------
-        graphs :
-            a list or a np.ndarray of graphs to be saved
-
-        input_format : str, default="networkx"
-            format of the graphs to be saved
-
-        path : str, default=""
-            path where to save the graphs
-
-        output_format : str, default="dot"
-            the output format in which to save the graphs
-
-        ids :
-            a list containing the ids of the graphs. Must have same length as the graph list or np.ndarray.
-
-
-        Examples
-        --------
-        >>> g1, g2 = nx.line_graph(10), nx.line_graph(7)
-        >>> graphs = [g1, g2]
-        >>> save_graphs(graphs, path="path/to/your/data/")
-
-        """
-    # check input format
-    if input_format == "networkx":
-        save_networkx_to_file(graphs, path, output_format=output_format, ids=ids)
-    else:
-        raise NotImplementedError("Your desired output format is not supported yet.")
 
 
 def visualize_networkx(graphs, layout=nx.spring_layout, colorscheme="Blues", show=True):
