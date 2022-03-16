@@ -29,5 +29,6 @@ within the PHOTON framework. The module provides a range of graph machine learni
                       'nxt_gem @ git+https://github.com/jernsting/nxt_gem.git',
                       'pandas>=1.1.2',
                       'numpy>=1.12.2',
-                      'scipy>=0.19.1']
+                      'scipy>=0.19.1',
+                      'tqdm']
 )

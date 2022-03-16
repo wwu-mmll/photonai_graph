@@ -67,6 +67,8 @@ nav:
   - Graph Kernels: 'api/graph_kernels.md'
   - Graph Neural Networks: 'api/graph_convnets.md'
   - Graph Utilities: 'api/graph_utilities.md'
+- Examples:
+    - Networkx Example: 'examples/networkx_pipeline.ipynb'
 
 extra_css:
   - assets/stylesheets/material.css
@@ -79,3 +81,4 @@ plugins:
             docstring_style: numpy
           rendering:
             show_source: false
+  - mkdocs-jupyter

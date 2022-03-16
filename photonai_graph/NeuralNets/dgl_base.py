@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 import os
 from photonai_graph.util import assert_imported
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
+from tqdm import tqdm
 try:
     import dgl
     import torch
@@ -26,6 +27,7 @@ class DGLModel(BaseEstimator, ABC):
                  feature_axis: int = 1,
                  add_self_loops: bool = True,
                  allow_zero_in_degree: bool = False,
+                 verbose: bool = False,
                  logs: str = None):
         """
         Base class for DGL based graph neural networks. Implements
@@ -49,6 +51,8 @@ class DGLModel(BaseEstimator, ABC):
             self loops are added if true
         allow_zero_in_degree: bool,default=False
             If true the zero in degree test of dgl is disabled
+        verbose: bool,default=False
+            If true verbose information is printed
         logs: str,default=None
             Path to the log data
 
@@ -71,12 +75,12 @@ class DGLModel(BaseEstimator, ABC):
         else:
             self.logs = os.getcwd()
         assert_imported(["dgl", "pytorch"])
+        self.verbose = verbose
 
-    @staticmethod
-    def train_model(epochs, model, optimizer, loss_func, data_loader):
+    def train_model(self, epochs, model, optimizer, loss_func, data_loader):
         # This function trains the neural network
         epoch_losses = []
-        for epoch in range(epochs):
+        for epoch in tqdm(range(epochs)):
             epoch_loss = 0
             iteration = 0
             for it, (bg, label) in enumerate(data_loader):
@@ -88,7 +92,8 @@ class DGLModel(BaseEstimator, ABC):
                 epoch_loss += loss.detach().item()
                 iteration = it
             epoch_loss /= (iteration + 1)
-            print('Epoch {}, loss {:.4f}'.format(epoch, epoch_loss))
+            if self.verbose:
+                print('Epoch {}, loss {:.4f}'.format(epoch, epoch_loss))
             epoch_losses.append(epoch_loss)
 
     def handle_inputs(self, x, adjacency_axis, feature_axis):
