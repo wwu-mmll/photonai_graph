@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import networkx as nx
-from photonai_graph.NeuralNets.NNRegressor.sgc_regressor import SGConvRegressorModel
+from photonai_graph.NeuralNets.SGCModel import SGConvRegressorModel
 from photonai_graph.GraphUtilities import get_random_labels
 
 

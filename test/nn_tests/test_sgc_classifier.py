@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import networkx as nx
-from photonai_graph.NeuralNets.NNClassifier.sgc_classifier import SGConvClassifierModel
+from photonai_graph.NeuralNets.SGCModel import SGConvClassifierModel
 from photonai_graph.GraphUtilities import get_random_labels
 
 

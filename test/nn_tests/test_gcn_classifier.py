@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 import networkx as nx
 from dgl.data import MiniGCDataset
-from photonai_graph.NeuralNets.NNClassifier.gcn_classifier import GCNClassifierModel
+from photonai_graph.NeuralNets.GCNModel import GCNClassifierModel
 from photonai_graph.GraphUtilities import get_random_labels
 
 

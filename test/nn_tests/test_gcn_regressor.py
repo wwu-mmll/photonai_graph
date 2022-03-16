@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import networkx as nx
-from photonai_graph.NeuralNets.NNRegressor.gcn_regressor import GCNRegressorModel
+from photonai_graph.NeuralNets.GCNModel import GCNRegressorModel
 from photonai_graph.GraphUtilities import get_random_labels
 
 
