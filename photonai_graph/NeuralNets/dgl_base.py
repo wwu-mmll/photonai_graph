@@ -16,7 +16,7 @@ except ImportError:
     pass
 
 
-class DGLmodel(BaseEstimator, ABC):
+class DGLModel(BaseEstimator, ABC):
     _estimator_type = "classifier"
 
     def __init__(self, nn_epochs: int = 200,
@@ -137,7 +137,7 @@ class DGLmodel(BaseEstimator, ABC):
         raise NotImplementedError()
 
 
-class DGLClassifierBaseModel(DGLmodel, ClassifierMixin, ABC):
+class DGLClassifierBaseModel(DGLModel, ClassifierMixin, ABC):
     def __init__(self,
                  nn_epochs: int = 200,
                  learning_rate: float = 0.001,
@@ -207,7 +207,7 @@ class DGLClassifierBaseModel(DGLmodel, ClassifierMixin, ABC):
         return batched_graph, torch.tensor(labels, dtype=torch.long)
 
 
-class DGLRegressorBaseModel(DGLmodel, RegressorMixin, ABC):
+class DGLRegressorBaseModel(DGLModel, RegressorMixin, ABC):
     def __init__(self,
                  nn_epochs: int = 200,
                  learning_rate: float = 0.001,
