@@ -8,7 +8,7 @@ from scipy import stats
 from scipy import sparse
 import os
 import matplotlib.pyplot as plt
-from photonai_graph.GraphConversions import save_networkx_to_file
+from photonai_graph.GraphIO import save_networkx_to_file
 
 
 def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=None,
