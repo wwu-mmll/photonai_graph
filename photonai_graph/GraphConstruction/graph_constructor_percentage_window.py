@@ -71,7 +71,7 @@ class GraphConstructorPercentageWindow(GraphConstructor):
         self.percentage_lower = percentage_lower
         self.retain_weights = retain_weights
 
-    def transform(self, X) -> np.ndarray:
+    def transform(self, X: np.ndarray) -> np.ndarray:
         """Select percent strongest connections"""
         adj, feat = self.get_mtrx(X)
         # prepare matrices
@@ -83,20 +83,15 @@ class GraphConstructorPercentageWindow(GraphConstructor):
 
         return X_transformed
 
-    def percentage_window(self, adjacency):
+    def percentage_window(self, adjacency: np.ndarray) -> np.ndarray:
         """Finds the x percent strongest connections"""
         for matrix in range(adjacency.shape[0]):
             thresh_upper = np.percentile(adjacency[matrix, :, :, :], self.percentage_upper)
             thresh_lower = np.percentile(adjacency[matrix, :, :, :], self.percentage_lower)
-            if self.retain_weights == 0:
-                adjacency[matrix, :, :, :][adjacency[matrix, :, :, :] >= thresh_upper] = 0
+            adjacency[matrix, :, :, :][adjacency[matrix, :, :, :] <= thresh_lower] = 0
+            adjacency[matrix, :, :, :][adjacency[matrix, :, :, :] >= thresh_upper] = 0
+            if not self.retain_weights:
                 adjacency[matrix, :, :, :][(adjacency[matrix, :, :, :] <= thresh_upper) &
                                            (adjacency[matrix, :, :, :] >= thresh_lower)] = 1
-                adjacency[matrix, :, :, :][adjacency[matrix, :, :, :] <= thresh_lower] = 0
-            elif self.retain_weights == 1:
-                adjacency[matrix, :, :, :][adjacency[matrix, :, :, :] >= thresh_upper] = 0
-                adjacency[matrix, :, :, :][adjacency[matrix, :, :, :] <= thresh_lower] = 0
-            else:
-                raise ValueError('retain weights needs to be 0 or 1')
 
         return adjacency

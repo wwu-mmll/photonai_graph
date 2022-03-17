@@ -27,6 +27,8 @@ class GraphConstructorSpatial(GraphConstructor):
         of the coordinates in the chosen atlas.
         Adapted from Ktena et al, 2017.
 
+        !!! danger
+            Currently considered untested!
 
         Parameters
         ----------

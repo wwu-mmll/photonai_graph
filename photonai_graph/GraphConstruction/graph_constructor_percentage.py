@@ -68,7 +68,7 @@ class GraphConstructorPercentage(GraphConstructor):
         self.percentage = percentage
         self.retain_weights = retain_weights
 
-    def transform(self, X) -> np.ndarray:
+    def transform(self, X: np.ndarray) -> np.ndarray:
         """Select percent strongest connections"""
         adj, feat = self.get_mtrx(X)
         # prepare matrices
@@ -76,23 +76,19 @@ class GraphConstructorPercentage(GraphConstructor):
         # get percent strongest connections
         adj = self.percent_strongest(adj)
         # get feature matrix
-        X_transformed = self.get_features(adj, feat)
+        x_transformed = self.get_features(adj, feat)
 
-        return X_transformed
+        return x_transformed
 
-    def percent_strongest(self, X):
+    def percent_strongest(self, adjacency: np.ndarray) -> np.ndarray:
         """Finds the x percent strongest connections"""
-        for matrix in range(X.shape[0]):
-            thresh = np.percentile(X[matrix, :, :, :], self.percentage)
+        for matrix in range(adjacency.shape[0]):
+            thresh = np.percentile(adjacency[matrix, ...], self.percentage)
             if np.isnan(thresh):
                 raise ValueError('Input contains NaN -> can not threshold')
             else:
-                if self.retain_weights == 0:
-                    X[matrix, :, :, :][X[matrix, :, :, :] >= thresh] = 1
-                    X[matrix, :, :, :][X[matrix, :, :, :] < thresh] = 0
-                elif self.retain_weights == 1:
-                    X[matrix, :, :, :][X[matrix, :, :, :] < thresh] = 0
-                else:
-                    raise ValueError('retain weights needs to be 0 or 1')
+                adjacency[matrix, ...][adjacency[matrix, ...] < thresh] = 0
+                if not self.retain_weights:
+                    adjacency[matrix, ...][adjacency[matrix, ...] >= thresh] = 1
 
-        return X
+        return adjacency

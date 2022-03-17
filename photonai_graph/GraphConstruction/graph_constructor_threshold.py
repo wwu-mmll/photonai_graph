@@ -82,7 +82,7 @@ class GraphConstructorThreshold(GraphConstructor):
         self.return_adjacency_only = return_adjacency_only
         self.retain_weights = retain_weights
 
-    def transform(self, X) -> np.ndarray:
+    def transform(self, X: np.ndarray) -> np.ndarray:
         """Transform input matrices using a threshold"""
         adj, feat = self.get_mtrx(X)
         # do preparatory matrix transformations
@@ -94,7 +94,7 @@ class GraphConstructorThreshold(GraphConstructor):
 
         return X_transformed
 
-    def threshold_matrix(self, adjacency):
+    def threshold_matrix(self, adjacency: np.ndarray) -> np.ndarray:
         """Threshold matrix"""
         if self.retain_weights == 0:
             adjacency[adjacency >= self.threshold] = 1

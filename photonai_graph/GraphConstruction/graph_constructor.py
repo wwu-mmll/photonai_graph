@@ -1,9 +1,11 @@
 import os
 from abc import ABC, abstractmethod
+
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.metrics import pairwise_distances
 from scipy import sparse
+
 from photonai_graph.GraphUtilities import individual_ztransform, individual_fishertransform
 
 
@@ -63,19 +65,19 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
     def fit(self, X, y):
         return self
 
-    def get_mtrx(self, X):
+    def get_mtrx(self, graph_obj: np.ndarray) -> (np.ndarray, np.ndarray):
         """Returns a feature and adjacency matrix"""
 
-        if not np.ndim(X) == 4:
+        if not np.ndim(graph_obj) == 4:
             raise ValueError("Please make sure your graphs have the needed input shape.")
 
-        adjacency_matrix = X[:, :, :, self.adjacency_axis].copy()
+        adjacency_matrix = graph_obj[:, :, :, self.adjacency_axis].copy()
         adjacency_matrix = adjacency_matrix[:, :, :, np.newaxis]
-        feature_matrix = X.copy()
+        feature_matrix = graph_obj.copy()
 
         return adjacency_matrix, feature_matrix
 
-    def prep_mtrx(self, adjacency):
+    def prep_mtrx(self, adjacency: np.ndarray) -> np.ndarray:
         """transforms the matrix according to selected criteria"""
         if self.fisher_transform:
             adjacency = individual_fishertransform(adjacency)
@@ -88,7 +90,7 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
 
         return adjacency
 
-    def get_features(self, adjacency, features) -> np.ndarray:
+    def get_features(self, adjacency: np.ndarray, features: np.ndarray) -> np.ndarray:
         """Returns a concatenated version of feature matrix and one hot nodes"""
         if self.discard_original_connectivity:
             features = features[..., 1:]
@@ -98,15 +100,15 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
         return transformed
 
     @staticmethod
-    def get_one_hot_nodes(X):
+    def get_one_hot_nodes(adjacency: np.ndarray) -> np.ndarray:
         """Returns a one hot node encoding for every node of the matrix"""
         # an identity matrix is a one hot node encoding
-        identity_matrix = np.identity((X.shape[1]))
+        identity_matrix = np.identity((adjacency.shape[1]))
         # expands dims
         identity_matrix = identity_matrix[np.newaxis, :, :, np.newaxis]
         # repeat along first dimension and concatenate
-        one_hot = np.repeat(identity_matrix, X.shape[0], 0)
-        concat = np.concatenate((X, one_hot), axis=3)
+        one_hot = np.repeat(identity_matrix, adjacency.shape[0], 0)
+        concat = np.concatenate((adjacency, one_hot), axis=3)
         return concat
 
     @staticmethod
@@ -140,7 +142,7 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
         return w
 
     @staticmethod
-    def distance_sklearn_metrics(z, k, metric='euclidean'):
+    def distance_sklearn_metrics(z: np.ndarray, k: int, metric: str = 'euclidean') -> (np.ndarray, np.ndarray):
         """Compute exact pairwise distances."""
         d = pairwise_distances(z, metric=metric, n_jobs=-2)
         # k-NN photonai_graph.
