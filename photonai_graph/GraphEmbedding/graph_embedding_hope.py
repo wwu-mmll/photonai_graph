@@ -5,6 +5,7 @@ import networkx
 import os
 try:
     from gem.embedding.hope import HOPE
+    from gem.embedding.static_graph_embedding import StaticGraphEmbedding
 except ImportError:  # pragma: no cover
     pass
 
@@ -50,14 +51,14 @@ class GraphEmbeddingHOPE(GraphEmbeddingBase):
         self.decay_factor = decay_factor
         self.orig_transformed = None
 
-    def transform(self, X):
+    def transform(self, X: np.ndarray) -> np.ndarray:
         x_transformed = super(GraphEmbeddingHOPE, self).transform(X)
         self.orig_transformed = x_transformed
         if self.embedding_dimension == 1:
             x_transformed = np.squeeze(np.reshape(x_transformed, (X.shape[0], -1, 1)))
         return x_transformed
 
-    def _init_embedding(self):
+    def _init_embedding(self) -> StaticGraphEmbedding:
         embedding_dimension = self.embedding_dimension
         if embedding_dimension == 1:
             embedding_dimension = 2

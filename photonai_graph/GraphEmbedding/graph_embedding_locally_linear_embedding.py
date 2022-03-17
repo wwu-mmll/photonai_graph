@@ -1,6 +1,7 @@
 from photonai_graph.GraphEmbedding.graph_embedding_base import GraphEmbeddingBase
 try:
     from gem.embedding.lle import LocallyLinearEmbedding
+    from gem.embedding.static_graph_embedding import StaticGraphEmbedding
 except ImportError:  # pragma: no cover
     pass
 
@@ -39,5 +40,5 @@ class GraphEmbeddingLocallyLinearEmbedding(GraphEmbeddingBase):
                                                                    adjacency_axis=adjacency_axis,
                                                                    logs=logs)
 
-    def _init_embedding(self):
+    def _init_embedding(self) -> StaticGraphEmbedding:
         return LocallyLinearEmbedding(d=self.embedding_dimension)
