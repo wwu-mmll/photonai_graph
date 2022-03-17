@@ -3,7 +3,6 @@ import os
 from networkx.drawing.nx_pydot import write_dot, read_dot
 import networkx as nx
 import numpy as np
-import yaml
 
 output_formats = {
     "dot": write_dot,
@@ -17,7 +16,6 @@ output_formats = {
     "GraphML": nx.write_graphml,
     "GraphML-XML": nx.write_graphml_xml,
     "GraphML-LXML": nx.write_graphml_lxml,
-    "YAML": yaml.dump,
     "graph6": nx.write_graph6,
     "PAJEK": nx.write_pajek
 }
@@ -32,7 +30,6 @@ input_formats = {
     "pickle": nx.read_gpickle,
     "GML": nx.read_gml,
     "GraphML": nx.read_graphml,
-    "YAML": yaml.load,
     "graph6": nx.read_graph6,
     "PAJEK": nx.read_pajek
 }
