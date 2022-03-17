@@ -24,8 +24,8 @@ Universitaetsklinikum Muenster
 # TODO: make documentation for every single method
 
 import networkx
-import dask
-from dask.diagnostics import ProgressBar
+from tqdm.contrib.concurrent import thread_map
+from functools import partial
 from sklearn.base import BaseEstimator, TransformerMixin
 import networkx as nx
 import pandas as pd
@@ -84,7 +84,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         return self
 
     def _inner_transform(self, X):
-        X_transformed = []
+        x_transformed = []
 
         if isinstance(X, np.ndarray) or isinstance(X, np.matrix):
             graphs = dense_to_networkx(X, adjacency_axis=self.adjacency_axis)
@@ -99,27 +99,21 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         with open(measure_json, 'r') as measure_json_file:
             measure_j = json.load(measure_json_file)
 
-        # ToDo: write unit test for parallelization
-
         if self.n_processes > 1:
-            task_list = []
-            for graph in graphs:
-                tmp = dask.delayed(self._compute_graph_metrics)(graph, self.graph_functions, measure_j)
-                task_list.append(tmp)
-            with ProgressBar():
-                X_transformed = list(dask.compute(*task_list, num_workers=self.n_processes, scheduler='threads'))
+            pfn = partial(self._compute_graph_metrics, graph_functions=self.graph_functions, measure_j=measure_j)
+            x_transformed = thread_map(pfn, graphs, max_workers=self.n_processes)
         else:
             for graph in graphs:
                 measure_list_graph = self._compute_graph_metrics(graph, self.graph_functions, measure_j)
-                X_transformed.append(measure_list_graph)
+                x_transformed.append(measure_list_graph)
 
         for c_measure in range(len(self.graph_functions)):
-            expected_values = max([len(graph[c_measure]) for graph in X_transformed])
-            for graph in X_transformed:
+            expected_values = max([len(graph[c_measure]) for graph in x_transformed])
+            for graph in x_transformed:
                 if len(graph[c_measure]) < expected_values:
                     graph[c_measure] = [np.NAN] * expected_values
 
-        return X_transformed
+        return x_transformed
 
     def transform(self, X):
         X_transformed = self._inner_transform(X)
