@@ -9,7 +9,7 @@ class PercentageWindowTests(unittest.TestCase):
         self.X4d = np.ones((20, 20, 20, 2))
         self.Xrandom4d = np.random.rand(20, 20, 20, 2)
         test_array = np.reshape(np.arange(1, 101, 1), (-1, 10, 10))
-        self.Xtest4d = np.repeat(test_array, 10, axis=0)
+        self.Xtest4d = np.repeat(test_array, 10, axis=0)[..., np.newaxis]
         self.y = np.ones((20))
 
     def test_percentage_window_individual(self):

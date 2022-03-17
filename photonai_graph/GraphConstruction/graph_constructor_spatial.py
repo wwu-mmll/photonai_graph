@@ -95,7 +95,7 @@ class GraphConstructorSpatial(GraphConstructor):
 
         return adjacency
 
-    def transform_test(self, X):
+    def transform(self, X) -> np.ndarray:
         """Transform input matrices accordingly"""
         adj, feat = self.get_mtrx(X)
         # do preparatory matrix transformations

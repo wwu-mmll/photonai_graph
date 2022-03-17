@@ -1,5 +1,5 @@
 import os
-from abc import ABC
+from abc import ABC, abstractmethod
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.metrics import pairwise_distances
@@ -55,9 +55,8 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
         self.zscore = zscore
         self.use_abs_zscore = use_abs_zscore
         self.adjacency_axis = adjacency_axis
-        if logs:
-            self.logs = logs
-        else:
+        self.logs = logs
+        if not self.logs:
             self.logs = os.getcwd()
         self.mean_matrix = None
 
@@ -67,17 +66,12 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
     def get_mtrx(self, X):
         """Returns a feature and adjacency matrix"""
 
-        # ensure that the array has the "right" number of dimensions
-        if np.ndim(X) == 4:
-            adjacency_matrix = X[:, :, :, self.adjacency_axis].copy()
-            adjacency_matrix = adjacency_matrix[:, :, :, np.newaxis]  # return 4d
-            feature_matrix = X.copy()
-        # handle the case where there are 3 dimensions, meaning that there is no "adjacency axis"
-        elif np.ndim(X) == 3:
-            adjacency_matrix = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
-            feature_matrix = X.copy().reshape(X.shape[0], X.shape[1], X.shape[2], -1)
-        else:
-            raise ValueError('input matrix needs to have 3 or 4 dimensions')
+        if not np.ndim(X) == 4:
+            raise ValueError("Please make sure your graphs have the needed input shape.")
+
+        adjacency_matrix = X[:, :, :, self.adjacency_axis].copy()
+        adjacency_matrix = adjacency_matrix[:, :, :, np.newaxis]
+        feature_matrix = X.copy()
 
         return adjacency_matrix, feature_matrix
 
@@ -94,7 +88,7 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
 
         return adjacency
 
-    def get_features(self, adjacency, features):
+    def get_features(self, adjacency, features) -> np.ndarray:
         """Returns a concatenated version of feature matrix and one hot nodes"""
         if self.discard_original_connectivity:
             features = features[..., 1:]
@@ -154,3 +148,7 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
         d.sort()
         d = d[:, 1:k + 1]
         return d, idx
+
+    @abstractmethod
+    def transform(self, X) -> np.ndarray:
+        """transform the input data"""

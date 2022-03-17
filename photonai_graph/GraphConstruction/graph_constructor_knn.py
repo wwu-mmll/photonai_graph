@@ -86,7 +86,7 @@ class GraphConstructorKNN(GraphConstructor):
 
         return adjacency_knn
 
-    def transform(self, X):
+    def transform(self, X) -> np.ndarray:
         """Transform matrices based on k nearest neighbours"""
         adj, feat = self.get_mtrx(X)
         # do preparatory matrix transformations

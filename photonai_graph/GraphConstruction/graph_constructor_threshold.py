@@ -1,3 +1,5 @@
+import numpy as np
+
 from photonai_graph.GraphConstruction.graph_constructor import GraphConstructor
 
 
@@ -80,7 +82,7 @@ class GraphConstructorThreshold(GraphConstructor):
         self.return_adjacency_only = return_adjacency_only
         self.retain_weights = retain_weights
 
-    def transform(self, X):
+    def transform(self, X) -> np.ndarray:
         """Transform input matrices using a threshold"""
         adj, feat = self.get_mtrx(X)
         # do preparatory matrix transformations

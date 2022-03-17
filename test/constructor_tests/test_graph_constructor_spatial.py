@@ -5,7 +5,7 @@ import pandas as pd
 from photonai_graph.GraphConstruction.graph_constructor_spatial import GraphConstructorSpatial
 
 
-class KNNTests(unittest.TestCase):
+class SpatialTests(unittest.TestCase):
 
     def setUp(self):
         # get random matrix as feature matrix
@@ -28,7 +28,7 @@ class KNNTests(unittest.TestCase):
         self.spatial_coords.to_csv(path, header=False, index=False)
         g_constr = GraphConstructorSpatial(k_distance=3, atlas_name='test', atlas_folder="/tmp/")
         g_constr.fit(self.Xrandom4d, self.y)
-        trans = g_constr.transform_test(self.Xrandom4d)
+        trans = g_constr.transform(self.Xrandom4d)
         self.assertEqual(np.shape(trans), (20, 12, 12, 3))
         os.remove(path)
 
@@ -37,7 +37,7 @@ class KNNTests(unittest.TestCase):
         self.spatial_coords.to_csv(path, header=False, index=False)
         g_constr = GraphConstructorSpatial(k_distance=3, atlas_name='test', atlas_folder="/tmp/")
         g_constr.fit(self.Xrandom4d, self.y)
-        trans = g_constr.transform_test(self.Xrandom4d)
+        trans = g_constr.transform(self.Xrandom4d)
         bool_array = np.count_nonzero(trans[0, :, :, 0], axis=1, keepdims=True) == self.check_array
         self.assertFalse(False in bool_array)
         os.remove(path)

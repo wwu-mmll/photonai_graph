@@ -71,7 +71,7 @@ class GraphConstructorPercentageWindow(GraphConstructor):
         self.percentage_lower = percentage_lower
         self.retain_weights = retain_weights
 
-    def transform(self, X):
+    def transform(self, X) -> np.ndarray:
         """Select percent strongest connections"""
         adj, feat = self.get_mtrx(X)
         # prepare matrices

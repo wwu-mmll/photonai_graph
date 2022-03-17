@@ -154,7 +154,7 @@ class GraphConstructorRandomWalks(GraphConstructor):
 
         return ho_adjacency
 
-    def transform(self, X):
+    def transform(self, X) -> np.ndarray:
         """Transforms the matrix using random walks"""
         adj, feat = self.get_mtrx(X)
         # do preparatory matrix transformations

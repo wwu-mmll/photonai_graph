@@ -1,3 +1,5 @@
+import numpy as np
+
 from photonai_graph.GraphConstruction.graph_constructor import GraphConstructor
 
 
@@ -73,7 +75,7 @@ class GraphConstructorThresholdWindow(GraphConstructor):
         self.threshold_lower = threshold_lower
         self.retain_weights = retain_weights
 
-    def transform(self, X):
+    def transform(self, X) -> np.ndarray:
         """Transform input matrices accordingly"""
         adj, feat = self.get_mtrx(X)
         # do preparatory matrix transformations
