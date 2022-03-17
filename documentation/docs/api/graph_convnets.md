@@ -11,40 +11,48 @@ The Graph Neural Network module consists of three parts. The Layer Module, where
 You can also write your own custom graph neural network architecture, and register them via the PHOTON register function (link here). When writing your own custom neural nets you are free to choose your own package, as long as they implement fit, transform and predict functions like the GraphConvNet module classes. These can also be used as a blueprint if you want to integrate your own graph neural network architectures into PHOTONAI.
 
 ## DglModel
-::: photonai_graph.NeuralNets.dgl_base.DGLmodel.__init__
+::: photonai_graph.NeuralNets.dgl_base.DGLModel.__init__
     rendering:
         show_root_toc_entry: False
 
+## DGLRegressorBaseModel
+::: photonai_graph.NeuralNets.dgl_base.DGLRegressorBaseModel.__init__
+    rendering:
+        show_root_toc_entry: False
+
+## DGLClassifierBaseModel
+::: photonai_graph.NeuralNets.dgl_base.DGLClassifierBaseModel.__init__
+
 ## GCNClassifierModel
-::: photonai_graph.NeuralNets.NNClassifier.gcn_classifier.GCNClassifierModel.__init__
+::: photonai_graph.NeuralNets.GCNModel.GCNClassifierModel.__init__
     rendering:
         show_root_toc_entry: False
 
 
 ## SGConvClassifierModel
-::: photonai_graph.NeuralNets.NNClassifier.sgc_classifier.SGConvClassifierModel.__init__
+::: photonai_graph.NeuralNets.SGCModel.SGConvClassifierModel.__init__
     rendering:
         show_root_toc_entry: False
 
 
 ## GATClassifierModel
 
-::: photonai_graph.NeuralNets.NNClassifier.gat_classifier.GATClassifierModel.__init__
+::: photonai_graph.NeuralNets.GATModel.GATClassifierModel.__init__
     rendering:
         show_root_toc_entry: False
 
 
 ## GCNRegressorModel
-::: photonai_graph.NeuralNets.NNRegressor.gcn_regressor.GCNRegressorModel.__init__
+::: photonai_graph.NeuralNets.GCNModel.GCNRegressorModel.__init__
     rendering:
         show_root_toc_entry: False
 
 ## SGConvRegressorModel
-::: photonai_graph.NeuralNets.NNRegressor.sgc_regressor.SGConvRegressorModel.__init__
+::: photonai_graph.NeuralNets.SGCModel.SGConvRegressorModel.__init__
     rendering:
         show_root_toc_entry: False
 
 ## GATRegressorModel
-::: photonai_graph.NeuralNets.NNRegressor.gat_regressor.GATRegressorModel.__init__
+::: photonai_graph.NeuralNets.GATModel.GATRegressorModel.__init__
     rendering:
         show_root_toc_entry: False

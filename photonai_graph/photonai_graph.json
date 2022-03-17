@@ -56,27 +56,27 @@
       "Transformer"
    ],
    "GATClassifier":[
-      "photonai_graph.NeuralNets.NNClassifier.gat_classifier.GATClassifierModel",
+      "photonai_graph.NeuralNets.GATModel.GATClassifierModel",
       "Estimator"
    ],
    "GCNClassifier":[
-      "photonai_graph.NeuralNets.NNClassifier.gcn_classifier.GCNClassifierModel",
+      "photonai_graph.NeuralNets.GCNModel.GCNClassifierModel",
       "Estimator"
    ],
    "SGCClassifier":[
-      "photonai_graph.NeuralNets.NNClassifier.sgc_classifier.SGConvClassifierModel",
+      "photonai_graph.NeuralNets.SGCModel.SGConvClassifierModel",
       "Estimator"
    ],
    "GATRegressor": [
-      "photonai_graph.NeuralNets.NNRegressor.gat_regressor.GATRegressorModel",
+      "photonai_graph.NeuralNets.GATModel.GATRegressorModel",
       "Estimator"
    ],
    "GCNRegressor": [
-      "photonai_graph.NeuralNets.NNRegressor.gcn_regressor.GCNRegressorModel",
+      "photonai_graph.NeuralNets.GCNModel.GCNRegressorModel",
       "Estimator"
    ],
    "SGCRegressor": [
-      "photonai_graph.NeuralNets.NNRegressor.sgc_regressor.SGCRegressorModel",
+      "photonai_graph.NeuralNets.SGCModel.SGCRegressorModel",
       "Estimator"
    ],
    "GrakelAdapter": [

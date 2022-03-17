@@ -23,6 +23,7 @@ def get_sw_graph(num_graphs=500, num_nodes=20, knn=5, edge_rew=0.2):
 
     return graph_list
 
+
 def plot_nx_edge_count(graphs1, graphs2, label1="graphs_1", label2="graphs_2"):
     # plot the distribution of edges for 2 sets of graphs
     edges1 = []

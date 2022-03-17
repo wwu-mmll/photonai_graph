@@ -9,7 +9,7 @@ To make life easier, you can simply try and install everything inside your curre
 Install mkdocs (Python package) through PyPI (inside your Python environment, if you're using one). We also need to install the material theme https://squidfunk.github.io/mkdocs-material/ and some custom plugins we're using to render Latex and so on.
 
 ```bash
-pip install mkdocs mkdocs-material pymdown-extensions mkdocstrings-python
+pip install mkdocs mkdocs-material pymdown-extensions mkdocstrings-python mkdocs-jupyter
 ```
 
 ### How to use it

@@ -4,7 +4,7 @@ graphs and use the average adjacency with the individual connectivity as feature
 
 This transformer is intended for this case.
 
-## Population Averaging
+## Population Averaging Transform
 ::: photonai_graph.PopulationAveragingTransform.PopulationAveragingTransform.__init__
     rendering:
         show_root_toc_entry: False

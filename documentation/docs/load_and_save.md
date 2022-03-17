@@ -12,10 +12,10 @@ From this networkx graph you can use different conversion functions to convert t
 desired format.
 
 ### Load networkx graph from file
-::: photonai_graph.GraphConversions.load_file_to_networkx
+::: photonai_graph.GraphIO.load_file_to_networkx
 
 ## Saving graphs
 Graphs can be saved as networkx 
 
 ### Graph to networkx file
-::: photonai_graph.GraphConversions.save_networkx_to_file
+::: photonai_graph.GraphIO.save_networkx_to_file
