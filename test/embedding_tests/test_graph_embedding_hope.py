@@ -12,19 +12,23 @@ class HOPETest(unittest.TestCase):
         self.y = np.ones(20)
 
     def test_embedding_hope(self):
-        g_embedding = GraphEmbeddingHOPE(embedding_dimension=1)
+        g_embedding = GraphEmbeddingHOPE()
         g_embedding.fit(self.X, self.y)
         gembed = g_embedding.transform(self.X)
-        self.assertEqual(np.shape(gembed), (20, 40))
+        self.assertEqual((20, 40), np.shape(gembed))
+        orig_transformed = g_embedding.orig_transformed
+        for graph in range(self.X.shape[0]):
+            self.assertTrue(np.array_equal(np.squeeze(np.reshape(orig_transformed[graph, ...], (-1, 1))),
+                                           gembed[graph, ...]))
 
     def test_embedding_hope_2d(self):
         g_embedding = GraphEmbeddingHOPE(embedding_dimension=2)
         g_embedding.fit(self.X, self.y)
         gembed = g_embedding.transform(self.X)
-        self.assertEqual(np.shape(gembed), (20, 20, 2))
+        self.assertEqual((20, 20, 2), np.shape(gembed))
 
     def test_embedding_hope_4d(self):
         g_embedding = GraphEmbeddingHOPE(embedding_dimension=4)
         g_embedding.fit(self.X, self.y)
         gembed = g_embedding.transform(self.X)
-        self.assertEqual(np.shape(gembed), (20, 20, 4))
+        self.assertEqual((20, 20, 4), np.shape(gembed))

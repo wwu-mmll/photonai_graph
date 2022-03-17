@@ -10,8 +10,6 @@ For this introduction we will assume that you are using connectivity matrices.
     Thresholding technique described below.
 
 ## 1. Loading data
-PHOTONAI Graph offers a plethora of different methods for loading your data.
-
 As this toolbox is build with neuro scientists in mind, the first example will cover the case of connectivity matrices.
 However, PHOTONAI Graph is not limited to connectivity matrices.
 

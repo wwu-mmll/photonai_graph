@@ -30,4 +30,13 @@ class PopulationAveragingTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             pat.transform(self.other_graphs)
 
+    def test_wrong_input_dimensionality(self):
+        dummy_input = np.ones((10, 20, 20))
+        pat = PopulationAveragingTransform()
+        with self.assertRaises(ValueError):
+            pat.fit(dummy_input, [])
+        pat.fit(dummy_input[..., np.newaxis], [])
+        with self.assertRaises(ValueError):
+            pat.transform(dummy_input)
+
 

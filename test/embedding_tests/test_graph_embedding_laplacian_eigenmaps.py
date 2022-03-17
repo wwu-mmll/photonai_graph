@@ -16,7 +16,7 @@ class LaplacianEigenmapsTest(unittest.TestCase):
         g_embedding = GraphEmbeddingLaplacianEigenmaps(embedding_dimension=1)
         g_embedding.fit(self.X, self.y)
         gembed = g_embedding.transform(self.X)
-        self.assertEqual(np.shape(gembed), (20, 20))
+        self.assertEqual((20, 20), np.shape(gembed))
 
     def test_embedding_laplacian_eigenmaps_complex(self):
         g_embedding = GraphEmbeddingLaplacianEigenmaps(embedding_dimension=1)
@@ -36,4 +36,4 @@ class LaplacianEigenmapsTest(unittest.TestCase):
         g_embedding = GraphEmbeddingLaplacianEigenmaps(embedding_dimension=3)
         g_embedding.fit(self.X, self.y)
         gembed = g_embedding.transform(self.X)
-        self.assertEqual(np.shape(gembed), (20, 20, 3))
+        self.assertEqual((20, 20, 3), np.shape(gembed))

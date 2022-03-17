@@ -2,7 +2,8 @@ from photonai_graph.GraphEmbedding.graph_embedding_base import GraphEmbeddingBas
 import numpy as np
 try:
     from gem.embedding.lap import LaplacianEigenmaps
-except ImportError:
+    from gem.embedding.static_graph_embedding import StaticGraphEmbedding
+except ImportError:  # pragma: no cover
     pass
 
 
@@ -39,15 +40,5 @@ class GraphEmbeddingLaplacianEigenmaps(GraphEmbeddingBase):
                                                                adjacency_axis=adjacency_axis,
                                                                logs=logs)
 
-    def fit(self, X, y):
-        return self
-
-    def transform(self, X):
-        """Transforms graph using Laplacian Eigenmaps Embedding"""
-        embedding = LaplacianEigenmaps(d=self.embedding_dimension)
-
-        X_transformed = self.calculate_embedding(embedding, X)
-
-        X_transformed = np.real(X_transformed)
-
-        return X_transformed
+    def _init_embedding(self) -> StaticGraphEmbedding:
+        return LaplacianEigenmaps(d=self.embedding_dimension)

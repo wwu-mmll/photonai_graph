@@ -27,6 +27,9 @@ class GraphConstructorSpatial(GraphConstructor):
         of the coordinates in the chosen atlas.
         Adapted from Ktena et al, 2017.
 
+        !!! danger
+            Currently considered untested!
+            See <a href='https://github.com/wwu-mmll/photonai_graph/issues/65' target='_blank'>Ticket</a>
 
         Parameters
         ----------
@@ -95,7 +98,7 @@ class GraphConstructorSpatial(GraphConstructor):
 
         return adjacency
 
-    def transform_test(self, X):
+    def transform(self, X) -> np.ndarray:
         """Transform input matrices accordingly"""
         adj, feat = self.get_mtrx(X)
         # do preparatory matrix transformations

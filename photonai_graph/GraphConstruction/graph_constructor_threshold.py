@@ -1,3 +1,5 @@
+import numpy as np
+
 from photonai_graph.GraphConstruction.graph_constructor import GraphConstructor
 
 
@@ -75,12 +77,14 @@ class GraphConstructorThreshold(GraphConstructor):
                                                         use_abs_zscore=use_abs_zscore,
                                                         adjacency_axis=adjacency_axis,
                                                         logs=logs)
+        if retain_weights not in [0, 1]:
+            raise ValueError("retain_weights has to be in [0, 1]")
         self.threshold = threshold
         self.concatenation_axis = concatenation_axis
         self.return_adjacency_only = return_adjacency_only
         self.retain_weights = retain_weights
 
-    def transform(self, X):
+    def transform(self, X: np.ndarray) -> np.ndarray:
         """Transform input matrices using a threshold"""
         adj, feat = self.get_mtrx(X)
         # do preparatory matrix transformations
@@ -92,14 +96,10 @@ class GraphConstructorThreshold(GraphConstructor):
 
         return X_transformed
 
-    def threshold_matrix(self, adjacency):
+    def threshold_matrix(self, adjacency: np.ndarray) -> np.ndarray:
         """Threshold matrix"""
-        if self.retain_weights == 0:
+        adjacency[adjacency < self.threshold] = 0
+        if not self.retain_weights:
             adjacency[adjacency >= self.threshold] = 1
-            adjacency[adjacency < self.threshold] = 0
-        elif self.retain_weights == 1:
-            adjacency[adjacency < self.threshold] = 0
-        else:
-            raise ValueError('retain weights needs to be 0 or 1')
 
         return adjacency

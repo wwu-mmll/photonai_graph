@@ -5,18 +5,19 @@ import networkx
 import os
 try:
     from gem.embedding.hope import HOPE
-except ImportError:
+    from gem.embedding.static_graph_embedding import StaticGraphEmbedding
+except ImportError:  # pragma: no cover
     pass
 
+from photonai_graph.GraphEmbedding.graph_embedding_base import GraphEmbeddingBase
 
-# todo: why does this class not inherit from GraphEmbeddingBase?
-class GraphEmbeddingHOPE(BaseEstimator, TransformerMixin):
+
+class GraphEmbeddingHOPE(GraphEmbeddingBase):
     _estimator_type = "transformer"
 
     def __init__(self,
                  embedding_dimension: int = 1,
                  decay_factor: float = 0.01,
-                 construction_axis=0,
                  adjacency_axis: int = 0,
                  logs: str = None):
         """
@@ -44,46 +45,21 @@ class GraphEmbeddingHOPE(BaseEstimator, TransformerMixin):
             constructor = GraphEmbeddingHOPE(embedding_dimension=1,
                                              decay_factor=0.1)
         """
-        self.embedding_dimension = embedding_dimension
+        super(GraphEmbeddingHOPE, self).__init__(embedding_dimension=embedding_dimension,
+                                                 adjacency_axis=adjacency_axis,
+                                                 logs=logs)
         self.decay_factor = decay_factor
-        self.construction_axis = construction_axis
-        self.adjacency_axis = adjacency_axis
-        if logs:
-            self.logs = logs
-        else:
-            self.logs = os.getcwd()
-        assert_imported(["gem"])
+        self.orig_transformed = None
 
-    def fit(self, X, y):
-        return self
+    def transform(self, X: np.ndarray) -> np.ndarray:
+        x_transformed = super(GraphEmbeddingHOPE, self).transform(X)
+        self.orig_transformed = x_transformed
+        if self.embedding_dimension == 1:
+            x_transformed = np.squeeze(np.reshape(x_transformed, (X.shape[0], -1, 1)))
+        return x_transformed
 
-    def transform(self, X):
-
-        embedding_list = []
-
-        if X.shape[0] == 0:
-            raise ValueError("Check the shape of your input.\nReceived X.shape[0]==0..?")
-
-        for i in range(X.shape[0]):
-            # take matrix and transform it into photonai_graph
-            g = networkx.convert_matrix.from_numpy_matrix(X[i, :, :, self.adjacency_axis])
-
-            # transform this photonai_graph with a photonai_graph embedding
-            if self.embedding_dimension == 1:
-                embedding = HOPE(d=2, beta=self.decay_factor)
-                embedding.learn_embedding(graph=g, is_weighted=True, no_python=True)
-                embedding_representation = embedding.get_embedding()
-                embedding_representation = np.reshape(embedding_representation, (-1, 1))
-
-            else:
-                embedding = HOPE(d=self.embedding_dimension, beta=self.decay_factor)
-                embedding.learn_embedding(graph=g, is_weighted=True, no_python=True)
-                embedding_representation = embedding.get_embedding()
-                embedding_representation = np.reshape(embedding_representation,
-                                                      (embedding_representation.shape[0],
-                                                       embedding_representation.shape[1],
-                                                       -1))
-
-            embedding_list.append(embedding_representation)
-
-        return np.squeeze(np.asarray(embedding_list))
+    def _init_embedding(self) -> StaticGraphEmbedding:
+        embedding_dimension = self.embedding_dimension
+        if embedding_dimension == 1:
+            embedding_dimension = 2
+        return HOPE(d=embedding_dimension, beta=self.decay_factor)

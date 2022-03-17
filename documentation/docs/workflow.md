@@ -52,7 +52,28 @@ graph = constructor.transform(example_graph)
 
 After transforming your matrix, using a graph constructor you can then use this matrix to do machine learning with it.
 
-### Machine Learning on Graphs
+## PHOTONAI Graph internal datastructure
+PHOTONAI Graph expects the graphs to be embedded in an 4 dimensional ndarray. Graph Constructors are 
+automatically transforming your input data into the desired format. If you want to preprocess your data
+in an external library and later use PHOTONAI Graph, you have to take care of the input by yourself.
+
+The shape of the input has to be in this format:
+$$
+[100, 20, 20, 4]
+$$
+
+Here we have defined
+
+* 100 Subjects
+* 20 Nodes per subject (20x20 adjacency matrix)
+* 4 Channels. The first channel is usually the adjacency (adjacency_axis), 
+other channels might for example contain node or edge features
+
+!!! danger "Sparse matrices"
+    Currently there is no support for sparse input matrices.
+    Dense matrices are suitable for many small graphs, as usually the case in neuroscience environments.
+
+## Machine Learning on Graphs
 
 Once you have a graph structure, you can then use this graph structure to do machine learning on it in a variety of ways.
 

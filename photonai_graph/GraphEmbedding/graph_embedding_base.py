@@ -1,9 +1,15 @@
 from sklearn.base import BaseEstimator, TransformerMixin
-from photonai_graph.GraphConversions import dense_to_networkx
-from photonai_graph.util import assert_imported
-from abc import ABC
+from abc import ABC, abstractmethod
 import numpy as np
 import os
+
+from photonai_graph.GraphConversions import dense_to_networkx
+from photonai_graph.util import assert_imported
+
+try:
+    from gem.embedding.static_graph_embedding import StaticGraphEmbedding
+except ImportError:  # pragma: no cover
+    pass
 
 
 class GraphEmbeddingBase(BaseEstimator, TransformerMixin, ABC):
@@ -31,9 +37,8 @@ class GraphEmbeddingBase(BaseEstimator, TransformerMixin, ABC):
                  logs: str = ''):
         self.embedding_dimension = embedding_dimension
         self.adjacency_axis = adjacency_axis
-        if logs:
-            self.logs = logs
-        else:
+        self.logs = logs
+        if not self.logs:
             self.logs = os.getcwd()
         assert_imported(["gem"])
 
@@ -41,7 +46,7 @@ class GraphEmbeddingBase(BaseEstimator, TransformerMixin, ABC):
         return self
 
     @staticmethod
-    def calculate_embedding(embedding, matrices):
+    def _calculate_embedding(embedding: StaticGraphEmbedding, matrices: np.ndarray) -> np.ndarray:
         """Returns embedding of graphs"""
         graphs = dense_to_networkx(matrices)  # convert matrices
         embedding_list = []
@@ -49,12 +54,19 @@ class GraphEmbeddingBase(BaseEstimator, TransformerMixin, ABC):
         for graph in graphs:
             embedding.learn_embedding(graph=graph, is_weighted=True, no_python=True)
             embedding_representation = embedding.get_embedding()
-            if 'embedding_list' not in locals():
-                embedding_list = embedding_representation
-
-            else:
-                embedding_list.append(embedding_representation)
+            embedding_list.append(embedding_representation)
 
         embedding_list = np.squeeze(np.asarray(embedding_list))
 
         return embedding_list
+
+    def transform(self, X: np.ndarray) -> np.ndarray:
+        """Transforms graph using Laplacian Eigenmaps Embedding"""
+        embedding = self._init_embedding()
+        X_transformed = self._calculate_embedding(embedding, X)
+        X_transformed = np.real(X_transformed)
+        return X_transformed
+
+    @abstractmethod
+    def _init_embedding(self) -> StaticGraphEmbedding:
+        """Initilaize the current embedding"""

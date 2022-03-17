@@ -67,7 +67,7 @@ class GraphConstructorKNN(GraphConstructor):
                                                   logs=logs)
         self.k_distance = k_distance
 
-    def get_knn(self, adjacency):
+    def get_knn(self, adjacency: np.ndarray) -> np.ndarray:
         """Returns kNN matrices"""
         adjacency = np.squeeze(adjacency)
         adjacency_list = []
@@ -86,7 +86,7 @@ class GraphConstructorKNN(GraphConstructor):
 
         return adjacency_knn
 
-    def transform(self, X):
+    def transform(self, X: np.ndarray) -> np.ndarray:
         """Transform matrices based on k nearest neighbours"""
         adj, feat = self.get_mtrx(X)
         # do preparatory matrix transformations

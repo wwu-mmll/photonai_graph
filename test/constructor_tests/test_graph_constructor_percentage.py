@@ -9,7 +9,7 @@ class PercentageTests(unittest.TestCase):
         self.X4d = np.ones((20, 20, 20, 2))
         self.Xrandom4d = np.random.rand(20, 20, 20, 2)
         test_array = np.reshape(np.arange(1, 101, 1), (-1, 10, 10))
-        self.Xtest4d = np.repeat(test_array, 10, axis=0)
+        self.Xtest4d = np.repeat(test_array, 10, axis=0)[..., np.newaxis]
         self.y = np.ones((20))
 
     def test_percentage_individual(self):
@@ -56,3 +56,10 @@ class PercentageTests(unittest.TestCase):
         expected_elements = [80, 81, 82, 83, 84, 85, 86, 87, 88, 89]
         for element in expected_elements:
             self.assertNotIn(element, trans[0, :, :, 0])
+
+    def test_illegal_threshold(self):
+        g_constr = GraphConstructorPercentage(percentage=90)
+        dummy_mtrx = np.reshape(np.tile(np.nan, 20*4*4*3), (20, 4, 4, 3))
+        g_constr.fit(dummy_mtrx, self.y)
+        with self.assertRaises(ValueError):
+            trans = g_constr.transform(dummy_mtrx)

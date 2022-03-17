@@ -1,5 +1,8 @@
-import numpy as np
+from typing import List
 from itertools import islice, combinations
+
+import numpy as np
+
 from photonai_graph.GraphConstruction.graph_constructor import GraphConstructor
 
 
@@ -90,7 +93,7 @@ class GraphConstructorRandomWalks(GraphConstructor):
         self.feature_axis = feature_axis
 
     @staticmethod
-    def random_walk(adjacency, walk_length, num_walks):
+    def random_walk(adjacency: np.ndarray, walk_length: int, num_walks: int) -> List[List[List[int]]]:
         """Performs a random walk on a given photonai_graph"""
         # a -> adj
         # i -> starting row
@@ -115,7 +118,7 @@ class GraphConstructorRandomWalks(GraphConstructor):
         return walks
 
     @staticmethod
-    def sliding_window(seq, n):
+    def sliding_window(seq, n: int):
         """Returns a sliding window (of width n) over data from the iterable
             s -> (s0,s1,...s[n-1]), (s1,s2,...,sn), ...                   """
         it = iter(seq)
@@ -129,9 +132,9 @@ class GraphConstructorRandomWalks(GraphConstructor):
         # todo: check return value!
         return  # sliding window co-ocurrence
 
-    def sliding_window_frequency(self, X_mean, walk_list):
+    def sliding_window_frequency(self, x_mean: np.ndarray, walk_list: List[List[List[int]]]) -> np.ndarray:
 
-        coocurrence = np.zeros((X_mean.shape[0], X_mean.shape[1]))
+        coocurrence = np.zeros((x_mean.shape[0], x_mean.shape[1]))
 
         for i in walk_list:
             node_walks = i
@@ -145,16 +148,16 @@ class GraphConstructorRandomWalks(GraphConstructor):
 
         return coocurrence
 
-    def get_ho_adjacency(self, adj):
+    def get_ho_adjacency(self, adj: np.ndarray) -> np.ndarray:
         """Returns the higher order adjacency of a graph"""
         adj = np.squeeze(adj)
 
         adjacency_list = self.__adjacency_to_list(adj, adj)
-        ho_adjacency = adjacency_list[:, :, :, np.newaxis]
+        ho_adjacency = adjacency_list[..., np.newaxis]
 
         return ho_adjacency
 
-    def transform(self, X):
+    def transform(self, X: np.ndarray) -> np.ndarray:
         """Transforms the matrix using random walks"""
         adj, feat = self.get_mtrx(X)
         # do preparatory matrix transformations
@@ -162,15 +165,15 @@ class GraphConstructorRandomWalks(GraphConstructor):
         # threshold matrix
         adj = self.get_ho_adjacency(adj)
         # get feature matrix
-        X_transformed = self.get_features(adj, feat)
+        x_transformed = self.get_features(adj, feat)
 
-        return X_transformed
+        return x_transformed
 
     # !===== Helper Functions =====!
-    def __adjacency_to_list(self, X, X_rw):
+    def __adjacency_to_list(self, adjacency_in: np.ndarray, adjacency_rw: np.ndarray) -> np.ndarray:
         adjacency_list = []
-        for i in range(X.shape[0]):
-            d, idx = self.distance_sklearn_metrics(X_rw[i, :, :], k=self.k_distance, metric='euclidean')
+        for i in range(adjacency_in.shape[0]):
+            d, idx = self.distance_sklearn_metrics(adjacency_rw[i, :, :], k=self.k_distance, metric='euclidean')
             adjacency = self.adjacency(d, idx).astype(np.float32)
 
             # normalize adjacency
@@ -184,14 +187,14 @@ class GraphConstructorRandomWalks(GraphConstructor):
 
         return np.asarray(adjacency_list)
 
-    def __adjacency_to_dense(self, adjacency):
+    def __adjacency_to_dense(self, adjacency: np.ndarray) -> np.ndarray:
         adjacency_rowsum = np.sum(adjacency, axis=1)
         adjacency_norm = adjacency / adjacency_rowsum[:, np.newaxis]
 
         walks = self.random_walk(adjacency=adjacency_norm, walk_length=self.walk_length,
                                  num_walks=self.number_of_walks)
 
-        higherorder_adjacency = self.sliding_window_frequency(X_mean=adjacency, walk_list=walks)
+        higherorder_adjacency = self.sliding_window_frequency(x_mean=adjacency, walk_list=walks)
 
         # obtain the kNN photonai_graph from the new adjacency matrix
         d, idx = self.distance_sklearn_metrics(higherorder_adjacency, k=10, metric='euclidean')
