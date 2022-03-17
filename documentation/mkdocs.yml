@@ -23,13 +23,19 @@ theme:
     code: 'Space Mono'
   logo: assets/img/favicon.ico
   favicon: assets/img/favicon.ico
+  features:
+     - toc.integrate
 
 # Latex
 extra_javascript:
-  - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
 # extensions
 markdown_extensions:
+  - pymdownx.arithmatex:
+        generic: true
   - pymdownx.highlight:
       auto_title: true
   - pymdownx.inlinehilite
