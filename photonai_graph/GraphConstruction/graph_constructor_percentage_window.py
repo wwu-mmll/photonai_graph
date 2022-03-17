@@ -70,6 +70,8 @@ class GraphConstructorPercentageWindow(GraphConstructor):
         self.percentage_upper = percentage_upper
         self.percentage_lower = percentage_lower
         self.retain_weights = retain_weights
+        if retain_weights not in [1, 0]:
+            raise ValueError('retain_weights has to be in [1, 0]')
 
     def transform(self, X: np.ndarray) -> np.ndarray:
         """Select percent strongest connections"""
@@ -79,9 +81,9 @@ class GraphConstructorPercentageWindow(GraphConstructor):
         # get percent strongest connections
         adj = self.percentage_window(adj)
         # get feature matrix
-        X_transformed = self.get_features(adj, feat)
+        x_transformed = self.get_features(adj, feat)
 
-        return X_transformed
+        return x_transformed
 
     def percentage_window(self, adjacency: np.ndarray) -> np.ndarray:
         """Finds the x percent strongest connections"""

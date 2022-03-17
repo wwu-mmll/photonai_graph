@@ -1,3 +1,6 @@
+import os
+from typing import Union, List
+
 from networkx.drawing.nx_pylab import draw
 import networkx.drawing as drawx
 from networkx.algorithms import asteroidal
@@ -6,7 +9,6 @@ import numpy as np
 import pydot
 from scipy import stats
 from scipy import sparse
-import os
 import matplotlib.pyplot as plt
 
 
@@ -352,16 +354,12 @@ def individual_ztransform(matrx, adjacency_axis=0):
         """
     # check dimensions
     transformed_matrices = []
-    if np.ndim(matrx) == 3:
-        for i in range(matrx.shape[0]):
-            matrix = matrx[i, :, :].copy()
-            matrix = stats.zscore(matrix)
-            transformed_matrices.append(matrix)
-    elif np.ndim(matrx) == 4:
-        for i in range(matrx.shape[0]):
-            matrix = matrx[i, :, :, adjacency_axis].copy()
-            matrix = stats.zscore(matrix)
-            transformed_matrices.append(matrix)
+    if not np.ndim(matrx) == 4:
+        raise ValueError("Please check input dimension of your graph data.")
+    for i in range(matrx.shape[0]):
+        matrix = matrx[i, :, :, adjacency_axis].copy()
+        matrix = stats.zscore(matrix)
+        transformed_matrices.append(matrix)
 
     transformed_matrices = np.asarray(transformed_matrices)
 
@@ -374,7 +372,7 @@ def individual_fishertransform(matrx, adjacency_axis=0):
         Parameters
         ----------
         matrx : np.ndarray
-            a list or of networkx graphs or a single networkx graph
+            An array containing the adjacency values for the graphs
         adjacency_axis: int, default=0
             the position of the adjacency matrix
 
@@ -392,16 +390,12 @@ def individual_fishertransform(matrx, adjacency_axis=0):
         """
     # check dimensions
     transformed_matrices = []
-    if np.ndim(matrx) == 3:
-        for i in range(matrx.shape[0]):
-            matrix = matrx[i, :, :].copy()
-            matrix = np.arctanh(matrix)
-            transformed_matrices.append(matrix)
-    elif np.ndim(matrx) == 4:
-        for i in range(matrx.shape[0]):
-            matrix = matrx[i, :, :, adjacency_axis].copy()
-            matrix = np.arctanh(matrix)
-            transformed_matrices.append(matrix)
+    if np.ndim(matrx) != 4:
+        raise ValueError("Please check input dimension of your graph data.")
+    for i in range(matrx.shape[0]):
+        matrix = matrx[i, :, :, adjacency_axis].copy()
+        matrix = np.arctanh(matrix)
+        transformed_matrices.append(matrix)
 
     transformed_matrices = np.asarray(transformed_matrices)
 
@@ -438,8 +432,34 @@ def pydot_to_nx(graphs):
     return a_graphs
 
 
-def check_asteroidal(graph, return_boolean=True):
-    """checks whether a graph or a list graphs is asteroidal
+def check_asteroidal_boolean(graph: Union[nx.Graph, List[nx.Graph]]) -> Union[bool, List[bool]]:
+    """checks wether a graph or a list of graphs is asteroidal
+
+    Parameters
+    ----------
+    graph: Union[nx.classes.graph.Graph, List[nx.classes.graph.Graph]]
+        Input graph(s)
+
+    Returns
+    -------
+    Union[bool, List[bool]]
+        True if graph is asteroidal, False otherwise per graph
+    """
+    if isinstance(graph, list):
+        graph_answer = []
+        for i in graph:
+            answer = asteroidal.is_at_free(i)
+            graph_answer.append(answer)
+    elif isinstance(graph, nx.classes.graph.Graph):
+        graph_answer = asteroidal.is_at_free(graph)
+    else:
+        raise ValueError('Your input is not a networkx photonai_graph or a list of networkx graphs. '
+                         'Please check your inputs.')
+    return graph_answer
+
+
+def check_asteroidal(graph: Union[nx.Graph, List[nx.Graph]]) -> Union[Union[List, None], List[Union[List, None]]]:
+    """checks whether a graph or a list of graphs is asteroidal
 
         Parameters
         ----------
@@ -452,33 +472,20 @@ def check_asteroidal(graph, return_boolean=True):
 
         Returns
         -------
-        list or boolean
-            A list of True/False values or a list of asteroidal triples, or a single boolean value
+        list
+            A list of asteroidal triples or a single asteroidal triple
 
         """
     # checks for asteroidal triples in the photonai_graph or in a list of networkx graphs
-    if return_boolean:
-        if isinstance(graph, list):
-            graph_answer = []
-            for i in graph:
-                answer = asteroidal.is_at_free(i)
-                graph_answer.append(answer)
-        elif isinstance(graph, nx.classes.graph.Graph):
-            graph_answer = asteroidal.is_at_free(graph)
-        else:
-            raise ValueError('Your input is not a networkx photonai_graph or a list of networkx graphs. '
-                             'Please check your inputs.')
-
+    if isinstance(graph, list):
+        graph_answer = []
+        for i in graph:
+            answer = asteroidal.find_asteroidal_triple(i)
+            graph_answer.append(answer)
+    elif isinstance(graph, nx.classes.graph.Graph):
+        graph_answer = asteroidal.find_asteroidal_triple(graph)
     else:
-        if isinstance(graph, list):
-            graph_answer = []
-            for i in graph:
-                answer = asteroidal.find_asteroidal_triple(i)
-                graph_answer.append(answer)
-        elif isinstance(graph, nx.classes.graph.Graph):
-            graph_answer = asteroidal.find_asteroidal_triple(graph)
-        else:
-            raise ValueError('Your input is not a networkx photonai_graph or a list of networkx graphs. '
-                             'Please check your inputs.')
+        raise ValueError('Your input is not a networkx photonai_graph or a list of networkx graphs. '
+                         'Please check your inputs.')
 
     return graph_answer

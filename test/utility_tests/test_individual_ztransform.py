@@ -10,8 +10,8 @@ class IndividualZtransformTest(unittest.TestCase):
         self.m4d = np.ones((10, 20, 20, 2))
 
     def test_ztransform_3d(self):
-        trans_m3d = individual_ztransform(self.m3d)
-        self.assertEqual(np.shape(trans_m3d), np.shape(self.m3d))
+        with self.assertRaises(ValueError):
+            individual_ztransform(self.m3d)
 
     def test_ztransform_4d(self):
         trans_m4d = individual_ztransform(self.m4d)

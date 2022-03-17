@@ -10,8 +10,8 @@ class IndividualFishertransformTest(unittest.TestCase):
         self.m4d = np.ones((10, 20, 20, 2))
 
     def test_fishertransform_3d(self):
-        trans_m3d = individual_fishertransform(self.m3d)
-        self.assertEqual(np.shape(trans_m3d), np.shape(self.m3d))
+        with self.assertRaises(ValueError):
+            individual_fishertransform(self.m3d)
 
     def test_ztransform_4d(self):
         trans_m4d = individual_fishertransform(self.m4d)

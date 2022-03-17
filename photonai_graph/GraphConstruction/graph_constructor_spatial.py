@@ -29,6 +29,7 @@ class GraphConstructorSpatial(GraphConstructor):
 
         !!! danger
             Currently considered untested!
+            See <a href='https://github.com/wwu-mmll/photonai_graph/issues/65' target='_blank'>Ticket</a>
 
         Parameters
         ----------

@@ -40,36 +40,23 @@ class PopulationAveragingTransform(BaseEstimator, TransformerMixin):
         self.adjacency_axis = adjacency_axis
         self.feature_axis = feature_axis
         self.learned_mean = None
-        if self.feature_axis != 2:
+        if self.feature_axis != 2:  # pragma: no cover
             raise NotImplementedError("Feature passing is not implemented yet.")
 
-    def fit(self, X, y):
-        if isinstance(X, list):
-            x_int = np.asarray(X)
-        else:
-            x_int = X
-        mean = np.mean(x_int, axis=0)
-        if np.ndim(x_int) == 4:
-            self.learned_mean = mean[..., self.adjacency_axis]
-        elif np.ndim(x_int) == 3:
-            self.learned_mean = mean
-        else:
-            raise ValueError("The input matrices need to have 3 or 4 dimensions. Please check your input matrix.")
+    def fit(self, X: np.ndarray, y: np.ndarray):
+        if np.ndim(X) != 4:
+            raise ValueError("Unexpected input dimensionality")
+        mean = np.mean(X, axis=0)
+        self.learned_mean = mean[..., self.adjacency_axis]
+
         return self
 
-    def transform(self, X):
+    def transform(self, X: np.ndarray) -> np.ndarray:
         if self.learned_mean is None:
             raise ValueError("This transformer has not been fitted yet.")
-        if np.ndim(X) < 3:
-            raise ValueError("Usage of population averaging without features or original connectivity is discouraged.\n"
-                             "Please read the documentation of this transformer")
-        if isinstance(X, list):
-            x_int = np.array(X)
-        else:
-            x_int = X
-        if not isinstance(X, np.ndarray):
-            raise ValueError(f"Expected list or np.ndarray as input type, got {type(X)}")
+        if np.ndim(X) != 4:
+            raise ValueError("Unexpected input dimensionality.")
         new_adjacency = self.learned_mean.copy()
         new_adjacency = new_adjacency[np.newaxis, ..., np.newaxis]
-        new_adjacency = np.repeat(new_adjacency, x_int.shape[0], axis=0)
-        return np.concatenate((new_adjacency, x_int[..., self.feature_axis, np.newaxis]), axis=3)
+        new_adjacency = np.repeat(new_adjacency, X.shape[0], axis=0)
+        return np.concatenate((new_adjacency, X[..., self.feature_axis, np.newaxis]), axis=3)

@@ -5,7 +5,7 @@ from photonai.photonlogger import logger
 current_path = os.path.dirname(os.path.abspath(__file__))
 registered_file = os.path.join(current_path, "registered")
 logger.info("Checking Graph Module Registration")
-if not os.path.isfile(registered_file):
+if not os.path.isfile(registered_file):  # pragma: no cover
     logger.info("Registering Graph Module")
     from photonai.base import PhotonRegistry
     reg = PhotonRegistry()

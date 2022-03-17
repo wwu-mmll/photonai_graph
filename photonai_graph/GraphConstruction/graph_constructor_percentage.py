@@ -67,6 +67,8 @@ class GraphConstructorPercentage(GraphConstructor):
                                                          logs=logs)
         self.percentage = percentage
         self.retain_weights = retain_weights
+        if retain_weights not in [0, 1]:
+            raise ValueError("retain_weights has to be in [0, 1]")
 
     def transform(self, X: np.ndarray) -> np.ndarray:
         """Select percent strongest connections"""
