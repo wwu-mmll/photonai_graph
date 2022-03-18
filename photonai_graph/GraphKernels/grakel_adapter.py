@@ -1,6 +1,6 @@
 from sklearn.base import BaseEstimator, ClassifierMixin
-from photonai_graph.GraphConversions import get_dense_feature, get_dense_edge_features
 from photonai_graph.util import assert_imported
+import numpy as np
 try:
     from grakel import graph
     import grakel
@@ -91,8 +91,8 @@ class GrakelAdapter(BaseEstimator, ClassifierMixin):
         """construct node features from the feature matrix"""
         label_list = []
         for mtrx in range(matrices.shape[0]):
-            feat = get_dense_feature(matrices[mtrx, :, :, :], adjacency_axis=self.adjacency_axis,
-                                     feature_axis=self.feature_axis, aggregation=self.node_feature_construction)
+            feat = self.get_dense_feature(matrices[mtrx, :, :, :], adjacency_axis=self.adjacency_axis,
+                                          feature_axis=self.feature_axis, aggregation=self.node_feature_construction)
             label_list.append(feat)
 
         return label_list
@@ -101,8 +101,63 @@ class GrakelAdapter(BaseEstimator, ClassifierMixin):
         """construct edge features from the feature or adjacency matrix"""
         label_list = []
         for mtrx in range(matrices.shape[0]):
-            feat = get_dense_edge_features(matrices[mtrx, :, :, :], adjacency_axis=self.adjacency_axis,
-                                           feature_axis=self.feature_axis)
+            feat = self.get_dense_edge_features(matrices[mtrx, :, :, :], adjacency_axis=self.adjacency_axis,
+                                                feature_axis=self.feature_axis)
             label_list.append(feat)
 
         return label_list
+
+    @staticmethod
+    def get_dense_edge_features(matrix, adjacency_axis, feature_axis):
+        """returns the features for an edge label dictionary
+            Parameters
+            ---------
+            matrix: np.matrix/np.ndarray
+                feature matrix
+            adjacency_axis: int
+                position of the adjacency matrix
+            feature_axis: int
+                position of the feature matrix
+        """
+        edge_feat = {}
+        for index, value in np.ndenumerate(matrix[:, :, adjacency_axis]):
+            conn_key = (str(index[0]), str(index[1]))
+            key_val = {conn_key: value}
+            edge_feat.update(key_val)
+        return edge_feat
+
+    @staticmethod
+    def get_dense_feature(matrix, adjacency_axis, feature_axis, aggregation="sum"):
+        """returns the features for a networkx graph
+            Parameters
+            ---------
+            matrix: np.matrix/np.ndarray
+                feature matrix
+            adjacency_axis: int
+                position of the adjacency matrix
+            feature_axis: int
+                position of the feature matrix
+            aggregation:
+                method of feature construction, sum gives a row-wise sum,
+                "mean" gives a row-wise mean, "node_degree" give a row-wise node-degree,
+                features returns the entire row as the feature vector
+        """
+        if aggregation == "sum":
+            features = np.sum(matrix[:, :, feature_axis], axis=1)
+            features = features.tolist()
+        elif aggregation == "mean":
+            features = (np.sum(matrix[:, :, feature_axis], axis=1)) / matrix.shape[0]
+            features = features.tolist()
+        elif aggregation == "node_degree":
+            features = np.count_nonzero(matrix[:, :, adjacency_axis], axis=1, keepdims=False)
+            features = features.tolist()
+        elif aggregation == "features":
+            features = matrix[:, :, feature_axis]
+            features = features.reshape((features.shape[0], -1))
+            features = features.tolist()
+        else:
+            raise KeyError('Only sum, mean, node_degree and all features are supported')
+
+        features = dict(enumerate(features, 0))
+
+        return features

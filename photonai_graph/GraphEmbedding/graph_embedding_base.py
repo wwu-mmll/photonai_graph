@@ -45,10 +45,10 @@ class GraphEmbeddingBase(BaseEstimator, TransformerMixin, ABC):
     def fit(self, X, y):
         return self
 
-    @staticmethod
-    def _calculate_embedding(embedding: StaticGraphEmbedding, matrices: np.ndarray) -> np.ndarray:
+    def _calculate_embedding(self, embedding: StaticGraphEmbedding, matrices: np.ndarray) -> np.ndarray:
         """Returns embedding of graphs"""
-        graphs = dense_to_networkx(matrices)  # convert matrices
+        # convert matrices
+        graphs = dense_to_networkx(matrices, adjacency_axis=self.adjacency_axis)
         embedding_list = []
 
         for graph in graphs:

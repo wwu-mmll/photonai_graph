@@ -33,6 +33,8 @@ import numpy as np
 import json
 import os
 
+from photonai_graph.GraphConversions import dense_to_networkx
+
 
 class GraphMeasureTransform(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
@@ -85,7 +87,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         X_transformed = []
 
         if isinstance(X, np.ndarray) or isinstance(X, np.matrix):
-            graphs = [nx.from_numpy_array(X[i, ..., self.adjacency_axis]) for i in range(X.shape[0])]
+            graphs = dense_to_networkx(X, adjacency_axis=self.adjacency_axis)
         elif isinstance(X, list) and min([isinstance(g, nx.classes.graph.Graph) for g in X]):
             graphs = X
         else:
