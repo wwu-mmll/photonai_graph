@@ -1,9 +1,12 @@
 from typing import List
 
-import dgl
-import torch.nn as nn
 import numpy as np
-from dgl.nn.pytorch import GATConv
+try:
+    import dgl
+    import torch.nn as nn
+    from dgl.nn.pytorch import GATConv
+except ImportError:
+    pass
 
 from photonai_graph.NeuralNets.dgl_base import DGLClassifierBaseModel, DGLRegressorBaseModel
 

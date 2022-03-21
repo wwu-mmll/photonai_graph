@@ -1,7 +1,10 @@
-import dgl
 import numpy as np
-import torch.nn as nn
-from dgl.nn.pytorch import GraphConv, SGConv, GATConv
+try:
+    import dgl
+    import torch.nn as nn
+    from dgl.nn.pytorch import GraphConv, SGConv, GATConv
+except ImportError:
+    pass
 
 from photonai_graph.NeuralNets.dgl_base import DGLClassifierBaseModel, DGLRegressorBaseModel
 
