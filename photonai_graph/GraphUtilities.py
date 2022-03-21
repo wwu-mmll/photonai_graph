@@ -392,6 +392,8 @@ def individual_fishertransform(matrx, adjacency_axis=0):
     transformed_matrices = []
     if np.ndim(matrx) != 4:
         raise ValueError("Please check input dimension of your graph data.")
+    if not np.isfinite(matrx).all():
+        raise ValueError("For a fisher transform graph data should only include finite values, no nans")
     for i in range(matrx.shape[0]):
         matrix = matrx[i, :, :, adjacency_axis].copy()
         matrix = np.arctanh(matrix)
