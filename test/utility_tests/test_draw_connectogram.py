@@ -30,5 +30,4 @@ class DrawConnectogramTests(unittest.TestCase):
             draw_connectogram(self.cyc_graph, weight=0.5, show=False)
 
     def test_drawing_weight_corrected(self):
-        #draw_connectogram(self.weight_graph, weight=0.5, show=False)
-        warnings.warn('This test has to be reimplemented')
+        draw_connectogram(self.weight_graph[0], weight=0.5, show=False)
