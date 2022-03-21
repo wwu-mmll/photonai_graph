@@ -367,7 +367,9 @@ def individual_ztransform(matrx, adjacency_axis=0):
 
 
 def individual_fishertransform(matrx, adjacency_axis=0):
-    """applies a fisher transformation individually to each connectivity matrix in an array
+    """applies a fisher transformation individually to each connectivity matrix in an array.
+        all values need to be finite (non nans) as this would introduce complex numbers, which
+        can not be handled by other methods.
 
         Parameters
         ----------
