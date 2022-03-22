@@ -12,8 +12,9 @@ class GraphConstructorThreshold(GraphConstructor):
                  retain_weights: int = 0,
                  discard_original_connectivity: bool = False,
                  one_hot_nodes: int = 0,
-                 fisher_transform: int = 0,
                  use_abs: int = 0,
+                 fisher_transform: int = 0,
+                 use_abs_fisher: int = 0,
                  zscore: int = 0,
                  use_abs_zscore: int = 0,
                  adjacency_axis: int = 0,
@@ -40,7 +41,7 @@ class GraphConstructorThreshold(GraphConstructor):
             whether to return the adjacency matrix only (1) or also a feature matrix (0)
         fisher_transform: int
             whether to perform a fisher transform of each matrix (1) or not (0)
-        use_abs: int, default=0
+        use_abs_fisher: int, default=0
             changes the values to absolute values. Is applied after fisher transform and before z-score transformation
         zscore: int, default=0
             performs a zscore transformation of the data. Applied after fisher transform and np_abs
@@ -70,9 +71,10 @@ class GraphConstructorThreshold(GraphConstructor):
         ```
        """
         super(GraphConstructorThreshold, self).__init__(one_hot_nodes=one_hot_nodes,
+                                                        use_abs=use_abs,
                                                         fisher_transform=fisher_transform,
                                                         discard_original_connectivity=discard_original_connectivity,
-                                                        use_abs=use_abs,
+                                                        use_abs_fisher=use_abs_fisher,
                                                         zscore=zscore,
                                                         use_abs_zscore=use_abs_zscore,
                                                         adjacency_axis=adjacency_axis,

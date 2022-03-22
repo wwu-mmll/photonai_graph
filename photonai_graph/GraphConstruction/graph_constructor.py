@@ -14,9 +14,10 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
 
     def __init__(self,
                  one_hot_nodes: int = 0,
+                 use_abs: int = 0,
                  fisher_transform: int = 0,
                  discard_original_connectivity: bool = False,
-                 use_abs: int = 0,
+                 use_abs_fisher: int = 0,
                  zscore: int = 0,
                  use_abs_zscore: int = 0,
                  adjacency_axis: int = 0,
@@ -29,12 +30,15 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
         ----------
         one_hot_nodes: int, default=0
             whether to return a one hot node encoding as feature or not
+        use_abs: bool, default = False
+            whether to convert all matrix values to absolute values before applying
+            other transformations
         fisher_transform: int, default=0
             whether to perform a fisher transform of every matrix
         discard_original_connectivity: bool,default=False
             If true the second index of the last dimension will be the original connectivity.
             Otherwise the original connectivity will be dropped from the matrix.
-        use_abs: int
+        use_abs_fisher: int
             Changes the values to absolute values. Is applied after fisher transform and before
             z-score transformation
         zscore: int, default=0
@@ -51,9 +55,11 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
         if one_hot_nodes not in [0, 1]:
             raise ValueError("one_hot_nodes must be in [0, 1]")
         self.one_hot_nodes = one_hot_nodes
-        self.fisher_transform = fisher_transform
-        self.discard_original_connectivity = discard_original_connectivity
         self.use_abs = use_abs
+        self.fisher_transform = fisher_transform
+        self.use_abs_fisher = use_abs_fisher
+        self.discard_original_connectivity = discard_original_connectivity
+        self.use_abs_fisher = use_abs_fisher
         self.zscore = zscore
         self.use_abs_zscore = use_abs_zscore
         self.adjacency_axis = adjacency_axis
@@ -79,9 +85,11 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
 
     def prep_mtrx(self, adjacency: np.ndarray) -> np.ndarray:
         """transforms the matrix according to selected criteria"""
+        if self.use_abs:
+            adjacency = np.abs(adjacency)
         if self.fisher_transform:
             adjacency = individual_fishertransform(adjacency)
-        if self.use_abs:
+        if self.use_abs_fisher:
             adjacency = np.abs(adjacency)
         if self.zscore:
             adjacency = individual_ztransform(adjacency)

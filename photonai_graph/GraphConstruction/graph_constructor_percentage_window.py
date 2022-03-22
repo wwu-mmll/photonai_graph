@@ -10,8 +10,9 @@ class GraphConstructorPercentageWindow(GraphConstructor):
                  percentage_lower: float = 10,
                  retain_weights: float = 0,
                  one_hot_nodes: int = 0,
-                 fisher_transform: int = 0,
                  use_abs: int = 0,
+                 fisher_transform: int = 0,
+                 use_abs_fisher: int = 0,
                  zscore: int = 0,
                  use_abs_zscore: int = 0,
                  adjacency_axis: int = 0,
@@ -35,7 +36,7 @@ class GraphConstructorPercentageWindow(GraphConstructor):
             Whether to generate a one hot encoding of the nodes in the matrix (1) or not (0)
         fisher_transform: int
             whether to perform a fisher transform of each matrix (1) or not (0)
-        use_abs: int,default=0
+        use_abs_fisher: int,default=0
             changes the values to absolute values. Is applied after fisher transform and before z-score transformation
         zscore: int,default=0
             performs a zscore transformation of the data. Applied after fisher transform and np_abs
@@ -61,8 +62,9 @@ class GraphConstructorPercentageWindow(GraphConstructor):
         ```
        """
         super(GraphConstructorPercentageWindow, self).__init__(one_hot_nodes=one_hot_nodes,
-                                                               fisher_transform=fisher_transform,
                                                                use_abs=use_abs,
+                                                               fisher_transform=fisher_transform,
+                                                               use_abs_fisher=use_abs_fisher,
                                                                zscore=zscore,
                                                                use_abs_zscore=use_abs_zscore,
                                                                adjacency_axis=adjacency_axis,
