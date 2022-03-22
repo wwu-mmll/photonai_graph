@@ -12,7 +12,7 @@ from scipy import sparse
 import matplotlib.pyplot as plt
 
 
-def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=None,
+def draw_connectogram(graph, connection_style="arc3", colorscheme=None, nodesize=None,
                       node_shape='o', weight=None, path=None, show=True):
     """This functions draws a connectogram, from a graph.
 
@@ -20,8 +20,8 @@ def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=None,
     ----------
     graph: nx.class.graph.Graph
         input graph, a single networkx graph
-    edge_rad:
-        edge radius, controlling the curvature of the drawn edges
+    connection_style:
+        connection style, controlling the style of the drawn edges
     colorscheme:
         colormap for drawing the connectogram
     nodesize: int
@@ -48,12 +48,12 @@ def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=None,
         elarge = [(u, v) for (u, v, d) in graph.edges(data=True) if d['weight'] > weight]
         esmall = [(u, v) for (u, v, d) in graph.edges(data=True) if d['weight'] <= weight]
         nx.draw_networkx_edges(graph, pos, edgelist=elarge,
-                               connectionstyle=edge_rad)
+                               connectionstyle=connection_style)
         nx.draw_networkx_edges(graph, pos, edgelist=esmall,
-                               alpha=0.5, edge_color='b', style='dashed', connectionstyle=edge_rad)
+                               alpha=0.5, edge_color='b', style='dashed', connectionstyle=connection_style)
 
     else:
-        nx.draw_networkx_edges(graph, pos, connectionstyle=edge_rad)
+        nx.draw_networkx_edges(graph, pos, connectionstyle=connection_style)
 
     if show:
         plt.show()
