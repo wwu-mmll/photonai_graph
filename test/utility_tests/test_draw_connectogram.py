@@ -11,7 +11,7 @@ class DrawConnectogramTests(unittest.TestCase):
 
     def setUp(self):
         self.cyc_graph = nx.cycle_graph(20)
-        self.weight_graph = dense_to_networkx(np.random.rand(1, 20, 20, 2))
+        self.weight_graph = dense_to_networkx(np.random.rand(1, 20, 20, 2), adjacency_axis=0)
 
     def test_drawing(self):
         draw_connectogram(self.cyc_graph, show=False)
@@ -30,5 +30,4 @@ class DrawConnectogramTests(unittest.TestCase):
             draw_connectogram(self.cyc_graph, weight=0.5, show=False)
 
     def test_drawing_weight_corrected(self):
-        #draw_connectogram(self.weight_graph, weight=0.5, show=False)
-        warnings.warn('This test has to be reimplemented')
+        draw_connectogram(self.weight_graph[0], weight=0.5, show=False)

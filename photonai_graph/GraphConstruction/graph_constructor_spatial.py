@@ -24,7 +24,8 @@ class GraphConstructorSpatial(GraphConstructor):
         Transformer class for generating adjacency matrices
         from connectivity matrices. Selects the k nearest
         neighbours for each node based on spatial distance
-        of the coordinates in the chosen atlas.
+        of the coordinates in the chosen atlas. This method
+        can be applied to both DTI and rs-fMRI data.
         Adapted from Ktena et al, 2017.
 
         !!! danger

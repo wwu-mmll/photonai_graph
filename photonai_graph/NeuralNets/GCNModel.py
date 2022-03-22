@@ -1,8 +1,11 @@
-import dgl
 import numpy as np
-import torch.nn as nn
-import torch.nn.functional as F
-from dgl.nn.pytorch import GraphConv
+try:
+    import dgl
+    import torch.nn as nn
+    import torch.nn.functional as F
+    from dgl.nn.pytorch import GraphConv
+except ImportError:
+    pass
 
 from photonai_graph.NeuralNets.dgl_base import DGLRegressorBaseModel, DGLClassifierBaseModel
 
