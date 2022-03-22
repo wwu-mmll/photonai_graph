@@ -27,7 +27,7 @@ class GrakelTransformer(BaseEstimator, TransformerMixin):
         "CoreFramework": CoreFramework
     }
 
-    def __init__(self, *args, transformation: str = None, **kwargs):
+    def __init__(self, transformation: str = None, **kwargs):
         """A transformer class for transforming graphs in grakel format.
 
         Parameters
@@ -41,11 +41,19 @@ class GrakelTransformer(BaseEstimator, TransformerMixin):
         """
         if transformation not in self.transformations.keys():
             raise ValueError(f"The requested transformation {transformation} was not found.")
-        transformation_class = self.transformations[transformation]
-        self.transformation = transformation_class(*args, **kwargs)
+        self.transformation_class = self.transformations[transformation]
+        for key in kwargs.keys():
+            setattr(self, key, kwargs[key])
+        self.kwargs_keys = kwargs.keys()
+        self.transformation = None
 
     def fit(self, X, y=None):
+        kwargs = {k: getattr(self, k) for k in self.kwargs_keys}
+        self.transformation = self.transformation_class(**kwargs)
         self.transformation.fit(X, y)
+        return self
 
     def transform(self, X):
-        self.transformation.transform(X)
+        if self.transformation is None:
+            raise ValueError("Transformation was not fit yet.")
+        return self.transformation.transform(X)
