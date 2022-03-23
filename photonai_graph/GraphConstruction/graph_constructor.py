@@ -89,12 +89,12 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
             adjacency = np.abs(adjacency)
         if self.fisher_transform:
             adjacency = individual_fishertransform(adjacency)
-        if self.use_abs_fisher:
-            adjacency = np.abs(adjacency)
+            if self.use_abs_fisher:
+                adjacency = np.abs(adjacency)
         if self.zscore:
             adjacency = individual_ztransform(adjacency)
-        if self.use_abs_zscore:
-            adjacency = np.abs(adjacency)
+            if self.use_abs_zscore:
+                adjacency = np.abs(adjacency)
 
         return adjacency
 
