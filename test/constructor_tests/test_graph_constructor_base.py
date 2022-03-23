@@ -113,6 +113,21 @@ class ThresholdTests(unittest.TestCase):
         self.assertEqual((np.sum(np.array(output_matrix) >= 0)), 4)
 
     def test_use_abs_zscore(self):
-        g_constr = GraphConstructorThreshold(threshold=0.5)
+        g_constr = GraphConstructorThreshold(threshold=0.5, zscore=1, use_abs_zscore=1)
         output_matrix = g_constr.prep_mtrx(self.test_mtrx[np.newaxis, :, :, np.newaxis])
         self.assertEqual((np.sum(np.array(output_matrix) >= 0)), 16)
+
+    def test_use_abs_and_fisher(self):
+        g_constr = GraphConstructorThreshold(threshold=0.5, use_abs=1, fisher_transform=1)
+        output_matrix = g_constr.prep_mtrx(self.test_mtrx[np.newaxis, :, :, np.newaxis])
+        self.assertEqual((np.sum(np.array(output_matrix) >= 1)), 2)
+
+    def test_use_abs_and_fisher_and_abs_fisher(self):
+        g_constr = GraphConstructorThreshold(threshold=0.5, use_abs=1, fisher_transform=1, use_abs_fisher=1)
+        output_matrix = g_constr.prep_mtrx(self.test_mtrx[np.newaxis, :, :, np.newaxis])
+        self.assertEqual((np.sum(np.array(output_matrix) >= 1)), 2)
+
+    def test_use_abs_and_fisher_and_zsore(self):
+        g_constr = GraphConstructorThreshold(threshold=0.5, use_abs=1, fisher_transform=1, zscore=1)
+        output_matrix = g_constr.prep_mtrx(self.test_mtrx[np.newaxis, :, :, np.newaxis])
+        self.assertEqual((np.sum(np.array(output_matrix) >= 1)), 2)
