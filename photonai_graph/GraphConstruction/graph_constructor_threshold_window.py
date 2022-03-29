@@ -30,10 +30,13 @@ class GraphConstructorThresholdWindow(GraphConstructor):
             upper limit of the threshold window
         threshold_lower: float
             lower limit of the threshold window
-        adjacency_axis: int
-            position of the adjacency matrix, default being zero
+        retain_weights: int
+            whether to retain weight values or not
         one_hot_nodes: int
             Whether to generate a one hot encoding of the nodes in the matrix.
+        use_abs: bool, default = False
+            whether to convert all matrix values to absolute values before applying
+            other transformations
         fisher_transform: int
             Perform a fisher transform of each matrix. No (0) or Yes (1)
         use_abs_fisher: int
@@ -45,6 +48,8 @@ class GraphConstructorThresholdWindow(GraphConstructor):
         use_abs_zscore: int, default=0
             whether to use the absolute values of the z-score transformation or allow for negative
             values. Applied after fisher transform, use_abs and zscore
+        adjacency_axis: int
+            position of the adjacency matrix, default being zero
         logs: str, default=None
             Path to the log data
 

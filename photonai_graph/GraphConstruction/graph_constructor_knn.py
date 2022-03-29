@@ -14,8 +14,7 @@ class GraphConstructorKNN(GraphConstructor):
                  zscore: int = 0,
                  use_abs_zscore: int = 0,
                  adjacency_axis: int = 0,
-                 logs: str = None
-                 ):
+                 logs: str = None):
         """
         Transformer class for generating adjacency matrices
         from connectivity matrices. Selects the k nearest
@@ -28,10 +27,11 @@ class GraphConstructorKNN(GraphConstructor):
         ----------
         k_distance: int
             the k nearest neighbours value, for the kNN algorithm.
-        adjacency_axis: int,default=0
-            position of the adjacency matrix, default being zero
         one_hot_nodes: int,default=0
             Whether to generate a one hot encoding of the nodes in the matrix (1) or not (0)
+        use_abs: bool, default = False
+            whether to convert all matrix values to absolute values before applying
+            other transformations
         fisher_transform: int,default=0
             whether to perform a fisher transform of each matrix (1) or not (0)
         use_abs_fisher: int,default=0
@@ -40,7 +40,10 @@ class GraphConstructorKNN(GraphConstructor):
             performs a zscore transformation of the data. Applied after fisher transform and np_abs
         use_abs_zscore: int,default=0
             whether to use the absolute values of the z-score transformation or allow for negative values
-
+        adjacency_axis: int,default=0
+            position of the adjacency matrix, default being zero
+        logs: str, default=None
+            Path to the log data
 
         Example
         -------

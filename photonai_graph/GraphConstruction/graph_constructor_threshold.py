@@ -6,7 +6,8 @@ from photonai_graph.GraphConstruction.graph_constructor import GraphConstructor
 class GraphConstructorThreshold(GraphConstructor):
     _estimator_type = "transformer"
 
-    def __init__(self, threshold: float = 0.1,
+    def __init__(self,
+                 threshold: float = 0.1,
                  concatenation_axis: int = 3,
                  return_adjacency_only: int = 0,
                  retain_weights: int = 0,
@@ -29,16 +30,19 @@ class GraphConstructorThreshold(GraphConstructor):
         ----------
         threshold: float
             threshold value below which to set matrix entries to zero
-        adjacency_axis: int, default=0
-            position of the adjacency matrix, default being zero
         concatenation_axis: int
             axis along which to concatenate the adjacency and feature matrix
+        return_adjacency_only: int
+            whether to return the adjacency matrix only (1) or also a feature matrix (0)
+        retain_weights: int
+            whether to retain weight values or not
         discard_original_connectivity: bool,default=False
             If true the original connectivity will be passed on. Otherwise it gets discarded
         one_hot_nodes: int
             Whether to generate a one hot encoding of the nodes in the matrix (1) or not (0)
-        return_adjacency_only: int
-            whether to return the adjacency matrix only (1) or also a feature matrix (0)
+        use_abs: bool, default = False
+            whether to convert all matrix values to absolute values before applying
+            other transformations
         fisher_transform: int
             whether to perform a fisher transform of each matrix (1) or not (0)
         use_abs_fisher: int, default=0
@@ -47,8 +51,8 @@ class GraphConstructorThreshold(GraphConstructor):
             performs a zscore transformation of the data. Applied after fisher transform and np_abs
         use_abs_zscore:
             whether to use the absolute values of the z-score transformation or allow for negative values
-        retain_weights: int
-            whether to retain weight values or not
+        adjacency_axis: int, default=0
+            position of the adjacency matrix, default being zero
         logs: str, default=None
             Path to the log data
 
