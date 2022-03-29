@@ -10,7 +10,13 @@ import pydot
 from scipy import stats
 from scipy import sparse
 import matplotlib.pyplot as plt
+import scipy.io as sio
+try:
+    import mat73
+except ImportError as e:  # pragma: no cover
+    pass
 
+from photonai_graph.util import assert_imported
 
 def draw_connectogram(graph, connection_style="arc3", colorscheme=None, nodesize=None,
                       node_shape='o', weight=None, path=None, show=True):
@@ -494,3 +500,23 @@ def check_asteroidal(graph: Union[nx.Graph, List[nx.Graph]]) -> Union[Union[List
                          'Please check your inputs.')
 
     return graph_answer
+
+
+def load_conn(path='', mtrx_name='matrix', subject_dim=3, modality_dim=2):
+    """loads matlab 4d connectivity matrix from matlab file"""
+    assert_imported(['mat73'])
+    try:
+        matfile = sio.loadmat(path)
+        mtrx = matfile[mtrx_name]
+        mtrx = np.moveaxis(mtrx, [subject_dim, modality_dim], [0, 3])
+    except Exception as ex1:
+        try:
+            matfile = mat73.loadmat(path)
+            mtrx = matfile[mtrx_name]
+            mtrx = np.moveaxis(mtrx, [subject_dim, modality_dim], [0, 3])
+        except Exception as ex2:
+            raise Exception(ex1, ex2)
+
+    return mtrx
+
+

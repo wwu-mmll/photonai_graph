@@ -24,10 +24,15 @@ We cannot guarante that this function is correctly loading your data. If in doub
 With such a function you can then load your data:
 
 ```python
-from connectivity_loading import load_conn
+from photonai_graph.GraphUtilities import load_conn
 
 matrices = load_conn('/path/to/your/data.mat')
 ```
+
+!!! danger
+    Please make sure the imported data has the exact structure you are expecting.
+    We cannot guarantee to load your data correctly under any circumstances. If in doubt
+    write an importer for your own data.
 
 ## 2. Load your labels
 
