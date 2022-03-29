@@ -74,6 +74,15 @@ nav:
     - Graph Embeddings:
       - Graph Embedding LEM: 'examples/GraphEmbedding_lem_example.ipynb'
       - Graph Embedding LLE: 'examples/GraphEmbedding_lle_example.ipynb'
+    - Graph Neural Networks:
+        - GNN Classification: 'examples/GraphNN_classification_example.ipynb'
+        - GNN Regression: 'examples/GraphNN_regression_example.ipynb'
+    - Graph Kernels:
+        - PyramidMatch: 'examples/GraphKernel_PyramidMatch_example.ipynb'
+        - SVMtheta: 'examples/GraphKernel_SVMtheta_example.ipynb'
+    - Graph Measures:
+        - Extraction Example: 'examples/GraphMeasure_extraction_example.ipynb'
+        - Pipeline Example: 'examples/GraphMeasure_pipeline_example.ipynb'
     - Graph Litmus Test: 'examples/GraphLitmusTest.ipynb'
 
 extra_css:
