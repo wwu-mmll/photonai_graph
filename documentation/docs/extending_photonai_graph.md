@@ -6,4 +6,20 @@ For new Estimators see <a target="_blank", href="https://wwu-mmll.github.io/phot
 
 ## PHOTONAI Graph specific base classes
 
-Todo
+PHOTONAI Graph offers a few base classes for simple integration.
+
+To extend PHOTONAI Graph simply inherit from the desired base class
+and register your custom model to PHOTONAI.
+
+### GraphConstructor Base Class
+::: photonai_graph.GraphConstruction.GraphConstructor.__init__
+    rendering:
+        show_root_toc_entry: False
+
+### DGL Base Class - Classification
+::: photonai_graph.NeuralNets.dgl_base.DGLClassifierBaseModel.__init__
+    rendering:
+        show_root_toc_entry: False
+
+### DGL Base Class - Regression
+::: photonai_graph.NeuralNets.dgl_base.DGLRegressorBaseModel.__init__
