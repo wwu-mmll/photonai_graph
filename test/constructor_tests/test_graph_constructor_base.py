@@ -9,6 +9,10 @@ class ThresholdTests(unittest.TestCase):
         self.X4d_adjacency = np.ones((20, 20, 20, 1))
         self.X4d_features = np.random.rand(20, 20, 20, 1)
         self.X4d = np.concatenate((self.X4d_adjacency, self.X4d_features), axis=3)
+        self.test_mtrx = np.array(([0.5, 0, 0, 0],
+                                  [0, 1, 0, 0],
+                                  [0, 0, 1, 0],
+                                  [0, 0, 0, 0.5]))
         self.y = np.ones(20)
 
     def test_wrong_input_shape(self):
@@ -88,3 +92,47 @@ class ThresholdTests(unittest.TestCase):
         input_matrix = np.eye(4)
         output_matrix = g_constr.prep_mtrx(input_matrix * -1)
         self.assertTrue(np.array_equal(input_matrix, output_matrix))
+
+    def test_use_abs(self):
+        g_constr = GraphConstructorThreshold(threshold=0.5, use_abs=True)
+        input_matrix = np.eye(4) * -1
+        output_matrix = g_constr.prep_mtrx(input_matrix)
+        self.assertTrue(np.array_equal(np.eye(4), output_matrix))
+
+    def test_use_abs_fisher(self):
+        g_constr = GraphConstructorThreshold(threshold=0.5, fisher_transform=1, use_abs_fisher=1)
+        input_matrix = np.eye(4) * -1
+        input_matrix = input_matrix[np.newaxis, :, :, np.newaxis]
+        output_matrix = g_constr.prep_mtrx(input_matrix)
+        ids = np.diag(output_matrix[0, ..., 0])
+        self.assertTrue(np.array_equal(np.isposinf(ids), [True, True, True, True]))
+
+    def test_use_zscore(self):
+        g_constr = GraphConstructorThreshold(threshold=0.5, zscore=1)
+        output_matrix = g_constr.prep_mtrx(self.test_mtrx[np.newaxis, :, :, np.newaxis])
+        self.assertEqual((np.sum(np.array(output_matrix) >= 0)), 4)
+
+    def test_use_abs_zscore(self):
+        g_constr = GraphConstructorThreshold(threshold=0.5, zscore=1, use_abs_zscore=1)
+        output_matrix = g_constr.prep_mtrx(self.test_mtrx[np.newaxis, :, :, np.newaxis])
+        self.assertEqual((np.sum(np.array(output_matrix) >= 0)), 16)
+
+    def test_use_abs_and_fisher(self):
+        g_constr = GraphConstructorThreshold(threshold=0.5, use_abs=1, fisher_transform=1)
+        output_matrix = g_constr.prep_mtrx(self.test_mtrx[np.newaxis, :, :, np.newaxis])
+        self.assertEqual((np.sum(np.array(output_matrix) >= 1)), 2)
+
+    def test_use_abs_and_fisher_and_abs_fisher(self):
+        g_constr = GraphConstructorThreshold(threshold=0.5, use_abs=1, fisher_transform=1, use_abs_fisher=1)
+        output_matrix = g_constr.prep_mtrx(self.test_mtrx[np.newaxis, :, :, np.newaxis])
+        self.assertEqual((np.sum(np.array(output_matrix) >= 1)), 2)
+
+    def test_use_abs_and_fisher_and_zsore(self):
+        g_constr = GraphConstructorThreshold(threshold=0.5, use_abs=1, fisher_transform=1, zscore=1)
+        output_matrix = g_constr.prep_mtrx(self.test_mtrx[np.newaxis, :, :, np.newaxis])
+        self.assertEqual((np.sum(np.array(output_matrix) >= 1)), 2)
+
+    def test_fisher_and_zscore_and_abszscore(self):
+        g_constr = GraphConstructorThreshold(threshold=0.5, fisher_transform=1, zscore=1, use_abs_zscore=1)
+        output_matrix = g_constr.prep_mtrx(self.test_mtrx[np.newaxis, :, :, np.newaxis])
+        self.assertEqual((np.sum(np.array(output_matrix) >= 1)), 2)

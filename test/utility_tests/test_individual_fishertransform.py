@@ -16,7 +16,7 @@ class IndividualFishertransformTest(unittest.TestCase):
 
     def test_ztransform_4d(self):
         trans_m4d = individual_fishertransform(self.m4d)
-        self.assertEqual(np.shape(trans_m4d), np.shape(self.m4d[:, :, :, 0]))
+        self.assertEqual(np.shape(trans_m4d), np.shape(self.m4d[..., 0, np.newaxis]))
 
     def test_fishertransform_nan(self):
         with self.assertRaises(ValueError):

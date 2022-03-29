@@ -5,15 +5,17 @@ from photonai_graph.GraphConstruction.graph_constructor import GraphConstructor
 class GraphConstructorPercentage(GraphConstructor):
     _estimator_type = "transformer"
 
-    def __init__(self, percentage: float = 80,
+    def __init__(self,
+                 percentage: float = 80,
                  retain_weights: float = 0,
                  one_hot_nodes: int = 0,
-                 fisher_transform: int = 0,
                  use_abs: int = 0,
+                 fisher_transform: int = 0,
+                 use_abs_fisher: int = 0,
                  zscore: int = 0,
                  use_abs_zscore: int = 0,
                  adjacency_axis: int = 0,
-                 logs: str = ''):
+                 logs: str = None):
         """
         Transformer class for generating adjacency matrices
         from connectivity matrices. Selects the top x percent
@@ -24,20 +26,25 @@ class GraphConstructorPercentage(GraphConstructor):
         ----------
         percentage: float
             value of percent of connections to discard. A value of 90 keeps only the top 10%
-        adjacency_axis: int, default=0
-            position of the adjacency matrix, default being zero
+        retain_weights: float
+            whether to retain weight values or not
         one_hot_nodes: int, default=0
             Whether to generate a one hot encoding of the nodes in the matrix (1) or not (0)
+        use_abs: bool, default = False
+            whether to convert all matrix values to absolute values before applying
+            other transformations
         fisher_transform: int, default=0
             whether to perform a fisher transform of each matrix (1) or not (0)
-        use_abs: int, default=0
+        use_abs_fisher: int, default=0
             changes the values to absolute values. Is applied after fisher transform and before z-score transformation
         zscore: int, default=0
             performs a zscore transformation of the data. Applied after fisher transform and np_abs
         use_abs_zscore: int, default=0
             whether to use the absolute values of the z-score transformation or allow for negative values
-        retain_weights: float
-            whether to retain weight values or not
+        adjacency_axis: int, default=0
+            position of the adjacency matrix, default being zero
+        logs: str, default=None
+            Path to the log data
 
         Example
         -------
@@ -59,8 +66,9 @@ class GraphConstructorPercentage(GraphConstructor):
 
        """
         super(GraphConstructorPercentage, self).__init__(one_hot_nodes=one_hot_nodes,
-                                                         fisher_transform=fisher_transform,
                                                          use_abs=use_abs,
+                                                         fisher_transform=fisher_transform,
+                                                         use_abs_fisher=use_abs_fisher,
                                                          zscore=zscore,
                                                          use_abs_zscore=use_abs_zscore,
                                                          adjacency_axis=adjacency_axis,

@@ -402,6 +402,7 @@ def individual_fishertransform(matrx, adjacency_axis=0):
         transformed_matrices.append(matrix)
 
     transformed_matrices = np.asarray(transformed_matrices)
+    transformed_matrices = transformed_matrices[:, :, :, np.newaxis]
 
     return transformed_matrices
 
