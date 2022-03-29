@@ -88,7 +88,7 @@ class ThresholdTests(unittest.TestCase):
         self.assertTrue(np.array_equal(trans[..., 2, np.newaxis], self.X4d_features))
 
     def test_prep_matrix(self):
-        g_constr = GraphConstructorThreshold(threshold=.0, use_abs_fisher=True)
+        g_constr = GraphConstructorThreshold(threshold=.0, use_abs=True)
         input_matrix = np.eye(4)
         output_matrix = g_constr.prep_mtrx(input_matrix * -1)
         self.assertTrue(np.array_equal(input_matrix, output_matrix))
@@ -104,7 +104,7 @@ class ThresholdTests(unittest.TestCase):
         input_matrix = np.eye(4) * -1
         input_matrix = input_matrix[np.newaxis, :, :, np.newaxis]
         output_matrix = g_constr.prep_mtrx(input_matrix)
-        ids = np.diag(output_matrix[0, :, :])
+        ids = np.diag(output_matrix[0, ..., 0])
         self.assertTrue(np.array_equal(np.isposinf(ids), [True, True, True, True]))
 
     def test_use_zscore(self):
