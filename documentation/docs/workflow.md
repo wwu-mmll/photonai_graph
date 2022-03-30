@@ -2,13 +2,9 @@
 
 The starting point for PHOTON Graph can be either connectivity matrices or data that is already in a graph 
 format. Depending on your starting point, there are different 
-ways in which you will you will have set up your pipeline. In the case that you have connectivity matrices, 
+ways in which you will have set up your pipeline. In the case that you have connectivity matrices, 
 you will need to use graph constructors to turn those connectivity matrices into adjacency matrices. 
 After that you can choose from different options of doing machine learning with your graph data.
-
-!!! info
-    PHOTONAI Graph offers various methods to load your graph data in existing formats. For example, you can simply
-    load nx or dgl graphs. For more information about supported formats see [load and save](load_and_save.md).
 
 ```mermaid
 graph TD

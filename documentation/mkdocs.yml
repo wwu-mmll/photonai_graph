@@ -55,13 +55,11 @@ nav:
 - Installation: 'installation.md'
 - Getting Started: 'getting_started.md'
 - PHOTONAI Graph Workflow: 'workflow.md'
-- Load and Save Graphs: 'load_and_save.md'
 - Extending PHOTONAI Graph: 'extending_photonai_graph.md'
 - API:
   - API Introduction: 'api/introduction.md'
   - Graph Construction: 'api/graph_construction.md'
   - Graph Conversions: 'api/graph_conversions.md'
-  - Graph IO: 'api/graph_io.md'
   - Population Averaging: 'api/population_averaging.md'
   - Dynamic Utilities: 'api/dynamic_utils.md'
   - Graph Measures: 'api/graph_measures.md'
@@ -96,4 +94,5 @@ plugins:
             docstring_style: numpy
           rendering:
             show_source: false
-  - mkdocs-jupyter
+  - mkdocs-jupyter:
+      execute: True
