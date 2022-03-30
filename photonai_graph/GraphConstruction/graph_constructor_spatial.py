@@ -135,7 +135,6 @@ class GraphConstructorSpatial(GraphConstructor):
         returns:
             matrix       : matrix of roi 3D coordinates in MNI space (num_rois x 3)
         """
-        root_folder = root_folder
         coords_file = os.path.join(root_folder, atlas_name + '_coords.csv')
         coords = np.loadtxt(coords_file, delimiter=',')
 
