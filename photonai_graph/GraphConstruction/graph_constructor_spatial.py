@@ -13,18 +13,19 @@ class GraphConstructorSpatial(GraphConstructor):
                  atlas_name: str = 'ho',
                  atlas_folder: str = "",
                  one_hot_nodes: int = 0,
-                 fisher_transform: int = 0,
                  use_abs: int = 0,
+                 fisher_transform: int = 0,
+                 use_abs_fisher: int = 0,
                  zscore: int = 0,
                  use_abs_zscore: int = 0,
                  adjacency_axis: int = 0,
-                 logs: str = None
-                 ):
+                 logs: str = None):
         """
         Transformer class for generating adjacency matrices
         from connectivity matrices. Selects the k nearest
         neighbours for each node based on spatial distance
-        of the coordinates in the chosen atlas.
+        of the coordinates in the chosen atlas. This method
+        can be applied to both DTI and rs-fMRI data.
         Adapted from Ktena et al, 2017.
 
         !!! danger
@@ -39,19 +40,23 @@ class GraphConstructorSpatial(GraphConstructor):
             name of the atlas coordinate file
         atlas_folder: str,default="ho"
             path to the atlas coordinate file
-        adjacency_axis: int,default=0
-            position of the adjacency matrix, default being zero
         one_hot_nodes: int,default=0
             Whether to generate a one hot encoding of the nodes in the matrix (1) or not (0)
+        use_abs: bool, default = False
+            whether to convert all matrix values to absolute values before applying
+            other transformations
         fisher_transform: int,default=0
             whether to perform a fisher transform of each matrix (1) or not (0)
-        use_abs: int,default=0
+        use_abs_fisher: int,default=0
             changes the values to absolute values. Is applied after fisher transform and before z-score transformation
         zscore: int,default=0
             performs a zscore transformation of the data. Applied after fisher transform and np_abs
         use_abs_zscore: int,default=0
             whether to use the absolute values of the z-score transformation or allow for negative values
-
+        adjacency_axis: int,default=0
+            position of the adjacency matrix, default being zero
+        logs: str, default=None
+            Path to the log data
 
         Example
         -------
@@ -74,8 +79,9 @@ class GraphConstructorSpatial(GraphConstructor):
         ```
        """
         super(GraphConstructorSpatial, self).__init__(one_hot_nodes=one_hot_nodes,
-                                                      fisher_transform=fisher_transform,
                                                       use_abs=use_abs,
+                                                      fisher_transform=fisher_transform,
+                                                      use_abs_fisher=use_abs_fisher,
                                                       zscore=zscore,
                                                       use_abs_zscore=use_abs_zscore,
                                                       adjacency_axis=adjacency_axis,

@@ -11,8 +11,9 @@ class GraphConstructorThresholdWindow(GraphConstructor):
                  threshold_lower: float = 0.8,
                  retain_weights: float = 0,
                  one_hot_nodes: int = 0,
-                 fisher_transform: int = 0,
                  use_abs: int = 0,
+                 fisher_transform: int = 0,
+                 use_abs_fisher: int = 0,
                  zscore: int = 0,
                  use_abs_zscore: int = 0,
                  adjacency_axis: int = 0,
@@ -29,13 +30,16 @@ class GraphConstructorThresholdWindow(GraphConstructor):
             upper limit of the threshold window
         threshold_lower: float
             lower limit of the threshold window
-        adjacency_axis: int
-            position of the adjacency matrix, default being zero
+        retain_weights: int
+            whether to retain weight values or not
         one_hot_nodes: int
             Whether to generate a one hot encoding of the nodes in the matrix.
+        use_abs: bool, default = False
+            whether to convert all matrix values to absolute values before applying
+            other transformations
         fisher_transform: int
             Perform a fisher transform of each matrix. No (0) or Yes (1)
-        use_abs: int
+        use_abs_fisher: int
             Changes the values to absolute values. Is applied after fisher transform and before
             z-score transformation
         zscore: int, default=0
@@ -44,6 +48,8 @@ class GraphConstructorThresholdWindow(GraphConstructor):
         use_abs_zscore: int, default=0
             whether to use the absolute values of the z-score transformation or allow for negative
             values. Applied after fisher transform, use_abs and zscore
+        adjacency_axis: int
+            position of the adjacency matrix, default being zero
         logs: str, default=None
             Path to the log data
 
@@ -65,8 +71,9 @@ class GraphConstructorThresholdWindow(GraphConstructor):
         ```
        """
         super(GraphConstructorThresholdWindow, self).__init__(one_hot_nodes=one_hot_nodes,
-                                                              fisher_transform=fisher_transform,
                                                               use_abs=use_abs,
+                                                              fisher_transform=fisher_transform,
+                                                              use_abs_fisher=use_abs_fisher,
                                                               zscore=zscore,
                                                               use_abs_zscore=use_abs_zscore,
                                                               adjacency_axis=adjacency_axis,

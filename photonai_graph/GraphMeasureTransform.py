@@ -24,15 +24,16 @@ Universitaetsklinikum Muenster
 # TODO: make documentation for every single method
 
 import networkx
-import dask
-from dask.diagnostics import ProgressBar
+from tqdm.contrib.concurrent import thread_map
+from functools import partial
 from sklearn.base import BaseEstimator, TransformerMixin
-from photonai_graph.GraphConversions import dense_to_networkx
 import networkx as nx
 import pandas as pd
 import numpy as np
 import json
 import os
+
+from photonai_graph.GraphConversions import dense_to_networkx
 
 
 class GraphMeasureTransform(BaseEstimator, TransformerMixin):
@@ -40,6 +41,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self,
                  graph_functions: dict = None,
+                 adjacency_axis: int = 0,
                  logs: str = None,
                  n_processes: int = 1):
         """The GraphMeasureTransform class is a class for extracting graph measures from graphs.
@@ -52,6 +54,8 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
             a dict of graph functions to calculate with keys as the networkx function name and a dict of the arguments
             as the value. In this second dictionary, the keys are the functions arguments and values are the desired
             values for the argument.
+        adjacency_axis: int,default=0
+            Channel index for adjacency
         logs: str,default=None
             path to the log data
         n_processes: str,default=None
@@ -70,20 +74,20 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         if graph_functions is None:
             graph_functions = {"global_efficiency": {}, "average_node_connectivity": {}}
         self.graph_functions = graph_functions
+        self.adjacency_axis = adjacency_axis
 
-        if logs:
-            self.logs = logs
-        else:
+        self.logs = logs
+        if not logs:
             self.logs = os.getcwd()
 
     def fit(self, X, y):
         return self
 
     def _inner_transform(self, X):
-        X_transformed = []
+        x_transformed = []
 
         if isinstance(X, np.ndarray) or isinstance(X, np.matrix):
-            graphs = dense_to_networkx(X, adjacency_axis=0)
+            graphs = dense_to_networkx(X, adjacency_axis=self.adjacency_axis)
         elif isinstance(X, list) and min([isinstance(g, nx.classes.graph.Graph) for g in X]):
             graphs = X
         else:
@@ -95,27 +99,21 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         with open(measure_json, 'r') as measure_json_file:
             measure_j = json.load(measure_json_file)
 
-        # ToDo: write unit test for parallelization
-
         if self.n_processes > 1:
-            task_list = []
-            for graph in graphs:
-                tmp = dask.delayed(self._compute_graph_metrics)(graph, self.graph_functions, measure_j)
-                task_list.append(tmp)
-            with ProgressBar():
-                X_transformed = list(dask.compute(*task_list, num_workers=self.n_processes, scheduler='threads'))
+            pfn = partial(self._compute_graph_metrics, graph_functions=self.graph_functions, measure_j=measure_j)
+            x_transformed = thread_map(pfn, graphs, max_workers=self.n_processes)
         else:
             for graph in graphs:
                 measure_list_graph = self._compute_graph_metrics(graph, self.graph_functions, measure_j)
-                X_transformed.append(measure_list_graph)
+                x_transformed.append(measure_list_graph)
 
         for c_measure in range(len(self.graph_functions)):
-            expected_values = max([len(graph[c_measure]) for graph in X_transformed])
-            for graph in X_transformed:
+            expected_values = max([len(graph[c_measure]) for graph in x_transformed])
+            for graph in x_transformed:
                 if len(graph[c_measure]) < expected_values:
                     graph[c_measure] = [np.NAN] * expected_values
 
-        return X_transformed
+        return x_transformed
 
     def transform(self, X):
         X_transformed = self._inner_transform(X)
@@ -131,8 +129,6 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         return X_transformed
 
     def _compute_graph_metrics(self, graph, graph_functions, measure_j):
-        if networkx.classes.function.is_empty(graph):
-            print("Graph is empty")
         measure_list_graph = []
         for key, value in graph_functions.items():
             measure_list = list()

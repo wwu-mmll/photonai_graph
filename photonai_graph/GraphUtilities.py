@@ -10,9 +10,15 @@ import pydot
 from scipy import stats
 from scipy import sparse
 import matplotlib.pyplot as plt
+import scipy.io as sio
+try:
+    import mat73
+except ImportError as e:  # pragma: no cover
+    pass
 
+from photonai_graph.util import assert_imported
 
-def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=None,
+def draw_connectogram(graph, connection_style="arc3", colorscheme=None, nodesize=None,
                       node_shape='o', weight=None, path=None, show=True):
     """This functions draws a connectogram, from a graph.
 
@@ -20,8 +26,8 @@ def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=None,
     ----------
     graph: nx.class.graph.Graph
         input graph, a single networkx graph
-    edge_rad:
-        edge radius, controlling the curvature of the drawn edges
+    connection_style:
+        connection style, controlling the style of the drawn edges
     colorscheme:
         colormap for drawing the connectogram
     nodesize: int
@@ -48,12 +54,12 @@ def draw_connectogram(graph, edge_rad=None, colorscheme=None, nodesize=None,
         elarge = [(u, v) for (u, v, d) in graph.edges(data=True) if d['weight'] > weight]
         esmall = [(u, v) for (u, v, d) in graph.edges(data=True) if d['weight'] <= weight]
         nx.draw_networkx_edges(graph, pos, edgelist=elarge,
-                               connectionstyle=edge_rad)
+                               connectionstyle=connection_style)
         nx.draw_networkx_edges(graph, pos, edgelist=esmall,
-                               alpha=0.5, edge_color='b', style='dashed', connectionstyle=edge_rad)
+                               alpha=0.5, edge_color='b', style='dashed', connectionstyle=connection_style)
 
     else:
-        nx.draw_networkx_edges(graph, pos, connectionstyle=edge_rad)
+        nx.draw_networkx_edges(graph, pos, connectionstyle=connection_style)
 
     if show:
         plt.show()
@@ -367,7 +373,9 @@ def individual_ztransform(matrx, adjacency_axis=0):
 
 
 def individual_fishertransform(matrx, adjacency_axis=0):
-    """applies a fisher transformation individually to each connectivity matrix in an array
+    """applies a fisher transformation individually to each connectivity matrix in an array.
+        all values need to be finite (non nans) as this would introduce complex numbers, which
+        can not be handled by other methods.
 
         Parameters
         ----------
@@ -392,12 +400,15 @@ def individual_fishertransform(matrx, adjacency_axis=0):
     transformed_matrices = []
     if np.ndim(matrx) != 4:
         raise ValueError("Please check input dimension of your graph data.")
+    if not np.isfinite(matrx).all():
+        raise ValueError("For a fisher transform graph data should only include finite values, no nans")
     for i in range(matrx.shape[0]):
         matrix = matrx[i, :, :, adjacency_axis].copy()
         matrix = np.arctanh(matrix)
         transformed_matrices.append(matrix)
 
     transformed_matrices = np.asarray(transformed_matrices)
+    transformed_matrices = transformed_matrices[:, :, :, np.newaxis]
 
     return transformed_matrices
 
@@ -489,3 +500,23 @@ def check_asteroidal(graph: Union[nx.Graph, List[nx.Graph]]) -> Union[Union[List
                          'Please check your inputs.')
 
     return graph_answer
+
+
+def load_conn(path='', mtrx_name='matrix', subject_dim=3, modality_dim=2):
+    """loads matlab 4d connectivity matrix from matlab file"""
+    assert_imported(['mat73'])
+    try:
+        matfile = sio.loadmat(path)
+        mtrx = matfile[mtrx_name]
+        mtrx = np.moveaxis(mtrx, [subject_dim, modality_dim], [0, 3])
+    except Exception as ex1:
+        try:
+            matfile = mat73.loadmat(path)
+            mtrx = matfile[mtrx_name]
+            mtrx = np.moveaxis(mtrx, [subject_dim, modality_dim], [0, 3])
+        except Exception as ex2:
+            raise Exception(ex1, ex2)
+
+    return mtrx
+
+

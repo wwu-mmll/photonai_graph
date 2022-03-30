@@ -83,72 +83,8 @@
       "photonai_graph.GraphKernels.grakel_adapter.GrakelAdapter",
       "Transformer"
    ],
-   "VertexHistogram": [
-      "grakel.VertexHistogram",
-      "Transformer"
-   ],
-   "EdgeHistogram": [
-      "grakel.EdgeHistogram",
-      "Transformer"
-   ],
-   "ShortestPath": [
-      "grakel.ShortestPath",
-      "Transformer"
-   ],
-   "GraphletSampling": [
-      "grakel.GraphletSampling",
-      "Transformer"
-   ],
-   "RandomWalk": [
-      "grakel.RandomWalk",
-      "Transformer"
-   ],
-   "NeighborhoodHash": [
-      "grakel.NeighborhoodHash",
-      "Transformer"
-   ],
-   "WeisfeilerLehman": [
-      "grakel.WeisfeilerLehman",
-      "Transformer"
-   ],
-   "NeighborhoodSubgraphPairwiseDistance": [
-      "grakel.NeighborhoodSubgraphPairwiseDistance",
-      "Transformer"
-   ],
-   "LovaszTheta": [
-      "grakel.LovaszTheta",
-      "Transformer"
-   ],
-   "SvmTheta": [
-      "grakel.SvmTheta",
-      "Transformer"
-   ],
-   "OddSth": [
-      "grakel.OddSth",
-      "Transformer"
-   ],
-   "GraphHopper": [
-      "grakel.GraphHopper",
-      "Transformer"
-   ],
-   "Propagation": [
-      "grakel.Propagation",
-      "Transformer"
-   ],
-   "PyramidMatch": [
-      "grakel.PyramidMatch",
-      "Transformer"
-   ],
-   "SubgraphMatching": [
-      "grakel.SubgraphMatching",
-      "Transformer"
-   ],
-   "MultiscaleLaplacian": [
-      "grakel.MultiscaleLaplacian",
-      "Transformer"
-   ],
-   "CoreFramework": [
-      "grakel.CoreFramework",
+   "GrakelTransformer": [
+      "photonai_graph.GraphKernels.GrakelTransformer.GrakelTransformer",
       "Transformer"
    ],
    "CofluctTransform": [

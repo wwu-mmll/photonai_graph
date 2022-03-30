@@ -39,29 +39,9 @@ class DglToNetworkxTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             check_dgl(self.edge_dict)
 
-    def test_list_networkx(self):
-        g = check_dgl(self.nx_graph_list)
-        self.assertEqual(len(g), 10)
-
-    def test_networkx_conversion(self):
-        g = check_dgl(self.nx_graph_list)
-        self.assertEqual(type(g[0]), dgl.DGLGraph)
-
-    def test_networkx_output_num_nodes(self):
-        g = check_dgl(self.nx_graph_list)
-        self.assertEqual(g[0].number_of_nodes(), 5)
-
-    def test_networkx_output_num_edges(self):
-        g = check_dgl(self.nx_graph_list)
-        self.assertEqual(g[0].number_of_edges(), 10)
-
     def test_list_dgl(self):
         g = check_dgl(self.dgl_graph_list)
         self.assertEqual(len(g), 10)
-
-    def test_dgl_conversion(self):
-        g = check_dgl(self.nx_graph_list)
-        self.assertEqual(type(g[0]), dgl.DGLGraph)
 
     def test_dgl_output_num_nodes(self):
         g = check_dgl(self.dgl_graph_list)
@@ -69,22 +49,6 @@ class DglToNetworkxTest(unittest.TestCase):
 
     def test_dgl_output_num_edges(self):
         g = check_dgl(self.dgl_graph_list)
-        self.assertEqual(g[0].number_of_edges(), 6)
-
-    def test_list_sparse(self):
-        g = check_dgl(self.sp_matrix_list)
-        self.assertEqual(len(g), 10)
-
-    def test_sparse_conversion(self):
-        g = check_dgl(self.sp_matrix_list)
-        self.assertEqual(type(g[0]), dgl.DGLGraph)
-
-    def test_sparse_output_num_nodes(self):
-        g = check_dgl(self.sp_matrix_list)
-        self.assertEqual(g[0].number_of_nodes(), 3)
-
-    def test_sparse_output_num_edges(self):
-        g = check_dgl(self.sp_matrix_list)
         self.assertEqual(g[0].number_of_edges(), 6)
 
     def test_numpy_list_exception(self):

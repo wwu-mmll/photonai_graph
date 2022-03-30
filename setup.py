@@ -18,7 +18,7 @@ PHOTON Graph is a submodule of the PHOTON package, which, using the PHOTON API, 
 within the PHOTON framework. The module provides a range of graph machine learning algorithms, along with methods for constructing graphs.
 """,
     author='PHOTON Team',
-    author_email='v_hols01@uni-muenster.de',
+    author_email='hahnt@uni-muenster.de',
     url='https://github.com/wwu-mmll/photonai_graph.git',
     download_url='https://github.com/wwu-mmll/photonai_graph/archive/' + __version__ + '.tar.gz',
     keywords=['machine learning', 'deep learning', 'graph convolutional neural networks', 'graphs'],

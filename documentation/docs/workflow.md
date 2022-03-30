@@ -58,6 +58,7 @@ automatically transforming your input data into the desired format. If you want 
 in an external library and later use PHOTONAI Graph, you have to take care of the input by yourself.
 
 The shape of the input has to be in this format:
+
 $$
 [100, 20, 20, 4]
 $$

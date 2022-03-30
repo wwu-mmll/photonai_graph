@@ -15,10 +15,10 @@ class GraphConstructorRandomWalks(GraphConstructor):
                  walk_length: int = 10,
                  window_size: int = 5,
                  no_edge_weight: int = 1,
-                 feature_axis=1,
                  one_hot_nodes: int = 0,
-                 fisher_transform: int = 0,
                  use_abs: int = 0,
+                 fisher_transform: int = 0,
+                 use_abs_fisher: int = 0,
                  zscore: int = 0,
                  use_abs_zscore: int = 0,
                  adjacency_axis: int = 0,
@@ -45,18 +45,23 @@ class GraphConstructorRandomWalks(GraphConstructor):
             size of the sliding window from which to sample to coocurrence of two nodes
         no_edge_weight: int,default=1
             whether to return an edge weight (0) or not (1)
-        adjacency_axis: int,default=0
-            position of the adjacency matrix, default being zero
         one_hot_nodes: int,default=0
             Whether to generate a one hot encoding of the nodes in the matrix (1) or not (0)
+        use_abs: bool, default = False
+            whether to convert all matrix values to absolute values before applying
+            other transformations
         fisher_transform: int,default=0
             whether to perform a fisher transform of each matrix (1) or not (0)
-        use_abs: int,default=0
+        use_abs_fisher: int,default=0
             changes the values to absolute values. Is applied after fisher transform and before z-score transformation
         zscore: int,default=0
             performs a zscore transformation of the data. Applied after fisher transform and np_abs
         use_abs_zscore: int,default=0
             whether to use the absolute values of the z-score transformation or allow for negative values
+        adjacency_axis: int,default=0
+            position of the adjacency matrix, default being zero
+        logs: str, default=None
+            Path to the log data
 
 
         Example
@@ -79,8 +84,9 @@ class GraphConstructorRandomWalks(GraphConstructor):
         ```
        """
         super(GraphConstructorRandomWalks, self).__init__(one_hot_nodes=one_hot_nodes,
-                                                          fisher_transform=fisher_transform,
                                                           use_abs=use_abs,
+                                                          fisher_transform=fisher_transform,
+                                                          use_abs_fisher=use_abs_fisher,
                                                           zscore=zscore,
                                                           use_abs_zscore=use_abs_zscore,
                                                           adjacency_axis=adjacency_axis,
@@ -90,7 +96,6 @@ class GraphConstructorRandomWalks(GraphConstructor):
         self.walk_length = walk_length
         self.window_size = window_size
         self.no_edge_weight = no_edge_weight
-        self.feature_axis = feature_axis
 
     @staticmethod
     def random_walk(adjacency: np.ndarray, walk_length: int, num_walks: int) -> List[List[List[int]]]:

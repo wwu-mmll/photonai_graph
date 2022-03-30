@@ -1,5 +1,8 @@
-import torch
-from torch.utils.data import Dataset
+try:
+    import torch
+    from torch.utils.data import Dataset
+except ImportError:
+    pass
 
 
 class CustomDataset(Dataset):
