@@ -6,7 +6,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-
+    name: Test PHOTONAI Graph
     runs-on: ubuntu-latest
 
     steps:

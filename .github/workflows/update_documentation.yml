@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: Deploy docs
+    name: Build docs
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main
@@ -15,7 +15,7 @@ jobs:
           python-version: '3.9'
 
       - name: Install mkdocs requirements
-        run: pip install mkdocs mkdocs-material pymdown-extensions mkdocstrings-python mkdocs-jupyter
+        run: pip install mkdocs mkdocs-material pymdown-extensions mkdocstrings-python mkdocs-jupyter jupyter
 
       - name: Install photonai_graph requirements
         run: pip install -r requirements.txt
@@ -42,7 +42,7 @@ jobs:
           python-version: '3.9'
 
       - name: Install mkdocs requirements
-        run: pip install mkdocs mkdocs-material pymdown-extensions mkdocstrings-python mkdocs-jupyter
+        run: pip install mkdocs mkdocs-material pymdown-extensions mkdocstrings-python mkdocs-jupyter jupyter
 
       - name: Install photonai_graph requirements
         run: pip install -r requirements.txt
