@@ -1,3 +1,9 @@
+[![Python application](https://github.com/wwu-mmll/photonai_graph/actions/workflows/lintandtest.yml/badge.svg)](https://github.com/wwu-mmll/photonai_graph/actions/workflows/lintandtest.yml)
+[![Coverage Status](https://coveralls.io/repos/github/wwu-mmll/photonai_graph/badge.svg?branch=master)](https://coveralls.io/github/wwu-mmll/photonai_graph?branch=master)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=wwu-mmll_photonai_graph&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=wwu-mmll_photonai_graph)
+![GitHub](https://img.shields.io/github/license/wwu-mmll/photonai_graph)
+[![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2Fwwu_mmll)](https://twitter.com/wwu_mmll)
+
 # photonai-graph
 Photon Graph is an extension for the PHOTON framework that allows for the use of machine learning based on graphs. Furthermore, the Graph Utilities contain a wide variety of functions that allow for the visualization and converting of graphs.
 
