@@ -90,5 +90,9 @@
    "CofluctTransform": [
       "photonai_graph.DynamicUtils.cofluct_transform.CofluctTransform",
       "Transformer"
+   ],
+   "ChebConvClassifierModel": [
+      "photonai_graph.NeuralNets.ChebConvModel.ChebConvClassifierModel",
+      "Estimator"
    ]
 }
