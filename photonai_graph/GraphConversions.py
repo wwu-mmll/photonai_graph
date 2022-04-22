@@ -43,8 +43,10 @@ def dense_to_dgl(graphs, adjacency_axis=None, feature_axis=None):
     for graph in range(graphs.shape[0]):
         src, dst = np.nonzero(graphs[graph, :, :, adjacency_axis])
         g = dgl.graph((src, dst), num_nodes=graphs[graph, ...].shape[1])
-        feat = torch.tensor(graphs[graph, :, :, feature_axis])
-        g.ndata['feat'] = feat
+        # from torch_geometric.utils import dense_to_sparse
+        # idx, feat = dense_to_sparse(torch.as_tensor(graphs[graph, :, :, feature_axis]))
+        g.ndata['feat'] = torch.tensor(graphs[graph, :, :, feature_axis])
+        # g.edata['feat'] = feat
         graph_list.append(g)
     return graph_list
 

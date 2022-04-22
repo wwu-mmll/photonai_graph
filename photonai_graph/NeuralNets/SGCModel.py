@@ -27,7 +27,7 @@ class SGConvClassifier(nn.Module):
         self.classify = nn.Linear(hidden_dim, n_classes)
 
     def forward(self, bg):
-        h = bg.in_degrees().view(-1, 1).float()
+        h = dgl.readout_nodes(bg, 'feat').view(-1, 1).float() #bg.in_degrees().view(-1, 1).float()
         for lr, layer in enumerate(self.layers):
             h = layer(bg, h)
         bg.ndata['h'] = h
@@ -45,7 +45,7 @@ class SGConvClassifierModel(DGLClassifierBaseModel):
                  hidden_dim: int = 256,
                  nn_epochs: int = 200,
                  learning_rate: float = 0.001,
-                 batch_size: int = 32,
+                 batch_size: int = 2048,
                  adjacency_axis: int = 0,
                  feature_axis: int = 1,
                  add_self_loops: bool = True,

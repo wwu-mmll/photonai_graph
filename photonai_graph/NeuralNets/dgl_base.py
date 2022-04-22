@@ -10,7 +10,7 @@ try:
     import torch.nn as nn
     import torch.optim as optim
     from torch.utils.data import DataLoader
-    from dgl.dataloading.pytorch import GraphDataLoader
+    from dgl.dataloading import GraphDataLoader
     from photonai_graph.GraphConversions import check_dgl
     from photonai_graph.NeuralNets.NNUtilities import DGLData, zip_data
 except ImportError:
@@ -27,7 +27,7 @@ class DGLModel(BaseEstimator, ABC):
                  feature_axis: int = 1,
                  add_self_loops: bool = True,
                  allow_zero_in_degree: bool = False,
-                 verbose: bool = False,
+                 verbose: bool = True,
                  logs: str = None):
         """
         Base class for DGL based graph neural networks. Implements
@@ -76,6 +76,7 @@ class DGLModel(BaseEstimator, ABC):
             self.logs = os.getcwd()
         assert_imported(["dgl", "pytorch"])
         self.verbose = verbose
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     def train_model(self, epochs, model, optimizer, loss_func, data_loader):
         # This function trains the neural network
@@ -84,6 +85,8 @@ class DGLModel(BaseEstimator, ABC):
             epoch_loss = 0
             iteration = 0
             for it, (bg, label) in enumerate(data_loader):
+                bg = bg.to(device=self.device)
+                label = label.to(device=self.device)
                 prediction = model(bg)
                 loss = loss_func(prediction, label)
                 optimizer.zero_grad()
@@ -93,7 +96,7 @@ class DGLModel(BaseEstimator, ABC):
                 iteration = it
             epoch_loss /= (iteration + 1)
             if self.verbose:
-                print('Epoch {}, loss {:.4f}'.format(epoch, epoch_loss))
+                tqdm.write('Epoch {}, loss {:.4f}'.format(epoch, epoch_loss))
             epoch_losses.append(epoch_loss)
 
     def handle_inputs(self, x, adjacency_axis, feature_axis):
@@ -112,6 +115,8 @@ class DGLModel(BaseEstimator, ABC):
         self._init_model(X, y)
         # get optimizers
         loss_func, optimizer = self.setup_model()
+        # push data and model
+        self.model.to(device=self.device)
         # train model
         self.model.train()
         self.train_model(self.nn_epochs, self.model, optimizer, loss_func, data_loader)
@@ -193,14 +198,16 @@ class DGLClassifierBaseModel(DGLModel, ClassifierMixin, ABC):
         self.model.eval()
         x_trans = self.handle_inputs(X, self.adjacency_axis, self.feature_axis)
         test_bg = dgl.batch(x_trans)
+        test_bg = test_bg.to(device=self.device)
         probs_y = torch.softmax(self.model(test_bg), 1)
         argmax_y = torch.max(probs_y, 1)[1].view(-1, 1)
-        return argmax_y.squeeze()
+        return argmax_y.squeeze().cpu().numpy()
 
     def get_data_loader(self, x_trans, y):
         """returns data in a data loader format"""
         data = DGLData(zip_data(x_trans, y))
         # create dataloader
+        print(f"Using batch size: {self.batch_size}")
         data_loader = GraphDataLoader(data, batch_size=self.batch_size, shuffle=True, collate_fn=self.collate)
         return data_loader
 
@@ -262,8 +269,9 @@ class DGLRegressorBaseModel(DGLModel, RegressorMixin, ABC):
         self.model.eval()
         x_trans = self.handle_inputs(X, self.adjacency_axis, self.feature_axis)
         test_bg = dgl.batch(x_trans)
+        test_bg = test_bg.to(device=self.device)
         probs = self.model(test_bg)
-        probs = probs.detach().numpy()
+        probs = probs.detach().cpu().numpy()
         return probs.squeeze()
 
     def get_data_loader(self, x_trans, y):

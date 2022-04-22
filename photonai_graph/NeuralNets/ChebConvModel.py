@@ -4,7 +4,8 @@ try:
     import dgl
     import torch.optim as optim
     import torch.nn as nn
-    from torch_geometric.nn import ChebConv, global_mean_pool
+    #from torch_geometric.nn import ChebConv, global_mean_pool
+    from dgl.nn.pytorch.conv import ChebConv
     import torch.nn.functional as func
 except ImportError:
     pass
@@ -24,25 +25,38 @@ class ChebConvModel(nn.Module):
 
         self.p = dropout
 
-        self.conv1 = ChebConv(int(num_features), 128, K=k_order)
-        self.conv2 = ChebConv(128, 64, K=k_order)
-        self.conv3 = ChebConv(64, 32, K=k_order)
+        self.conv1 = ChebConv(int(num_features), 128, k=k_order)
+        self.conv2 = ChebConv(128, 64, k=k_order)
+        self.conv3 = ChebConv(64, 32, k=k_order)
 
         self.lin1 = nn.Linear(32, int(num_classes))
 
-    def forward(self, data):
-        x, edge_index, edge_attr = data.x, data.edge_index, data.edge_attr
-        batch = data.batch
+    def forward(self, x):
 
-        x = func.relu(self.conv1(x, edge_index, edge_attr))
-        x = func.dropout(x, p=self.p, training=self.training)
-        x = func.relu(self.conv2(x, edge_index, edge_attr))
-        x = func.dropout(x, p=self.p, training=self.training)
-        x = func.relu(self.conv3(x, edge_index, edge_attr))
+        h = dgl.readout_nodes(x, 'feat').view(-1, 1).float()#  x.in_degrees().view(-1, 1).float()
 
-        x = global_mean_pool(x, batch)
-        x = self.lin1(x)
-        return x
+        h = self.conv1(x, h)
+        h = func.dropout(h, p=self.p, training=self.training)
+        h = self.conv2(x, h)
+        h = func.dropout(h, p=self.p, training=self.training)
+        h = self.conv3(x, h)
+
+        h = h.flatten(1)
+        x.ndata['h'] = h
+        hg = dgl.mean_nodes(x, 'h')
+        return self.lin1(hg)
+        #x, edge_index, edge_attr = data.x, data.edge_index, data.edge_attr
+        #batch = data.batch
+
+        #x = func.relu(self.conv1(x, edge_index, edge_attr))
+        #x = func.dropout(x, p=self.p, training=self.training)
+        #x = func.relu(self.conv2(x, edge_index, edge_attr))
+        #x = func.dropout(x, p=self.p, training=self.training)
+        #x = func.relu(self.conv3(x, edge_index, edge_attr))
+
+        #x = global_mean_pool(x, batch)
+        #x = self.lin1(x)
+        # return x
 
 
 class ChebConvClassifierModel(DGLClassifierBaseModel):
@@ -55,7 +69,7 @@ class ChebConvClassifierModel(DGLClassifierBaseModel):
                  agg_mode="mean",
                  nn_epochs: int = 200,
                  learning_rate: float = 0.001,
-                 batch_size: int = 32,
+                 model_batch_size: int = 16,
                  adjacency_axis: int = 0,
                  feature_axis: int = 1,
                  add_self_loops: bool = True,
@@ -81,14 +95,15 @@ class ChebConvClassifierModel(DGLClassifierBaseModel):
         """
         super(ChebConvClassifierModel, self).__init__(nn_epochs=nn_epochs,
                                                       learning_rate=learning_rate,
-                                                      batch_size=batch_size,
+                                                      batch_size=model_batch_size,
                                                       adjacency_axis=adjacency_axis,
                                                       feature_axis=feature_axis,
                                                       add_self_loops=add_self_loops,
                                                       allow_zero_in_degree=allow_zero_in_degree,
                                                       logs=logs)
+        self.model_batch_size = model_batch_size
         if heads is None:
-            heads = [2, 2]
+            heads = 2
             # Todo: if heads is not length of hidden layers +1 (bc of the first layer)
         self.in_dim = in_dim
         self.hidden_layers = hidden_layers
