@@ -39,10 +39,8 @@ class ControllabilityTransformTests(unittest.TestCase):
 
     def test_error_transform(self):
         # ensure that mean transform style with a 3d matrix returns the right shape
-        contr = ControllabilityMeasureTransform(mod_control=0, ave_control=0)
-        with self.assertRaises(Exception):
-            contr.fit(self.X_sym, self.y)
-            contr.transform(self.X_sym)
+        with self.assertRaises(ValueError):
+            ControllabilityMeasureTransform(mod_control=0, ave_control=0)
 
     def test_extract_measures_mod_control(self):
         path = "/tmp/test.csv"
@@ -66,23 +64,21 @@ class ControllabilityTransformTests(unittest.TestCase):
         os.remove(path)
 
     def test_error_extract_measures(self):
-        path = "/tmp/test.csv"
-        contr = ControllabilityMeasureTransform(mod_control=0, ave_control=0)
-        with self.assertRaises(Exception):
-            contr.extract_measures(self.X_sym, path)
+        with self.assertRaises(ValueError):
+            ControllabilityMeasureTransform(mod_control=0, ave_control=0)
 
     def test_node_list_error(self):
         path = "/tmp/test.csv"
         node_list = list(range(5))
-        contr = ControllabilityMeasureTransform(mod_control=0, ave_control=0)
-        with self.assertRaises(Exception):
+        contr = ControllabilityMeasureTransform(mod_control=1, ave_control=0)
+        with self.assertRaises(ValueError):
             contr.extract_measures(self.X_sym, path, node_list=node_list)
 
     def test_id_list_error(self):
         path = "/tmp/test.csv"
         id_list = list(range(3))
-        contr = ControllabilityMeasureTransform(mod_control=0, ave_control=0)
-        with self.assertRaises(Exception):
+        contr = ControllabilityMeasureTransform(mod_control=1, ave_control=0)
+        with self.assertRaises(ValueError):
             contr.extract_measures(self.X_sym, path, ids=id_list)
 
 
