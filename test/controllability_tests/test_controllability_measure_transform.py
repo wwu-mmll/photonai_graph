@@ -16,7 +16,7 @@ class ControllabilityTransformTests(unittest.TestCase):
         b_symm = np.repeat(b_symm, 10, axis=0)
         self.X_sym = b_symm
         self.y = np.random.rand(20)
-        self.rep_X_sym = np.load('./X_test.npz')['arr_0']
+        self.rep_X_sym = np.load(os.path.dirname(__file__) + '/X_test.npz')['arr_0']
 
     def test_mod_control_shape(self):
         contr = ControllabilityMeasureTransform(mod_control=1, ave_control=0)
@@ -61,7 +61,7 @@ class ControllabilityTransformTests(unittest.TestCase):
         contr = ControllabilityMeasureTransform(mod_control=1, ave_control=1)
         contr.extract_measures(self.rep_X_sym, path)
         df = pd.read_csv(path)
-        df_expected = pd.read_csv("./test.csv")
+        df_expected = pd.read_csv(os.path.dirname(__file__) + "/test.csv")
         self.assertTrue(df.equals(df_expected), "Generated measures are not as expected")
         os.remove(path)
 
