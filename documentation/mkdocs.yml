@@ -67,6 +67,7 @@ nav:
   - Graph Kernels: 'api/graph_kernels.md'
   - Graph Neural Networks: 'api/graph_convnets.md'
   - Graph Utilities: 'api/graph_utilities.md'
+  - Graph Controllability: 'api/graph_controllability.md'
 - Examples:
     - Networkx Loading: 'examples/networkx_pipeline.ipynb'
     - Graph Embeddings:
