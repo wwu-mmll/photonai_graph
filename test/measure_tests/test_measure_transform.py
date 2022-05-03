@@ -9,7 +9,8 @@ from photonai_graph.GraphMeasureTransform import GraphMeasureTransform
 class GraphMeasureTransformTests(unittest.TestCase):
 
     def setUp(self):
-        self.X_nx = [nx.barabasi_albert_graph(20, 2)] * 10
+        gs = np.load(os.path.dirname(__file__) + '/X_test.npz')['arr_0']
+        self.X_nx = [nx.from_numpy_array(gs[i]) for i in range(gs.shape[0])]
         self.y = np.random.rand(10)
         self.ids = list(range(10))
         # generate random matrices
