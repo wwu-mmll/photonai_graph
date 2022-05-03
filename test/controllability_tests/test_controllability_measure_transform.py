@@ -61,7 +61,7 @@ class ControllabilityTransformTests(unittest.TestCase):
         df = pd.read_csv(path)
         path_ref = os.path.dirname(__file__) + "/test.csv"
         df_expected = pd.read_csv(path_ref)
-        self.assertTrue(np.array_equal(df.to_numpy(), df_expected.to_numpy()), "Generated measures are not as expected")
+        self.assertTrue(np.allclose(df.to_numpy(), df_expected.to_numpy()), "Generated measures are not as expected")
         os.remove(path)
 
     def test_error_extract_measures(self):
