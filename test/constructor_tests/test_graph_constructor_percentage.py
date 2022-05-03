@@ -62,4 +62,4 @@ class PercentageTests(unittest.TestCase):
         dummy_mtrx = np.reshape(np.tile(np.nan, 20*4*4*3), (20, 4, 4, 3))
         g_constr.fit(dummy_mtrx, self.y)
         with self.assertRaises(ValueError):
-            trans = g_constr.transform(dummy_mtrx)
+            g_constr.transform(dummy_mtrx)

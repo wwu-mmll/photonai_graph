@@ -4,7 +4,7 @@ import numpy as np
 try:
     from grakel import graph
     import grakel
-except ImportError:
+except ImportError:  # pragma: no cover
     pass
 
 
@@ -52,6 +52,8 @@ class GrakelAdapter(BaseEstimator, ClassifierMixin):
         self.feature_axis = feature_axis
         self.adjacency_axis = adjacency_axis
         assert_imported(["grakel"])
+        if input_type not in ['networkx', 'dense']:
+            raise ValueError("Only networkx or dense conversions are supported.")
 
     def fit(self, X, y):
         return self
@@ -74,16 +76,12 @@ class GrakelAdapter(BaseEstimator, ClassifierMixin):
         g_trans = []
         if in_format == "dense":
             for g in range(graphs.shape[0]):
-                if graph.is_adjacency(graphs[g, :, :, adjacency_axis]):
-                    conv_g = graph.Graph(graphs[g, :, :, adjacency_axis], node_labels=node_labels[g],
-                                         edge_labels=edge_features[g])
-                    g_trans.append(conv_g)
-                else:
-                    raise Exception("Adjacency needs to be grakel conform")
-        elif in_format == "networkx":
+                conv_g = graph.Graph(graphs[g, :, :, adjacency_axis], node_labels=node_labels[g],
+                                     edge_labels=edge_features[g])
+                g_trans.append(conv_g)
+
+        if in_format == "networkx":
             g_trans = grakel.graph_from_networkx(graphs)
-        else:
-            raise ValueError("Only networkx or dense conversions are supported.")
 
         return g_trans
 

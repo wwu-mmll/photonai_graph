@@ -17,8 +17,19 @@ class GrakelAdapterTests(unittest.TestCase):
 
     def test_grakel_adapter_type_list(self):
         g_adapter = GrakelAdapter()
+        g_adapter.fit(self.Xrandom4d, self.y)
         x_trans = g_adapter.transform(self.Xrandom4d)
         self.assertEqual(type(x_trans), list)
+
+    def test_unexpected_input(self):
+        g_adapter = GrakelAdapter(feature_axis=0)
+        g_in = np.array([[1, 0, 0], [-1, 3, 4]])
+        with self.assertRaises(ValueError):
+            g_adapter.transform(g_in[np.newaxis, ..., np.newaxis])
+
+    def test_unexpected_input_type(self):
+        with self.assertRaises(ValueError):
+            GrakelAdapter(input_type="non-sens")
 
     def test_grakel_adapter_type_graph(self):
         g_adapter = GrakelAdapter()

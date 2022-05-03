@@ -2,7 +2,6 @@ import unittest
 
 import numpy as np
 import networkx as nx
-import os
 from photonai_graph.PopulationAveragingTransform import PopulationAveragingTransform
 
 
@@ -38,5 +37,3 @@ class PopulationAveragingTests(unittest.TestCase):
         pat.fit(dummy_input[..., np.newaxis], [])
         with self.assertRaises(ValueError):
             pat.transform(dummy_input)
-
-

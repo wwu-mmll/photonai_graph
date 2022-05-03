@@ -77,6 +77,3 @@ class ControllabilityTransformTests(unittest.TestCase):
         contr = ControllabilityMeasureTransform(mod_control=1, ave_control=0)
         with self.assertRaises(ValueError):
             contr.extract_measures(self.X_sym, path, ids=id_list)
-
-
-

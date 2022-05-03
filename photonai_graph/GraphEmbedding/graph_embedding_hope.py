@@ -1,8 +1,4 @@
-from sklearn.base import BaseEstimator, TransformerMixin
-from photonai_graph.util import assert_imported
 import numpy as np
-import networkx
-import os
 try:
     from gem.embedding.hope import HOPE
     from gem.embedding.static_graph_embedding import StaticGraphEmbedding

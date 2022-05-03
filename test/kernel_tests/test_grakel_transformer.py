@@ -25,7 +25,7 @@ class GrakelTransformerTest(unittest.TestCase):
 
     def test_unknown_function(self):
         with self.assertRaises(ValueError):
-            gt = GrakelTransformer(transformation="Dummy")
+            GrakelTransformer(transformation="Dummy")
 
     def test_unfit_transformer(self):
         g_adapter = GrakelAdapter()
