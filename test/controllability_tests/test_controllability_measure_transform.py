@@ -60,11 +60,8 @@ class ControllabilityTransformTests(unittest.TestCase):
         contr.extract_measures(self.rep_X_sym, path, ids=[i for i in range(10)], node_list=[f"node_{i}" for i in range(20)])
         df = pd.read_csv(path)
         path_ref = os.path.dirname(__file__) + "/test.csv"
-        print(f"reading {path_ref}")
         df_expected = pd.read_csv(path_ref)
-        print(df)
-        print(df_expected)
-        self.assertTrue(df.equals(df_expected), "Generated measures are not as expected")
+        self.assertTrue(np.array_equal(df.to_numpy(), df_expected.to_numpy()), "Generated measures are not as expected")
         os.remove(path)
 
     def test_error_extract_measures(self):
