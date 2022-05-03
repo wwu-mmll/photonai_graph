@@ -62,6 +62,8 @@ class ControllabilityTransformTests(unittest.TestCase):
         path_ref = os.path.dirname(__file__) + "/test.csv"
         print(f"reading {path_ref}")
         df_expected = pd.read_csv(path_ref)
+        print(df)
+        print(df_expected)
         self.assertTrue(df.equals(df_expected), "Generated measures are not as expected")
         os.remove(path)
 
