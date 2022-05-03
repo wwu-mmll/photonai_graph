@@ -57,9 +57,11 @@ class ControllabilityTransformTests(unittest.TestCase):
     def test_extract_measures_mod_ave_control(self):
         path = "/tmp/test.csv"
         contr = ControllabilityMeasureTransform(mod_control=1, ave_control=1)
-        contr.extract_measures(self.rep_X_sym, path)
+        contr.extract_measures(self.rep_X_sym, path, ids=[i for i in range(10)], node_list=[f"node_{i}" for i in range(20)])
         df = pd.read_csv(path)
-        df_expected = pd.read_csv(os.path.dirname(__file__) + "/test.csv")
+        path_ref = os.path.dirname(__file__) + "/test.csv"
+        print(f"reading {path_ref}")
+        df_expected = pd.read_csv(path_ref)
         self.assertTrue(df.equals(df_expected), "Generated measures are not as expected")
         os.remove(path)
 
