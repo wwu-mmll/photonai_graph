@@ -18,6 +18,7 @@ except ImportError as e:  # pragma: no cover
 
 from photonai_graph.util import assert_imported
 
+
 def draw_connectogram(graph, connection_style="arc3", colorscheme=None, nodesize=None,
                       node_shape='o', weight=None, path=None, show=True):
     """This functions draws a connectogram, from a graph.
@@ -61,7 +62,7 @@ def draw_connectogram(graph, connection_style="arc3", colorscheme=None, nodesize
     else:
         nx.draw_networkx_edges(graph, pos, connectionstyle=connection_style)
 
-    if show:
+    if show:  # pragma: no cover
         plt.show()
 
     if path is not None:
@@ -170,13 +171,13 @@ def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adja
                     plt.imshow(matrix[i, :, :, adjacency_axis], cmap=plt.get_cmap(colorscheme))
                     if colorbar:
                         plt.colorbar()
-                    if show:
+                    if show:  # pragma: no cover
                         plt.show()
             elif np.ndim(matrix) == 3:
                 plt.imshow(matrix[:, :, adjacency_axis], cmap=plt.get_cmap(colorscheme))
                 if colorbar:
                     plt.colorbar()
-                if show:
+                if show:  # pragma: no cover
                     plt.show()
             else:
                 raise Exception('Matrix dimension might not be specified correctly.')
@@ -188,13 +189,13 @@ def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adja
                     plt.imshow(matrix[i, :, :])
                     if colorbar:
                         plt.colorbar()
-                    if show:
+                    if show:  # pragma: no cover
                         plt.show()
             elif np.ndim(matrix) == 2:
                 plt.imshow(matrix)
                 if colorbar:
                     plt.colorbar()
-                if show:
+                if show:  # pragma: no cover
                     plt.show()
             else:
                 raise Exception('Matrix dimension might not be specified correctly.')
@@ -205,7 +206,7 @@ def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adja
                     plt.imshow(single_matrix[:, :, adjacency_axis])
                     if colorbar:
                         plt.colorbar()
-                    if show:
+                    if show:  # pragma: no cover
                         plt.show()
         elif isinstance(matrix[0], sparse.spmatrix) \
                 or isinstance(matrix[0], sparse.bsr_matrix) \
@@ -217,7 +218,7 @@ def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adja
                 or isinstance(matrix[0], sparse.dia_matrix):
             for single_matrix in matrix:
                 plt.spy(single_matrix)
-                if show:
+                if show:  # pragma: no cover
                     plt.show()
         else:
             raise TypeError('List elements need to be numpy arrays/matrices or scipy sparse matrices')
@@ -325,11 +326,11 @@ def visualize_networkx(graphs, layout=nx.spring_layout, colorscheme="Blues", sho
     if isinstance(graphs, list):
         for graph in graphs:
             draw(graph, pos=layout(graph), node_color=range(nx.number_of_nodes(graph)), cmap=plt.get_cmap(colorscheme))
-            if show:
+            if show:  # pragma: no cover
                 plt.show()
     elif isinstance(graphs, nx.classes.graph.Graph):
         draw(graphs, pos=layout(graphs), node_color=range(nx.number_of_nodes(graphs)), cmap=plt.get_cmap(colorscheme))
-        if show:
+        if show:  # pragma: no cover
             plt.show()
     else:
         raise ValueError("graphs has unexpected format")
@@ -502,8 +503,10 @@ def check_asteroidal(graph: Union[nx.Graph, List[nx.Graph]]) -> Union[Union[List
     return graph_answer
 
 
-def load_conn(path='', mtrx_name='matrix', subject_dim=3, modality_dim=2):
-    """loads matlab 4d connectivity matrix from matlab file"""
+def load_conn(path='', mtrx_name='matrix', subject_dim=3, modality_dim=2):  # pragma: no cover
+    """loads matlab 4d connectivity matrix from matlab file
+    This function is untested and serves only as an example how to load connectivity data.
+    """
     assert_imported(['mat73'])
     try:
         matfile = sio.loadmat(path)
