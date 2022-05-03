@@ -9,7 +9,8 @@ from photonai_graph.GraphMeasureTransform import GraphMeasureTransform
 class GraphMeasureTransformTests(unittest.TestCase):
 
     def setUp(self):
-        self.X_nx = [nx.barabasi_albert_graph(20, 2)] * 10
+        gs = np.load(os.path.dirname(__file__) + '/X_test.npz')['arr_0']
+        self.X_nx = [nx.from_numpy_array(gs[i]) for i in range(gs.shape[0])]
         self.y = np.random.rand(10)
         self.ids = list(range(10))
         # generate random matrices
@@ -91,6 +92,7 @@ class GraphMeasureTransformTests(unittest.TestCase):
         g_transform.fit(self.X_nx, self.y)
         measures = g_transform.transform(self.X_nx)
         self.assertEqual(measures.shape, (10, 2))
+        pass
 
     def test_transform_directed(self):
         g_transform = GraphMeasureTransform(graph_functions={"degree_pearson_correlation_coefficient": {}})
