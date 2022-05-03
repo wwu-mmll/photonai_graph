@@ -13,7 +13,7 @@ except ImportError:  # pragma: no cover
 def dense_to_networkx(graphs: np.ndarray, adjacency_axis: int = None, feature_axis=None):
     if adjacency_axis is None:
         warnings.warn("No adjacency passed. Guessing that adjacency is in first channel...")
-        adjacency_axis=0
+        adjacency_axis = 0
     nx_graphs = [nx.from_numpy_array(graphs[i, ..., adjacency_axis]) for i in range(graphs.shape[0])]
     if feature_axis is not None:
         raise NotImplementedError("This feature is not implemented yet.")

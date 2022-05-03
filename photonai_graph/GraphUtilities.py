@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import scipy.io as sio
 try:
     import mat73
-except ImportError as e:  # pragma: no cover
+except ImportError:  # pragma: no cover
     pass
 
 from photonai_graph.util import assert_imported
@@ -521,5 +521,3 @@ def load_conn(path='', mtrx_name='matrix', subject_dim=3, modality_dim=2):  # pr
             raise Exception(ex1, ex2)
 
     return mtrx
-
-

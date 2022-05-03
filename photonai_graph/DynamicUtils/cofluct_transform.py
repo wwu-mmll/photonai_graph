@@ -63,5 +63,3 @@ class CofluctTransform(BaseEstimator, TransformerMixin):
         np.asarray(cfls)
 
         return cfls
-
-

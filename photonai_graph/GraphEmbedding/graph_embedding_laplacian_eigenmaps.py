@@ -1,5 +1,4 @@
 from photonai_graph.GraphEmbedding.graph_embedding_base import GraphEmbeddingBase
-import numpy as np
 try:
     from gem.embedding.lap import LaplacianEigenmaps
     from gem.embedding.static_graph_embedding import StaticGraphEmbedding

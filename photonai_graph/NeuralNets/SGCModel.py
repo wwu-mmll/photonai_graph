@@ -2,7 +2,7 @@ import numpy as np
 try:
     import dgl
     import torch.nn as nn
-    from dgl.nn.pytorch import GraphConv, SGConv, GATConv
+    from dgl.nn.pytorch import SGConv
 except ImportError:
     pass
 

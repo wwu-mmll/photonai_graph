@@ -69,7 +69,7 @@ class ControllabilityMeasureTransform(BaseEstimator, TransformerMixin):
                          X: np.ndarray = None,
                          path: str = None,
                          ids: List[int] = None,
-                         node_list: List[str]=None):
+                         node_list: List[str] = None):
         """Extract controllability measures and write them to a csv file
 
         Parameters

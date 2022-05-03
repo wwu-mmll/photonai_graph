@@ -28,7 +28,7 @@ def modal_control(A):
     N = A.shape[0]
     phi = np.zeros(N, dtype=float)
     for i in range(N):
-        A_left = U[i,] * U[i,]  # element-wise multiplication
+        A_left = U[i, ] * U[i, ]  # element-wise multiplication
         A_right = (1.0 - np.power(eigVals, 2)).transpose()
         phi[i] = np.matmul(A_left, A_right)
     return phi

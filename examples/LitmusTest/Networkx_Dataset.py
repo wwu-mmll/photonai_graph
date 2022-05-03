@@ -44,4 +44,3 @@ def plot_nx_edge_count(graphs1, graphs2, label1="graphs_1", label2="graphs_2"):
 
     sns.displot(df, x="edge_count", hue="Group", kind="kde", fill=True)
     plt.show()
-

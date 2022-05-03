@@ -43,4 +43,3 @@ def assert_imported(packages: list = None):  # pragma: no cover
             return True
         else:
             raise ImportError(f"Could not load {package}. Please install it according to the documentation")
-    
