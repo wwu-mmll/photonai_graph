@@ -92,7 +92,6 @@ class GraphMeasureTransformTests(unittest.TestCase):
         g_transform.fit(self.X_nx, self.y)
         measures = g_transform.transform(self.X_nx)
         self.assertEqual(measures.shape, (10, 2))
-        pass
 
     def test_transform_directed(self):
         g_transform = GraphMeasureTransform(graph_functions={"degree_pearson_correlation_coefficient": {}})

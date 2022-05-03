@@ -64,10 +64,6 @@ class ControllabilityTransformTests(unittest.TestCase):
         self.assertTrue(np.allclose(df.to_numpy(), df_expected.to_numpy()), "Generated measures are not as expected")
         os.remove(path)
 
-    def test_error_extract_measures(self):
-        with self.assertRaises(ValueError):
-            ControllabilityMeasureTransform(mod_control=0, ave_control=0)
-
     def test_node_list_error(self):
         path = "/tmp/test.csv"
         node_list = list(range(5))
