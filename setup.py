@@ -26,7 +26,7 @@ within the PHOTON framework. The module provides a range of graph machine learni
     install_requires=['photonai @ git+https://github.com/wwu-mmll/photonai.git@develop',
                       'networkx>=2.4',
                       'pydot>=1.4.1',
-                      'nxt_gem @ git+https://github.com/jernsting/nxt_gem.git',
+                      'nxt-gem',
                       'pandas>=1.1.2',
                       'numpy>=1.12.2',
                       'scipy>=0.19.1',
