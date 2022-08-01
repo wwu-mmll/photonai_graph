@@ -10,7 +10,7 @@ try:
     import torch.nn as nn
     import torch.optim as optim
     from torch.utils.data import DataLoader
-    from dgl.dataloading.pytorch import GraphDataLoader
+    from dgl.dataloading import GraphDataLoader
     from photonai_graph.GraphConversions import check_dgl
     from photonai_graph.NeuralNets.NNUtilities import DGLData, zip_data
 except ImportError:
