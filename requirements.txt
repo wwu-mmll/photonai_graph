@@ -1,5 +1,4 @@
-#photonai
-git+https://github.com/wwu-mmll/photonai.git@develop
+photonai
 networkx
 pydot
 dgl
