@@ -4,6 +4,8 @@
 ![GitHub](https://img.shields.io/github/license/wwu-mmll/photonai_graph)
 [![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2Fwwu_mmll)](https://twitter.com/wwu_mmll)
 
+![PHOTONAI Graph](documentation/docs/assets/img/photonai-02.png)
+
 # photonai-graph
 Photon Graph is an extension for the PHOTON framework that allows for the use of machine learning based on graphs. Furthermore, the Graph Utilities contain a wide variety of functions that allow for the visualization and converting of graphs.
 

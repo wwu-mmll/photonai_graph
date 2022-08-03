@@ -10,11 +10,14 @@ try:
     import torch.nn as nn
     import torch.optim as optim
     from torch.utils.data import DataLoader
-    from dgl.dataloading.pytorch import GraphDataLoader
-    from photonai_graph.GraphConversions import check_dgl
-    from photonai_graph.NeuralNets.NNUtilities import DGLData, zip_data
+    from dgl.dataloading import GraphDataLoader
 except ImportError:
-    pass
+    import warnings
+    warnings.warn("Some of the dependencies could not be loaded. Make sure to install all Dependencies:\n"
+                  "https://wwu-mmll.github.io/photonai_graph/installation/#additional-packages")
+
+from photonai_graph.GraphConversions import check_dgl
+from photonai_graph.NeuralNets.NNUtilities import DGLData, zip_data
 
 
 class DGLModel(BaseEstimator, ABC):
