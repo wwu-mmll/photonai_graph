@@ -5,24 +5,28 @@ except ImportError:
     use_setuptools()
     from setuptools import setup, find_packages
 
-__version__ = '0.1.1'
+__version__ = '0.0.5'
+
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
 
 setup(
     name='photonai_graph',
     packages=find_packages(),
     include_package_data=True,
     version=__version__,
-    description="""
-PHOTON Graph
-PHOTON Graph is a submodule of the PHOTON package, which, using the PHOTON API, allows the user to utilize graph based machine learning methods
-within the PHOTON framework. The module provides a range of graph machine learning algorithms, along with methods for constructing graphs.
-""",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    description="PHOTON Graph - Graph machine learning with photonai.",
     author='PHOTON Team',
     author_email='hahnt@uni-muenster.de',
     url='https://github.com/wwu-mmll/photonai_graph.git',
     download_url='https://github.com/wwu-mmll/photonai_graph/archive/' + __version__ + '.tar.gz',
     keywords=['machine learning', 'deep learning', 'graph convolutional neural networks', 'graphs'],
-    classifiers=[],
+    classifiers=["License :: OSI Approved :: MIT License",
+                 "Topic :: Software Development :: Libraries :: Python Modules",
+                 "Topic :: Scientific/Engineering :: Artificial Intelligence",
+                 "Intended Audience :: Science/Research"],
     install_requires=['photonai>2.2.0',
                       'networkx>=2.4',
                       'pydot>=1.4.1',
