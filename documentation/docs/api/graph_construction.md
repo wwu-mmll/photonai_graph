@@ -32,14 +32,14 @@ classDiagram-v2
     Graph Constructor <|-- GraphConstructorSpatial
     Graph Constructor <|-- GraphConstructorRandomWalks
     
-    link GraphConstructor "/api/graph_construction/#graphconstructor"
-    link GraphConstructorThreshold "/api/graph_construction/#graphconstructorthreshold"
-    link GraphConstructorPercentage "/api/graph_construction/#graphconstructorpercentage"
-    link GraphConstructorThresholdWindow "/api/graph_construction/#graphconstructorthresholdwindow"
-    link GraphConstructorPercentageWindow "/api/graph_construction/#graphconstructorpercentagewindow"
-    link GraphConstructorKNN "/api/graph_construction/#graphconstructorknn"
-    link GraphConstructorSpatial "/api/graph_construction/#graphconstructorspatial"
-    link GraphConstructorRandomWalks "/api/graph_construction/#graphconstructorrandomwalks"
+    link GraphConstructor "/photonai_graph/api/graph_construction/#graphconstructor"
+    link GraphConstructorThreshold "/photonai_graph/api/graph_construction/#graphconstructorthreshold"
+    link GraphConstructorPercentage "/photonai_graph/api/graph_construction/#graphconstructorpercentage"
+    link GraphConstructorThresholdWindow "/photonai_graph/api/graph_construction/#graphconstructorthresholdwindow"
+    link GraphConstructorPercentageWindow "/photonai_graph/api/graph_construction/#graphconstructorpercentagewindow"
+    link GraphConstructorKNN "/photonai_graph/api/graph_construction/#graphconstructorknn"
+    link GraphConstructorSpatial "/photonai_graph/api/graph_construction/#graphconstructorspatial"
+    link GraphConstructorRandomWalks "/photonai_graph/api/graph_construction/#graphconstructorrandomwalks"
 ```
 
 Hint: By clicking on the class in the above diagram you will find the according documentation.
