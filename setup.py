@@ -21,6 +21,11 @@ setup(
     author='PHOTON Team',
     author_email='hahnt@uni-muenster.de',
     url='https://github.com/wwu-mmll/photonai_graph.git',
+    project_urls={
+        "Source Code": "https://github.com/wwu-mmll/photonai_graph",
+        "Documentation": "https://wwu-mmll.github.io/photonai_graph/",
+        "Bug Tracker": "https://github.com/wwu-mmll/photonai_graph/issues",
+    },
     download_url='https://github.com/wwu-mmll/photonai_graph/archive/' + __version__ + '.tar.gz',
     keywords=['machine learning', 'deep learning', 'graph convolutional neural networks', 'graphs'],
     classifiers=["License :: OSI Approved :: MIT License",
