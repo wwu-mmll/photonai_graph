@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from photonai.photonlogger import logger
 
-__version__ = '1.0.0'
+__version__ = '0.1.0'
 
 current_path = os.path.dirname(os.path.abspath(__file__))
 registered_file = os.path.join(current_path, "registered")
