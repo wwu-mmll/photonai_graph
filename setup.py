@@ -26,7 +26,7 @@ setup(
         "Documentation": "https://wwu-mmll.github.io/photonai_graph/",
         "Bug Tracker": "https://github.com/wwu-mmll/photonai_graph/issues",
     },
-    download_url='https://github.com/wwu-mmll/photonai_graph/archive/' + __version__ + '.tar.gz',
+    download_url='https://pypi.org/project/photonai-graph/#files',
     keywords=['machine learning', 'deep learning', 'graph convolutional neural networks', 'graphs'],
     classifiers=["License :: OSI Approved :: MIT License",
                  "Topic :: Software Development :: Libraries :: Python Modules",
