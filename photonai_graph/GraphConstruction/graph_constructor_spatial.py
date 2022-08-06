@@ -25,7 +25,10 @@ class GraphConstructorSpatial(GraphConstructor):
         from connectivity matrices. Selects the k nearest
         neighbours for each node based on spatial distance
         of the coordinates in the chosen atlas. This method
-        can be applied to both DTI and rs-fMRI data.
+        can be applied to both DTI and rs-fMRI data. A user
+        can construct their own atlas using defined spatial
+        coordinates that match those regions used in the
+        correspoding connectivity matrices.
         Adapted from Ktena et al, 2017.
 
         !!! danger
