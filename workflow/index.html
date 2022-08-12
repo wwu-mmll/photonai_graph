@@ -1,0 +1,1095 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../assets/img/photonai-02.png">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.3.9">
+    
+    
+      
+        <title>PHOTONAI Graph Workflow - PHOTONAI - Graph</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.1d29e8d0.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.cbb835fc.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#009485">
+        
+      
+      
+    
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../assets/stylesheets/material.css">
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#workflow" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="PHOTONAI - Graph" class="md-header__button md-logo" aria-label="PHOTONAI - Graph" data-md-component="logo">
+      
+  <img src="../assets/img/photonai-01.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PHOTONAI - Graph
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              PHOTONAI Graph Workflow
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/wwu-mmll/photonai-graph" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    photonai-graph
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="PHOTONAI - Graph" class="md-nav__button md-logo" aria-label="PHOTONAI - Graph" data-md-component="logo">
+      
+  <img src="../assets/img/photonai-01.png" alt="logo">
+
+    </a>
+    PHOTONAI - Graph
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/wwu-mmll/photonai-graph" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    photonai-graph
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting_started/" class="md-nav__link">
+        Getting Started
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          PHOTONAI Graph Workflow
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        PHOTONAI Graph Workflow
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#connectivity-matrices" class="md-nav__link">
+    Connectivity matrices
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#photonai-graph-internal-datastructure" class="md-nav__link">
+    PHOTONAI Graph internal datastructure
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#machine-learning-on-graphs" class="md-nav__link">
+    Machine Learning on Graphs
+  </a>
+  
+    <nav class="md-nav" aria-label="Machine Learning on Graphs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#classical-machine-learning" class="md-nav__link">
+    Classical Machine Learning
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deep-learning" class="md-nav__link">
+    Deep Learning
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#building-a-pipeline" class="md-nav__link">
+    Building a pipeline
+  </a>
+  
+    <nav class="md-nav" aria-label="Building a pipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extended-notes" class="md-nav__link">
+    Extended Notes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extending_photonai_graph/" class="md-nav__link">
+        Extending PHOTONAI Graph
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          API
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/introduction/" class="md-nav__link">
+        API Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/graph_construction/" class="md-nav__link">
+        Graph Construction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/graph_conversions/" class="md-nav__link">
+        Graph Conversions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/population_averaging/" class="md-nav__link">
+        Population Averaging
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/dynamic_utils/" class="md-nav__link">
+        Dynamic Utilities
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/graph_measures/" class="md-nav__link">
+        Graph Measures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/graph_embeddings/" class="md-nav__link">
+        Graph Embeddings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/graph_kernels/" class="md-nav__link">
+        Graph Kernels
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/graph_convnets/" class="md-nav__link">
+        Graph Neural Networks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/graph_utilities/" class="md-nav__link">
+        Graph Utilities
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/graph_controllability/" class="md-nav__link">
+        Graph Controllability
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Examples" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/networkx_pipeline/" class="md-nav__link">
+        Networkx example
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_2" type="checkbox" id="__nav_7_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_2">
+          Graph Embeddings
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Graph Embeddings" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          Graph Embeddings
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/GraphEmbedding_lem_example/" class="md-nav__link">
+        Graph Embeding LEM Example
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/GraphEmbedding_lle_example/" class="md-nav__link">
+        Graph Embedding LLE Example
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_3" type="checkbox" id="__nav_7_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_3">
+          Graph Neural Networks
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Graph Neural Networks" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_3">
+          <span class="md-nav__icon md-icon"></span>
+          Graph Neural Networks
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/GraphNN_classification_example/" class="md-nav__link">
+        GraphNN Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/GraphNN_regression_example/" class="md-nav__link">
+        Graph Neural Network regression example
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_4" type="checkbox" id="__nav_7_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_4">
+          Graph Kernels
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Graph Kernels" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          Graph Kernels
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/GraphKernel_PyramidMatch_example/" class="md-nav__link">
+        Graph Kernel Pyramid Match example
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/GraphKernel_SVMtheta_example/" class="md-nav__link">
+        Graph Kernel SVM theta example
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_5" type="checkbox" id="__nav_7_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_5">
+          Graph Measures
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Graph Measures" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_5">
+          <span class="md-nav__icon md-icon"></span>
+          Graph Measures
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/GraphMeasure_extraction_example/" class="md-nav__link">
+        Graph Measure extraction example
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/GraphMeasure_pipeline_example/" class="md-nav__link">
+        Graph Measure Pipeline example
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/GraphLitmusTest/" class="md-nav__link">
+        Graph Litmus Test
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/wwu-mmll/photonai-graph/edit/master/documentation/docs/workflow.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="workflow">Workflow</h1>
+<p>The starting point for PHOTON Graph can be either connectivity matrices or data that is already in a graph 
+format. Depending on your starting point, there are different 
+ways in which you will have set up your pipeline. In the case that you have connectivity matrices, 
+you will need to use graph constructors to turn those connectivity matrices into adjacency matrices. 
+After that you can choose from different options of doing machine learning with your graph data.</p>
+<pre class="mermaid"><code>graph TD
+    A[Connectivity Matrices] --&gt; B(Graph Constructor)
+    B --&gt; C{Graph Data}
+    C --&gt; D[Graph Embedding]
+    C --&gt; E[Graph Kernel]
+    C --&gt; F[Graph Measures]
+    C --&gt; G[Graph Neural Network]
+    D --&gt; H["Classical" Machine Learning]
+    E --&gt; H
+    F --&gt; H</code></pre>
+<h3 id="connectivity-matrices">Connectivity matrices</h3>
+<p>If you have connectivity matrices as your starting point, these might be noisy and densely connected, 
+as for example in the case of resting state functional connectivity in the area of neuroscience. 
+In order to reduce the amount connections and possibly reduce noise, one could threshold the graph so 
+weak connections will be discarded. </p>
+<div class="highlight"><span class="filename">Python</span><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">photonai_graph.GraphConstruction</span> <span class="kn">import</span> <span class="n">GraphConstructorThreshold</span>
+
+<span class="c1"># Generate dummy data</span>
+<span class="n">example_graph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<span class="n">example_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># Init GraphConstructorThreshold object</span>
+<span class="n">constructor</span> <span class="o">=</span> <span class="n">GraphConstructorThreshold</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">constructor</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">example_graph</span><span class="p">,</span> <span class="n">example_target</span><span class="p">)</span>
+
+<span class="c1"># Create graph from matrix</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">constructor</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">example_graph</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>This is not the only possible way to construct adjacency matrices, 
+and many more methods have been implemented, which can be found in the <a href="../api/graph_construction/">graph constructor section</a>.</p>
+</div>
+<p>After transforming your matrix, using a graph constructor you can then use this matrix to do machine learning with it.</p>
+<h2 id="photonai-graph-internal-datastructure">PHOTONAI Graph internal datastructure</h2>
+<p>PHOTONAI Graph expects the graphs to be embedded in an 4 dimensional ndarray. Graph Constructors are 
+automatically transforming your input data into the desired format. If you want to preprocess your data
+in an external library and later use PHOTONAI Graph, you have to take care of the input by yourself.</p>
+<p>The shape of the input has to be in this format:</p>
+<div class="arithmatex">\[
+[100, 20, 20, 4]
+\]</div>
+<p>Here we have defined</p>
+<ul>
+<li>100 Subjects</li>
+<li>20 Nodes per subject (20x20 adjacency matrix)</li>
+<li>4 Channels. The first channel is usually the adjacency (adjacency_axis), 
+other channels might for example contain node or edge features</li>
+</ul>
+<div class="admonition danger">
+<p class="admonition-title">Sparse matrices</p>
+<p>Currently there is no support for sparse input matrices.
+Dense matrices are suitable for many small graphs, as usually the case in neuroscience environments.</p>
+</div>
+<h2 id="machine-learning-on-graphs">Machine Learning on Graphs</h2>
+<p>Once you have a graph structure, you can then use this graph structure to do machine learning on it in a variety of ways.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Before running the analysis make sure if it should run using classical machine learning or deep learning with graph
+neural networks.</p>
+</div>
+<h4 id="classical-machine-learning">Classical Machine Learning</h4>
+<p>For classical Machine Learning approaches we have to extract features from the graphs.
+PHOTONAI Graph offers different options for extracting features:</p>
+<details class="tip">
+<summary><a href="../api/graph_embeddings/">Graph Embeddings</a></summary>
+<p>Graph Embeddings are a way to learn a low dimensional representation of a graph. 
+Through a graph embedding a graph can be represented in low dimensional form, while preserving graph
+information. This low-dimensional representation can then be used for training classic machine learning algorithms
+that would otherwise make no use of the graph information.</p>
+</details>
+<details class="tip">
+<summary><a href="../api/graph_measures/">Graph Measures</a></summary>
+<p>Graph measures or metrics are values that capture graph properties like efficiency. 
+As these measures capture information across the entire graph, or for nodes, edges or subgraphs, 
+they can be used to study graph properties. 
+These measures can also be used as a low-dimensional representation of the graph in machine learning tasks.</p>
+</details>
+<details class="tip">
+<summary><a href="../api/graph_kernels/">Graph Kernels</a></summary>
+<p>Graph Kernels are learnable functions that map the graph structure into a lower dimensional representation 
+and are commonly used to solve different problems in graph classification, or regression.</p>
+</details>
+<p>After the data is transformed into a feature representation a standard PHOTONAI pipeline can be used to 
+predict on the graph data. For more details consult the <a href='https://wwu-mmll.github.io/photonai/' target='_blank'>PHOTONAI documentation</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All of the <a href='https://wwu-mmll.github.io/photonai/algorithms/estimators/' target='_blank'>PHOTONAI estimators</a>
+can be used directly with PHOTONAI Graph.</p>
+</div>
+<h4 id="deep-learning">Deep Learning</h4>
+<p>In contrast, Graph Neural Nets are modified neural networks, that learn directly on graphs and make use of graph 
+information. Here different architectures are available, and no transformation step is required prior to the network.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If using Graph Neural Networks your data has to be in graph format. If you extract metadata from your graph
+using a PHOTONAI Graph transformer, the application of Graph Neural Networks is not possible.</p>
+</div>
+<p>PHOTONAI Graph already provides some <a href="../api/graph_convnets/">Graph Neural Networks</a>. However, additional models can
+be added by <a href="../extending_photonai_graph/">extending PHOTONAI Graph</a>.</p>
+<h3 id="building-a-pipeline">Building a pipeline</h3>
+<p>When building a pipeline, the elements are highly dependent on your input data.
+If the input data is a connectivity matrix this has to be transformed into a graph at first.
+For illustrative purposes the example will consider the case where the input data is a connectivity matrix.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>PHOTONAI Graph provides functions for generation of dummy connectivity matrices.</p>
+</div>
+<p>The next necessary decision is if the graph should be transformed into features for a subsequent classic
+machine learning pipeline or directly fed into a deep learning model.</p>
+<h4 id="example">Example</h4>
+<div class="highlight"><span class="filename">Python</span><pre><span></span><code><span class="kn">from</span> <span class="nn">photonai.base</span> <span class="kn">import</span> <span class="n">Hyperpipe</span><span class="p">,</span> <span class="n">PipelineElement</span>
+<span class="kn">from</span> <span class="nn">photonai_graph.GraphUtilities</span> <span class="kn">import</span> <span class="n">get_random_connectivity_data</span><span class="p">,</span> <span class="n">get_random_labels</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">KFold</span>
+
+<span class="c1"># make random matrices to simulate connectivity matrices</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">get_random_connectivity_data</span><span class="p">(</span><span class="n">number_of_nodes</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">number_of_individuals</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">get_random_labels</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="n">number_of_labels</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Design your Pipeline</span>
+<span class="n">my_pipe</span> <span class="o">=</span> <span class="n">Hyperpipe</span><span class="p">(</span><span class="s1">&#39;basic_gembedding_pipe&#39;</span><span class="p">,</span>
+                    <span class="n">inner_cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+                    <span class="n">outer_cv</span><span class="o">=</span><span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+                    <span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;sk_opt&#39;</span><span class="p">,</span>
+                    <span class="n">optimizer_params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;n_configurations&#39;</span><span class="p">:</span> <span class="mi">25</span><span class="p">},</span>
+                    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mean_absolute_error&#39;</span><span class="p">],</span>
+                    <span class="n">best_config_metric</span><span class="o">=</span><span class="s1">&#39;mean_absolute_error&#39;</span><span class="p">)</span>
+
+<span class="n">my_pipe</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">PipelineElement</span><span class="p">(</span><span class="s1">&#39;GraphConstructorThreshold&#39;</span><span class="p">,</span>
+                            <span class="n">hyperparameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;threshold&#39;</span><span class="p">:</span> <span class="mf">0.95</span><span class="p">}))</span>
+
+<span class="n">my_pipe</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">PipelineElement</span><span class="p">(</span><span class="s1">&#39;GraphEmbeddingHOPE&#39;</span><span class="p">))</span>
+
+<span class="n">my_pipe</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">PipelineElement</span><span class="p">(</span><span class="s1">&#39;SVR&#39;</span><span class="p">))</span>
+
+<span class="n">my_pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="extended-notes">Extended Notes</h3>
+<p>PHOTON Graph is written in such a way that each function is sklearn compatible. This means that every method can also used in custom pipelines outside of the PHOTON framework.</p>
+
+              
+            </article>
+            
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../getting_started/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Getting Started" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Getting Started
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../extending_photonai_graph/" class="md-footer__link md-footer__link--next" aria-label="Next: Extending PHOTONAI Graph" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Extending PHOTONAI Graph
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/wwu_mmll" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["toc.integrate"], "search": "../assets/javascripts/workers/search.b97dbffb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.6c7ad80a.min.js"></script>
+      
+        <script src="../assets/javascript/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

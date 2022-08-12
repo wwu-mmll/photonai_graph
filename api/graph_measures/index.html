@@ -1,0 +1,1490 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/img/photonai-02.png">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.3.9">
+    
+    
+      
+        <title>Graph Measures - PHOTONAI - Graph</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.1d29e8d0.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cbb835fc.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#009485">
+        
+      
+      
+    
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/material.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#graph-measures" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PHOTONAI - Graph" class="md-header__button md-logo" aria-label="PHOTONAI - Graph" data-md-component="logo">
+      
+  <img src="../../assets/img/photonai-01.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PHOTONAI - Graph
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Graph Measures
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/wwu-mmll/photonai-graph" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    photonai-graph
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PHOTONAI - Graph" class="md-nav__button md-logo" aria-label="PHOTONAI - Graph" data-md-component="logo">
+      
+  <img src="../../assets/img/photonai-01.png" alt="logo">
+
+    </a>
+    PHOTONAI - Graph
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/wwu-mmll/photonai-graph" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    photonai-graph
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/" class="md-nav__link">
+        Getting Started
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workflow/" class="md-nav__link">
+        PHOTONAI Graph Workflow
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extending_photonai_graph/" class="md-nav__link">
+        Extending PHOTONAI Graph
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          API
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction/" class="md-nav__link">
+        API Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graph_construction/" class="md-nav__link">
+        Graph Construction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graph_conversions/" class="md-nav__link">
+        Graph Conversions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../population_averaging/" class="md-nav__link">
+        Population Averaging
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dynamic_utils/" class="md-nav__link">
+        Dynamic Utilities
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Graph Measures
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Graph Measures
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#graphmeasuretransform" class="md-nav__link">
+    GraphMeasureTransform
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#available-measures" class="md-nav__link">
+    Available Measures
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graph_embeddings/" class="md-nav__link">
+        Graph Embeddings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graph_kernels/" class="md-nav__link">
+        Graph Kernels
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graph_convnets/" class="md-nav__link">
+        Graph Neural Networks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graph_utilities/" class="md-nav__link">
+        Graph Utilities
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../graph_controllability/" class="md-nav__link">
+        Graph Controllability
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Examples" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/networkx_pipeline/" class="md-nav__link">
+        Networkx example
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_2" type="checkbox" id="__nav_7_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_2">
+          Graph Embeddings
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Graph Embeddings" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          Graph Embeddings
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/GraphEmbedding_lem_example/" class="md-nav__link">
+        Graph Embeding LEM Example
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/GraphEmbedding_lle_example/" class="md-nav__link">
+        Graph Embedding LLE Example
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_3" type="checkbox" id="__nav_7_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_3">
+          Graph Neural Networks
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Graph Neural Networks" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_3">
+          <span class="md-nav__icon md-icon"></span>
+          Graph Neural Networks
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/GraphNN_classification_example/" class="md-nav__link">
+        GraphNN Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/GraphNN_regression_example/" class="md-nav__link">
+        Graph Neural Network regression example
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_4" type="checkbox" id="__nav_7_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_4">
+          Graph Kernels
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Graph Kernels" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          Graph Kernels
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/GraphKernel_PyramidMatch_example/" class="md-nav__link">
+        Graph Kernel Pyramid Match example
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/GraphKernel_SVMtheta_example/" class="md-nav__link">
+        Graph Kernel SVM theta example
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_5" type="checkbox" id="__nav_7_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_5">
+          Graph Measures
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Graph Measures" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_5">
+          <span class="md-nav__icon md-icon"></span>
+          Graph Measures
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/GraphMeasure_extraction_example/" class="md-nav__link">
+        Graph Measure extraction example
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/GraphMeasure_pipeline_example/" class="md-nav__link">
+        Graph Measure Pipeline example
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/GraphLitmusTest/" class="md-nav__link">
+        Graph Litmus Test
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/wwu-mmll/photonai-graph/edit/master/documentation/docs/api/graph_measures.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="graph-measures">Graph Measures</h1>
+<p>Graph measures or metrics are values that capture graph properties like efficiency. As these measures capture information across the entire graph, or for nodes, edges or subgraphs, they can be used to study graph properties. These measures can also be used as a low-dimensional representation of the graph in machine learning tasks. Since graph measures capture information across the entire graph, they make use of information that would otherwise be lost if one chose to only use node features or a vectorized connectivity matrix for example.</p>
+<h2 id="graphmeasuretransform">GraphMeasureTransform</h2>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+  <div class="doc doc-contents first">
+  
+      <p>The GraphMeasureTransform class is a class for extracting graph measures from graphs.
+A range of networkx graph measures is available and can be used in a PHOTON pipeline or extracted and
+written to a csv file for further use.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>graph_functions</code></td>
+          <td>
+                <code>dict</code>
+          </td>
+          <td><p>a dict of graph functions to calculate with keys as the networkx function name and a dict of the arguments
+as the value. In this second dictionary, the keys are the functions arguments and values are the desired
+values for the argument.</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>adjacency_axis</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>Channel index for adjacency</p></td>
+          <td>
+                <code>0</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>logs</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td><p>path to the log data</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>n_processes</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td><p>Number of processes for multi processing</p></td>
+          <td>
+                <code>1</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><span class="filename">Python</span><pre><span></span><code><span class="n">measuretrans</span> <span class="o">=</span> <span class="n">GraphMeasureTransform</span><span class="p">(</span><span class="n">graph_functions</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;large_clique_size&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                                                      <span class="s2">&quot;global_efficiency&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                                                      <span class="s2">&quot;overall_reciprocity&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                                                      <span class="s2">&quot;local_efficiency&quot;</span><span class="p">:</span> <span class="p">{}})</span>
+</code></pre></div>
+
+  </div>
+
+</div><h2 id="available-measures">Available Measures</h2>
+<p>The following measures are available. They are different networkx functions that calculate these measures. Be warned that, depending on your graph, these measures might take very long to calculate. Also some measures are only available as part of a pipeline, while some are also available for extraction (see accompanying table).</p>
+<table>
+<thead>
+<tr>
+<th>Measure</th>
+<th>Name in Dict</th>
+<th>available for extract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Node connectivity for all pairs</td>
+<td>all_pairs_node_connectivity</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Local node connectivity</td>
+<td>local_node_connectivity</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Node connectivity</td>
+<td>node_connectivity</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>K component structure</td>
+<td>k_components</td>
+<td>No</td>
+</tr>
+<tr>
+<td>large clique size</td>
+<td>large_clique_size</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Average clustering Coefficient</td>
+<td>average_clustering</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Treewidth decomposition (Minimum Degree Heuristic)</td>
+<td>treewidth_min_degree</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Treewidth decomposition (Minimum Fill-in heuristic)</td>
+<td>treewidth_min_fill_in</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Degree assortativity of graph</td>
+<td>degree_assortativity_coefficient</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Attribute assortativity of graph</td>
+<td>attribute_assortativity_coefficient</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Numeric assortativity of graph</td>
+<td>numeric_assortativity_coefficient</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Degree assortaivity of graph (scipy implmenetation)</td>
+<td>degree_pearson_correlation_coefficient</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Average neighbour degree node-wise</td>
+<td>average_neighbor_degree</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Average degree connectivity of graph</td>
+<td>average_degree_connectivity</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Average degree connectivity of graph (kNN implementation)</td>
+<td>k_nearest_neighbors</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Degree centrality (node-wise)</td>
+<td>degree_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>In-degree centrality (node-wise)</td>
+<td>in_degree_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Out-degree centrality (node-wise)</td>
+<td>out_degree_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Eigenvector centrality (node-wise)</td>
+<td>eigenvector_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Katz centrality (node-wise)</td>
+<td>katz_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Closeness centrality (node-wise)</td>
+<td>closeness_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Incremental closeness centrality (node-wise)</td>
+<td>incremental_closeness_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Current flow closeness centrality (node-wise)</td>
+<td>current_flow_closeness_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Information centrality (node-wise)</td>
+<td>information_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Betweeness centrality (node-wise)</td>
+<td>betweenness_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Betweeness centrality (node-wise) on a subset of nodes</td>
+<td>betweenness_centrality_subset</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Betweeness centrality (edge-wise) on a subset of edges</td>
+<td>edge_betweenness_centrality_subset</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Current flow betweeness centrality (node-wise)</td>
+<td>current_flow_betweenness_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Current flow betweeness centrality (edge-wise)</td>
+<td>enedge_current_flow_betweenness_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Approximate current flow betweeness centrality (node-wise)</td>
+<td>approximate_current_flow_betweenness_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Current flow betweeness centrality (node-wise) on a subset of nodes</td>
+<td>current_flow_betweenness_centrality_subset</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Current flow betweeness centrality (edge-wise) on a subset of edges</td>
+<td>edge_current_flow_betweenness_centrality_subset</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Communicability betweeness centrality (noe-wise)</td>
+<td>communicability_betweenness_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Betweeness centrality (group-wise)</td>
+<td>group_betweenness_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Closeness centrality (group-wise)</td>
+<td>group_closeness_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Degree centrality (group-wise)</td>
+<td>group_degree_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>In-degree centrality (group-wise)</td>
+<td>group_in_degree_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Out-degree centrality (group-wise)</td>
+<td>group_out_degree_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Load centrality (node-wise)</td>
+<td>load_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Load centrality (edge-wise)</td>
+<td>edge_load_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Subgraph centrality (node-wise)</td>
+<td>subgraph_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Subgraph centrality (node-wise, exponent implementation)</td>
+<td>subgraph_centrality_exp</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Estrada Index</td>
+<td>estrada_index</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Harmonic centrality (node-wise)</td>
+<td>harmonic_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Dispersion</td>
+<td>dispersion</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Local reaching centrality</td>
+<td>local_reaching_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Global reaching centrality</td>
+<td>global_reaching_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Perlocation centrality (node-wise)</td>
+<td>percolation_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Second-order centrality (node-wise)</td>
+<td>second_order_centrality</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Voterank via VoteRank algorithm</td>
+<td>voterank</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Size of largest clique</td>
+<td>graph_clique_number</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Number of maximal cliques in graph</td>
+<td>graph_number_of_cliques</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Size of largest clique containing each specified node</td>
+<td>node_clique_number</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Number of cliques for each specified node</td>
+<td>number_of_cliques</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Number of Triangles</td>
+<td>triangles</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Transivity</td>
+<td>transitivity</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Clustering coefficient for specified nodes</td>
+<td>clustering</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Square Clustering (node-wise)</td>
+<td>square_clustering</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Communicability</td>
+<td>communicability</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Communicability (exponent implmenetation)</td>
+<td>communicability_exp</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Number of connected components</td>
+<td>number_connected_components</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Number of strongly connected components</td>
+<td>number_strongly_connected_components</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Number of weakly connected components</td>
+<td>number_weakly_connected_components</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Number of attracting components</td>
+<td>number_attracting_components</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Average Node connectivity</td>
+<td>average_node_connectivity</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Edge connectivity</td>
+<td>edge_connectivity</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Local Edge connectivity</td>
+<td>local_edge_connectivity</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Core number (node-wise)</td>
+<td>core_number</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Onion layers (node-wise)</td>
+<td>onion_layers</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Boundary expansion (set-wise)</td>
+<td>boundary_expansion</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Conductance between two sets of nodes</td>
+<td>conductance</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Cut size between two sets of nodes</td>
+<td>cut_size</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Edge expansion between two sets of nodes</td>
+<td>edge_expansion</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Mixing expansion between two sets of nodes</td>
+<td>mixing_expansion</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Volume between two sets of nodes</td>
+<td>volume</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Diameter</td>
+<td>diameter</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Eccentricity</td>
+<td>eccentricity</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Radius</td>
+<td>radius</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Resistance Distance between node A and B</td>
+<td>resistance_distance</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Efficiency between node A and B</td>
+<td>efficiency</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Local efficiency</td>
+<td>local_efficiency</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Global efficiency</td>
+<td>global_efficiency</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Flow hierarchy</td>
+<td>flow_hierarchy</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Number of isolates</td>
+<td>number_of_isolates</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>PageRank value (node-wise)</td>
+<td>pagerank</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>HITS hubs and authorities</td>
+<td>hits</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Non-randomness</td>
+<td>non_randomness</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Reciprocity (node-wise)</td>
+<td>reciprocity</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Overall reciprocity</td>
+<td>overall_reciprocity</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Rich-club coefficient</td>
+<td>rich_club_coefficient</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Average shortest path length</td>
+<td>average_shortest_path_length</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Small-world coefficient sigma</td>
+<td>sigma</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Small-world coefficient omega</td>
+<td>omega</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>S-metric</td>
+<td>s_metric</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Constraint (node-wise)</td>
+<td>constraint</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Effective Size (node-wise)</td>
+<td>effective_size</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Local constraint of node A with respect to node B</td>
+<td>local_constraint</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Triadic census</td>
+<td>triadic_census</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Closeness vitality</td>
+<td>closeness_vitality</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Wiener Index</td>
+<td>wiener_index</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+
+              
+            </article>
+            
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../dynamic_utils/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Dynamic Utilities" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Dynamic Utilities
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../graph_embeddings/" class="md-footer__link md-footer__link--next" aria-label="Next: Graph Embeddings" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Graph Embeddings
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/wwu_mmll" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["toc.integrate"], "search": "../../assets/javascripts/workers/search.b97dbffb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.6c7ad80a.min.js"></script>
+      
+        <script src="../../assets/javascript/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
