@@ -18,9 +18,7 @@ theme:
   palette:
     primary: 'teal'
     accent: 'teal'
-  font:
-    text: 'Roboto'
-    code: 'Space Mono'
+  font: false
   logo: assets/img/photonai-01.png
   favicon: assets/img/photonai-02.png
   features:
