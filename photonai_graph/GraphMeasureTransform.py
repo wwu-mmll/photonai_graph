@@ -24,10 +24,9 @@ Universitaetsklinikum Muenster
 # TODO: make documentation for every single method
 
 import networkx
-from tqdm.contrib.concurrent import thread_map
+from tqdm.contrib.concurrent import process_map
 from functools import partial
 from sklearn.base import BaseEstimator, TransformerMixin
-import networkx as nx
 import pandas as pd
 import numpy as np
 import json
@@ -101,7 +100,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
 
         if self.n_processes > 1:
             pfn = partial(self._compute_graph_metrics, graph_functions=self.graph_functions, measure_j=measure_j)
-            x_transformed = thread_map(pfn, graphs, max_workers=self.n_processes)
+            x_transformed = process_map(pfn, graphs, max_workers=self.n_processes)
         else:
             for graph in graphs:
                 measure_list_graph = self._compute_graph_metrics(graph, self.graph_functions, measure_j)

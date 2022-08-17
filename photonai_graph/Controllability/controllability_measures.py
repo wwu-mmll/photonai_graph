@@ -1,9 +1,11 @@
 import os
 from typing import List
+from functools import partial
 
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
+from tqdm.contrib.concurrent import process_map
 
 from photonai_graph.Controllability.controllability_functions import modal_control, \
     average_control
@@ -16,6 +18,7 @@ class ControllabilityMeasureTransform(BaseEstimator, TransformerMixin):
                  mod_control: int = 1,
                  ave_control: int = 1,
                  adjacency_axis: int = 0,
+                 n_processes: int = 0,
                  logs: str = None):
         """
             Class for extraction of controllability measures. Allows
@@ -29,11 +32,14 @@ class ControllabilityMeasureTransform(BaseEstimator, TransformerMixin):
                 Whether to calculate nodewise average controllability (1) or not (0).
             adjacency_axis: int,default=0
                 position of the adjacency matrix, default being zero
+            n_processes: int,default=0
+                Number of processes to use for multiprocessing
             logs: str,default=None
             """
         self.mod_control = mod_control
         self.ave_control = ave_control
         self.adjacency_axis = adjacency_axis
+        self.n_processes = n_processes
         if logs:
             self.logs = logs
         else:
@@ -45,21 +51,28 @@ class ControllabilityMeasureTransform(BaseEstimator, TransformerMixin):
     def fit(self, X, y):
         return self
 
+    def __calculate_controllability(self, X, subj):
+        vec = None
+        if self.mod_control:
+            vec = modal_control(X[subj, :, :, self.adjacency_axis])
+        if self.ave_control:
+            ac = average_control(X[subj, :, :, self.adjacency_axis])
+            if vec is None:
+                vec = ac
+            else:
+                vec = np.concatenate((vec, ac))
+        return vec
+
     def transform(self, X, as_array: bool = True):
 
         controllabilities = []
-        for subj in range(X.shape[0]):
-            vec = None
-            if self.mod_control:
-                vec = modal_control(X[subj, :, :, self.adjacency_axis])
-            if self.ave_control:
-                ac = average_control(X[subj, :, :, self.adjacency_axis])
-                if vec is None:
-                    vec = ac
-                else:
-                    vec = np.concatenate((vec, ac))
-
-            controllabilities.append(vec)
+        if self.n_processes == 0:
+            for subj in range(X.shape[0]):
+                vec = self.__calculate_controllability(X, subj)
+                controllabilities.append(vec)
+        else:
+            fn = partial(self.__calculate_controllability, X=X)
+            controllabilities = process_map(fn, np.arange(X.shape[0]))
         if not as_array:
             return controllabilities
 
