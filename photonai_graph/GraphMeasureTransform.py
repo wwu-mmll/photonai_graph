@@ -138,7 +138,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
             measure = measure_j[key]
             # remove self loops if not allowed
             if not measure['self_loops_allowed']:
-                graph.remove_edges_from(networkx.selfloop_edges(graph))
+                graph.remove_edges_from(nx.selfloop_edges(graph))
             # make photonai_graph directed or undirected depending on what is needed
             if measure['Undirected']:
                 graph.to_undirected()
@@ -146,7 +146,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                 graph.to_directed()
 
             # call function
-            results = getattr(networkx, measure["path"].split(".")[-1])(graph, **value)
+            results = getattr(nx, measure["path"].split(".")[-1])(graph, **value)
             measure_list = self.handle_outputs(results, measure_list)
 
             if "compute_average" in measure.keys() and measure['compute_average']:
