@@ -23,7 +23,7 @@ Universitaetsklinikum Muenster
 # TODO: make error messages for possible errors
 # TODO: make documentation for every single method
 
-import networkx
+import networkx as nx
 from tqdm.contrib.concurrent import process_map
 from functools import partial
 from sklearn.base import BaseEstimator, TransformerMixin
