@@ -144,7 +144,7 @@ class GraphConstructorSpatial(GraphConstructor):
             coords = np.load(coords_file)
             coords = np.delete(coords, 82, axis=0)
 
-        elif atlas_name != 'ho' and not root_folder:
+        elif atlas_name != 'ho' and root_folder is None:
             raise NotImplementedError('Automatic detection of atlases from photonai-neuro not implemented yet.'
                                       'Please wait for futures releases.')
         else:
