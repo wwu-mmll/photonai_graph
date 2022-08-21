@@ -11,7 +11,7 @@ class GraphConstructorSpatial(GraphConstructor):
     def __init__(self,
                  k_distance: int = 10,
                  atlas_name: str = 'ho',
-                 atlas_folder: str = "",
+                 atlas_folder: str = None,
                  one_hot_nodes: int = 0,
                  use_abs: int = 0,
                  fisher_transform: int = 0,
@@ -138,10 +138,17 @@ class GraphConstructorSpatial(GraphConstructor):
         returns:
             matrix       : matrix of roi 3D coordinates in MNI space (num_rois x 3)
         """
-        coords_file = os.path.join(root_folder, atlas_name + '_coords.csv')
-        coords = np.loadtxt(coords_file, delimiter=',')
-
         if atlas_name == 'ho':
+            folder = os.path.dirname(os.path.abspath(__file__))
+            coords_file = os.path.join(folder, 'ho_coords.csv')
+            coords = np.load(coords_file)
             coords = np.delete(coords, 82, axis=0)
+
+        elif atlas_name != 'ho' and not root_folder:
+            raise NotImplementedError('Automatic detection of atlases from photonai-neuro not implemented yet.'
+                                      'Please wait for futures releases.')
+        else:
+            coords_file = os.path.join(root_folder, atlas_name + '_coords.csv')
+            coords = np.loadtxt(coords_file, delimiter=',')
 
         return coords
