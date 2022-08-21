@@ -141,7 +141,7 @@ class GraphConstructorSpatial(GraphConstructor):
         if atlas_name == 'ho':
             folder = os.path.dirname(os.path.abspath(__file__))
             coords_file = os.path.join(folder, 'ho_coords.csv')
-            coords = np.load(coords_file)
+            coords = np.genfromtxt(coords_file, delimiter=',')
             coords = np.delete(coords, 82, axis=0)
 
         elif atlas_name != 'ho' and root_folder is None:
