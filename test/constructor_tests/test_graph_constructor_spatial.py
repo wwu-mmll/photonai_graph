@@ -72,7 +72,6 @@ class SpatialTests(unittest.TestCase):
         self.assertTrue((np.sum(ho_adj) > 190))
 
     def test_NotImplementedError(self):
-        g_constr = GraphConstructorSpatial(k_distance=3, atlas_name='test')
+        g_constr = GraphConstructorSpatial(k_distance=3, atlas_name='test', atlas_folder=None)
         with self.assertRaises(NotImplementedError):
-            g_constr.fit(self.XrandomHO4d, self.y)
-
+            g_constr.transform(self.XrandomHO4d)
