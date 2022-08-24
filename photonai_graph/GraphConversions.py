@@ -1,5 +1,6 @@
 import networkx as nx
 import numpy as np
+import igraph
 import warnings
 from photonai_graph.util import assert_imported
 
@@ -8,6 +9,26 @@ try:
     import torch
 except ImportError:  # pragma: no cover
     pass
+
+
+def dense_to_igraph(graphs: np.ndarray, adjacency_axis: int = None, feature_axis: int = None):
+    """
+    Converts dense matrices to igraph Graph objects
+    :param graphs:  np.ndarray or np.matrix
+                    graphs represented as dense format
+    :param adjacency_axis: int, default=None
+                           position of the adjacency axis
+    :param feature_axis: int, default=None
+                         position of the feature axis
+    :return: igraph_graphs: Converted list of Igraph objects
+    """
+    if adjacency_axis is None:
+        warnings.warn("No adjacency passed. Guessing that adjacency is in first channel...")
+        adjacency_axis = 0
+    igraph_graphs = [igraph.Graph.Adjacency(graphs[i, ..., adjacency_axis]) for i in range(graphs.shape[0])]
+    if feature_axis is not None:
+        raise NotImplementedError("This feature is not implemented yet.")
+    return igraph_graphs
 
 
 def dense_to_networkx(graphs: np.ndarray, adjacency_axis: int = None, feature_axis=None):
