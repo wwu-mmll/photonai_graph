@@ -72,7 +72,7 @@ class IgraphMeasureTransform(BaseEstimator, TransformerMixin):
         """
         self.n_processes = n_processes
         if graph_functions is None:
-            graph_functions = {"global_efficiency": {}, "average_node_connectivity": {}}
+            graph_functions = {"degree": {}, "eigenvector_centrality": {}}
         self.graph_functions = graph_functions
         self.adjacency_axis = adjacency_axis
 
@@ -111,6 +111,11 @@ class IgraphMeasureTransform(BaseEstimator, TransformerMixin):
         return x_transformed
 
     def transform(self, X):
+        if not isinstance(X, (list, np.ndarray, np.matrix)):
+            raise TypeError('Input needs to list/ndarray of Igraph objects')
+        if not isinstance(X[0], igraph.Graph):
+            raise TypeError('Input needs to be list/ndarray or Igraph objects')
+
         X_transformed = self._inner_transform(X)
 
         for graph_idx in range(len(X_transformed)):
@@ -175,11 +180,7 @@ class IgraphMeasureTransform(BaseEstimator, TransformerMixin):
         x_graphs = x_graphs_in.copy()
         if ids is None:
             raise ValueError('No id provided')
-        if isinstance(x_graphs, np.ndarray):
-            # [..., 0] because we are discarding the feature axis
-            x_graphs = [nx.from_numpy_array(x_graphs[cid][..., 0]) for cid in ids]
-        else:
-            x_graphs = [x_graphs[cid] for cid in ids]
+
         X_transformed = self._inner_transform(x_graphs)
 
         measurements = []
