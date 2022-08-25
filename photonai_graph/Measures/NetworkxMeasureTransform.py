@@ -35,7 +35,7 @@ import os
 from photonai_graph.GraphConversions import dense_to_networkx
 
 
-class GraphMeasureTransform(BaseEstimator, TransformerMixin):
+class NetworkxMeasureTransform(BaseEstimator, TransformerMixin):
     _estimator_type = "transformer"
 
     def __init__(self,
@@ -160,7 +160,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         # handle results
         if isinstance(results, dict):
             for rskey, rsval in results.items():
-                GraphMeasureTransform.handle_outputs(rsval, measure_list)
+                NetworkxMeasureTransform.handle_outputs(rsval, measure_list)
             return measure_list
 
         if isinstance(results, list):
@@ -171,7 +171,7 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         # The second return value can be discarded in these functions
         if isinstance(results, tuple):
             for result in results:
-                GraphMeasureTransform.handle_outputs(result, measure_list)
+                NetworkxMeasureTransform.handle_outputs(result, measure_list)
             return measure_list
 
         if isinstance(results, nx.Graph):
