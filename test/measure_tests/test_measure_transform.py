@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 import networkx as nx
 import os
-from photonai_graph.GraphMeasureTransform import GraphMeasureTransform
+from photonai_graph.Measures.NetworkxMeasureTransform import GraphMeasureTransform
 
 
 class GraphMeasureTransformTests(unittest.TestCase):
