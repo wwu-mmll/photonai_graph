@@ -85,16 +85,14 @@ class NetworkxMeasureTransform(BaseEstimator, TransformerMixin):
     def _inner_transform(self, X):
         x_transformed = []
 
-        if isinstance(X, np.ndarray) or isinstance(X, np.matrix):
-            graphs = dense_to_networkx(X, adjacency_axis=self.adjacency_axis)
-        elif isinstance(X, list) and min([isinstance(g, nx.classes.graph.Graph) for g in X]):
+        if isinstance(X, (list, np.ndarray)) and min([isinstance(g, nx.classes.graph.Graph) for g in X]):
             graphs = X
         else:
-            raise TypeError("Input needs to be list of networkx graphs or numpy array.")
+            raise TypeError("Input needs to be list of networkx graphs or numpy array of networkx graphs.")
 
         # load json file
         base_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        measure_json = os.path.join(base_folder, 'photonai_graph/GraphMeasures.json')
+        measure_json = os.path.join(base_folder, 'GraphMeasures.json')
         with open(measure_json, 'r') as measure_json_file:
             measure_j = json.load(measure_json_file)
 

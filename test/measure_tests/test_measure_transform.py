@@ -18,12 +18,6 @@ class GraphMeasureTransformTests(unittest.TestCase):
         # generate nonsense input
         self.edge_dict = {(1, 0): 1, (2, 0): 1, (3, 0): 1}
 
-    def test_transform_input_mtrx(self):
-        g_transform = NetworkxMeasureTransform()
-        g_transform.fit(self.random_mtrx, self.y)
-        measures = g_transform.transform(self.random_mtrx)
-        self.assertEqual(measures.shape, (10, 2))
-
     def test_transform_nonsense_input(self):
         g_transform = NetworkxMeasureTransform()
         with self.assertRaises(TypeError):
@@ -38,14 +32,14 @@ class GraphMeasureTransformTests(unittest.TestCase):
 
     def test_transform_own_measures(self):
         g_transform = NetworkxMeasureTransform(graph_functions={"global_efficiency": {},
-                                                             "local_efficiency": {}})
+                                                                "local_efficiency": {}})
         g_transform.fit(self.X_nx, self.y)
         measures = g_transform.transform(self.X_nx)
         self.assertEqual(measures.shape, (10, 2))
 
     def test_transform_own_measures_parallel(self):
         g_transform = NetworkxMeasureTransform(graph_functions={"global_efficiency": {},
-                                                             "local_efficiency": {}},
+                                                                "local_efficiency": {}},
                                                n_processes=2)
         g_transform.fit(self.X_nx, self.y)
         measures = g_transform.transform(self.X_nx)
@@ -123,7 +117,7 @@ class GraphMeasureTransformTests(unittest.TestCase):
     def test_extract_own_measures(self):
         path = "/tmp/test.csv"
         g_transform = NetworkxMeasureTransform(graph_functions={"global_efficiency": {},
-                                                             "local_efficiency": {}})
+                                                                "local_efficiency": {}})
         g_transform.extract_measures(self.X_nx, path, self.ids)
         self.assertTrue(os.path.exists(path))
         os.remove(path)
