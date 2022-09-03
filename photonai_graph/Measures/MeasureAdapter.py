@@ -54,15 +54,7 @@ class GraphMeasureAdapter(BaseEstimator, TransformerMixin):
 
     def _inner_transform(self, X):
 
-        if self.output == 'networkx':
-            if isinstance(X, np.ndarray) or isinstance(X, np.matrix):
-                graphs = dense_to_networkx(X, adjacency_axis=self.adjacency_axis)
-            elif isinstance(X, list) and min([isinstance(g, nx.classes.graph.Graph) for g in X]):
-                graphs = X
-            else:
-                raise TypeError("Input needs to be list of networkx graphs or numpy array.")
-
-        elif self.output == 'igraph':
+        if self.output == 'igraph':
             if isinstance(X, np.ndarray) or isinstance(X, np.matrix):
                 graphs = dense_to_igraph(X, adjacency_axis=self.adjacency_axis)
             elif isinstance(X, list) and min([isinstance(g, igraph.Graph) for g in X]):

@@ -85,7 +85,9 @@ class NetworkxMeasureTransform(BaseEstimator, TransformerMixin):
     def _inner_transform(self, X):
         x_transformed = []
 
-        if isinstance(X, (list, np.ndarray)) and min([isinstance(g, nx.classes.graph.Graph) for g in X]):
+        if isinstance(X, np.ndarray):
+            graphs = dense_to_networkx(X, adjacency_axis=self.adjacency_axis)
+        elif isinstance(X, list) and min([isinstance(g, nx.classes.graph.Graph) for g in X]):
             graphs = X
         else:
             raise TypeError("Input needs to be list of networkx graphs or numpy array of networkx graphs.")
