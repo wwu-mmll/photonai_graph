@@ -5,6 +5,7 @@ import numpy as np
 import os
 
 from photonai_graph.GraphConversions import dense_to_networkx, dense_to_igraph
+from photonai_graph.util import NetworkxGraphWrapper
 
 
 class GraphMeasureAdapter(BaseEstimator, TransformerMixin):
@@ -61,6 +62,16 @@ class GraphMeasureAdapter(BaseEstimator, TransformerMixin):
                 graphs = X
             else:
                 raise TypeError("Input needs to a list of igraph graphs or numpy array")
+
+        elif self.output == 'networkx':
+            if isinstance(X, np.ndarray) or isinstance(X, np.matrix):
+                graphs = dense_to_networkx(X, adjacency_axis=self.adjacency_axis)
+            elif isinstance(X, list) and min([isinstance(g, nx.Graph) for g in X]):
+                graphs = X
+            else:
+                raise TypeError("Input has to be a list of networkx graphs or numpy array.")
+
+            graphs = [NetworkxGraphWrapper(g) for g in graphs]
 
         else:
             raise NotImplementedError('Can only convert to networkx or igraph.'

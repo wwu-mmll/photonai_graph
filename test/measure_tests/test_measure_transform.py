@@ -3,14 +3,17 @@ import unittest
 import numpy as np
 import networkx as nx
 import os
+
+
 from photonai_graph.Measures.NetworkxMeasureTransform import NetworkxMeasureTransform
+from photonai_graph.util import NetworkxGraphWrapper
 
 
 class GraphMeasureTransformTests(unittest.TestCase):
 
     def setUp(self):
         gs = np.load(os.path.dirname(__file__) + '/X_test.npz')['arr_0']
-        self.X_nx = [nx.from_numpy_array(gs[i]) for i in range(gs.shape[0])]
+        self.X_nx = [NetworkxGraphWrapper(nx.from_numpy_array(gs[i])) for i in range(gs.shape[0])]
         self.y = np.random.rand(10)
         self.ids = list(range(10))
         # generate random matrices
