@@ -8,7 +8,7 @@
       "Transformer"
    ],
    "IgraphMeasureTransform": [
-      "photonai_graph.Measures.IgraphMeasureTransform.IGraphMeasureTransform",
+      "photonai_graph.Measures.IgraphMeasureTransform.IgraphMeasureTransform",
       "Transformer"
    ],
    "MeasureAdapter": [
