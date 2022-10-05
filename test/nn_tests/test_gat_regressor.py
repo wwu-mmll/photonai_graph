@@ -20,6 +20,12 @@ class GATRegressorTests(unittest.TestCase):
         output = gat_clf.predict(self.Xrandom4d)
         self.assertEqual(output.shape, self.y.shape)
 
+    def test_gat_regressor_output_shape_valset(self):
+        gat_clf = GATRegressorModel(nn_epochs=20, verbose=True, validation_score=True)
+        gat_clf.fit(self.Xrandom4d, self.y)
+        output = gat_clf.predict(self.Xrandom4d)
+        self.assertEqual(output.shape, self.y.shape)
+
     def test_gat_regressor_output_hidden_dim(self):
         gat_clf = GATRegressorModel(hidden_dim=128)
         gat_clf.fit(self.Xrandom4d, self.y)
