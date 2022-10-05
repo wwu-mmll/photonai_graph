@@ -39,5 +39,6 @@ setup(
                       'pandas>=1.1.2',
                       'numpy>=1.12.2',
                       'scipy>=0.19.1',
-                      'tqdm']
+                      'tqdm',
+                      'igraph']
 )

@@ -1,5 +1,6 @@
 import sys
 
+import networkx as nx
 from photonai.base import PhotonRegistry
 import os
 try:
@@ -43,3 +44,8 @@ def assert_imported(packages: list = None):  # pragma: no cover
             return True
         else:
             raise ImportError(f"Could not load {package}. Please install it according to the documentation")
+
+
+class NetworkxGraphWrapper:
+    def __init__(self, graph_to_wrap: nx.Graph = None):
+        self.inner_graph = graph_to_wrap

@@ -10,3 +10,4 @@ scipy
 tensorflow
 torch
 tqdm
+igraph

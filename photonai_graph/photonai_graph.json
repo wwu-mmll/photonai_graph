@@ -3,8 +3,16 @@
       "photonai_graph.PopulationAveragingTransform.PopulationAveragingTransform",
       "Transformer"
    ],
-   "GraphMeasureTransform":[
-      "photonai_graph.GraphMeasureTransform.GraphMeasureTransform",
+   "NetworkxMeasureTransform":[
+      "photonai_graph.Measures.NetworkxMeasureTransform.NetworkxMeasureTransform",
+      "Transformer"
+   ],
+   "IgraphMeasureTransform": [
+      "photonai_graph.Measures.IgraphMeasureTransform.IGraphMeasureTransform",
+      "Transformer"
+   ],
+   "MeasureAdapter": [
+      "photonai.Measures.MeasureAdapter.MeasureAdapter",
       "Transformer"
    ],
    "GraphConstructorKNN":[

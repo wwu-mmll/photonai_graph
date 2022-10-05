@@ -23,19 +23,21 @@ Universitaetsklinikum Muenster
 # TODO: make error messages for possible errors
 # TODO: make documentation for every single method
 
-import networkx as nx
-from tqdm.contrib.concurrent import process_map
+import igraph
+from tqdm.contrib.concurrent import thread_map
 from functools import partial
 from sklearn.base import BaseEstimator, TransformerMixin
+import networkx as nx
 import pandas as pd
 import numpy as np
 import json
 import os
 
 from photonai_graph.GraphConversions import dense_to_networkx
+from photonai_graph.Measures.AbstractMeasureTransform import AbstractMeasureTransform
 
 
-class GraphMeasureTransform(BaseEstimator, TransformerMixin):
+class IgraphMeasureTransform(AbstractMeasureTransform):
     _estimator_type = "transformer"
 
     def __init__(self,
@@ -69,10 +71,10 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                                                               "local_efficiency": {}})
         ```
         """
+        super(IgraphMeasureTransform, self).__init__(graph_functions=graph_functions)
+        if self.graph_functions is None:
+            self.graph_functions = {"degree": {}, "eigenvector_centrality": {}}
         self.n_processes = n_processes
-        if graph_functions is None:
-            graph_functions = {"global_efficiency": {}, "average_node_connectivity": {}}
-        self.graph_functions = graph_functions
         self.adjacency_axis = adjacency_axis
 
         self.logs = logs
@@ -85,47 +87,32 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
     def _inner_transform(self, X):
         x_transformed = []
 
-        if isinstance(X, np.ndarray) or isinstance(X, np.matrix):
-            graphs = dense_to_networkx(X, adjacency_axis=self.adjacency_axis)
-        elif isinstance(X, list) and min([isinstance(g, nx.classes.graph.Graph) for g in X]):
-            graphs = X
-        else:
-            raise TypeError("Input needs to be list of networkx graphs or numpy array.")
+        graphs = X
 
         # load json file
         base_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        measure_json = os.path.join(base_folder, 'photonai_graph/GraphMeasures.json')
+        measure_json = os.path.join(base_folder, 'IgraphMeasures.json')
         with open(measure_json, 'r') as measure_json_file:
             measure_j = json.load(measure_json_file)
 
         if self.n_processes > 1:
             pfn = partial(self._compute_graph_metrics, graph_functions=self.graph_functions, measure_j=measure_j)
-            x_transformed = process_map(pfn, graphs, max_workers=self.n_processes)
+            x_transformed = thread_map(pfn, graphs, max_workers=self.n_processes)
         else:
             for graph in graphs:
                 measure_list_graph = self._compute_graph_metrics(graph, self.graph_functions, measure_j)
                 x_transformed.append(measure_list_graph)
 
-        for c_measure in range(len(self.graph_functions)):
-            expected_values = max([len(graph[c_measure]) for graph in x_transformed])
-            for graph in x_transformed:
-                if len(graph[c_measure]) < expected_values:
-                    graph[c_measure] = [np.NAN] * expected_values
-
-        return x_transformed
+        return self._shared_inner_transform(x_transformed=x_transformed)
 
     def transform(self, X):
-        X_transformed = self._inner_transform(X)
+        if not isinstance(X, (list, np.ndarray, np.matrix)):
+            raise TypeError('Input needs to list/ndarray of Igraph objects')
+        if not isinstance(X[0], igraph.Graph):
+            raise TypeError('Input needs to be list/ndarray or Igraph objects')
 
-        for graph_idx in range(len(X_transformed)):
-            g_m = list()
-            for measure in X_transformed[graph_idx]:
-                g_m.extend(measure)
-            X_transformed[graph_idx] = g_m
-
-        X_transformed = np.asarray(X_transformed)
-
-        return X_transformed
+        x_transformed = self._inner_transform(X)
+        return self._shared_transform(x_transformed=x_transformed)
 
     def _compute_graph_metrics(self, graph, graph_functions, measure_j):
         measure_list_graph = []
@@ -133,20 +120,12 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
             measure_list = list()
 
             if key not in measure_j:
-                raise ValueError(f"Measure functino {key} not found")
+                raise ValueError(f"Measure function {key} not found")
 
             measure = measure_j[key]
-            # remove self loops if not allowed
-            if not measure['self_loops_allowed']:
-                graph.remove_edges_from(nx.selfloop_edges(graph))
-            # make photonai_graph directed or undirected depending on what is needed
-            if measure['Undirected']:
-                graph.to_undirected()
-            elif not measure['Undirected']:
-                graph.to_directed()
 
             # call function
-            results = getattr(nx, measure["path"].split(".")[-1])(graph, **value)
+            results = getattr(graph, measure["path"].split(".")[-1])(**value)
             measure_list = self.handle_outputs(results, measure_list)
 
             if "compute_average" in measure.keys() and measure['compute_average']:
@@ -155,31 +134,6 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
                 measure_list_graph.append(measure_list)
         return measure_list_graph
 
-    @staticmethod
-    def handle_outputs(results, measure_list):
-        # handle results
-        if isinstance(results, dict):
-            for rskey, rsval in results.items():
-                GraphMeasureTransform.handle_outputs(rsval, measure_list)
-            return measure_list
-
-        if isinstance(results, list):
-            measure_list.extend(results)
-            return measure_list
-
-        # currently only networkx functions return tuples
-        # The second return value can be discarded in these functions
-        if isinstance(results, tuple):
-            for result in results:
-                GraphMeasureTransform.handle_outputs(result, measure_list)
-            return measure_list
-
-        if isinstance(results, nx.Graph):
-            return measure_list
-
-        measure_list.append(results)
-        return measure_list
-
     def get_measure_info(self):
         pass
 
@@ -187,22 +141,4 @@ class GraphMeasureTransform(BaseEstimator, TransformerMixin):
         x_graphs = x_graphs_in.copy()
         if ids is None:
             raise ValueError('No id provided')
-        if isinstance(x_graphs, np.ndarray):
-            # [..., 0] because we are discarding the feature axis
-            x_graphs = [nx.from_numpy_array(x_graphs[cid][..., 0]) for cid in ids]
-        else:
-            x_graphs = [x_graphs[cid] for cid in ids]
-        X_transformed = self._inner_transform(x_graphs)
-
-        measurements = []
-        for graph, gid in zip(X_transformed, ids):
-            for measurement_id, result in enumerate(graph):
-                for res in result:
-                    current_measurement = [gid, list(self.graph_functions.keys())[measurement_id], res]
-                    measurements.append(current_measurement)
-
-        df = pd.DataFrame(measurements)
-
-        col_names = ["graph_id", "measure", "value"]
-
-        df.to_csv(path_or_buf=path, header=col_names, index=None)
+        self._shared_extraction(x_graphs, ids, path)
