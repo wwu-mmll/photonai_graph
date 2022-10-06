@@ -47,7 +47,10 @@ class GCNClassifierModel(DGLClassifierBaseModel):
                  feature_axis: int = 1,
                  add_self_loops: bool = True,
                  allow_zero_in_degree: bool = False,
-                 logs: str = ''):
+                 validation_score: bool = False,
+                 verbose: bool = False,
+                 logs: str = '',
+                 **kwargs):
         """
         Graph Attention Network for graph classification. GCN Layers
         from Kipf & Welling, 2017.
@@ -62,7 +65,11 @@ class GCNClassifierModel(DGLClassifierBaseModel):
             number of hidden layers used by the model
         hidden_dim: int,default=256
             dimensions in the hidden layers
-
+        validation_score: bool,default=False
+            If true the input data is split into train and test (90%/10%).
+            The testset is then used to get validation results during training
+        verbose: bool,default=False
+            If true verbose output is generated
         """
         super(GCNClassifierModel, self).__init__(nn_epochs=nn_epochs,
                                                  learning_rate=learning_rate,
@@ -71,7 +78,10 @@ class GCNClassifierModel(DGLClassifierBaseModel):
                                                  feature_axis=feature_axis,
                                                  add_self_loops=add_self_loops,
                                                  allow_zero_in_degree=allow_zero_in_degree,
-                                                 logs=logs)
+                                                 validation_score=validation_score,
+                                                 verbose=verbose,
+                                                 logs=logs,
+                                                 **kwargs)
         self.in_dim = in_dim
         self.hidden_dim = hidden_dim
         self.hidden_layers = hidden_layers
@@ -97,7 +107,10 @@ class GCNRegressorModel(DGLRegressorBaseModel):
                  feature_axis: int = 1,
                  add_self_loops: bool = True,
                  allow_zero_in_degree: bool = False,
-                 logs: str = ''):
+                 validation_score: bool = False,
+                 verbose: bool = False,
+                 logs: str = '',
+                 **kwargs):
         """
         Graph convolutional Network for graph regression. GCN Layers
         from Kipf & Welling, 2017. Implementation based on dgl & pytorch.
@@ -111,7 +124,11 @@ class GCNRegressorModel(DGLRegressorBaseModel):
             number of hidden layers used by the model
         hidden_dim: int,default=256
             dimensions in the hidden layers
-
+        validation_score: bool,default=False
+            If true the input data is split into train and test (90%/10%).
+            The testset is then used to get validation results during training
+        verbose: bool,default=False
+            If true verbose output is generated
         """
         super(GCNRegressorModel, self).__init__(nn_epochs=nn_epochs,
                                                 learning_rate=learning_rate,
@@ -120,7 +137,10 @@ class GCNRegressorModel(DGLRegressorBaseModel):
                                                 feature_axis=feature_axis,
                                                 add_self_loops=add_self_loops,
                                                 allow_zero_in_degree=allow_zero_in_degree,
-                                                logs=logs)
+                                                validation_score=validation_score,
+                                                verbose=verbose,
+                                                logs=logs,
+                                                **kwargs)
         self.in_dim = in_dim
         self.hidden_dim = hidden_dim
         self.hidden_layers = hidden_layers
