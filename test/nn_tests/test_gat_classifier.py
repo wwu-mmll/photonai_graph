@@ -22,7 +22,13 @@ class GATClassifierTests(unittest.TestCase):
         self.y_mini = dgl_mini.labels
 
     def test_gat_classifier_output_shape(self):
-        gat_clf = GATClassifierModel(nn_epochs=20)
+        gat_clf = GATClassifierModel(nn_epochs=20, verbose=True)
+        gat_clf.fit(self.Xrandom4d, self.y)
+        output = gat_clf.predict(self.Xrandom4d)
+        self.assertEqual(output.shape, self.y.shape)
+
+    def test_gat_classifier_verbose_split_testset(self):
+        gat_clf = GATClassifierModel(nn_epochs=20, verbose=True, validation_score=True)
         gat_clf.fit(self.Xrandom4d, self.y)
         output = gat_clf.predict(self.Xrandom4d)
         self.assertEqual(output.shape, self.y.shape)

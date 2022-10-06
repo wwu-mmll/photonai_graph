@@ -69,6 +69,7 @@ other channels might for example contain node or edge features
 !!! danger "Sparse matrices"
     Currently there is no support for sparse input matrices.
     Dense matrices are suitable for many small graphs, as usually the case in neuroscience environments.
+    Rule of thumb: If your data still fits in your computers memory as numpy dense array, you are able to use PHOTONAI Graph.
 
 ## Machine Learning on Graphs
 
