@@ -12,7 +12,7 @@
       "Transformer"
    ],
    "MeasureAdapter": [
-      "photonai.Measures.MeasureAdapter.MeasureAdapter",
+      "photonai_graph.Measures.MeasureAdapter.GraphMeasureAdapter",
       "Transformer"
    ],
    "GraphConstructorKNN":[
