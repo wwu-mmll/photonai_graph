@@ -191,6 +191,21 @@ class DGLModel(BaseEstimator, ABC):
         return convergence
 
     @staticmethod
+    def check_loss_divergence(ep_loss_list, val_loss_list):
+        if len(ep_loss_list) < 10:
+            convergence = True
+        else:
+            trend_diff = val_loss_list[-10:] - ep_loss_list[-10:]
+            loss_step = np.diff(trend_diff)
+            avg_loss_diff = np.average(loss_step)
+            if avg_loss_diff > 0:  # TODO: add percent criteria
+                convergence = False
+            else:
+                convergence = True
+
+        return convergence
+
+    @staticmethod
     @abstractmethod
     def collate(samples):
         """Collate function"""
