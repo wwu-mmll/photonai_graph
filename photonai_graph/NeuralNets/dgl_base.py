@@ -5,6 +5,7 @@ from photonai_graph.util import assert_imported
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
+import numpy as np
 try:
     import dgl
     import torch
@@ -32,6 +33,7 @@ class DGLModel(BaseEstimator, ABC):
                  add_self_loops: bool = True,
                  allow_zero_in_degree: bool = False,
                  validation_score: bool = False,
+                 early_stopping: bool = False,
                  verbose: bool = False,
                  logs: str = None):
         """
@@ -59,6 +61,9 @@ class DGLModel(BaseEstimator, ABC):
         validation_score: bool,default=False
             If true the input data is split into train and test (90%/10%).
             The testset is then used to get validation results during training
+        early_stopping: bool, default=False
+            If true then the loss over multiple iterations is evaluated to see
+            whether early stopping should be called on the model
         verbose: bool,default=False
             If true verbose information is printed
         logs: str,default=None
@@ -73,6 +78,7 @@ class DGLModel(BaseEstimator, ABC):
         self.add_self_loops = add_self_loops
         self.allow_zero_in_degree = allow_zero_in_degree
         self.validation_score = validation_score
+        self.early_stopping = early_stopping
         if self.add_self_loops and self.allow_zero_in_degree:
             warnings.warn('If self loops are added allow_zero_in_degree should be false!')
         if not self.add_self_loops and not self.allow_zero_in_degree:
@@ -89,6 +95,7 @@ class DGLModel(BaseEstimator, ABC):
     def train_model(self, epochs, model, optimizer, loss_func, data_loader, val_loader=None):
         # This function trains the neural network
         epoch_losses = []
+        val_losses = []
         for epoch in tqdm(range(epochs)):
             epoch_loss = 0
             iteration = 0
@@ -112,7 +119,11 @@ class DGLModel(BaseEstimator, ABC):
                     iteration = it
                 val_loss /= (iteration + 1)
                 print(f'Epoch {epoch} \tloss {epoch_loss:.4f} \tval loss {val_loss:.4f}')
+                val_losses.append(val_loss)
             epoch_losses.append(epoch_loss)
+            convergence = self.check_loss(epoch_losses)
+            if not convergence:
+                break
 
     def fit(self, X, y=None):
         # handle inputs
@@ -150,6 +161,34 @@ class DGLModel(BaseEstimator, ABC):
         data = DGLData(zip_data(x_trans, y))
         data_loader = DataLoader(data, batch_size=self.batch_size, shuffle=True, collate_fn=self.collate)
         return data_loader
+
+    @staticmethod
+    def get_avg_loss(loss_list, val_loss):
+        if len(loss_list) < 10:
+            loss_list.insert(0, val_loss)
+            avg_loss = None
+        else:
+            loss_list.insert(0, val_loss)
+            loss_list.pop()
+            diff = np.diff(loss_list)
+            avg_loss = np.average(diff)
+
+        return loss_list, avg_loss
+
+    @staticmethod
+    def check_loss(loss_list: list):
+        if len(loss_list) < 10:
+            convergence = True
+        else:
+            recent_loss = loss_list[-10:]
+            loss_diff = np.diff(recent_loss)
+            avg_loss = np.average(loss_diff)
+            if avg_loss > 0:
+                convergence = False
+            else:
+                convergence = True
+
+        return convergence
 
     @staticmethod
     @abstractmethod
