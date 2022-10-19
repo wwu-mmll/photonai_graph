@@ -121,7 +121,7 @@ class DGLModel(BaseEstimator, ABC):
                 print(f'Epoch {epoch} \tloss {epoch_loss:.4f} \tval loss {val_loss:.4f}')
                 val_losses.append(val_loss)
             epoch_losses.append(epoch_loss)
-            convergence = self.check_loss(epoch_losses)
+            convergence = self.check_val_loss_divergence(val_losses)
             if not convergence:
                 break
 
@@ -163,42 +163,13 @@ class DGLModel(BaseEstimator, ABC):
         return data_loader
 
     @staticmethod
-    def get_avg_loss(loss_list, val_loss):
-        if len(loss_list) < 10:
-            loss_list.insert(0, val_loss)
-            avg_loss = None
-        else:
-            loss_list.insert(0, val_loss)
-            loss_list.pop()
-            diff = np.diff(loss_list)
-            avg_loss = np.average(diff)
-
-        return loss_list, avg_loss
-
-    @staticmethod
-    def check_loss(loss_list: list):
-        if len(loss_list) < 10:
+    def check_val_loss_divergence(val_loss_list: list):
+        if len(val_loss_list) < 10:
             convergence = True
         else:
-            recent_loss = loss_list[-10:]
-            loss_diff = np.diff(recent_loss)
-            avg_loss = np.average(loss_diff)
-            if avg_loss > 0:
-                convergence = False
-            else:
-                convergence = True
-
-        return convergence
-
-    @staticmethod
-    def check_loss_divergence(ep_loss_list, val_loss_list):
-        if len(ep_loss_list) < 10:
-            convergence = True
-        else:
-            trend_diff = val_loss_list[-10:] - ep_loss_list[-10:]
-            loss_step = np.diff(trend_diff)
-            avg_loss_diff = np.average(loss_step)
-            if avg_loss_diff > 0:  # TODO: add percent criteria
+            trend = np.diff(val_loss_list[-10:])
+            counter = sum(i > 0 for i in trend)
+            if counter >= 9:
                 convergence = False
             else:
                 convergence = True
