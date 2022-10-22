@@ -34,6 +34,9 @@ class DGLModel(BaseEstimator, ABC):
                  allow_zero_in_degree: bool = False,
                  validation_score: bool = False,
                  early_stopping: bool = False,
+                 es_patience: int = 10,
+                 es_tolerance: int = 9,
+                 es_delta: float = 0,
                  verbose: bool = False,
                  logs: str = None):
         """
@@ -79,6 +82,9 @@ class DGLModel(BaseEstimator, ABC):
         self.allow_zero_in_degree = allow_zero_in_degree
         self.validation_score = validation_score
         self.early_stopping = early_stopping
+        self.es_patience = es_patience
+        self.es_tolerance = es_tolerance
+        self.es_delta = es_delta
         if self.add_self_loops and self.allow_zero_in_degree:
             warnings.warn('If self loops are added allow_zero_in_degree should be false!')
         if not self.add_self_loops and not self.allow_zero_in_degree:
@@ -121,7 +127,8 @@ class DGLModel(BaseEstimator, ABC):
                 print(f'Epoch {epoch} \tloss {epoch_loss:.4f} \tval loss {val_loss:.4f}')
                 val_losses.append(val_loss)
             epoch_losses.append(epoch_loss)
-            convergence = self.check_val_loss_divergence(val_losses, epoch_losses)
+            convergence = self.check_val_loss_divergence(val_losses, epoch_losses,
+                                                         self.es_patience, self.es_tolerance, self.es_delta)
             if not convergence:
                 break
 
