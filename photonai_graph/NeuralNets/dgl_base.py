@@ -121,7 +121,7 @@ class DGLModel(BaseEstimator, ABC):
                 print(f'Epoch {epoch} \tloss {epoch_loss:.4f} \tval loss {val_loss:.4f}')
                 val_losses.append(val_loss)
             epoch_losses.append(epoch_loss)
-            convergence = self.check_val_loss_divergence(val_losses)
+            convergence = self.check_val_loss_divergence(val_losses, epoch_losses)
             if not convergence:
                 break
 
@@ -163,13 +163,16 @@ class DGLModel(BaseEstimator, ABC):
         return data_loader
 
     @staticmethod
-    def check_val_loss_divergence(val_loss_list: list):
+    def check_val_loss_divergence(val_loss_list: list, ep_loss_list: list,
+                                  patience: int = 10, tolerance: int = 9,
+                                  delta=0):
         if len(val_loss_list) < 10:
             convergence = True
         else:
-            trend = np.diff(val_loss_list[-10:])
-            counter = sum(i > 0 for i in trend)
-            if counter >= 9:
+            train_val_divergence = val_loss_list[-patience:] - ep_loss_list[-patience:]
+            # trend = np.diff(train_val_divergence)
+            counter = sum(i > delta for i in train_val_divergence)
+            if counter >= tolerance:
                 convergence = False
             else:
                 convergence = True
