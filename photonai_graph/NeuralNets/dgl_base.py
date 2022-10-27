@@ -176,7 +176,9 @@ class DGLModel(BaseEstimator, ABC):
         if len(val_loss_list) < 10:
             convergence = True
         else:
-            train_val_divergence = val_loss_list[-patience:] - ep_loss_list[-patience:]
+            val_recent = val_loss_list[-patience:]
+            ep_recent = ep_loss_list[-patience:]
+            train_val_divergence = [val - ep for val, ep in zip(val_recent, ep_recent)]
             # trend = np.diff(train_val_divergence)
             counter = sum(i > delta for i in train_val_divergence)
             if counter >= tolerance:
