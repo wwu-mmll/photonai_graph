@@ -5,6 +5,7 @@ from photonai_graph.util import assert_imported
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
+import numpy as np
 try:
     import dgl
     import torch
@@ -32,6 +33,10 @@ class DGLModel(BaseEstimator, ABC):
                  add_self_loops: bool = True,
                  allow_zero_in_degree: bool = False,
                  validation_score: bool = False,
+                 early_stopping: bool = False,
+                 es_patience: int = 10,
+                 es_tolerance: int = 9,
+                 es_delta: float = 0,
                  verbose: bool = False,
                  logs: str = None):
         """
@@ -59,6 +64,9 @@ class DGLModel(BaseEstimator, ABC):
         validation_score: bool,default=False
             If true the input data is split into train and test (90%/10%).
             The testset is then used to get validation results during training
+        early_stopping: bool, default=False
+            If true then the loss over multiple iterations is evaluated to see
+            whether early stopping should be called on the model
         verbose: bool,default=False
             If true verbose information is printed
         logs: str,default=None
@@ -73,6 +81,10 @@ class DGLModel(BaseEstimator, ABC):
         self.add_self_loops = add_self_loops
         self.allow_zero_in_degree = allow_zero_in_degree
         self.validation_score = validation_score
+        self.early_stopping = early_stopping
+        self.es_patience = es_patience
+        self.es_tolerance = es_tolerance
+        self.es_delta = es_delta
         if self.add_self_loops and self.allow_zero_in_degree:
             warnings.warn('If self loops are added allow_zero_in_degree should be false!')
         if not self.add_self_loops and not self.allow_zero_in_degree:
@@ -89,6 +101,7 @@ class DGLModel(BaseEstimator, ABC):
     def train_model(self, epochs, model, optimizer, loss_func, data_loader, val_loader=None):
         # This function trains the neural network
         epoch_losses = []
+        val_losses = []
         for epoch in tqdm(range(epochs)):
             epoch_loss = 0
             iteration = 0
@@ -112,7 +125,12 @@ class DGLModel(BaseEstimator, ABC):
                     iteration = it
                 val_loss /= (iteration + 1)
                 print(f'Epoch {epoch} \tloss {epoch_loss:.4f} \tval loss {val_loss:.4f}')
+                val_losses.append(val_loss)
             epoch_losses.append(epoch_loss)
+            convergence = self.check_val_loss_divergence(val_losses, epoch_losses,
+                                                         self.es_patience, self.es_tolerance, self.es_delta)
+            if not convergence:
+                break
 
     def fit(self, X, y=None):
         # handle inputs
@@ -150,6 +168,25 @@ class DGLModel(BaseEstimator, ABC):
         data = DGLData(zip_data(x_trans, y))
         data_loader = DataLoader(data, batch_size=self.batch_size, shuffle=True, collate_fn=self.collate)
         return data_loader
+
+    @staticmethod
+    def check_val_loss_divergence(val_loss_list: list, ep_loss_list: list,
+                                  patience: int = 10, tolerance: int = 9,
+                                  delta=0):
+        if len(val_loss_list) < 10:
+            convergence = True
+        else:
+            val_recent = val_loss_list[-patience:]
+            ep_recent = ep_loss_list[-patience:]
+            train_val_divergence = [val - ep for val, ep in zip(val_recent, ep_recent)]
+            # trend = np.diff(train_val_divergence)
+            counter = sum(i > delta for i in train_val_divergence)
+            if counter >= tolerance:
+                convergence = False
+            else:
+                convergence = True
+
+        return convergence
 
     @staticmethod
     @abstractmethod

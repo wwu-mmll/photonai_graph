@@ -61,6 +61,10 @@ class GATClassifierModel(DGLClassifierBaseModel):
                  add_self_loops: bool = True,
                  allow_zero_in_degree: bool = False,
                  validation_score: bool = False,
+                 early_stopping: bool = False,
+                 es_patience: int = 10,
+                 es_tolerance: int = 9,
+                 es_delta: float = 0,
                  verbose: bool = False,
                  logs: str = '',
                  **kwargs):
@@ -97,6 +101,10 @@ class GATClassifierModel(DGLClassifierBaseModel):
                                                  add_self_loops=add_self_loops,
                                                  allow_zero_in_degree=allow_zero_in_degree,
                                                  validation_score=validation_score,
+                                                 early_stopping=early_stopping,
+                                                 es_patience=es_patience,
+                                                 es_tolerance=es_tolerance,
+                                                 es_delta=es_delta,
                                                  verbose=verbose,
                                                  logs=logs,
                                                  **kwargs)
@@ -131,6 +139,10 @@ class GATRegressorModel(DGLRegressorBaseModel):
                  allow_zero_in_degree: bool = False,
                  logs: str = None,
                  validation_score: bool = False,
+                 early_stopping: bool = False,
+                 es_patience: int = 10,
+                 es_tolerance: int = 9,
+                 es_delta: float = 0,
                  verbose: bool = False,
                  agg_mode: str = None,
                  **kwargs):
@@ -164,6 +176,10 @@ class GATRegressorModel(DGLRegressorBaseModel):
                                                 add_self_loops=add_self_loops,
                                                 allow_zero_in_degree=allow_zero_in_degree,
                                                 validation_score=validation_score,
+                                                early_stopping=early_stopping,
+                                                es_patience=es_patience,
+                                                es_tolerance=es_tolerance,
+                                                es_delta=es_delta,
                                                 verbose=verbose,
                                                 logs=logs,
                                                 **kwargs)

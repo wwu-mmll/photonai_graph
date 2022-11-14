@@ -8,11 +8,11 @@
       "Transformer"
    ],
    "IgraphMeasureTransform": [
-      "photonai_graph.Measures.IgraphMeasureTransform.IGraphMeasureTransform",
+      "photonai_graph.Measures.IgraphMeasureTransform.IgraphMeasureTransform",
       "Transformer"
    ],
    "MeasureAdapter": [
-      "photonai.Measures.MeasureAdapter.MeasureAdapter",
+      "photonai_graph.Measures.MeasureAdapter.GraphMeasureAdapter",
       "Transformer"
    ],
    "GraphConstructorKNN":[
