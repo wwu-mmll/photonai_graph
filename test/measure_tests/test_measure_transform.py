@@ -1,4 +1,5 @@
 import unittest
+from tempfile import mkstemp
 
 import numpy as np
 import networkx as nx
@@ -100,7 +101,7 @@ class GraphMeasureTransformTests(unittest.TestCase):
         self.assertEqual(measures.shape, (10, 1))
 
     def test_extract_input_mtrx(self):
-        path = "/tmp/test.csv"
+        _, path = mkstemp()
         g_transform = GraphMeasureTransform()
         g_transform.fit(self.random_mtrx, self.y)
         g_transform.extract_measures(self.random_mtrx, path, self.ids)
@@ -114,14 +115,14 @@ class GraphMeasureTransformTests(unittest.TestCase):
             g_transform.extract_measures(self.edge_dict)
 
     def test_extract_default_measures(self):
-        path = "/tmp/test.csv"
+        _, path = mkstemp('.csv')
         g_transform = GraphMeasureTransform()
         g_transform.extract_measures(self.X_nx, path, self.ids)
         self.assertTrue(os.path.exists(path))
         os.remove(path)
 
     def test_extract_own_measures(self):
-        path = "/tmp/test.csv"
+        _, path = mkstemp('.csv')
         g_transform = GraphMeasureTransform(graph_functions={"global_efficiency": {},
                                                              "local_efficiency": {}})
         g_transform.extract_measures(self.X_nx, path, self.ids)
@@ -129,21 +130,21 @@ class GraphMeasureTransformTests(unittest.TestCase):
         os.remove(path)
 
     def test_extract_dict_node(self):
-        path = "/tmp/test.csv"
+        _, path = mkstemp('.csv')
         g_transform = GraphMeasureTransform(graph_functions={"eigenvector_centrality": {}})
         g_transform.extract_measures(self.X_nx, path, self.ids)
         self.assertTrue(os.path.exists(path))
         os.remove(path)
 
     def test_extract_dict_edge(self):
-        path = "/tmp/test.csv"
+        _, path = mkstemp('.csv')
         g_transform = GraphMeasureTransform(graph_functions={"edge_current_flow_betweenness_centrality": {}})
         g_transform.extract_measures(self.X_nx, path, self.ids)
         self.assertTrue(os.path.exists(path))
         os.remove(path)
 
     def test_extract_float_or_dict(self):
-        path = "/tmp/test.csv"
+        _, path = mkstemp('.csv')
         g_transform = GraphMeasureTransform(graph_functions={"clustering": {}})
         g_transform.extract_measures(self.X_nx, path, self.ids)
         self.assertTrue(os.path.exists(path))
@@ -155,7 +156,7 @@ class GraphMeasureTransformTests(unittest.TestCase):
             g_transform.extract_measures(self.X_nx)
 
     def test_extract_directed(self):
-        path = "/tmp/test.csv"
+        _, path = mkstemp('.csv')
         g_transform = GraphMeasureTransform(graph_functions={"degree_pearson_correlation_coefficient": {}})
         g_transform.fit(self.X_nx, self.y)
         g_transform.extract_measures(self.X_nx, path, self.ids)
