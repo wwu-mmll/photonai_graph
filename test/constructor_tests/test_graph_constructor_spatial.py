@@ -62,3 +62,16 @@ class SpatialTests(unittest.TestCase):
         trans = g_constr.transform(self.XrandomHO4d)
         ho_adj = trans[0, :, :, 0]
         self.assertTrue(np.array_equal(np.count_nonzero(ho_adj, axis=0), self.ho_check))
+            
+    def test_ho_atlas_sum(self):
+        path = os.path.dirname(os.path.abspath(__file__))
+        g_constr = GraphConstructorSpatial(k_distance=3, atlas_name='ho', atlas_folder=path)
+        g_constr.fit(self.XrandomHO4d, self.y)
+        trans = g_constr.transform(self.XrandomHO4d)
+        ho_adj = trans[0, :, :, 0]
+        self.assertTrue((np.sum(ho_adj) > 190))
+
+    def test_NotImplementedError(self):
+        g_constr = GraphConstructorSpatial(k_distance=3, atlas_name='test', atlas_folder=None)
+        with self.assertRaises(NotImplementedError):
+            g_constr.transform(self.XrandomHO4d)

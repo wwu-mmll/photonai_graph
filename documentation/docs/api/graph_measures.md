@@ -4,7 +4,7 @@ Graph measures or metrics are values that capture graph properties like efficien
 
 
 ## GraphMeasureTransform
-::: photonai_graph.GraphMeasureTransform.GraphMeasureTransform.__init__
+::: photonai_graph.Measures.NetworkxMeasureTransform.NetworkxMeasureTransform.__init__
     rendering:
         show_root_toc_entry: False
 
