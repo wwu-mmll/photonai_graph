@@ -7,10 +7,12 @@
 ![PHOTONAI Graph](https://raw.githubusercontent.com/wwu-mmll/photonai_graph/master/documentation/docs/assets/img/photonai-02.png)
 
 # photonai-graph
+
 Photon Graph is an extension for the PHOTON framework that allows for the use of machine learning based on graphs. Furthermore, the Graph Utilities contain a wide variety of functions that allow for the visualization and converting of graphs.
 
 # Documentation
-You can find a detailed documentation here: https://wwu-mmll.github.io/photonai_graph/
+
+You can find a detailed documentation here: <https://wwu-mmll.github.io/photonai_graph/>
 
 # Installation
 
@@ -48,5 +50,3 @@ For graph neural networks pytorch and deep graph library are required. You can i
 pip install torch
 pip install dgl
 ```
-
-
