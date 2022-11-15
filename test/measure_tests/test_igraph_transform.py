@@ -1,4 +1,5 @@
 import unittest
+from tempfile import mkstemp
 
 import numpy as np
 import igraph
@@ -64,14 +65,14 @@ class GraphMeasureTransformTests(unittest.TestCase):
             g_transform.extract_measures(self.edge_dict)
 
     def test_extract_default_measures(self):
-        path = "/tmp/test.csv"
+        _, path = mkstemp('.csv')
         g_transform = IgraphMeasureTransform()
         g_transform.extract_measures(self.er_graph, path, self.ids)
         self.assertTrue(os.path.exists(path))
         os.remove(path)
 
     def test_extract_own_measures(self):
-        path = "/tmp/test.csv"
+        _, path = mkstemp('.csv')
         g_transform = IgraphMeasureTransform(graph_functions={"eigenvector_centrality": {}})
         g_transform.extract_measures(self.er_graph, path, self.ids)
         self.assertTrue(os.path.exists(path))
