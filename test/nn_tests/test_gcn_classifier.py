@@ -27,6 +27,12 @@ class GCNClassifierTests(unittest.TestCase):
         output = gcn_clf.predict(self.Xrandom4d)
         self.assertTrue(np.array_equal(output.shape, self.y.shape))
 
+    def test_gcn_classifier_output_valset(self):
+        gcn_clf = GCNClassifierModel(nn_epochs=20, verbose=True, validation_score=True)
+        gcn_clf.fit(self.Xrandom4d, self.y)
+        output = gcn_clf.predict(self.Xrandom4d)
+        self.assertTrue(np.array_equal(output.shape, self.y.shape))
+
     def test_gcn_classifier_output_hidden_dim(self):
         gcn_clf = GCNClassifierModel(hidden_dim=128)
         gcn_clf.fit(self.Xrandom4d, self.y)

@@ -1,0 +1,38 @@
+{
+  "degree": {
+    "path" : "igraph.Graph.degree",
+    "return_type": "list"
+},
+  "strength": {
+    "path" : "igraph.Graph.strength",
+    "return_type": "list"
+  },
+  "density": {
+    "path" : "igraph.Graph.density",
+    "return_type" : "value"
+  },
+  "clustering_coefficient": {
+    "path" : "igraph.Graph.transitivity_undirected",
+    "return_type" : "value"
+  },
+  "eccentricity": {
+    "path" : "igraph.Graph.eccentricity",
+    "return_type" : "list"
+  },
+  "radius": {
+    "path" : "igraph.Graph.radius",
+    "return_type" : "value"
+  },
+  "diameter": {
+    "path" : "igraph.Graph.diameter",
+    "return_type" : "value"
+  },
+  "eigenvector_centrality": {
+    "path": "igraph.Graph.eigenvector_centrality",
+    "return_type": "list"
+  },
+  "betweenness": {
+    "path": "igraph.Graph.betweenness",
+    "return_type": "list"
+  }
+}

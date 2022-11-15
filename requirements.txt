@@ -11,3 +11,4 @@ tensorflow
 torch
 tqdm
 pbr
+igraph

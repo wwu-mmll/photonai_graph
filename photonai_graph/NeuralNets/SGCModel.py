@@ -50,7 +50,14 @@ class SGConvClassifierModel(DGLClassifierBaseModel):
                  feature_axis: int = 1,
                  add_self_loops: bool = True,
                  allow_zero_in_degree: bool = False,
-                 logs: str = ''):
+                 validation_score: bool = False,
+                 early_stopping: bool = False,
+                 es_patience: int = 10,
+                 es_tolerance: int = 9,
+                 es_delta: float = 0,
+                 verbose: bool = False,
+                 logs: str = '',
+                 **kwargs):
         """
         Graph convolutional network for graph classification. Simple Graph
         convolutional layers from Wu, Felix, et al., 2018.
@@ -65,7 +72,11 @@ class SGConvClassifierModel(DGLClassifierBaseModel):
             number of hidden layers used by the model
         hidden_dim: int,default=256
             dimensions in the hidden layers
-
+        validation_score: bool,default=False
+            If true the input data is split into train and test (90%/10%).
+            The testset is then used to get validation results during training
+        verbose: bool,default=False
+            If true verbose output is generated
         """
         super(SGConvClassifierModel, self).__init__(nn_epochs=nn_epochs,
                                                     learning_rate=learning_rate,
@@ -74,7 +85,14 @@ class SGConvClassifierModel(DGLClassifierBaseModel):
                                                     feature_axis=feature_axis,
                                                     add_self_loops=add_self_loops,
                                                     allow_zero_in_degree=allow_zero_in_degree,
-                                                    logs=logs)
+                                                    validation_score=validation_score,
+                                                    early_stopping=early_stopping,
+                                                    es_patience=es_patience,
+                                                    es_tolerance=es_tolerance,
+                                                    es_delta=es_delta,
+                                                    verbose=verbose,
+                                                    logs=logs,
+                                                    **kwargs)
         self.in_dim = in_dim
         self.hidden_layers = hidden_layers
         self.hidden_dim = hidden_dim
@@ -98,7 +116,14 @@ class SGConvRegressorModel(DGLRegressorBaseModel):
                  feature_axis: int = 1,
                  add_self_loops: bool = True,
                  allow_zero_in_degree: bool = False,
-                 logs: str = ''):
+                 validation_score: bool = False,
+                 early_stopping: bool = False,
+                 es_patience: int = 10,
+                 es_tolerance: int = 9,
+                 es_delta: float = 0,
+                 verbose: bool = False,
+                 logs: str = '',
+                 **kwargs):
         """
         Graph convolutional network for graph regression. Simple Graph
         convolutional layers from Wu, Felix, et al., 2018. Implementation
@@ -113,7 +138,11 @@ class SGConvRegressorModel(DGLRegressorBaseModel):
             number of hidden layers used by the model
         hidden_dim: int,default=256
             dimensions in the hidden layers
-
+        validation_score: bool,default=False
+            If true the input data is split into train and test (90%/10%).
+            The testset is then used to get validation results during training
+        verbose: bool,default=False
+            If true verbose output is generated
         """
         super(SGConvRegressorModel, self).__init__(nn_epochs=nn_epochs,
                                                    learning_rate=learning_rate,
@@ -122,7 +151,14 @@ class SGConvRegressorModel(DGLRegressorBaseModel):
                                                    feature_axis=feature_axis,
                                                    add_self_loops=add_self_loops,
                                                    allow_zero_in_degree=allow_zero_in_degree,
-                                                   logs=logs)
+                                                   validation_score=validation_score,
+                                                   early_stopping=early_stopping,
+                                                   es_patience=es_patience,
+                                                   es_tolerance=es_tolerance,
+                                                   es_delta=es_delta,
+                                                   verbose=verbose,
+                                                   logs=logs,
+                                                   **kwargs)
         self.in_dim = in_dim
         self.hidden_layers = hidden_layers
         self.hidden_dim = hidden_dim

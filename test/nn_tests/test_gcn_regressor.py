@@ -22,6 +22,12 @@ class GCNRegressorTests(unittest.TestCase):
         output = gat_clf.predict(self.Xrandom4d)
         self.assertEqual(output.shape, self.y.shape)
 
+    def test_gcn_regressor_output_valset(self):
+        gat_clf = GCNRegressorModel(nn_epochs=20, verbose=True, validation_score=True)
+        gat_clf.fit(self.Xrandom4d, self.y)
+        output = gat_clf.predict(self.Xrandom4d)
+        self.assertEqual(output.shape, self.y.shape)
+
     def test_gcn_regressor_output_hidden_dim(self):
         gat_clf = GCNRegressorModel(hidden_dim=128)
         gat_clf.fit(self.Xrandom4d, self.y)

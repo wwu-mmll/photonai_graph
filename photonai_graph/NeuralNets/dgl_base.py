@@ -3,7 +3,9 @@ from abc import ABC, abstractmethod
 import os
 from photonai_graph.util import assert_imported
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
+from sklearn.model_selection import train_test_split
 from tqdm import tqdm
+import numpy as np
 try:
     import dgl
     import torch
@@ -30,6 +32,11 @@ class DGLModel(BaseEstimator, ABC):
                  feature_axis: int = 1,
                  add_self_loops: bool = True,
                  allow_zero_in_degree: bool = False,
+                 validation_score: bool = False,
+                 early_stopping: bool = False,
+                 es_patience: int = 10,
+                 es_tolerance: int = 9,
+                 es_delta: float = 0,
                  verbose: bool = False,
                  logs: str = None):
         """
@@ -54,6 +61,12 @@ class DGLModel(BaseEstimator, ABC):
             self loops are added if true
         allow_zero_in_degree: bool,default=False
             If true the zero in degree test of dgl is disabled
+        validation_score: bool,default=False
+            If true the input data is split into train and test (90%/10%).
+            The testset is then used to get validation results during training
+        early_stopping: bool, default=False
+            If true then the loss over multiple iterations is evaluated to see
+            whether early stopping should be called on the model
         verbose: bool,default=False
             If true verbose information is printed
         logs: str,default=None
@@ -67,6 +80,11 @@ class DGLModel(BaseEstimator, ABC):
         self.feature_axis = feature_axis
         self.add_self_loops = add_self_loops
         self.allow_zero_in_degree = allow_zero_in_degree
+        self.validation_score = validation_score
+        self.early_stopping = early_stopping
+        self.es_patience = es_patience
+        self.es_tolerance = es_tolerance
+        self.es_delta = es_delta
         if self.add_self_loops and self.allow_zero_in_degree:
             warnings.warn('If self loops are added allow_zero_in_degree should be false!')
         if not self.add_self_loops and not self.allow_zero_in_degree:
@@ -80,9 +98,10 @@ class DGLModel(BaseEstimator, ABC):
         assert_imported(["dgl", "pytorch"])
         self.verbose = verbose
 
-    def train_model(self, epochs, model, optimizer, loss_func, data_loader):
+    def train_model(self, epochs, model, optimizer, loss_func, data_loader, val_loader=None):
         # This function trains the neural network
         epoch_losses = []
+        val_losses = []
         for epoch in tqdm(range(epochs)):
             epoch_loss = 0
             iteration = 0
@@ -95,9 +114,45 @@ class DGLModel(BaseEstimator, ABC):
                 epoch_loss += loss.detach().item()
                 iteration = it
             epoch_loss /= (iteration + 1)
-            if self.verbose:
-                print('Epoch {}, loss {:.4f}'.format(epoch, epoch_loss))
+            if self.verbose and not self.validation_score:
+                print('Epoch {} \tloss {:.4f}'.format(epoch, epoch_loss))
+            if self.verbose and self.validation_score:
+                val_loss = 0
+                for it, (bg, label) in enumerate(val_loader):
+                    prediction = model(bg)
+                    loss = loss_func(prediction, label)
+                    val_loss += loss.detach().item()
+                    iteration = it
+                val_loss /= (iteration + 1)
+                print(f'Epoch {epoch} \tloss {epoch_loss:.4f} \tval loss {val_loss:.4f}')
+                val_losses.append(val_loss)
             epoch_losses.append(epoch_loss)
+            convergence = self.check_val_loss_divergence(val_losses, epoch_losses,
+                                                         self.es_patience, self.es_tolerance, self.es_delta)
+            if not convergence:
+                break
+
+    def fit(self, X, y=None):
+        # handle inputs
+        X_trans = self.handle_inputs(X, self.adjacency_axis, self.feature_axis)
+        # get data loader
+        val_loader = None
+        if not self.validation_score:
+            data_loader = self.get_data_loader(X_trans, y)
+        else:
+            print("10% of your train data is used as validation data!\ndisable with validation_score=False")
+            X_train, X_val, y_train, y_val = train_test_split(X_trans, y, test_size=.1)
+            data_loader = self.get_data_loader(X_train, y_train)
+            val_loader = self.get_data_loader(X_val, y_val)
+        # specify model with optimizer etc
+        self._init_model(X, y)
+        # get optimizers
+        loss_func, optimizer = self.setup_model()
+        # train model
+        self.model.train()
+        self.train_model(epochs=self.nn_epochs, model=self.model, optimizer=optimizer,
+                         loss_func=loss_func, data_loader=data_loader, val_loader=val_loader)
+        return self
 
     def handle_inputs(self, x, adjacency_axis, feature_axis):
         """checks the format of the input and transforms them for dgl models"""
@@ -106,31 +161,37 @@ class DGLModel(BaseEstimator, ABC):
             x_trans = [dgl.add_self_loop(x) for x in x_trans]
         return x_trans
 
-    def fit(self, X, y=None):
-        # handle inputs
-        X_trans = self.handle_inputs(X, self.adjacency_axis, self.feature_axis)
-        # get data loader
-        data_loader = self.get_data_loader(X_trans, y)
-        # specify model with optimizer etc
-        self._init_model(X, y)
-        # get optimizers
-        loss_func, optimizer = self.setup_model()
-        # train model
-        self.model.train()
-        self.train_model(self.nn_epochs, self.model, optimizer, loss_func, data_loader)
-        return self
-
     def predict(self, x):
         return self.predict_model(x)
+
+    def get_data_loader(self, x_trans, y):
+        data = DGLData(zip_data(x_trans, y))
+        data_loader = DataLoader(data, batch_size=self.batch_size, shuffle=True, collate_fn=self.collate)
+        return data_loader
+
+    @staticmethod
+    def check_val_loss_divergence(val_loss_list: list, ep_loss_list: list,
+                                  patience: int = 10, tolerance: int = 9,
+                                  delta=0):
+        if len(val_loss_list) < 10:
+            convergence = True
+        else:
+            val_recent = val_loss_list[-patience:]
+            ep_recent = ep_loss_list[-patience:]
+            train_val_divergence = [val - ep for val, ep in zip(val_recent, ep_recent)]
+            # trend = np.diff(train_val_divergence)
+            counter = sum(i > delta for i in train_val_divergence)
+            if counter >= tolerance:
+                convergence = False
+            else:
+                convergence = True
+
+        return convergence
 
     @staticmethod
     @abstractmethod
     def collate(samples):
         """Collate function"""
-
-    @abstractmethod
-    def get_data_loader(self, x_trans, y):
-        """Data loader"""
 
     @abstractmethod
     def predict_model(self, X):
@@ -154,7 +215,10 @@ class DGLClassifierBaseModel(DGLModel, ClassifierMixin, ABC):
                  feature_axis: int = 1,
                  add_self_loops: bool = True,
                  allow_zero_in_degree: bool = False,
-                 logs: str = None):
+                 validation_score: bool = False,
+                 verbose: bool = False,
+                 logs: str = None,
+                 **kwargs):
         """Abstract base class for classification algorithms
 
                 Parameters
@@ -173,6 +237,11 @@ class DGLClassifierBaseModel(DGLModel, ClassifierMixin, ABC):
                     If this value is true, a self loop is added to each node of each graph
                 allow_zero_in_degree: bool,default=False
                     If true the dgl model allows zero-in-degree Graphs
+                validation_score: bool,default=False
+                    It true the input data is split into train and test (90%/10%).
+                    The testset is then used to get validation results during training
+                verbose: bool,default=False
+                    If true verbose output is generated
                 logs: str,default=None
                     Default logging directory
                 """
@@ -183,7 +252,10 @@ class DGLClassifierBaseModel(DGLModel, ClassifierMixin, ABC):
                                                      feature_axis=feature_axis,
                                                      add_self_loops=add_self_loops,
                                                      allow_zero_in_degree=allow_zero_in_degree,
-                                                     logs=logs)
+                                                     validation_score=validation_score,
+                                                     verbose=verbose,
+                                                     logs=logs,
+                                                     **kwargs)
 
     def setup_model(self):
         """returns the loss and optimizer for classification"""
@@ -199,13 +271,6 @@ class DGLClassifierBaseModel(DGLModel, ClassifierMixin, ABC):
         probs_y = torch.softmax(self.model(test_bg), 1)
         argmax_y = torch.max(probs_y, 1)[1].view(-1, 1)
         return argmax_y.squeeze()
-
-    def get_data_loader(self, x_trans, y):
-        """returns data in a data loader format"""
-        data = DGLData(zip_data(x_trans, y))
-        # create dataloader
-        data_loader = GraphDataLoader(data, batch_size=self.batch_size, shuffle=True, collate_fn=self.collate)
-        return data_loader
 
     @staticmethod
     def collate(samples):
@@ -224,7 +289,10 @@ class DGLRegressorBaseModel(DGLModel, RegressorMixin, ABC):
                  feature_axis: int = 1,
                  add_self_loops: bool = True,
                  allow_zero_in_degree: bool = False,
-                 logs: str = None):
+                 validation_score: bool = False,
+                 verbose: bool = False,
+                 logs: str = None,
+                 **kwargs):
         """Abstract base class for regression algorithms
 
         Parameters
@@ -243,6 +311,11 @@ class DGLRegressorBaseModel(DGLModel, RegressorMixin, ABC):
             If this value is true, a self loop is added to each node of each graph
         allow_zero_in_degree: bool,default=False
             If true the dgl model allows zero-in-degree Graphs
+        validation_score: bool,default=False
+            If true the input data is split into train and test (90%/10%).
+            The testset is then used to get validation results during training
+        verbose: bool,default=False
+            If true verbose output is generated
         logs: str,default=None
             Default logging directory
         """
@@ -253,7 +326,10 @@ class DGLRegressorBaseModel(DGLModel, RegressorMixin, ABC):
                                                     feature_axis=feature_axis,
                                                     add_self_loops=add_self_loops,
                                                     allow_zero_in_degree=allow_zero_in_degree,
-                                                    logs=logs)
+                                                    validation_score=validation_score,
+                                                    verbose=verbose,
+                                                    logs=logs,
+                                                    **kwargs)
 
     def setup_model(self):
         """returns the loss and optimizer for regression"""
@@ -272,9 +348,7 @@ class DGLRegressorBaseModel(DGLModel, RegressorMixin, ABC):
     def get_data_loader(self, x_trans, y):
         """returns data in a regression data loader format"""
         y = y.reshape(y.shape[0], 1)
-        data = DGLData(zip_data(x_trans, y))
-        data_loader = DataLoader(data, batch_size=self.batch_size, shuffle=True, collate_fn=self.collate)
-        return data_loader
+        return super(DGLRegressorBaseModel, self).get_data_loader(x_trans=x_trans, y=y)
 
     @staticmethod
     def collate(samples):
