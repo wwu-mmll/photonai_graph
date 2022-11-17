@@ -1,3 +1,3 @@
 from pbr.version import VersionInfo
 
-__version__ = VersionInfo('<my_package>').release_string()
+__version__ = VersionInfo('photonai_graph').release_string()
