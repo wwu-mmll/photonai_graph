@@ -39,6 +39,8 @@
     
       <link rel="stylesheet" href="../../assets/stylesheets/material.css">
     
+      <link rel="stylesheet" href="../../assets/stylesheets/fonts.css">
+    
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -2056,8 +2058,8 @@ Did not find any hyperparameter to convert into skopt space.
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
   warnings.warn(msg)
-100%|██████████| 200/200 [00:30&lt;00:00,  6.51it/s]
-100%|██████████| 200/200 [00:30&lt;00:00,  6.50it/s]
+100%|██████████| 200/200 [00:19&lt;00:00, 10.46it/s]
+100%|██████████| 200/200 [00:19&lt;00:00, 10.30it/s]
 </pre>
 </div>
 </div>
@@ -2079,10 +2081,10 @@ VALIDATION PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       0.8100      |      0.7888      |
-| balanced_accuracy |       0.8050      |      0.7924      |
-|       recall      |       0.7885      |      0.7577      |
-|     precision     |       0.8339      |      0.8187      |
+|      accuracy     |       0.8237      |      0.8113      |
+| balanced_accuracy |       0.8206      |      0.8126      |
+|       recall      |       0.7666      |      0.7617      |
+|     precision     |       0.8629      |      0.8448      |
 +-------------------+-------------------+------------------+
 </pre>
 </div>
@@ -2095,7 +2097,7 @@ VALIDATION PERFORMANCE
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 200/200 [01:02&lt;00:00,  3.18it/s]
+<pre>100%|██████████| 200/200 [00:37&lt;00:00,  5.33it/s]
 </pre>
 </div>
 </div>
@@ -2113,10 +2115,10 @@ TEST PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       0.8200      |      0.8200      |
-| balanced_accuracy |       0.8204      |      0.8221      |
-|       recall      |       0.8393      |      0.7963      |
-|     precision     |       0.8024      |      0.8600      |
+|      accuracy     |       0.7987      |      0.8200      |
+| balanced_accuracy |       0.7998      |      0.8175      |
+|       recall      |       0.8706      |      0.8585      |
+|     precision     |       0.7572      |      0.8125      |
 +-------------------+-------------------+------------------+
 *****************************************************************************************************
 Finished all outer fold computations.
@@ -2131,7 +2133,7 @@ Finished all outer fold computations.
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 200/200 [01:16&lt;00:00,  2.63it/s]</pre>
+<pre>100%|██████████| 200/200 [00:47&lt;00:00,  4.23it/s]</pre>
 </div>
 </div>
 
@@ -2145,9 +2147,9 @@ Finished all outer fold computations.
 <pre>*****************************************************************************************************
 
 ANALYSIS INFORMATION ================================================================================ 
-Project Folder: /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/networkx_example_pipe_results_2022-11-17_11-48-04,
-Computation Time: 2022-11-17 11:48:04.820999 - 2022-11-17 11:50:14.462838
-Duration: 0:02:09.641839
+Project Folder: /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/networkx_example_pipe_results_2022-11-18_01-04-07,
+Computation Time: 2022-11-18 01:04:07.778853 - 2022-11-18 01:05:27.072414
+Duration: 0:01:19.293561
 Optimized for: accuracy
 Hyperparameter Optimizer: sk_opt
 
@@ -2161,10 +2163,10 @@ AVERAGE PERFORMANCE ACROSS OUTER FOLDS =========================================
 +-------------------+---------------+--------------+-----------+----------+
 |    Metric Name    | Training Mean | Training Std | Test Mean | Test Std |
 +-------------------+---------------+--------------+-----------+----------+
-|      accuracy     |      0.82     |     0.0      |    0.82   |   0.0    |
-| balanced_accuracy |    0.820378   |     0.0      |  0.822061 |   0.0    |
-|       recall      |    0.839286   |     0.0      |  0.796296 |   0.0    |
-|     precision     |    0.802439   |     0.0      |    0.86   |   0.0    |
+|      accuracy     |    0.79875    |     0.0      |    0.82   |   0.0    |
+| balanced_accuracy |    0.799811   |     0.0      |  0.817543 |   0.0    |
+|       recall      |    0.870558   |     0.0      |  0.858491 |   0.0    |
+|     precision     |    0.757174   |     0.0      |   0.8125  |   0.0    |
 +-------------------+---------------+--------------+-----------+----------+
 
 BEST HYPERPARAMETER CONFIGURATION ===================================================================
@@ -2174,11 +2176,11 @@ BEST HYPERPARAMETER CONFIGURATION ==============================================
 +--------+----------+-------------------+--------+-----------+----------------------------+
 | fold # | accuracy | balanced_accuracy | recall | precision | Best Hyperparameter Config |
 +--------+----------+-------------------+--------+-----------+----------------------------+
-|   1*   |  0.8200  |       0.8221      | 0.7963 |   0.8600  |             {}             |
+|   1*   |  0.8200  |       0.8175      | 0.8585 |   0.8125  |             {}             |
 +--------+----------+-------------------+--------+-----------+----------------------------+
 
 PHOTONAI 2.2.1 ======================================================================================
-Your results are stored in /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/networkx_example_pipe_results_2022-11-17_11-48-04
+Your results are stored in /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/networkx_example_pipe_results_2022-11-18_01-04-07
 Go to https://explorer.photon-ai.com and upload your photon_result_file.json for convenient result visualization! 
 For more info and documentation visit https://www.photon-ai.com
 </pre>

@@ -39,6 +39,8 @@
     
       <link rel="stylesheet" href="../../assets/stylesheets/material.css">
     
+      <link rel="stylesheet" href="../../assets/stylesheets/fonts.css">
+    
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -2061,7 +2063,7 @@ VALIDATION PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2520      |      0.2587      |
+| mean_absolute_error |       0.2486      |      0.2492      |
 +---------------------+-------------------+------------------+
 -----------------------------------------------------------------------------------------------------
 TEST PERFORMANCE
@@ -2069,7 +2071,7 @@ TEST PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2528      |      0.2981      |
+| mean_absolute_error |       0.2487      |      0.2119      |
 +---------------------+-------------------+------------------+
 
 *****************************************************************************************************
@@ -2085,7 +2087,7 @@ VALIDATION PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2557      |      0.2600      |
+| mean_absolute_error |       0.2418      |      0.2437      |
 +---------------------+-------------------+------------------+
 -----------------------------------------------------------------------------------------------------
 TEST PERFORMANCE
@@ -2093,7 +2095,7 @@ TEST PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2559      |      0.2809      |
+| mean_absolute_error |       0.2420      |      0.2367      |
 +---------------------+-------------------+------------------+
 
 *****************************************************************************************************
@@ -2109,7 +2111,7 @@ VALIDATION PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2631      |      0.2682      |
+| mean_absolute_error |       0.2329      |      0.2339      |
 +---------------------+-------------------+------------------+
 -----------------------------------------------------------------------------------------------------
 TEST PERFORMANCE
@@ -2117,7 +2119,7 @@ TEST PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2637      |      0.2483      |
+| mean_absolute_error |       0.2329      |      0.2734      |
 +---------------------+-------------------+------------------+
 
 *****************************************************************************************************
@@ -2133,7 +2135,7 @@ VALIDATION PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2722      |      0.2739      |
+| mean_absolute_error |       0.2409      |      0.2425      |
 +---------------------+-------------------+------------------+
 -----------------------------------------------------------------------------------------------------
 TEST PERFORMANCE
@@ -2141,7 +2143,7 @@ TEST PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2723      |      0.2169      |
+| mean_absolute_error |       0.2412      |      0.2402      |
 +---------------------+-------------------+------------------+
 
 *****************************************************************************************************
@@ -2157,7 +2159,7 @@ VALIDATION PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2561      |      0.2592      |
+| mean_absolute_error |       0.2398      |      0.2408      |
 +---------------------+-------------------+------------------+
 -----------------------------------------------------------------------------------------------------
 TEST PERFORMANCE
@@ -2165,16 +2167,16 @@ TEST PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2565      |      0.2772      |
+| mean_absolute_error |       0.2399      |      0.2453      |
 +---------------------+-------------------+------------------+
 *****************************************************************************************************
 Finished all outer fold computations.
 *****************************************************************************************************
 
 ANALYSIS INFORMATION ================================================================================ 
-Project Folder: /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_kernel_pipe_results_2022-11-17_11-11-18,
-Computation Time: 2022-11-17 11:11:18.115584 - 2022-11-17 11:12:34.031034
-Duration: 0:01:15.915450
+Project Folder: /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_kernel_pipe_results_2022-11-18_00-40-54,
+Computation Time: 2022-11-18 00:40:54.713888 - 2022-11-18 00:41:47.286225
+Duration: 0:00:52.572337
 Optimized for: mean_absolute_error
 Hyperparameter Optimizer: grid_search
 
@@ -2188,7 +2190,7 @@ AVERAGE PERFORMANCE ACROSS OUTER FOLDS =========================================
 +---------------------+---------------+--------------+-----------+----------+
 |     Metric Name     | Training Mean | Training Std | Test Mean | Test Std |
 +---------------------+---------------+--------------+-----------+----------+
-| mean_absolute_error |    0.260226   |   0.007035   |  0.264301 | 0.028595 |
+| mean_absolute_error |    0.240928   |   0.005034   |  0.241522 | 0.019662 |
 +---------------------+---------------+--------------+-----------+----------+
 
 BEST HYPERPARAMETER CONFIGURATION ===================================================================
@@ -2198,15 +2200,15 @@ BEST HYPERPARAMETER CONFIGURATION ==============================================
 +--------+---------------------+----------------------------+
 | fold # | mean_absolute_error | Best Hyperparameter Config |
 +--------+---------------------+----------------------------+
-|   1    |        0.2981       |             {}             |
-|   2    |        0.2809       |             {}             |
-|   3    |        0.2483       |             {}             |
-|   4*   |        0.2169       |             {}             |
-|   5    |        0.2772       |             {}             |
+|   1*   |        0.2119       |             {}             |
+|   2    |        0.2367       |             {}             |
+|   3    |        0.2734       |             {}             |
+|   4    |        0.2402       |             {}             |
+|   5    |        0.2453       |             {}             |
 +--------+---------------------+----------------------------+
 
 PHOTONAI 2.2.1 ======================================================================================
-Your results are stored in /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_kernel_pipe_results_2022-11-17_11-11-18
+Your results are stored in /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_kernel_pipe_results_2022-11-18_00-40-54
 Go to https://explorer.photon-ai.com and upload your photon_result_file.json for convenient result visualization! 
 For more info and documentation visit https://www.photon-ai.com
 </pre>

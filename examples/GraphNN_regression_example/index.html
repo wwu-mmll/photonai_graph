@@ -39,6 +39,8 @@
     
       <link rel="stylesheet" href="../../assets/stylesheets/material.css">
     
+      <link rel="stylesheet" href="../../assets/stylesheets/fonts.css">
+    
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -2036,11 +2038,11 @@ Did not find any hyperparameter to convert into skopt space.
   warnings.warn(msg)
   0%|          | 0/20 [00:00&lt;?, ?it/s]/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai_graph/NeuralNets/dgl_base.py:358: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at ../torch/csrc/utils/tensor_new.cpp:230.)
   return batched_graph, torch.tensor(labels, dtype=torch.float32)
-100%|██████████| 20/20 [00:02&lt;00:00,  7.46it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  7.87it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  7.90it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  7.59it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  7.79it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 10.86it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.34it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.31it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.05it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 10.86it/s]
 </pre>
 </div>
 </div>
@@ -2062,7 +2064,7 @@ VALIDATION PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2604      |      0.2606      |
+| mean_absolute_error |       0.2465      |      0.2506      |
 +---------------------+-------------------+------------------+
 </pre>
 </div>
@@ -2075,7 +2077,7 @@ VALIDATION PERFORMANCE
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 20/20 [00:03&lt;00:00,  5.98it/s]
+<pre>100%|██████████| 20/20 [00:02&lt;00:00,  8.82it/s]
 </pre>
 </div>
 </div>
@@ -2093,7 +2095,7 @@ TEST PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2598      |      0.2756      |
+| mean_absolute_error |       0.2461      |      0.2187      |
 +---------------------+-------------------+------------------+
 
 *****************************************************************************************************
@@ -2113,11 +2115,11 @@ Did not find any hyperparameter to convert into skopt space.
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
   warnings.warn(msg)
-100%|██████████| 20/20 [00:02&lt;00:00,  8.05it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  8.07it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  7.84it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  8.11it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  8.08it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.30it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.35it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.57it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.28it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.35it/s]
 </pre>
 </div>
 </div>
@@ -2139,7 +2141,7 @@ VALIDATION PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2588      |      0.2603      |
+| mean_absolute_error |       0.2452      |      0.2526      |
 +---------------------+-------------------+------------------+
 </pre>
 </div>
@@ -2152,7 +2154,7 @@ VALIDATION PERFORMANCE
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 20/20 [00:03&lt;00:00,  6.23it/s]
+<pre>100%|██████████| 20/20 [00:02&lt;00:00,  8.84it/s]
 </pre>
 </div>
 </div>
@@ -2170,7 +2172,7 @@ TEST PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2578      |      0.2701      |
+| mean_absolute_error |       0.2448      |      0.2244      |
 +---------------------+-------------------+------------------+
 
 *****************************************************************************************************
@@ -2190,11 +2192,11 @@ Did not find any hyperparameter to convert into skopt space.
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
   warnings.warn(msg)
-100%|██████████| 20/20 [00:02&lt;00:00,  7.94it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  8.06it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  7.98it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  8.04it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  8.00it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.27it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.39it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.15it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.56it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 10.96it/s]
 </pre>
 </div>
 </div>
@@ -2216,7 +2218,7 @@ VALIDATION PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2664      |      0.2638      |
+| mean_absolute_error |       0.2438      |      0.2503      |
 +---------------------+-------------------+------------------+
 </pre>
 </div>
@@ -2229,7 +2231,7 @@ VALIDATION PERFORMANCE
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 20/20 [00:03&lt;00:00,  6.05it/s]
+<pre>100%|██████████| 20/20 [00:02&lt;00:00,  8.57it/s]
 </pre>
 </div>
 </div>
@@ -2247,7 +2249,7 @@ TEST PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2676      |      0.2501      |
+| mean_absolute_error |       0.2400      |      0.2439      |
 +---------------------+-------------------+------------------+
 
 *****************************************************************************************************
@@ -2267,11 +2269,11 @@ Did not find any hyperparameter to convert into skopt space.
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
   warnings.warn(msg)
-100%|██████████| 20/20 [00:02&lt;00:00,  7.88it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  8.09it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  7.92it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  7.79it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  7.86it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.43it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.30it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.43it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.47it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.39it/s]
 </pre>
 </div>
 </div>
@@ -2293,7 +2295,7 @@ VALIDATION PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2645      |      0.2659      |
+| mean_absolute_error |       0.2370      |      0.2288      |
 +---------------------+-------------------+------------------+
 </pre>
 </div>
@@ -2306,7 +2308,7 @@ VALIDATION PERFORMANCE
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 20/20 [00:03&lt;00:00,  6.19it/s]
+<pre>100%|██████████| 20/20 [00:02&lt;00:00,  8.98it/s]
 </pre>
 </div>
 </div>
@@ -2324,7 +2326,7 @@ TEST PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2650      |      0.2552      |
+| mean_absolute_error |       0.2350      |      0.2718      |
 +---------------------+-------------------+------------------+
 
 *****************************************************************************************************
@@ -2344,11 +2346,11 @@ Did not find any hyperparameter to convert into skopt space.
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
   warnings.warn(msg)
-100%|██████████| 20/20 [00:02&lt;00:00,  7.97it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  7.98it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  7.92it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  8.16it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  8.17it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.74it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.39it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.65it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.44it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 11.07it/s]
 </pre>
 </div>
 </div>
@@ -2370,7 +2372,7 @@ VALIDATION PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2496      |      0.2491      |
+| mean_absolute_error |       0.2379      |      0.2443      |
 +---------------------+-------------------+------------------+
 </pre>
 </div>
@@ -2383,7 +2385,7 @@ VALIDATION PERFORMANCE
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 20/20 [00:03&lt;00:00,  6.14it/s]
+<pre>100%|██████████| 20/20 [00:02&lt;00:00,  8.84it/s]
 </pre>
 </div>
 </div>
@@ -2401,7 +2403,7 @@ TEST PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2507      |      0.3001      |
+| mean_absolute_error |       0.2384      |      0.2627      |
 +---------------------+-------------------+------------------+
 *****************************************************************************************************
 Finished all outer fold computations.
@@ -2416,7 +2418,7 @@ Finished all outer fold computations.
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 20/20 [00:04&lt;00:00,  4.50it/s]</pre>
+<pre>100%|██████████| 20/20 [00:02&lt;00:00,  7.15it/s]</pre>
 </div>
 </div>
 
@@ -2430,9 +2432,9 @@ Finished all outer fold computations.
 <pre>*****************************************************************************************************
 
 ANALYSIS INFORMATION ================================================================================ 
-Project Folder: /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_gembedding_pipe_results_2022-11-17_11-46-18,
-Computation Time: 2022-11-17 11:46:18.599393 - 2022-11-17 11:47:47.257192
-Duration: 0:01:28.657799
+Project Folder: /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_gembedding_pipe_results_2022-11-18_01-02-54,
+Computation Time: 2022-11-18 01:02:54.554531 - 2022-11-18 01:03:56.104682
+Duration: 0:01:01.550151
 Optimized for: mean_absolute_error
 Hyperparameter Optimizer: sk_opt
 
@@ -2446,7 +2448,7 @@ AVERAGE PERFORMANCE ACROSS OUTER FOLDS =========================================
 +---------------------+---------------+--------------+-----------+----------+
 |     Metric Name     | Training Mean | Training Std | Test Mean | Test Std |
 +---------------------+---------------+--------------+-----------+----------+
-| mean_absolute_error |    0.26018    |   0.005884   |  0.270213 | 0.017632 |
+| mean_absolute_error |    0.240877   |   0.004075   |  0.244284 | 0.020719 |
 +---------------------+---------------+--------------+-----------+----------+
 
 BEST HYPERPARAMETER CONFIGURATION ===================================================================
@@ -2456,15 +2458,15 @@ BEST HYPERPARAMETER CONFIGURATION ==============================================
 +--------+---------------------+----------------------------+
 | fold # | mean_absolute_error | Best Hyperparameter Config |
 +--------+---------------------+----------------------------+
-|   1    |        0.2756       |             {}             |
-|   2    |        0.2701       |             {}             |
-|   3*   |        0.2501       |             {}             |
-|   4    |        0.2552       |             {}             |
-|   5    |        0.3001       |             {}             |
+|   1*   |        0.2187       |             {}             |
+|   2    |        0.2244       |             {}             |
+|   3    |        0.2439       |             {}             |
+|   4    |        0.2718       |             {}             |
+|   5    |        0.2627       |             {}             |
 +--------+---------------------+----------------------------+
 
 PHOTONAI 2.2.1 ======================================================================================
-Your results are stored in /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_gembedding_pipe_results_2022-11-17_11-46-18
+Your results are stored in /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_gembedding_pipe_results_2022-11-18_01-02-54
 Go to https://explorer.photon-ai.com and upload your photon_result_file.json for convenient result visualization! 
 For more info and documentation visit https://www.photon-ai.com
 </pre>

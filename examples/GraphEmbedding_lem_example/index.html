@@ -39,6 +39,8 @@
     
       <link rel="stylesheet" href="../../assets/stylesheets/material.css">
     
+      <link rel="stylesheet" href="../../assets/stylesheets/fonts.css">
+    
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -2081,8 +2083,6 @@ Did not find any hyperparameter to convert into skopt space.
   _warn_prf(average, modifier, msg_start, len(result))
 /opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
   _warn_prf(average, modifier, msg_start, len(result))
-/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
 </pre>
 </div>
 </div>
@@ -2104,10 +2104,10 @@ VALIDATION PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       0.8625      |      0.5125      |
-| balanced_accuracy |       0.8383      |      0.4844      |
-|       recall      |       0.7106      |      0.0667      |
-|     precision     |       0.9493      |      0.0400      |
+|      accuracy     |       0.8781      |      0.4125      |
+| balanced_accuracy |       0.8736      |      0.5332      |
+|       recall      |       0.8374      |      0.3556      |
+|     precision     |       0.8940      |      0.3229      |
 +-------------------+-------------------+------------------+
 -----------------------------------------------------------------------------------------------------
 TEST PERFORMANCE
@@ -2115,10 +2115,10 @@ TEST PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       0.8750      |      0.4500      |
-| balanced_accuracy |       0.8568      |      0.4091      |
-|       recall      |       0.7353      |      0.0000      |
-|     precision     |       0.9615      |      0.0000      |
+|      accuracy     |       0.9125      |      0.5000      |
+| balanced_accuracy |       0.9091      |      0.4848      |
+|       recall      |       0.8421      |      0.3333      |
+|     precision     |       0.9697      |      0.4286      |
 +-------------------+-------------------+------------------+
 
 *****************************************************************************************************
@@ -2138,10 +2138,6 @@ Did not find any hyperparameter to convert into skopt space.
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
   warnings.warn(msg)
-/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
 </pre>
 </div>
 </div>
@@ -2163,10 +2159,10 @@ VALIDATION PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       0.8938      |      0.5000      |
-| balanced_accuracy |       0.8771      |      0.4649      |
-|       recall      |       0.7720      |      0.0667      |
-|     precision     |       0.9751      |      0.1667      |
+|      accuracy     |       0.8969      |      0.4375      |
+| balanced_accuracy |       0.8913      |      0.4851      |
+|       recall      |       0.9449      |      0.6289      |
+|     precision     |       0.8750      |      0.5017      |
 +-------------------+-------------------+------------------+
 -----------------------------------------------------------------------------------------------------
 TEST PERFORMANCE
@@ -2174,10 +2170,10 @@ TEST PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       0.8875      |      0.6000      |
-| balanced_accuracy |       0.8715      |      0.5556      |
-|       recall      |       0.7647      |      0.1111      |
-|     precision     |       0.9630      |      1.0000      |
+|      accuracy     |       0.9125      |      0.3500      |
+| balanced_accuracy |       0.9104      |      0.5000      |
+|       recall      |       0.9524      |      0.8000      |
+|     precision     |       0.8889      |      0.2500      |
 +-------------------+-------------------+------------------+
 
 *****************************************************************************************************
@@ -2197,6 +2193,12 @@ Did not find any hyperparameter to convert into skopt space.
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
   warnings.warn(msg)
+/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
 </pre>
 </div>
 </div>
@@ -2218,10 +2220,10 @@ VALIDATION PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       0.8656      |      0.5625      |
-| balanced_accuracy |       0.8620      |      0.6003      |
-|       recall      |       0.8229      |      0.4589      |
-|     precision     |       0.8947      |      0.6242      |
+|      accuracy     |       0.8875      |      0.5625      |
+| balanced_accuracy |       0.8636      |      0.5050      |
+|       recall      |       0.7440      |      0.0833      |
+|     precision     |       0.9759      |      0.1333      |
 +-------------------+-------------------+------------------+
 -----------------------------------------------------------------------------------------------------
 TEST PERFORMANCE
@@ -2229,10 +2231,10 @@ TEST PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       0.8750      |      0.5500      |
-| balanced_accuracy |       0.8755      |      0.6250      |
-|       recall      |       0.8974      |      0.7500      |
-|     precision     |       0.8537      |      0.2727      |
+|      accuracy     |       0.9500      |      0.2500      |
+| balanced_accuracy |       0.9439      |      0.3690      |
+|       recall      |       0.9091      |      0.0714      |
+|     precision     |       0.9677      |      0.3333      |
 +-------------------+-------------------+------------------+
 
 *****************************************************************************************************
@@ -2254,8 +2256,6 @@ Did not find any hyperparameter to convert into skopt space.
   warnings.warn(msg)
 /opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
   _warn_prf(average, modifier, msg_start, len(result))
-/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
 </pre>
 </div>
 </div>
@@ -2277,45 +2277,21 @@ VALIDATION PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       0.8906      |      0.5375      |
-| balanced_accuracy |       0.8709      |      0.4858      |
-|       recall      |       0.7589      |      0.0833      |
-|     precision     |       0.9760      |      0.1400      |
+|      accuracy     |       0.8781      |      0.4250      |
+| balanced_accuracy |       0.8714      |      0.4671      |
+|       recall      |       0.8337      |      0.2286      |
+|     precision     |       0.9038      |      0.1988      |
 +-------------------+-------------------+------------------+
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
 TEST PERFORMANCE
 -----------------------------------------------------------------------------------------------------
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       0.9250      |      0.5000      |
-| balanced_accuracy |       0.9091      |      0.5000      |
-|       recall      |       0.8182      |      0.0000      |
-|     precision     |       1.0000      |      0.0000      |
+|      accuracy     |       0.8625      |      0.5500      |
+| balanced_accuracy |       0.8551      |      0.5500      |
+|       recall      |       0.7568      |      0.2000      |
+|     precision     |       0.9333      |      0.6667      |
 +-------------------+-------------------+------------------+
 
 *****************************************************************************************************
@@ -2337,12 +2313,6 @@ Did not find any hyperparameter to convert into skopt space.
   warnings.warn(msg)
 /opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
   _warn_prf(average, modifier, msg_start, len(result))
-/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
 </pre>
 </div>
 </div>
@@ -2364,10 +2334,10 @@ VALIDATION PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       0.9094      |      0.5500      |
-| balanced_accuracy |       0.8890      |      0.4692      |
-|       recall      |       0.7952      |      0.0000      |
-|     precision     |       0.9769      |      0.0000      |
+|      accuracy     |       0.8812      |      0.4000      |
+| balanced_accuracy |       0.8741      |      0.4784      |
+|       recall      |       0.8173      |      0.3179      |
+|     precision     |       0.9306      |      0.4129      |
 +-------------------+-------------------+------------------+
 -----------------------------------------------------------------------------------------------------
 TEST PERFORMANCE
@@ -2375,19 +2345,19 @@ TEST PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       0.8625      |      0.4000      |
-| balanced_accuracy |       0.8281      |      0.4444      |
-|       recall      |       0.6562      |      0.0000      |
-|     precision     |       1.0000      |      0.0000      |
+|      accuracy     |       0.8500      |      0.5000      |
+| balanced_accuracy |       0.8496      |      0.4848      |
+|       recall      |       0.8421      |      0.3333      |
+|     precision     |       0.8421      |      0.4286      |
 +-------------------+-------------------+------------------+
 *****************************************************************************************************
 Finished all outer fold computations.
 *****************************************************************************************************
 
 ANALYSIS INFORMATION ================================================================================ 
-Project Folder: /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_gembedding_pipe_results_2022-11-17_10-35-31,
-Computation Time: 2022-11-17 10:35:31.008694 - 2022-11-17 10:37:11.341787
-Duration: 0:01:40.333093
+Project Folder: /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_gembedding_pipe_results_2022-11-18_00-17-25,
+Computation Time: 2022-11-18 00:17:25.548429 - 2022-11-18 00:18:28.276847
+Duration: 0:01:02.728418
 Optimized for: accuracy
 Hyperparameter Optimizer: sk_opt
 
@@ -2401,10 +2371,10 @@ AVERAGE PERFORMANCE ACROSS OUTER FOLDS =========================================
 +-------------------+---------------+--------------+-----------+----------+
 |    Metric Name    | Training Mean | Training Std | Test Mean | Test Std |
 +-------------------+---------------+--------------+-----------+----------+
-|      accuracy     |     0.885     |   0.021506   |    0.5    | 0.070711 |
-| balanced_accuracy |    0.868205   |   0.026356   |  0.506818 | 0.07724  |
-|       recall      |    0.774374   |   0.080793   |  0.172222 | 0.292076 |
-|     precision     |    0.955632   |   0.053711   |  0.254545 | 0.387405 |
+|      accuracy     |     0.8975    |   0.036572   |    0.43   | 0.11225  |
+| balanced_accuracy |    0.893641   |   0.03597    |  0.477749 | 0.059384 |
+|       recall      |    0.860488   |   0.066697   |  0.347619 | 0.246223 |
+|     precision     |    0.920353   |   0.048912   |  0.421429 | 0.139565 |
 +-------------------+---------------+--------------+-----------+----------+
 
 BEST HYPERPARAMETER CONFIGURATION ===================================================================
@@ -2414,15 +2384,15 @@ BEST HYPERPARAMETER CONFIGURATION ==============================================
 +--------+----------+-------------------+--------+-----------+----------------------------+
 | fold # | accuracy | balanced_accuracy | recall | precision | Best Hyperparameter Config |
 +--------+----------+-------------------+--------+-----------+----------------------------+
-|   1    |  0.4500  |       0.4091      | 0.0000 |   0.0000  |             {}             |
-|   2*   |  0.6000  |       0.5556      | 0.1111 |   1.0000  |             {}             |
-|   3    |  0.5500  |       0.6250      | 0.7500 |   0.2727  |             {}             |
-|   4    |  0.5000  |       0.5000      | 0.0000 |   0.0000  |             {}             |
-|   5    |  0.4000  |       0.4444      | 0.0000 |   0.0000  |             {}             |
+|   1    |  0.5000  |       0.4848      | 0.3333 |   0.4286  |             {}             |
+|   2    |  0.3500  |       0.5000      | 0.8000 |   0.2500  |             {}             |
+|   3    |  0.2500  |       0.3690      | 0.0714 |   0.3333  |             {}             |
+|   4*   |  0.5500  |       0.5500      | 0.2000 |   0.6667  |             {}             |
+|   5    |  0.5000  |       0.4848      | 0.3333 |   0.4286  |             {}             |
 +--------+----------+-------------------+--------+-----------+----------------------------+
 
 PHOTONAI 2.2.1 ======================================================================================
-Your results are stored in /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_gembedding_pipe_results_2022-11-17_10-35-31
+Your results are stored in /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_gembedding_pipe_results_2022-11-18_00-17-25
 Go to https://explorer.photon-ai.com and upload your photon_result_file.json for convenient result visualization! 
 For more info and documentation visit https://www.photon-ai.com
 </pre>
