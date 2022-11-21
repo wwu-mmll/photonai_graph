@@ -2058,8 +2058,8 @@ Did not find any hyperparameter to convert into skopt space.
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
   warnings.warn(msg)
-100%|██████████| 200/200 [00:19&lt;00:00, 10.46it/s]
-100%|██████████| 200/200 [00:19&lt;00:00, 10.30it/s]
+100%|██████████| 200/200 [00:26&lt;00:00,  7.50it/s]
+100%|██████████| 200/200 [00:27&lt;00:00,  7.37it/s]
 </pre>
 </div>
 </div>
@@ -2081,10 +2081,10 @@ VALIDATION PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       0.8237      |      0.8113      |
-| balanced_accuracy |       0.8206      |      0.8126      |
-|       recall      |       0.7666      |      0.7617      |
-|     precision     |       0.8629      |      0.8448      |
+|      accuracy     |       0.7725      |      0.7650      |
+| balanced_accuracy |       0.7710      |      0.7647      |
+|       recall      |       0.8284      |      0.8445      |
+|     precision     |       0.7495      |      0.7324      |
 +-------------------+-------------------+------------------+
 </pre>
 </div>
@@ -2097,7 +2097,7 @@ VALIDATION PERFORMANCE
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 200/200 [00:37&lt;00:00,  5.33it/s]
+<pre>100%|██████████| 200/200 [00:51&lt;00:00,  3.89it/s]
 </pre>
 </div>
 </div>
@@ -2115,10 +2115,10 @@ TEST PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       0.7987      |      0.8200      |
-| balanced_accuracy |       0.7998      |      0.8175      |
-|       recall      |       0.8706      |      0.8585      |
-|     precision     |       0.7572      |      0.8125      |
+|      accuracy     |       0.7562      |      0.7450      |
+| balanced_accuracy |       0.7550      |      0.7484      |
+|       recall      |       0.8837      |      0.8333      |
+|     precision     |       0.7069      |      0.6957      |
 +-------------------+-------------------+------------------+
 *****************************************************************************************************
 Finished all outer fold computations.
@@ -2133,7 +2133,7 @@ Finished all outer fold computations.
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 200/200 [00:47&lt;00:00,  4.23it/s]</pre>
+<pre>100%|██████████| 200/200 [01:04&lt;00:00,  3.12it/s]</pre>
 </div>
 </div>
 
@@ -2147,9 +2147,9 @@ Finished all outer fold computations.
 <pre>*****************************************************************************************************
 
 ANALYSIS INFORMATION ================================================================================ 
-Project Folder: /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/networkx_example_pipe_results_2022-11-18_01-04-07,
-Computation Time: 2022-11-18 01:04:07.778853 - 2022-11-18 01:05:27.072414
-Duration: 0:01:19.293561
+Project Folder: /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/networkx_example_pipe_results_2022-11-21_10-53-20,
+Computation Time: 2022-11-21 10:53:20.661866 - 2022-11-21 10:55:10.750622
+Duration: 0:01:50.088756
 Optimized for: accuracy
 Hyperparameter Optimizer: sk_opt
 
@@ -2163,10 +2163,10 @@ AVERAGE PERFORMANCE ACROSS OUTER FOLDS =========================================
 +-------------------+---------------+--------------+-----------+----------+
 |    Metric Name    | Training Mean | Training Std | Test Mean | Test Std |
 +-------------------+---------------+--------------+-----------+----------+
-|      accuracy     |    0.79875    |     0.0      |    0.82   |   0.0    |
-| balanced_accuracy |    0.799811   |     0.0      |  0.817543 |   0.0    |
-|       recall      |    0.870558   |     0.0      |  0.858491 |   0.0    |
-|     precision     |    0.757174   |     0.0      |   0.8125  |   0.0    |
+|      accuracy     |    0.75625    |     0.0      |   0.745   |   0.0    |
+| balanced_accuracy |    0.754963   |     0.0      |  0.748397 |   0.0    |
+|       recall      |    0.883663   |     0.0      |  0.833333 |   0.0    |
+|     precision     |    0.706931   |     0.0      |  0.695652 |   0.0    |
 +-------------------+---------------+--------------+-----------+----------+
 
 BEST HYPERPARAMETER CONFIGURATION ===================================================================
@@ -2176,11 +2176,11 @@ BEST HYPERPARAMETER CONFIGURATION ==============================================
 +--------+----------+-------------------+--------+-----------+----------------------------+
 | fold # | accuracy | balanced_accuracy | recall | precision | Best Hyperparameter Config |
 +--------+----------+-------------------+--------+-----------+----------------------------+
-|   1*   |  0.8200  |       0.8175      | 0.8585 |   0.8125  |             {}             |
+|   1*   |  0.7450  |       0.7484      | 0.8333 |   0.6957  |             {}             |
 +--------+----------+-------------------+--------+-----------+----------------------------+
 
 PHOTONAI 2.2.1 ======================================================================================
-Your results are stored in /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/networkx_example_pipe_results_2022-11-18_01-04-07
+Your results are stored in /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/networkx_example_pipe_results_2022-11-21_10-53-20
 Go to https://explorer.photon-ai.com and upload your photon_result_file.json for convenient result visualization! 
 For more info and documentation visit https://www.photon-ai.com
 </pre>
