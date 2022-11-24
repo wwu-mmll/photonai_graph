@@ -53,20 +53,7 @@ class GATClassifierModel(DGLClassifierBaseModel):
                  hidden_dim: int = 256,
                  heads: List = None,
                  agg_mode="mean",
-                 nn_epochs: int = 200,
-                 learning_rate: float = 0.001,
-                 batch_size: int = 32,
-                 adjacency_axis: int = 0,
-                 feature_axis: int = 1,
-                 add_self_loops: bool = True,
-                 allow_zero_in_degree: bool = False,
-                 validation_score: bool = False,
-                 early_stopping: bool = False,
-                 es_patience: int = 10,
-                 es_tolerance: int = 9,
-                 es_delta: float = 0,
-                 verbose: bool = False,
-                 logs: str = '',
+                 *args,
                  **kwargs):
         """
             Graph Attention Network for graph classification. GAT Layers
@@ -93,21 +80,7 @@ class GATClassifierModel(DGLClassifierBaseModel):
                 aggregation mode for the graph convolutional layers
 
         """
-        super(GATClassifierModel, self).__init__(nn_epochs=nn_epochs,
-                                                 learning_rate=learning_rate,
-                                                 batch_size=batch_size,
-                                                 adjacency_axis=adjacency_axis,
-                                                 feature_axis=feature_axis,
-                                                 add_self_loops=add_self_loops,
-                                                 allow_zero_in_degree=allow_zero_in_degree,
-                                                 validation_score=validation_score,
-                                                 early_stopping=early_stopping,
-                                                 es_patience=es_patience,
-                                                 es_tolerance=es_tolerance,
-                                                 es_delta=es_delta,
-                                                 verbose=verbose,
-                                                 logs=logs,
-                                                 **kwargs)
+        super(GATClassifierModel, self).__init__(*args, **kwargs)
         if heads is None:
             heads = [2, 2]
             # Todo: if heads is not length of hidden layers +1 (bc of the first layer)
@@ -130,21 +103,8 @@ class GATRegressorModel(DGLRegressorBaseModel):
                  hidden_layers: int = 2,
                  hidden_dim: int = 256,
                  heads: List = None,
-                 nn_epochs: int = 200,
-                 learning_rate: float = 0.001,
-                 batch_size: int = 32,
-                 adjacency_axis: int = 0,
-                 feature_axis: int = 1,
-                 add_self_loops: bool = True,
-                 allow_zero_in_degree: bool = False,
-                 logs: str = None,
-                 validation_score: bool = False,
-                 early_stopping: bool = False,
-                 es_patience: int = 10,
-                 es_tolerance: int = 9,
-                 es_delta: float = 0,
-                 verbose: bool = False,
                  agg_mode: str = None,
+                 *args,
                  **kwargs):
         """
             Graph Attention Network for graph regression. GAT Layers
@@ -168,21 +128,7 @@ class GATRegressorModel(DGLRegressorBaseModel):
             verbose: bool,default=False
                 If true verbose output is generated
         """
-        super(GATRegressorModel, self).__init__(nn_epochs=nn_epochs,
-                                                learning_rate=learning_rate,
-                                                batch_size=batch_size,
-                                                adjacency_axis=adjacency_axis,
-                                                feature_axis=feature_axis,
-                                                add_self_loops=add_self_loops,
-                                                allow_zero_in_degree=allow_zero_in_degree,
-                                                validation_score=validation_score,
-                                                early_stopping=early_stopping,
-                                                es_patience=es_patience,
-                                                es_tolerance=es_tolerance,
-                                                es_delta=es_delta,
-                                                verbose=verbose,
-                                                logs=logs,
-                                                **kwargs)
+        super(GATRegressorModel, self).__init__(*args, **kwargs)
         if heads is None:
             heads = [2, 2]
             # Todo: if heads is not length of hidden layers +1 (bc of the first layer)
