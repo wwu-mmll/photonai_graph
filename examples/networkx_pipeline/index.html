@@ -1932,8 +1932,8 @@ labels = rr_labels + er_labels</div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -1977,6 +1977,86 @@ my_pipe.add(PipelineElement('GCNClassifier', feature_axis=0))</div>
     </div>
 
 </div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">RuntimeError</span>                              Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[3], line 9</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span style="color: rgb(95,135,135)"># Design your Pipeline</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> my_pipe <span style="color: rgb(98,98,98)">=</span> Hyperpipe(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">networkx_example_pipe</span><span style="color: rgb(175,0,0)">&#39;</span>,
+<span class="ansi-green-intense-fg ansi-bold">      3</span>                     inner_cv<span style="color: rgb(98,98,98)">=</span>KFold(n_splits<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(98,98,98)">2</span>),
+<span class="ansi-green-intense-fg ansi-bold">      4</span>                     optimizer<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">sk_opt</span><span style="color: rgb(175,0,0)">&#39;</span>,
+<span class="ansi-green-intense-fg ansi-bold">      5</span>                     optimizer_params<span style="color: rgb(98,98,98)">=</span>{<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">n_configurations</span><span style="color: rgb(175,0,0)">&#39;</span>: <span style="color: rgb(98,98,98)">25</span>},
+<span class="ansi-green-intense-fg ansi-bold">      6</span>                     metrics<span style="color: rgb(98,98,98)">=</span>[<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">accuracy</span><span style="color: rgb(175,0,0)">&#39;</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">balanced_accuracy</span><span style="color: rgb(175,0,0)">&#39;</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">recall</span><span style="color: rgb(175,0,0)">&#39;</span>, <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">precision</span><span style="color: rgb(175,0,0)">&#39;</span>],
+<span class="ansi-green-intense-fg ansi-bold">      7</span>                     best_config_metric<span style="color: rgb(98,98,98)">=</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">accuracy</span><span style="color: rgb(175,0,0)">&#39;</span>)
+<span class="ansi-green-fg">----&gt; 9</span> my_pipe<span style="color: rgb(98,98,98)">.</span>add(<span class="ansi-yellow-bg">PipelineElement</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">GCNClassifier</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#39;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">feature_axis</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">0</span><span class="ansi-yellow-bg">)</span>)
+
+File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/base/photon_elements.py:137</span>, in <span class="ansi-cyan-fg">PipelineElement.__init__</span><span class="ansi-blue-fg">(self, name, hyperparameters, test_disabled, disabled, base_element, batch_size, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    132</span> <span style="color: rgb(95,135,135)"># self.initalize_hyperparameters = hyperparameters</span>
+<span class="ansi-green-intense-fg ansi-bold">    133</span> <span style="color: rgb(95,135,135)"># check if hyperparameters are already in sklearn style</span>
+<span class="ansi-green-intense-fg ansi-bold">    134</span> 
+<span class="ansi-green-intense-fg ansi-bold">    135</span> <span style="color: rgb(95,135,135)"># check if hyperparameters are members of the class</span>
+<span class="ansi-green-intense-fg ansi-bold">    136</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>is_transformer <span class="ansi-bold" style="color: rgb(175,0,255)">or</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>is_estimator:
+<span class="ansi-green-fg">--&gt; 137</span>     <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_check_hyperparameters</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">BaseEstimator</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    139</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>disabled <span style="color: rgb(98,98,98)">=</span> disabled
+<span class="ansi-green-intense-fg ansi-bold">    141</span> <span style="color: rgb(95,135,135)"># check if self.base element needs y for fitting and transforming</span>
+
+File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/base/photon_elements.py:175</span>, in <span class="ansi-cyan-fg">PipelineElement._check_hyperparameters</span><span class="ansi-blue-fg">(self, BaseEstimator)</span>
+<span class="ansi-green-intense-fg ansi-bold">    171</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">_check_hyperparameters</span>(<span style="color: rgb(0,135,0)">self</span>, BaseEstimator):
+<span class="ansi-green-intense-fg ansi-bold">    172</span>     <span style="color: rgb(95,135,135)"># check if hyperparameters are members of the class</span>
+<span class="ansi-green-intense-fg ansi-bold">    173</span>     not_supported_hyperparameters <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">list</span>(
+<span class="ansi-green-intense-fg ansi-bold">    174</span>         <span style="color: rgb(0,135,0)">set</span>([key<span style="color: rgb(98,98,98)">.</span>split(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">__</span><span style="color: rgb(175,0,0)">&#34;</span>)[<span style="color: rgb(98,98,98)">-</span><span style="color: rgb(98,98,98)">1</span>] <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> key <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_hyperparameters<span style="color: rgb(98,98,98)">.</span>keys() <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> key<span style="color: rgb(98,98,98)">.</span>split(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">__</span><span style="color: rgb(175,0,0)">&#34;</span>)[<span style="color: rgb(98,98,98)">-</span><span style="color: rgb(98,98,98)">1</span>] <span style="color: rgb(98,98,98)">!=</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">disabled</span><span style="color: rgb(175,0,0)">&#34;</span>]) <span style="color: rgb(98,98,98)">-</span>
+<span class="ansi-green-fg">--&gt; 175</span>         <span style="color: rgb(0,135,0)">set</span>(<span class="ansi-yellow-bg">BaseEstimator</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">get_params</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">base_element</span><span class="ansi-yellow-bg">)</span><span style="color: rgb(98,98,98)">.</span>keys()))
+<span class="ansi-green-intense-fg ansi-bold">    176</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> not_supported_hyperparameters:
+<span class="ansi-green-intense-fg ansi-bold">    177</span>         error_message <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">ValueError: Set of hyperparameters are not valid, check hyperparameters:</span><span style="color: rgb(175,0,0)">&#39;</span> <span style="color: rgb(98,98,98)">+</span> \
+<span class="ansi-green-intense-fg ansi-bold">    178</span>                         <span style="color: rgb(0,135,0)">str</span>(not_supported_hyperparameters)
+
+File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/base.py:210</span>, in <span class="ansi-cyan-fg">BaseEstimator.get_params</span><span class="ansi-blue-fg">(self, deep)</span>
+<span class="ansi-green-intense-fg ansi-bold">    195</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">    196</span> <span style="color: rgb(175,0,0)">Get parameters for this estimator.</span>
+<span class="ansi-green-intense-fg ansi-bold">    197</span> 
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-intense-fg ansi-bold">    207</span> <span style="color: rgb(175,0,0)">    Parameter names mapped to their values.</span>
+<span class="ansi-green-intense-fg ansi-bold">    208</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">    209</span> out <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">dict</span>()
+<span class="ansi-green-fg">--&gt; 210</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> key <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_get_param_names</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span>:
+<span class="ansi-green-intense-fg ansi-bold">    211</span>     value <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">getattr</span>(<span style="color: rgb(0,135,0)">self</span>, key)
+<span class="ansi-green-intense-fg ansi-bold">    212</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> deep <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> <span style="color: rgb(0,135,0)">hasattr</span>(value, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">get_params</span><span style="color: rgb(175,0,0)">&#34;</span>) <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span style="color: rgb(0,135,0)">isinstance</span>(value, <span style="color: rgb(0,135,0)">type</span>):
+
+File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/base.py:184</span>, in <span class="ansi-cyan-fg">BaseEstimator._get_param_names</span><span class="ansi-blue-fg">(cls)</span>
+<span class="ansi-green-intense-fg ansi-bold">    182</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> p <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> parameters:
+<span class="ansi-green-intense-fg ansi-bold">    183</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> p<span style="color: rgb(98,98,98)">.</span>kind <span style="color: rgb(98,98,98)">==</span> p<span style="color: rgb(98,98,98)">.</span>VAR_POSITIONAL:
+<span class="ansi-green-fg">--&gt; 184</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> <span class="ansi-bold" style="color: rgb(215,95,95)">RuntimeError</span>(
+<span class="ansi-green-intense-fg ansi-bold">    185</span>             <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">scikit-learn estimators should always </span><span style="color: rgb(175,0,0)">&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">    186</span>             <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">specify their parameters in the signature</span><span style="color: rgb(175,0,0)">&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">    187</span>             <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> of their __init__ (no varargs).</span><span style="color: rgb(175,0,0)">&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">    188</span>             <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> </span><span class="ansi-bold" style="color: rgb(175,95,135)">%s</span><span style="color: rgb(175,0,0)"> with constructor </span><span class="ansi-bold" style="color: rgb(175,95,135)">%s</span><span style="color: rgb(175,0,0)"> doesn</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">t </span><span style="color: rgb(175,0,0)">&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">    189</span>             <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> follow this convention.</span><span style="color: rgb(175,0,0)">&#34;</span> <span style="color: rgb(98,98,98)">%</span> (<span style="color: rgb(0,135,0)">cls</span>, init_signature)
+<span class="ansi-green-intense-fg ansi-bold">    190</span>         )
+<span class="ansi-green-intense-fg ansi-bold">    191</span> <span style="color: rgb(95,135,135)"># Extract and sort argument names excluding &#39;self&#39;</span>
+<span class="ansi-green-intense-fg ansi-bold">    192</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span style="color: rgb(0,135,0)">sorted</span>([p<span style="color: rgb(98,98,98)">.</span>name <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> p <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> parameters])
+
+<span class="ansi-red-fg">RuntimeError</span>: scikit-learn estimators should always specify their parameters in the signature of their __init__ (no varargs). &lt;class &#39;photonai_graph.NeuralNets.GCNModel.GCNClassifierModel&#39;&gt; with constructor (self, in_dim: int = 1, hidden_layers: int = 2, hidden_dim: int = 256, *args, **kwargs) doesn&#39;t  follow this convention.</pre>
+</div>
+</div>
+
+</div>
+
 </div>
 
 </div>
@@ -2040,11 +2120,16 @@ my_pipe.add(PipelineElement('GCNClassifier', feature_axis=0))</div>
 <pre>=====================================================================================================
 PHOTONAI ANALYSIS: networkx_example_pipe
 =====================================================================================================
+list index out of range
+Traceback (most recent call last):
+  File &#34;/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/base/hyperpipe.py&#34;, line 1002, in fit
+    self._prepare_pipeline()
+  File &#34;/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/base/hyperpipe.py&#34;, line 941, in _prepare_pipeline
+    self._pipe = Branch.sanity_check_pipeline(self._pipe)
+  File &#34;/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/base/photon_elements.py&#34;, line 860, in sanity_check_pipeline
+    if isinstance(pipe.elements[-1][1], CallbackElement):
+IndexError: list index out of range
 
-*****************************************************************************************************
-Outer Cross validation Fold 1
-*****************************************************************************************************
-Did not find any hyperparameter to convert into skopt space.
 </pre>
 </div>
 </div>
@@ -2056,145 +2141,14 @@ Did not find any hyperparameter to convert into skopt space.
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
-  warnings.warn(msg)
-100%|██████████| 200/200 [00:19&lt;00:00, 10.52it/s]
-100%|██████████| 200/200 [00:18&lt;00:00, 10.69it/s]
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-----------------------------------------------------------------------------------------------------
-BEST_CONFIG 
------------------------------------------------------------------------------------------------------
-{}
------------------------------------------------------------------------------------------------------
-VALIDATION PERFORMANCE
------------------------------------------------------------------------------------------------------
-+-------------------+-------------------+------------------+
-|       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
-+-------------------+-------------------+------------------+
-|      accuracy     |       0.7650      |      0.7812      |
-| balanced_accuracy |       0.7678      |      0.7777      |
-|       recall      |       0.8091      |      0.8184      |
-|     precision     |       0.7559      |      0.7772      |
-+-------------------+-------------------+------------------+
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 200/200 [00:37&lt;00:00,  5.33it/s]
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-----------------------------------------------------------------------------------------------------
-TEST PERFORMANCE
------------------------------------------------------------------------------------------------------
-+-------------------+-------------------+------------------+
-|       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
-+-------------------+-------------------+------------------+
-|      accuracy     |       0.7837      |      0.8050      |
-| balanced_accuracy |       0.7837      |      0.8058      |
-|       recall      |       0.7861      |      0.8469      |
-|     precision     |       0.7841      |      0.7757      |
-+-------------------+-------------------+------------------+
-*****************************************************************************************************
-Finished all outer fold computations.
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 200/200 [00:46&lt;00:00,  4.26it/s]</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>*****************************************************************************************************
-
-ANALYSIS INFORMATION ================================================================================ 
-Project Folder: /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/networkx_example_pipe_results_2022-11-24_22-10-59,
-Computation Time: 2022-11-24 22:10:59.872684 - 2022-11-24 22:12:18.415478
-Duration: 0:01:18.542794
-Optimized for: accuracy
-Hyperparameter Optimizer: sk_opt
-
-DUMMY RESULTS =======================================================================================
-+-------------------+--+
-| PERFORMANCE DUMMY |  |
-+-------------------+--+
-+-------------------+--+
-
-AVERAGE PERFORMANCE ACROSS OUTER FOLDS ==============================================================
-+-------------------+---------------+--------------+-----------+----------+
-|    Metric Name    | Training Mean | Training Std | Test Mean | Test Std |
-+-------------------+---------------+--------------+-----------+----------+
-|      accuracy     |    0.78375    |     0.0      |   0.805   |   0.0    |
-| balanced_accuracy |    0.783738   |     0.0      |  0.805822 |   0.0    |
-|       recall      |    0.78607    |     0.0      |  0.846939 |   0.0    |
-|     precision     |    0.784119   |     0.0      |  0.775701 |   0.0    |
-+-------------------+---------------+--------------+-----------+----------+
-
-BEST HYPERPARAMETER CONFIGURATION ===================================================================
-{}
-
-
-+--------+----------+-------------------+--------+-----------+----------------------------+
-| fold # | accuracy | balanced_accuracy | recall | precision | Best Hyperparameter Config |
-+--------+----------+-------------------+--------+-----------+----------------------------+
-|   1*   |  0.8050  |       0.8058      | 0.8469 |   0.7757  |             {}             |
-+--------+----------+-------------------+--------+-----------+----------------------------+
-
-PHOTONAI 2.2.1 ======================================================================================
-Your results are stored in /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/networkx_example_pipe_results_2022-11-24_22-10-59
-Go to https://explorer.photon-ai.com and upload your photon_result_file.json for convenient result visualization! 
-For more info and documentation visit https://www.photon-ai.com
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>
+<pre>Traceback (most recent call last):
+  File &#34;/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/base/hyperpipe.py&#34;, line 1002, in fit
+    self._prepare_pipeline()
+  File &#34;/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/base/hyperpipe.py&#34;, line 941, in _prepare_pipeline
+    self._pipe = Branch.sanity_check_pipeline(self._pipe)
+  File &#34;/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/base/photon_elements.py&#34;, line 860, in sanity_check_pipeline
+    if isinstance(pipe.elements[-1][1], CallbackElement):
+IndexError: list index out of range
 </pre>
 </div>
 </div>
@@ -2208,171 +2162,40 @@ For more info and documentation visit https://www.photon-ai.com
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
 <pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/IPython/core/formatters.py:972</span>, in <span class="ansi-cyan-fg">MimeBundleFormatter.__call__</span><span class="ansi-blue-fg">(self, obj, include, exclude)</span>
-<span class="ansi-green-intense-fg ansi-bold">    969</span>     method <span style="color: rgb(98,98,98)">=</span> get_real_method(obj, <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>print_method)
-<span class="ansi-green-intense-fg ansi-bold">    971</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> method <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>:
-<span class="ansi-green-fg">--&gt; 972</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">method</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">include</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">include</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">exclude</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">exclude</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    973</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
-<span class="ansi-green-intense-fg ansi-bold">    974</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
+<span class="ansi-red-fg">IndexError</span>                                Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[4], line 1</span>
+<span class="ansi-green-fg">----&gt; 1</span> <span class="ansi-yellow-bg">my_pipe</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">fit</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">graphs</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">labels</span><span class="ansi-yellow-bg">)</span>
 
-File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/base.py:631</span>, in <span class="ansi-cyan-fg">BaseEstimator._repr_mimebundle_</span><span class="ansi-blue-fg">(self, **kwargs)</span>
-<span class="ansi-green-intense-fg ansi-bold">    629</span> output <span style="color: rgb(98,98,98)">=</span> {<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">text/plain</span><span style="color: rgb(175,0,0)">&#34;</span>: <span style="color: rgb(0,135,0)">repr</span>(<span style="color: rgb(0,135,0)">self</span>)}
-<span class="ansi-green-intense-fg ansi-bold">    630</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> get_config()[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">display</span><span style="color: rgb(175,0,0)">&#34;</span>] <span style="color: rgb(98,98,98)">==</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">diagram</span><span style="color: rgb(175,0,0)">&#34;</span>:
-<span class="ansi-green-fg">--&gt; 631</span>     output[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">text/html</span><span style="color: rgb(175,0,0)">&#34;</span>] <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">estimator_html_repr</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    632</span> <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> output
+File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/base/hyperpipe.py:1077</span>, in <span class="ansi-cyan-fg">Hyperpipe.fit</span><span class="ansi-blue-fg">(self, data, targets, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1075</span>     logger<span style="color: rgb(98,98,98)">.</span>error(traceback<span style="color: rgb(98,98,98)">.</span>format_exc())
+<span class="ansi-green-intense-fg ansi-bold">   1076</span>     traceback<span style="color: rgb(98,98,98)">.</span>print_exc()
+<span class="ansi-green-fg">-&gt; 1077</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">raise</span> e
+<span class="ansi-green-intense-fg ansi-bold">   1078</span> <span class="ansi-bold" style="color: rgb(0,135,0)">finally</span>:
+<span class="ansi-green-intense-fg ansi-bold">   1079</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>nr_of_processes <span style="color: rgb(98,98,98)">&gt;</span> <span style="color: rgb(98,98,98)">1</span>:
 
-File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/utils/_estimator_html_repr.py:417</span>, in <span class="ansi-cyan-fg">estimator_html_repr</span><span class="ansi-blue-fg">(estimator)</span>
-<span class="ansi-green-intense-fg ansi-bold">    403</span> fallback_msg <span style="color: rgb(98,98,98)">=</span> (
-<span class="ansi-green-intense-fg ansi-bold">    404</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">In a Jupyter environment, please rerun this cell to show the HTML</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">    405</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> representation or trust the notebook. &lt;br /&gt;On GitHub, the</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">    406</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> HTML representation is unable to render, please try loading this page</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">    407</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> with nbviewer.org.</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">    408</span> )
-<span class="ansi-green-intense-fg ansi-bold">    409</span> out<span style="color: rgb(98,98,98)">.</span>write(
-<span class="ansi-green-intense-fg ansi-bold">    410</span>     <span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">&lt;style&gt;</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>style_with_id<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">&lt;/style&gt;</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">    411</span>     <span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">&lt;div id=</span><span style="color: rgb(175,0,0)">&#34;</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>container_id<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> class=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">sk-top-container</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">&gt;</span><span style="color: rgb(175,0,0)">&#39;</span>
-<span class="ansi-green-fg">   (...)</span>
-<span class="ansi-green-intense-fg ansi-bold">    415</span>     <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">&lt;div class=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">sk-container</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> hidden&gt;</span><span style="color: rgb(175,0,0)">&#39;</span>
-<span class="ansi-green-intense-fg ansi-bold">    416</span> )
-<span class="ansi-green-fg">--&gt; 417</span> <span class="ansi-yellow-bg">_write_estimator_html</span><span class="ansi-yellow-bg">(</span>
-<span class="ansi-green-intense-fg ansi-bold">    418</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">out</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">    419</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">estimator</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">    420</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">estimator</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg" style="color: rgb(0,0,135)">__class__</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg" style="color: rgb(0,0,135)">__name__</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">    421</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">estimator_str</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">    422</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">first_call</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">True</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">    423</span> <span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    424</span> out<span style="color: rgb(98,98,98)">.</span>write(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">&lt;/div&gt;&lt;/div&gt;</span><span style="color: rgb(175,0,0)">&#34;</span>)
-<span class="ansi-green-intense-fg ansi-bold">    426</span> html_output <span style="color: rgb(98,98,98)">=</span> out<span style="color: rgb(98,98,98)">.</span>getvalue()
+File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/base/hyperpipe.py:1002</span>, in <span class="ansi-cyan-fg">Hyperpipe.fit</span><span class="ansi-blue-fg">(self, data, targets, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1000</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>data<span style="color: rgb(98,98,98)">.</span>input_data_sanity_checks(data, targets, <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwargs)
+<span class="ansi-green-intense-fg ansi-bold">   1001</span> <span style="color: rgb(95,135,135)"># create photon pipeline</span>
+<span class="ansi-green-fg">-&gt; 1002</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_prepare_pipeline</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1003</span> <span style="color: rgb(95,135,135)"># initialize the progress monitors</span>
+<span class="ansi-green-intense-fg ansi-bold">   1004</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_prepare_result_logging(start)
 
-File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/utils/_estimator_html_repr.py:151</span>, in <span class="ansi-cyan-fg">_write_estimator_html</span><span class="ansi-blue-fg">(out, estimator, estimator_label, estimator_label_details, first_call)</span>
-<span class="ansi-green-intense-fg ansi-bold">    149</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;Write estimator to html in serial, parallel, or by itself (single).&#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">    150</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> first_call:
-<span class="ansi-green-fg">--&gt; 151</span>     est_block <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">_get_visual_block</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">estimator</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    152</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
-<span class="ansi-green-intense-fg ansi-bold">    153</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">with</span> config_context(print_changed_only<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">True</span>):
+File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/base/hyperpipe.py:941</span>, in <span class="ansi-cyan-fg">Hyperpipe._prepare_pipeline</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    939</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">_prepare_pipeline</span>(<span style="color: rgb(0,135,0)">self</span>):
+<span class="ansi-green-intense-fg ansi-bold">    940</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_pipe <span style="color: rgb(98,98,98)">=</span> Branch<span style="color: rgb(98,98,98)">.</span>prepare_photon_pipe(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>elements)
+<span class="ansi-green-fg">--&gt; 941</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_pipe <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">Branch</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">sanity_check_pipeline</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">_pipe</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    942</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>random_state:
+<span class="ansi-green-intense-fg ansi-bold">    943</span>         <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_pipe<span style="color: rgb(98,98,98)">.</span>random_state <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>random_state
 
-File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/utils/_estimator_html_repr.py:127</span>, in <span class="ansi-cyan-fg">_get_visual_block</span><span class="ansi-blue-fg">(estimator)</span>
-<span class="ansi-green-intense-fg ansi-bold">    123</span> <span style="color: rgb(95,135,135)"># check if estimator looks like a meta estimator wraps estimators</span>
-<span class="ansi-green-intense-fg ansi-bold">    124</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">hasattr</span>(estimator, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">get_params</span><span style="color: rgb(175,0,0)">&#34;</span>):
-<span class="ansi-green-intense-fg ansi-bold">    125</span>     estimators <span style="color: rgb(98,98,98)">=</span> [
-<span class="ansi-green-intense-fg ansi-bold">    126</span>         (key, est)
-<span class="ansi-green-fg">--&gt; 127</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> key, est <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span class="ansi-yellow-bg">estimator</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">get_params</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">deep</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">False</span><span class="ansi-yellow-bg">)</span><span style="color: rgb(98,98,98)">.</span>items()
-<span class="ansi-green-intense-fg ansi-bold">    128</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">hasattr</span>(est, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">get_params</span><span style="color: rgb(175,0,0)">&#34;</span>) <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> <span style="color: rgb(0,135,0)">hasattr</span>(est, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">fit</span><span style="color: rgb(175,0,0)">&#34;</span>)
-<span class="ansi-green-intense-fg ansi-bold">    129</span>     ]
-<span class="ansi-green-intense-fg ansi-bold">    130</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> estimators:
-<span class="ansi-green-intense-fg ansi-bold">    131</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> _VisualBlock(
-<span class="ansi-green-intense-fg ansi-bold">    132</span>             <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">parallel</span><span style="color: rgb(175,0,0)">&#34;</span>,
-<span class="ansi-green-intense-fg ansi-bold">    133</span>             [est <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> _, est <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> estimators],
-<span class="ansi-green-intense-fg ansi-bold">    134</span>             names<span style="color: rgb(98,98,98)">=</span>[<span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>key<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">: </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>est<span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,135)">__class__</span><span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,135)">__name__</span><span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">&#34;</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> key, est <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> estimators],
-<span class="ansi-green-intense-fg ansi-bold">    135</span>             name_details<span style="color: rgb(98,98,98)">=</span>[<span style="color: rgb(0,135,0)">str</span>(est) <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> _, est <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> estimators],
-<span class="ansi-green-intense-fg ansi-bold">    136</span>         )
+File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/photonai/base/photon_elements.py:860</span>, in <span class="ansi-cyan-fg">Branch.sanity_check_pipeline</span><span class="ansi-blue-fg">(pipe)</span>
+<span class="ansi-green-intense-fg ansi-bold">    858</span> <span style="color: rgb(175,0,255)">@staticmethod</span>
+<span class="ansi-green-intense-fg ansi-bold">    859</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">sanity_check_pipeline</span>(pipe):
+<span class="ansi-green-fg">--&gt; 860</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">isinstance</span>(<span class="ansi-yellow-bg">pipe</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">elements</span><span class="ansi-yellow-bg">[</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">-</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">1</span><span class="ansi-yellow-bg">]</span>[<span style="color: rgb(98,98,98)">1</span>], CallbackElement):
+<span class="ansi-green-intense-fg ansi-bold">    861</span>         msg <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">Last element of pipeline cannot be callback element, would be mistaken for estimator. Removing it.</span><span style="color: rgb(175,0,0)">&#34;</span>
+<span class="ansi-green-intense-fg ansi-bold">    862</span>         logger<span style="color: rgb(98,98,98)">.</span>warning(msg)
 
-File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/base.py:211</span>, in <span class="ansi-cyan-fg">BaseEstimator.get_params</span><span class="ansi-blue-fg">(self, deep)</span>
-<span class="ansi-green-intense-fg ansi-bold">    209</span> out <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">dict</span>()
-<span class="ansi-green-intense-fg ansi-bold">    210</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> key <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_get_param_names():
-<span class="ansi-green-fg">--&gt; 211</span>     value <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">getattr</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">key</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    212</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> deep <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> <span style="color: rgb(0,135,0)">hasattr</span>(value, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">get_params</span><span style="color: rgb(175,0,0)">&#34;</span>) <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span style="color: rgb(0,135,0)">isinstance</span>(value, <span style="color: rgb(0,135,0)">type</span>):
-<span class="ansi-green-intense-fg ansi-bold">    213</span>         deep_items <span style="color: rgb(98,98,98)">=</span> value<span style="color: rgb(98,98,98)">.</span>get_params()<span style="color: rgb(98,98,98)">.</span>items()
-
-<span class="ansi-red-fg">AttributeError</span>: &#39;Hyperpipe&#39; object has no attribute &#39;best_config_metric&#39;</pre>
+<span class="ansi-red-fg">IndexError</span>: list index out of range</pre>
 </div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/IPython/core/formatters.py:342</span>, in <span class="ansi-cyan-fg">BaseFormatter.__call__</span><span class="ansi-blue-fg">(self, obj)</span>
-<span class="ansi-green-intense-fg ansi-bold">    340</span>     method <span style="color: rgb(98,98,98)">=</span> get_real_method(obj, <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>print_method)
-<span class="ansi-green-intense-fg ansi-bold">    341</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> method <span class="ansi-bold" style="color: rgb(175,0,255)">is</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>:
-<span class="ansi-green-fg">--&gt; 342</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">method</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    343</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-bold" style="color: rgb(0,135,0)">None</span>
-<span class="ansi-green-intense-fg ansi-bold">    344</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
-
-File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/base.py:625</span>, in <span class="ansi-cyan-fg">BaseEstimator._repr_html_inner</span><span class="ansi-blue-fg">(self)</span>
-<span class="ansi-green-intense-fg ansi-bold">    620</span> <span class="ansi-bold" style="color: rgb(0,135,0)">def</span> <span style="color: rgb(0,0,255)">_repr_html_inner</span>(<span style="color: rgb(0,135,0)">self</span>):
-<span class="ansi-green-intense-fg ansi-bold">    621</span>     <span style="color: rgb(175,0,0)">&#34;&#34;&#34;This function is returned by the @property `_repr_html_` to make</span>
-<span class="ansi-green-intense-fg ansi-bold">    622</span> <span style="color: rgb(175,0,0)">    `hasattr(estimator, &#34;_repr_html_&#34;) return `True` or `False` depending</span>
-<span class="ansi-green-intense-fg ansi-bold">    623</span> <span style="color: rgb(175,0,0)">    on `get_config()[&#34;display&#34;]`.</span>
-<span class="ansi-green-intense-fg ansi-bold">    624</span> <span style="color: rgb(175,0,0)">    &#34;&#34;&#34;</span>
-<span class="ansi-green-fg">--&gt; 625</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">estimator_html_repr</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">)</span>
-
-File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/utils/_estimator_html_repr.py:417</span>, in <span class="ansi-cyan-fg">estimator_html_repr</span><span class="ansi-blue-fg">(estimator)</span>
-<span class="ansi-green-intense-fg ansi-bold">    403</span> fallback_msg <span style="color: rgb(98,98,98)">=</span> (
-<span class="ansi-green-intense-fg ansi-bold">    404</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">In a Jupyter environment, please rerun this cell to show the HTML</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">    405</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> representation or trust the notebook. &lt;br /&gt;On GitHub, the</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">    406</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> HTML representation is unable to render, please try loading this page</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">    407</span>     <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> with nbviewer.org.</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">    408</span> )
-<span class="ansi-green-intense-fg ansi-bold">    409</span> out<span style="color: rgb(98,98,98)">.</span>write(
-<span class="ansi-green-intense-fg ansi-bold">    410</span>     <span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">&lt;style&gt;</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>style_with_id<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">&lt;/style&gt;</span><span style="color: rgb(175,0,0)">&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">    411</span>     <span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">&lt;div id=</span><span style="color: rgb(175,0,0)">&#34;</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>container_id<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> class=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">sk-top-container</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">&gt;</span><span style="color: rgb(175,0,0)">&#39;</span>
-<span class="ansi-green-fg">   (...)</span>
-<span class="ansi-green-intense-fg ansi-bold">    415</span>     <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">&lt;div class=</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">sk-container</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)"> hidden&gt;</span><span style="color: rgb(175,0,0)">&#39;</span>
-<span class="ansi-green-intense-fg ansi-bold">    416</span> )
-<span class="ansi-green-fg">--&gt; 417</span> <span class="ansi-yellow-bg">_write_estimator_html</span><span class="ansi-yellow-bg">(</span>
-<span class="ansi-green-intense-fg ansi-bold">    418</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">out</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">    419</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">estimator</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">    420</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">estimator</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg" style="color: rgb(0,0,135)">__class__</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg" style="color: rgb(0,0,135)">__name__</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">    421</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">estimator_str</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">    422</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">first_call</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">True</span><span class="ansi-yellow-bg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">    423</span> <span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    424</span> out<span style="color: rgb(98,98,98)">.</span>write(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">&lt;/div&gt;&lt;/div&gt;</span><span style="color: rgb(175,0,0)">&#34;</span>)
-<span class="ansi-green-intense-fg ansi-bold">    426</span> html_output <span style="color: rgb(98,98,98)">=</span> out<span style="color: rgb(98,98,98)">.</span>getvalue()
-
-File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/utils/_estimator_html_repr.py:151</span>, in <span class="ansi-cyan-fg">_write_estimator_html</span><span class="ansi-blue-fg">(out, estimator, estimator_label, estimator_label_details, first_call)</span>
-<span class="ansi-green-intense-fg ansi-bold">    149</span> <span style="color: rgb(175,0,0)">&#34;&#34;&#34;Write estimator to html in serial, parallel, or by itself (single).&#34;&#34;&#34;</span>
-<span class="ansi-green-intense-fg ansi-bold">    150</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> first_call:
-<span class="ansi-green-fg">--&gt; 151</span>     est_block <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">_get_visual_block</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">estimator</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    152</span> <span class="ansi-bold" style="color: rgb(0,135,0)">else</span>:
-<span class="ansi-green-intense-fg ansi-bold">    153</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">with</span> config_context(print_changed_only<span style="color: rgb(98,98,98)">=</span><span class="ansi-bold" style="color: rgb(0,135,0)">True</span>):
-
-File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/utils/_estimator_html_repr.py:127</span>, in <span class="ansi-cyan-fg">_get_visual_block</span><span class="ansi-blue-fg">(estimator)</span>
-<span class="ansi-green-intense-fg ansi-bold">    123</span> <span style="color: rgb(95,135,135)"># check if estimator looks like a meta estimator wraps estimators</span>
-<span class="ansi-green-intense-fg ansi-bold">    124</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">hasattr</span>(estimator, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">get_params</span><span style="color: rgb(175,0,0)">&#34;</span>):
-<span class="ansi-green-intense-fg ansi-bold">    125</span>     estimators <span style="color: rgb(98,98,98)">=</span> [
-<span class="ansi-green-intense-fg ansi-bold">    126</span>         (key, est)
-<span class="ansi-green-fg">--&gt; 127</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> key, est <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span class="ansi-yellow-bg">estimator</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">get_params</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">deep</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg ansi-bold" style="color: rgb(0,135,0)">False</span><span class="ansi-yellow-bg">)</span><span style="color: rgb(98,98,98)">.</span>items()
-<span class="ansi-green-intense-fg ansi-bold">    128</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">hasattr</span>(est, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">get_params</span><span style="color: rgb(175,0,0)">&#34;</span>) <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> <span style="color: rgb(0,135,0)">hasattr</span>(est, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">fit</span><span style="color: rgb(175,0,0)">&#34;</span>)
-<span class="ansi-green-intense-fg ansi-bold">    129</span>     ]
-<span class="ansi-green-intense-fg ansi-bold">    130</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> estimators:
-<span class="ansi-green-intense-fg ansi-bold">    131</span>         <span class="ansi-bold" style="color: rgb(0,135,0)">return</span> _VisualBlock(
-<span class="ansi-green-intense-fg ansi-bold">    132</span>             <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">parallel</span><span style="color: rgb(175,0,0)">&#34;</span>,
-<span class="ansi-green-intense-fg ansi-bold">    133</span>             [est <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> _, est <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> estimators],
-<span class="ansi-green-intense-fg ansi-bold">    134</span>             names<span style="color: rgb(98,98,98)">=</span>[<span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>key<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">: </span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>est<span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,135)">__class__</span><span style="color: rgb(98,98,98)">.</span><span style="color: rgb(0,0,135)">__name__</span><span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">&#34;</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> key, est <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> estimators],
-<span class="ansi-green-intense-fg ansi-bold">    135</span>             name_details<span style="color: rgb(98,98,98)">=</span>[<span style="color: rgb(0,135,0)">str</span>(est) <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> _, est <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> estimators],
-<span class="ansi-green-intense-fg ansi-bold">    136</span>         )
-
-File <span class="ansi-green-fg">/opt/hostedtoolcache/Python/3.9.15/x64/lib/python3.9/site-packages/sklearn/base.py:211</span>, in <span class="ansi-cyan-fg">BaseEstimator.get_params</span><span class="ansi-blue-fg">(self, deep)</span>
-<span class="ansi-green-intense-fg ansi-bold">    209</span> out <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">dict</span>()
-<span class="ansi-green-intense-fg ansi-bold">    210</span> <span class="ansi-bold" style="color: rgb(0,135,0)">for</span> key <span class="ansi-bold" style="color: rgb(175,0,255)">in</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_get_param_names():
-<span class="ansi-green-fg">--&gt; 211</span>     value <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">getattr</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg" style="color: rgb(0,135,0)">self</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">key</span><span class="ansi-yellow-bg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    212</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> deep <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> <span style="color: rgb(0,135,0)">hasattr</span>(value, <span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">get_params</span><span style="color: rgb(175,0,0)">&#34;</span>) <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> <span class="ansi-bold" style="color: rgb(175,0,255)">not</span> <span style="color: rgb(0,135,0)">isinstance</span>(value, <span style="color: rgb(0,135,0)">type</span>):
-<span class="ansi-green-intense-fg ansi-bold">    213</span>         deep_items <span style="color: rgb(98,98,98)">=</span> value<span style="color: rgb(98,98,98)">.</span>get_params()<span style="color: rgb(98,98,98)">.</span>items()
-
-<span class="ansi-red-fg">AttributeError</span>: &#39;Hyperpipe&#39; object has no attribute &#39;best_config_metric&#39;</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[4]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>Hyperpipe(name=&#39;networkx_example_pipe&#39;)</pre>
-</div>
-
 </div>
 
 </div>
