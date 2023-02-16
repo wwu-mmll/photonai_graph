@@ -150,7 +150,7 @@ def dgl_to_sparse(graphs, fmt="csr"):
 
     graph_list = []
     for graph in graphs:
-        scp_graph = graph.adjacency_matrix_scipy(fmt=fmt)
+        scp_graph = graph.adjacency_matrix(scipy_fmt=fmt)
         graph_list.append(scp_graph)
     return graph_list
 
