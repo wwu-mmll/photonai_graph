@@ -102,11 +102,11 @@ def draw_connectograms(graphs, curved_edge=False, colorscheme=None,
             if len(ids) == len(graphs):
                 for graph, ID in zip(graphs, ids):
                     if None in [path, out_format]:
-                        raise Exception('To save graphs, declare a path and an output format.')
+                        raise ValueError('To save graphs, declare a path and an output format.')
                     save_path = os.path.join(path, str(ID) + out_format)
                     draw_connectogram(graph, curved_edge, colorscheme, path=save_path, show=show)
             else:
-                raise Exception('Number of IDs must match number of graphs.')
+                raise ValueError('Number of IDs must match number of graphs.')
         # if no IDs are provided graphs are just numbered
         else:
             counter = 0
@@ -180,10 +180,10 @@ def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adja
                 if show:  # pragma: no cover
                     plt.show()
             else:
-                raise Exception('Matrix dimension might not be specified correctly.')
+                raise ValueError('Matrix dimension might not be specified correctly.')
         else:
             if np.ndim(matrix) == 4:
-                raise Exception('You have 4 dimension, please specify axis to plot')
+                raise ValueError('You have 4 dimension, please specify axis to plot')
             elif np.ndim(matrix) == 3:
                 for i in range(matrix.shape[0]):
                     plt.imshow(matrix[i, :, :])
@@ -198,7 +198,7 @@ def draw_connectivity_matrix(matrix, colorbar=False, colorscheme="viridis", adja
                 if show:  # pragma: no cover
                     plt.show()
             else:
-                raise Exception('Matrix dimension might not be specified correctly.')
+                raise ValueError('Matrix dimension might not be specified correctly.')
     elif isinstance(matrix, list):
         if isinstance(matrix[0], np.ndarray) or isinstance(matrix[0], np.matrix):
             for single_matrix in matrix:
@@ -247,9 +247,9 @@ def get_random_connectivity_data(out_type="dense",
         random_matrices = np.random.rand(number_of_individuals, number_of_nodes, number_of_nodes, number_of_modalities)
     elif out_type == "sparse":
         random_matrices = []
-        for i in range(number_of_individuals):
+        for _ in range(number_of_individuals):
             modality_list = []
-            for m in range(number_of_modalities):
+            for _ in range(number_of_modalities):
                 random_matrix = sparse.random(number_of_nodes, number_of_nodes, density=0.1)
                 modality_list.append(random_matrix)
             random_matrices.append(modality_list)
@@ -361,7 +361,7 @@ def individual_ztransform(matrx, adjacency_axis=0):
         """
     # check dimensions
     transformed_matrices = []
-    if not np.ndim(matrx) == 4:
+    if np.ndim(matrx) != 4:
         raise ValueError("Please check input dimension of your graph data.")
     for i in range(matrx.shape[0]):
         matrix = matrx[i, :, :, adjacency_axis].copy()
@@ -518,6 +518,6 @@ def load_conn(path='', mtrx_name='matrix', subject_dim=3, modality_dim=2):  # pr
             mtrx = matfile[mtrx_name]
             mtrx = np.moveaxis(mtrx, [subject_dim, modality_dim], [0, 3])
         except Exception as ex2:
-            raise Exception(ex1, ex2)
+            raise (ex1, ex2)
 
     return mtrx

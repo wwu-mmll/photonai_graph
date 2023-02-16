@@ -80,9 +80,6 @@ class GraphMeasureAdapter(BaseEstimator, TransformerMixin):
         return graphs
 
     def transform(self, X):
-
-        X_transformed = self._inner_transform(X)
-
-        X_transformed = np.asarray(X_transformed)
-
-        return X_transformed
+        transformed = self._inner_transform(X)
+        transformed = np.asarray(transformed)
+        return transformed

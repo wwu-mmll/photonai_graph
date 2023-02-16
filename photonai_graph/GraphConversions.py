@@ -126,7 +126,7 @@ def dgl_to_dense(graphs, in_fmt="csr"):
     assert_imported(["dgl"])
 
     if not isinstance(graphs, list):
-        raise Exception('Input graphs need to be in list format')
+        raise ValueError('Input graphs need to be in list format')
 
     sp_graphs = dgl_to_sparse(graphs, in_fmt)
     graph_list = sparse_to_dense(sp_graphs)
@@ -146,7 +146,7 @@ def dgl_to_sparse(graphs, fmt="csr"):
     assert_imported(["dgl"])
 
     if not isinstance(graphs, list):
-        raise Exception("Input type needs to be a list")
+        raise ValueError("Input type needs to be a list")
 
     graph_list = []
     for graph in graphs:
