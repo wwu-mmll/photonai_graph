@@ -3,15 +3,12 @@
   src: url("../fonts/Roboto/Roboto-Regular.ttf");
 }
 
-:root {
-  --md-text-font: "Roboto";
-}
-
 @font-face {
     font-family: "SpaceMono";
     src: url("../fonts/Space_Mono/SpaceMono-Regular.ttf");
 }
 
 :root {
+    --md-text-font: "Roboto";
     --md-code-font: "SpaceMono";
 }
