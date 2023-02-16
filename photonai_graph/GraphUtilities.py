@@ -518,6 +518,6 @@ def load_conn(path='', mtrx_name='matrix', subject_dim=3, modality_dim=2):  # pr
             mtrx = matfile[mtrx_name]
             mtrx = np.moveaxis(mtrx, [subject_dim, modality_dim], [0, 3])
         except Exception as ex2:
-            raise (ex1, ex2)
+            raise ExceptionGroup(ex1, ex2)
 
     return mtrx
