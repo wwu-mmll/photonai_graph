@@ -74,7 +74,7 @@ class GraphConstructor(BaseEstimator, TransformerMixin, ABC):
     def get_mtrx(self, graph_obj: np.ndarray) -> (np.ndarray, np.ndarray):
         """Returns a feature and adjacency matrix"""
 
-        if not np.ndim(graph_obj) == 4:
+        if np.ndim(graph_obj) != 4:
             raise ValueError("Please make sure your graphs have the needed input shape.")
 
         adjacency_matrix = graph_obj[:, :, :, self.adjacency_axis].copy()

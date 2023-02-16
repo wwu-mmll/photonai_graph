@@ -17,7 +17,7 @@ class GCNClassifier(nn.Module):
         # input layers
         self.layers.append(GraphConv(in_dim, hidden_dim, allow_zero_in_degree=allow_zero_in_degree))
         # hidden layers
-        for layer in range(1, hidden_layers):
+        for _ in range(1, hidden_layers):
             self.layers.append(GraphConv(hidden_dim, hidden_dim, allow_zero_in_degree=allow_zero_in_degree))
         self.classify = nn.Linear(hidden_dim, n_classes)
 

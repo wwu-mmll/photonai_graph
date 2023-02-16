@@ -85,7 +85,6 @@ class GraphConstructorKNN(GraphConstructor):
             k_adjacency = k_adjacency.toarray()
             adjacency_list.append(k_adjacency)
 
-        # X = X[..., None] + adjacency[None, None, :] #use broadcasting to speed up computation
         adjacency_knn = np.asarray(adjacency_list)
         adjacency_knn = adjacency_knn[:, :, :, np.newaxis]
 
@@ -99,6 +98,6 @@ class GraphConstructorKNN(GraphConstructor):
         # threshold matrix
         adj = self.get_knn(adj)
         # get feature matrix
-        X_transformed = self.get_features(adj, feat)
+        transformed = self.get_features(adj, feat)
 
-        return X_transformed
+        return transformed

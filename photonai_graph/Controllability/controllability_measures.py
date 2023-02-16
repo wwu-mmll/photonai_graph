@@ -101,14 +101,14 @@ class ControllabilityMeasureTransform(BaseEstimator, TransformerMixin):
 
         # check if id list is correct length
         if ids is not None:
-            if not len(ids) == len(list(range(X.shape[0]))):
+            if len(ids) != len(list(range(X.shape[0]))):
                 raise ValueError("ID list does not match number of samples.")
         else:
             ids = list(range(X.shape[0]))
 
         # check if node list is correct length
         if node_list is not None:
-            if not len(node_list) == len(list(range(X.shape[1]))):
+            if len(node_list) != len(list(range(X.shape[1]))):
                 raise ValueError("Node list does not match number of nodes.")
         else:
             node_list = list(range(X.shape[1]))

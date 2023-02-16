@@ -21,7 +21,7 @@ class SGConvClassifier(nn.Module):
         # input layer
         self.layers.append(SGConv(in_dim, hidden_dim))
         # hidden layers
-        for lr in range(1, hidden_layers):
+        for _ in range(1, hidden_layers):
             self.layers.append(SGConv(hidden_dim, hidden_dim, allow_zero_in_degree=allow_zero_in_degree))
         # output layer
         self.classify = nn.Linear(hidden_dim, n_classes)

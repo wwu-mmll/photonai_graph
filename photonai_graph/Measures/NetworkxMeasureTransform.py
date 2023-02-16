@@ -20,14 +20,10 @@ Translationale Psychiatrie
 Universitaetsklinikum Muenster
 """
 
-# TODO: make error messages for possible errors
-# TODO: make documentation for every single method
-
 import warnings
 import networkx as nx
 from tqdm.contrib.concurrent import process_map
 from functools import partial
-import pandas as pd
 import numpy as np
 import json
 import os
@@ -142,9 +138,6 @@ class NetworkxMeasureTransform(AbstractMeasureTransform):
             else:
                 measure_list_graph.append(measure_list)
         return measure_list_graph
-
-    def get_measure_info(self):
-        pass
 
     def extract_measures(self, x_graphs_in, path="", ids=None):
         x_graphs = x_graphs_in.copy()

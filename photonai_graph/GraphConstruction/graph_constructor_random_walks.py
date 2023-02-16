@@ -104,9 +104,9 @@ class GraphConstructorRandomWalks(GraphConstructor):
         # i -> starting row
         walks = []  # holds transitions
         elements = np.arange(adjacency.shape[0])  # for our photonai_graph [0,1,2,3]
-        for k in range(num_walks):
+        for _ in range(num_walks):
             node_walks = []
-            for i in range(elements.shape[0]):
+            for _ in range(elements.shape[0]):
                 index = np.random.choice(elements, replace=False)  # current index for this iteration
                 count = 0  # count of transitions
                 walk = []
@@ -133,9 +133,6 @@ class GraphConstructorRandomWalks(GraphConstructor):
         for elem in it:
             result = result[1:] + (elem,)
             yield result
-
-        # todo: check return value!
-        return  # sliding window co-ocurrence
 
     def sliding_window_frequency(self, x_mean: np.ndarray, walk_list: List[List[List[int]]]) -> np.ndarray:
 

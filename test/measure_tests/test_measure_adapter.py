@@ -12,8 +12,8 @@ class MeasureAdapterTests(unittest.TestCase):
     def setUp(self):
         # generate random graphs
         self.random_mtrx = np.random.rand(10, 20, 20, 2)
-        self.random_igraph = [igraph.Graph.Erdos_Renyi(n=10, p=0.3) for i in range(10)]
-        self.random_networkx = [nx.erdos_renyi_graph(n=10, p=0.3) for i in range(10)]
+        self.random_igraph = [igraph.Graph.Erdos_Renyi(n=10, p=0.3) for _ in range(10)]
+        self.random_networkx = [nx.erdos_renyi_graph(n=10, p=0.3) for _ in range(10)]
         # generate nonsense input
         self.edge_dict = {(1, 0): 1, (2, 0): 1, (3, 0): 1}
         self.y = np.random.rand(10)
