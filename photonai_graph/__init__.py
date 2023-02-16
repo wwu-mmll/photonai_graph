@@ -1,5 +1,4 @@
 import os
-from datetime import datetime
 from photonai.base import PhotonRegistry
 from photonai.photonlogger import logger
 
