@@ -1,11 +1,11 @@
 photonai
-networkx==2.5
+networkx<=2.5
 pydot
-dgl==0.9.0
+dgl<=0.9.1
 nxt-gem
 grakel
 pandas
-numpy
+numpy<=1.24.2
 scipy
 tensorflow
 torch
