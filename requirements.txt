@@ -1,7 +1,7 @@
 photonai
-networkx==2.4
+networkx==2.5
 pydot
-dgl==0.6.1
+dgl==0.9.0
 nxt-gem
 grakel
 pandas
