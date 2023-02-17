@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 def get_random_graphs(num_graphs=500, num_nodes=20, edge_prob=0.3):
     # returns a list of random networkx graphs
     graph_list = []
-    for i in range(num_graphs):
+    for _ in range(num_graphs):
         graph = nx.fast_gnp_random_graph(num_nodes, edge_prob)
         graph_list.append(graph)
 
@@ -17,7 +17,7 @@ def get_random_graphs(num_graphs=500, num_nodes=20, edge_prob=0.3):
 def get_sw_graph(num_graphs=500, num_nodes=20, knn=5, edge_rew=0.2):
     # returns a list of small world networkx graphs
     graph_list = []
-    for i in range(num_graphs):
+    for _ in range(num_graphs):
         graph = nx.watts_strogatz_graph(num_nodes, knn, edge_rew)
         graph_list.append(graph)
 

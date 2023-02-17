@@ -134,16 +134,16 @@ class DGLModel(BaseEstimator, ABC):
 
     def fit(self, X, y=None):
         # handle inputs
-        X_trans = self.handle_inputs(X, self.adjacency_axis, self.feature_axis)
+        transformed_inputs = self.handle_inputs(X, self.adjacency_axis, self.feature_axis)
         # get data loader
         val_loader = None
         if not self.validation_score:
-            data_loader = self.get_data_loader(X_trans, y)
+            data_loader = self.get_data_loader(transformed_inputs, y)
         else:
             print("10% of your train data is used as validation data!\ndisable with validation_score=False")
-            X_train, X_val, y_train, y_val = train_test_split(X_trans, y, test_size=.1)
-            data_loader = self.get_data_loader(X_train, y_train)
-            val_loader = self.get_data_loader(X_val, y_val)
+            x_train, x_val, y_train, y_val = train_test_split(transformed_inputs, y, test_size=.1)
+            data_loader = self.get_data_loader(x_train, y_train)
+            val_loader = self.get_data_loader(x_val, y_val)
         # specify model with optimizer etc
         self._init_model(X, y)
         # get optimizers

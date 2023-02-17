@@ -100,10 +100,10 @@ def draw_connectograms(graphs, curved_edge=False, colorscheme=None,
     if isinstance(graphs, list):
         if ids is not None:
             if len(ids) == len(graphs):
-                for graph, ID in zip(graphs, ids):
+                for graph, current_id in zip(graphs, ids):
                     if None in [path, out_format]:
                         raise ValueError('To save graphs, declare a path and an output format.')
-                    save_path = os.path.join(path, str(ID) + out_format)
+                    save_path = os.path.join(path, str(current_id) + out_format)
                     draw_connectogram(graph, curved_edge, colorscheme, path=save_path, show=show)
             else:
                 raise ValueError('Number of IDs must match number of graphs.')

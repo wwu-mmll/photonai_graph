@@ -66,9 +66,9 @@ class GrakelAdapter(BaseEstimator, ClassifierMixin):
         else:
             node_features = None
             edge_features = None
-        X_transformed = self.convert_grakel(X, self.input_type, node_features, edge_features, self.adjacency_axis)
+        transformed = self.convert_grakel(X, self.input_type, node_features, edge_features, self.adjacency_axis)
 
-        return X_transformed
+        return transformed
 
     @staticmethod
     def convert_grakel(graphs, in_format, node_labels, edge_features, adjacency_axis):

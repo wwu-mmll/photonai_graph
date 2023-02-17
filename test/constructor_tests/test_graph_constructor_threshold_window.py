@@ -19,12 +19,6 @@ class ThresholdWindowTests(unittest.TestCase):
         trans = g_constr.transform(self.X4d)
         self.assertEqual(np.shape(trans), (20, 20, 20, 3))
 
-    def test_threshold_window_individual(self):
-        g_constr = GraphConstructorThresholdWindow()
-        g_constr.fit(self.X4d, self.y)
-        trans = g_constr.transform(self.X4d)
-        self.assertEqual(np.shape(trans), (20, 20, 20, 3))
-
     def test_threshold_window_retain_weights_none(self):
         g_constr = GraphConstructorThresholdWindow(retain_weights=0)
         g_constr.fit(self.Xrandom4d, self.y)

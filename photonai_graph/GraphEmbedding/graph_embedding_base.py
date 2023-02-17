@@ -63,9 +63,9 @@ class GraphEmbeddingBase(BaseEstimator, TransformerMixin, ABC):
     def transform(self, X: np.ndarray) -> np.ndarray:
         """Transforms graph using Laplacian Eigenmaps Embedding"""
         embedding = self._init_embedding()
-        X_transformed = self._calculate_embedding(embedding, X)
-        X_transformed = np.real(X_transformed)
-        return X_transformed
+        transformed = self._calculate_embedding(embedding, X)
+        transformed = np.real(transformed)
+        return transformed
 
     @abstractmethod
     def _init_embedding(self) -> StaticGraphEmbedding:
