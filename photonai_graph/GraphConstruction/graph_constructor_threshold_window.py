@@ -92,9 +92,9 @@ class GraphConstructorThresholdWindow(GraphConstructor):
         # threshold matrix
         adj = self.threshold_window(adj)
         # get feature matrix
-        X_transformed = self.get_features(adj, feat)
+        transformed = self.get_features(adj, feat)
 
-        return X_transformed
+        return transformed
 
     def threshold_window(self, adjacency: np.ndarray) -> np.ndarray:
         """Threshold matrix"""

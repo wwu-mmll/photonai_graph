@@ -40,7 +40,7 @@ class CofluctTransform(BaseEstimator, TransformerMixin):
             self.logs = os.getcwd()
 
     def fit(self, X, y):
-        pass
+        return self
 
     def transform(self, X):
 
