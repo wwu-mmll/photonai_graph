@@ -1846,7 +1846,7 @@ from matplotlib import pyplot as plt</div>
             <div class="highlight-ipynb hl-python"><pre><span></span><span class="k">def</span> <span class="nf">get_random_graphs</span><span class="p">(</span><span class="n">num_graphs</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">num_nodes</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">edge_prob</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
     <span class="c1"># returns a list of random networkx graphs</span>
     <span class="n">graph_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_graphs</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_graphs</span><span class="p">):</span>
         <span class="n">graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">fast_gnp_random_graph</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">edge_prob</span><span class="p">)</span>
         <span class="n">graph_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
 
@@ -1855,7 +1855,7 @@ from matplotlib import pyplot as plt</div>
 <div id="cell-2" class="clipboard-copy-txt">def get_random_graphs(num_graphs=500, num_nodes=20, edge_prob=0.3):
     # returns a list of random networkx graphs
     graph_list = []
-    for i in range(num_graphs):
+    for _ in range(num_graphs):
         graph = nx.fast_gnp_random_graph(num_nodes, edge_prob)
         graph_list.append(graph)
 
@@ -1892,7 +1892,7 @@ from matplotlib import pyplot as plt</div>
             <div class="highlight-ipynb hl-python"><pre><span></span><span class="k">def</span> <span class="nf">get_sw_graph</span><span class="p">(</span><span class="n">num_graphs</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">num_nodes</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">knn</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">edge_rew</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
     <span class="c1"># returns a list of small world networkx graphs</span>
     <span class="n">graph_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_graphs</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_graphs</span><span class="p">):</span>
         <span class="n">graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">watts_strogatz_graph</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">knn</span><span class="p">,</span> <span class="n">edge_rew</span><span class="p">)</span>
         <span class="n">graph_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
 
@@ -1901,7 +1901,7 @@ from matplotlib import pyplot as plt</div>
 <div id="cell-3" class="clipboard-copy-txt">def get_sw_graph(num_graphs=500, num_nodes=20, knn=5, edge_rew=0.2):
     # returns a list of small world networkx graphs
     graph_list = []
-    for i in range(num_graphs):
+    for _ in range(num_graphs):
         graph = nx.watts_strogatz_graph(num_nodes, knn, edge_rew)
         graph_list.append(graph)
 

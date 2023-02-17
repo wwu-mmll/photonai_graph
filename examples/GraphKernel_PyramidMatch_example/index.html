@@ -2053,10 +2053,6 @@ Outer Cross validation Fold 1
   _warn_prf(average, modifier, msg_start, len(result))
 /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
   _warn_prf(average, modifier, msg_start, len(result))
-/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
 </pre>
 </div>
 </div>
@@ -2074,93 +2070,11 @@ BEST_CONFIG
 {}
 -----------------------------------------------------------------------------------------------------
 VALIDATION PERFORMANCE
------------------------------------------------------------------------------------------------------
-+-------------------+-------------------+------------------+
-|       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
-+-------------------+-------------------+------------------+
-|      accuracy     |       1.0000      |      0.5437      |
-| balanced_accuracy |       1.0000      |      0.5000      |
-|       recall      |       1.0000      |      0.0000      |
-|     precision     |       1.0000      |      0.0000      |
-+-------------------+-------------------+------------------+
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-----------------------------------------------------------------------------------------------------
-TEST PERFORMANCE
 -----------------------------------------------------------------------------------------------------
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
 |      accuracy     |       1.0000      |      0.4250      |
-| balanced_accuracy |       1.0000      |      0.5000      |
-|       recall      |       1.0000      |      0.0000      |
-|     precision     |       1.0000      |      0.0000      |
-+-------------------+-------------------+------------------+
-
-*****************************************************************************************************
-Outer Cross validation Fold 2
-*****************************************************************************************************
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-----------------------------------------------------------------------------------------------------
-BEST_CONFIG 
------------------------------------------------------------------------------------------------------
-{}
------------------------------------------------------------------------------------------------------
-VALIDATION PERFORMANCE
------------------------------------------------------------------------------------------------------
-+-------------------+-------------------+------------------+
-|       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
-+-------------------+-------------------+------------------+
-|      accuracy     |       1.0000      |      0.4313      |
 | balanced_accuracy |       1.0000      |      0.5000      |
 |       recall      |       1.0000      |      0.4000      |
 |     precision     |       1.0000      |      0.1562      |
@@ -2195,48 +2109,76 @@ TEST PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       1.0000      |      0.5250      |
+|      accuracy     |       1.0000      |      0.4000      |
 | balanced_accuracy |       1.0000      |      0.5000      |
 |       recall      |       1.0000      |      0.0000      |
 |     precision     |       1.0000      |      0.0000      |
 +-------------------+-------------------+------------------+
 
 *****************************************************************************************************
+Outer Cross validation Fold 2
+*****************************************************************************************************
+-----------------------------------------------------------------------------------------------------
+BEST_CONFIG 
+-----------------------------------------------------------------------------------------------------
+{}
+-----------------------------------------------------------------------------------------------------
+VALIDATION PERFORMANCE
+-----------------------------------------------------------------------------------------------------
++-------------------+-------------------+------------------+
+|       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
++-------------------+-------------------+------------------+
+|      accuracy     |       1.0000      |      0.5250      |
+| balanced_accuracy |       1.0000      |      0.5000      |
+|       recall      |       1.0000      |      1.0000      |
+|     precision     |       1.0000      |      0.5250      |
++-------------------+-------------------+------------------+
+-----------------------------------------------------------------------------------------------------
+TEST PERFORMANCE
+-----------------------------------------------------------------------------------------------------
++-------------------+-------------------+------------------+
+|       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
++-------------------+-------------------+------------------+
+|      accuracy     |       1.0000      |      0.4500      |
+| balanced_accuracy |       1.0000      |      0.5000      |
+|       recall      |       1.0000      |      1.0000      |
+|     precision     |       1.0000      |      0.4500      |
++-------------------+-------------------+------------------+
+
+*****************************************************************************************************
 Outer Cross validation Fold 3
 *****************************************************************************************************
-</pre>
-</div>
-</div>
+-----------------------------------------------------------------------------------------------------
+BEST_CONFIG 
+-----------------------------------------------------------------------------------------------------
+{}
+-----------------------------------------------------------------------------------------------------
+VALIDATION PERFORMANCE
+-----------------------------------------------------------------------------------------------------
++-------------------+-------------------+------------------+
+|       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
++-------------------+-------------------+------------------+
+|      accuracy     |       1.0000      |      0.5312      |
+| balanced_accuracy |       1.0000      |      0.5000      |
+|       recall      |       1.0000      |      1.0000      |
+|     precision     |       1.0000      |      0.5312      |
++-------------------+-------------------+------------------+
+-----------------------------------------------------------------------------------------------------
+TEST PERFORMANCE
+-----------------------------------------------------------------------------------------------------
++-------------------+-------------------+------------------+
+|       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
++-------------------+-------------------+------------------+
+|      accuracy     |       1.0000      |      0.4250      |
+| balanced_accuracy |       1.0000      |      0.5000      |
+|       recall      |       1.0000      |      1.0000      |
+|     precision     |       1.0000      |      0.4250      |
++-------------------+-------------------+------------------+
 
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-----------------------------------------------------------------------------------------------------
+*****************************************************************************************************
+Outer Cross validation Fold 4
+*****************************************************************************************************
+-----------------------------------------------------------------------------------------------------
 BEST_CONFIG 
 -----------------------------------------------------------------------------------------------------
 {}
@@ -2248,90 +2190,8 @@ VALIDATION PERFORMANCE
 +-------------------+-------------------+------------------+
 |      accuracy     |       1.0000      |      0.5188      |
 | balanced_accuracy |       1.0000      |      0.5000      |
-|       recall      |       1.0000      |      0.0000      |
-|     precision     |       1.0000      |      0.0000      |
-+-------------------+-------------------+------------------+
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-----------------------------------------------------------------------------------------------------
-TEST PERFORMANCE
------------------------------------------------------------------------------------------------------
-+-------------------+-------------------+------------------+
-|       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
-+-------------------+-------------------+------------------+
-|      accuracy     |       1.0000      |      0.5250      |
-| balanced_accuracy |       1.0000      |      0.5000      |
-|       recall      |       1.0000      |      0.0000      |
-|     precision     |       1.0000      |      0.0000      |
-+-------------------+-------------------+------------------+
-
-*****************************************************************************************************
-Outer Cross validation Fold 4
-*****************************************************************************************************
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-----------------------------------------------------------------------------------------------------
-BEST_CONFIG 
------------------------------------------------------------------------------------------------------
-{}
------------------------------------------------------------------------------------------------------
-VALIDATION PERFORMANCE
------------------------------------------------------------------------------------------------------
-+-------------------+-------------------+------------------+
-|       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
-+-------------------+-------------------+------------------+
-|      accuracy     |       1.0000      |      0.4375      |
-| balanced_accuracy |       1.0000      |      0.5000      |
-|       recall      |       1.0000      |      0.4000      |
-|     precision     |       1.0000      |      0.1688      |
+|       recall      |       1.0000      |      1.0000      |
+|     precision     |       1.0000      |      0.5188      |
 +-------------------+-------------------+------------------+
 -----------------------------------------------------------------------------------------------------
 TEST PERFORMANCE
@@ -2339,10 +2199,10 @@ TEST PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       1.0000      |      0.4000      |
+|      accuracy     |       1.0000      |      0.4750      |
 | balanced_accuracy |       1.0000      |      0.5000      |
 |       recall      |       1.0000      |      1.0000      |
-|     precision     |       1.0000      |      0.4000      |
+|     precision     |       1.0000      |      0.4750      |
 +-------------------+-------------------+------------------+
 
 *****************************************************************************************************
@@ -2365,6 +2225,8 @@ Outer Cross validation Fold 5
   _warn_prf(average, modifier, msg_start, len(result))
 /opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
   _warn_prf(average, modifier, msg_start, len(result))
+/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
 </pre>
 </div>
 </div>
@@ -2386,10 +2248,10 @@ VALIDATION PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       1.0000      |      0.4188      |
+|      accuracy     |       1.0000      |      0.4750      |
 | balanced_accuracy |       1.0000      |      0.5000      |
-|       recall      |       1.0000      |      0.4000      |
-|     precision     |       1.0000      |      0.1500      |
+|       recall      |       1.0000      |      0.2000      |
+|     precision     |       1.0000      |      0.0813      |
 +-------------------+-------------------+------------------+
 </pre>
 </div>
@@ -2421,7 +2283,7 @@ TEST PERFORMANCE
 +-------------------+-------------------+------------------+
 |       METRIC      | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +-------------------+-------------------+------------------+
-|      accuracy     |       1.0000      |      0.5250      |
+|      accuracy     |       1.0000      |      0.4000      |
 | balanced_accuracy |       1.0000      |      0.5000      |
 |       recall      |       1.0000      |      0.0000      |
 |     precision     |       1.0000      |      0.0000      |
@@ -2431,9 +2293,9 @@ Finished all outer fold computations.
 *****************************************************************************************************
 
 ANALYSIS INFORMATION ================================================================================ 
-Project Folder: /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_kernel_pipe_results_2023-02-16_16-38-00,
-Computation Time: 2023-02-16 16:38:00.581249 - 2023-02-16 16:57:42.891366
-Duration: 0:19:42.310117
+Project Folder: /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_kernel_pipe_results_2023-02-17_10-52-31,
+Computation Time: 2023-02-17 10:52:31.912590 - 2023-02-17 11:18:01.125008
+Duration: 0:25:29.212418
 Optimized for: accuracy
 Hyperparameter Optimizer: grid_search
 
@@ -2447,10 +2309,10 @@ AVERAGE PERFORMANCE ACROSS OUTER FOLDS =========================================
 +-------------------+---------------+--------------+-----------+----------+
 |    Metric Name    | Training Mean | Training Std | Test Mean | Test Std |
 +-------------------+---------------+--------------+-----------+----------+
-|      accuracy     |      1.0      |     0.0      |    0.48   | 0.055678 |
+|      accuracy     |      1.0      |     0.0      |    0.43   | 0.029155 |
 | balanced_accuracy |      1.0      |     0.0      |    0.5    |   0.0    |
-|       recall      |      1.0      |     0.0      |    0.2    |   0.4    |
-|     precision     |      1.0      |     0.0      |    0.08   |   0.16   |
+|       recall      |      1.0      |     0.0      |    0.6    | 0.489898 |
+|     precision     |      1.0      |     0.0      |    0.27   | 0.22102  |
 +-------------------+---------------+--------------+-----------+----------+
 
 BEST HYPERPARAMETER CONFIGURATION ===================================================================
@@ -2460,15 +2322,15 @@ BEST HYPERPARAMETER CONFIGURATION ==============================================
 +--------+----------+-------------------+--------+-----------+----------------------------+
 | fold # | accuracy | balanced_accuracy | recall | precision | Best Hyperparameter Config |
 +--------+----------+-------------------+--------+-----------+----------------------------+
-|   1    |  0.4250  |       0.5000      | 0.0000 |   0.0000  |             {}             |
-|   2*   |  0.5250  |       0.5000      | 0.0000 |   0.0000  |             {}             |
-|   3    |  0.5250  |       0.5000      | 0.0000 |   0.0000  |             {}             |
-|   4    |  0.4000  |       0.5000      | 1.0000 |   0.4000  |             {}             |
-|   5    |  0.5250  |       0.5000      | 0.0000 |   0.0000  |             {}             |
+|   1    |  0.4000  |       0.5000      | 0.0000 |   0.0000  |             {}             |
+|   2    |  0.4500  |       0.5000      | 1.0000 |   0.4500  |             {}             |
+|   3    |  0.4250  |       0.5000      | 1.0000 |   0.4250  |             {}             |
+|   4*   |  0.4750  |       0.5000      | 1.0000 |   0.4750  |             {}             |
+|   5    |  0.4000  |       0.5000      | 0.0000 |   0.0000  |             {}             |
 +--------+----------+-------------------+--------+-----------+----------------------------+
 
 PHOTONAI 2.3.0 ======================================================================================
-Your results are stored in /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_kernel_pipe_results_2023-02-16_16-38-00
+Your results are stored in /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_kernel_pipe_results_2023-02-17_10-52-31
 Go to https://explorer.photon-ai.com and upload your photonai_results.json for convenient result visualization! 
 For more info and documentation visit https://www.photon-ai.com
 </pre>
