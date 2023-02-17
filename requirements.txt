@@ -1,5 +1,5 @@
 photonai
-networkx<=2.5
+networkx<3.1
 pydot
 dgl==1.0.0
 nxt-gem
