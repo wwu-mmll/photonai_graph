@@ -163,14 +163,14 @@ class GraphMeasureTransformTests(unittest.TestCase):
     def test_compute_average(self):
         g_transform = NetworkxMeasureTransform(graph_functions={"degree_centrality": {}})
         g_transform.fit(self.X_nx, self.y)
-        X_nodes = g_transform.transform(self.X_nx)
-        X_nodes_average = np.mean(X_nodes, axis=1).reshape(-1, 1)
+        x_nodes = g_transform.transform(self.X_nx)
+        x_nodes_average = np.mean(x_nodes, axis=1).reshape(-1, 1)
 
         g_transform = NetworkxMeasureTransform(graph_functions={"average_degree_centrality": {}})
         g_transform.fit(self.X_nx, self.y)
-        X_average = g_transform.transform(self.X_nx)
+        x_average = g_transform.transform(self.X_nx)
 
-        np.testing.assert_array_equal(X_average, X_nodes_average)
+        np.testing.assert_array_equal(x_average, x_nodes_average)
 
     # !!!
     #   Below this line are legacy tests where
@@ -179,28 +179,24 @@ class GraphMeasureTransformTests(unittest.TestCase):
     #   todo: Reimplement all these tests!
     # !!!
 
-    # todo: rewrite
     """def test_extract_list(self):
         path = "/tmp/test.csv"
         g_transform = GraphMeasureTransform(graph_functions={"voterank": {}})
         with self.assertRaises(NotImplementedError):
             g_transform.extract_measures(self.X_nx, path, self.ids)"""
 
-    # todo: rewrite
     """def test_extract_dict_dict(self):
         path = "/tmp/test.csv"
         g_transform = GraphMeasureTransform(graph_functions={"communicability": {}})
         with self.assertRaises(NotImplementedError):
             g_transform.extract_measures(self.X_nx, path, self.ids)"""
 
-    # todo: reimplement
     """def test_extract_tuple_dict(self):
         path = "/tmp/test.csv"
         g_transform = GraphMeasureTransform(graph_functions={"hits": {}})
         with self.assertRaises(NotImplementedError):
             g_transform.extract_measures(self.X_nx, path, self.ids)"""
 
-    # todo: reimplement
     """    
     def test_extract_dual_tuple(self):
         path = "/tmp/test.csv"

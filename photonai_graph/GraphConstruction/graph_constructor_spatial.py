@@ -115,9 +115,9 @@ class GraphConstructorSpatial(GraphConstructor):
         # threshold matrix
         adj = self.get_spatial(adj)
         # get feature matrix
-        X_transformed = self.get_features(adj, feat)
+        transformed = self.get_features(adj, feat)
 
-        return X_transformed
+        return transformed
 
     @staticmethod
     def distance_scipy_spatial(z, k, metric='euclidean'):
