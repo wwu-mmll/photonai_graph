@@ -2018,23 +2018,23 @@ my_pipe.add(PipelineElement('GATRegressor', nn_epochs=20))</div>
 <pre>=====================================================================================================
 PHOTONAI ANALYSIS: basic_gembedding_pipe
 =====================================================================================================
-Found 100 target classes: [0.0118558  0.01571767 0.03092563 0.03434158 0.04464721 0.04626757
- 0.0481196  0.04900022 0.05929722 0.09489932 0.09807934 0.10395534
- 0.10643356 0.10998784 0.11429414 0.13262866 0.13318988 0.13538857
- 0.1478513  0.14806024 0.15096755 0.17876708 0.17954272 0.18866298
- 0.1923733  0.20295558 0.20904143 0.21177802 0.22570787 0.23044437
- 0.27464033 0.32267642 0.36455317 0.3659178  0.38353161 0.38358166
- 0.38818909 0.40890861 0.44423218 0.44940907 0.4553972  0.45563146
- 0.46255082 0.4667108  0.46757617 0.48481628 0.48925572 0.497234
- 0.50534212 0.50723345 0.51606794 0.52773809 0.5398622  0.54509232
- 0.55508157 0.5595537  0.58086593 0.58246637 0.61600461 0.62319409
- 0.63268278 0.64337676 0.6628736  0.676591   0.69283522 0.69412685
- 0.69417821 0.70267699 0.70969042 0.72030998 0.72037079 0.72122054
- 0.73284775 0.73933749 0.73941218 0.73994294 0.74024661 0.74339154
- 0.74725352 0.75532227 0.75686484 0.76861855 0.7727103  0.81085501
- 0.81260046 0.83857573 0.85813285 0.86073227 0.86336089 0.86886531
- 0.88023781 0.91155157 0.9174705  0.92193987 0.92357667 0.94063251
- 0.97052428 0.97385621 0.97483693 0.9897215 ]
+Found 100 target classes: [0.00874305 0.00978279 0.01684908 0.01864002 0.02878775 0.0380922
+ 0.04400718 0.04610329 0.05092174 0.0892     0.10305128 0.11028915
+ 0.11331007 0.11451747 0.13014074 0.1311517  0.13936134 0.1523791
+ 0.15836214 0.16120798 0.16871828 0.17312219 0.17351841 0.18967885
+ 0.21932981 0.21981833 0.22732574 0.23998515 0.25867357 0.25922975
+ 0.26565241 0.27771751 0.3248586  0.34853162 0.36116923 0.36600805
+ 0.36657406 0.37062866 0.37227097 0.38511651 0.39640219 0.40260934
+ 0.42360043 0.45597903 0.45714692 0.46265326 0.47479857 0.48107235
+ 0.48709224 0.49093987 0.5049475  0.52372692 0.52592589 0.53830752
+ 0.54028384 0.55143858 0.57980651 0.60899729 0.63157625 0.63317618
+ 0.64372636 0.65827753 0.66609777 0.67242643 0.67472376 0.6754865
+ 0.68753517 0.68959095 0.69713651 0.69843049 0.70608723 0.70808492
+ 0.71043583 0.72133499 0.74232506 0.75322741 0.76119203 0.77110671
+ 0.80045163 0.80089896 0.80728273 0.81925845 0.82038838 0.84296948
+ 0.84871132 0.84939813 0.85342537 0.88798733 0.90499699 0.90739427
+ 0.91046008 0.91151194 0.92274944 0.92311316 0.93346087 0.93731997
+ 0.94471613 0.94523274 0.95207524 0.97393969]
 
 *****************************************************************************************************
 Outer Cross validation Fold 1
@@ -2055,10 +2055,318 @@ Did not find any hyperparameter to convert into skopt space.
   warnings.warn(msg)
   0%|          | 0/20 [00:00&lt;?, ?it/s]/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/photonai_graph/NeuralNets/dgl_base.py:357: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at ../torch/csrc/utils/tensor_new.cpp:230.)
   return batched_graph, torch.tensor(labels, dtype=torch.float32)
-100%|██████████| 20/20 [00:02&lt;00:00,  9.20it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  9.35it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  9.44it/s]
+100%|██████████| 20/20 [00:02&lt;00:00,  9.29it/s]
+100%|██████████| 20/20 [00:02&lt;00:00,  9.76it/s]
+100%|██████████| 20/20 [00:02&lt;00:00,  9.54it/s]
+100%|██████████| 20/20 [00:02&lt;00:00,  9.42it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 10.02it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>-----------------------------------------------------------------------------------------------------
+BEST_CONFIG 
+-----------------------------------------------------------------------------------------------------
+{}
+-----------------------------------------------------------------------------------------------------
+VALIDATION PERFORMANCE
+-----------------------------------------------------------------------------------------------------
++---------------------+-------------------+------------------+
+|        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
++---------------------+-------------------+------------------+
+| mean_absolute_error |       0.2769      |      0.2832      |
++---------------------+-------------------+------------------+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|██████████| 20/20 [00:02&lt;00:00,  7.43it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>-----------------------------------------------------------------------------------------------------
+TEST PERFORMANCE
+-----------------------------------------------------------------------------------------------------
++---------------------+-------------------+------------------+
+|        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
++---------------------+-------------------+------------------+
+| mean_absolute_error |       0.2746      |      0.2018      |
++---------------------+-------------------+------------------+
+
+*****************************************************************************************************
+Outer Cross validation Fold 2
+*****************************************************************************************************
+Did not find any hyperparameter to convert into skopt space.
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
+  warnings.warn(msg)
 100%|██████████| 20/20 [00:02&lt;00:00,  9.60it/s]
+100%|██████████| 20/20 [00:02&lt;00:00,  9.85it/s]
+100%|██████████| 20/20 [00:02&lt;00:00,  9.92it/s]
+100%|██████████| 20/20 [00:02&lt;00:00,  9.96it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 10.04it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>-----------------------------------------------------------------------------------------------------
+BEST_CONFIG 
+-----------------------------------------------------------------------------------------------------
+{}
+-----------------------------------------------------------------------------------------------------
+VALIDATION PERFORMANCE
+-----------------------------------------------------------------------------------------------------
++---------------------+-------------------+------------------+
+|        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
++---------------------+-------------------+------------------+
+| mean_absolute_error |       0.2680      |      0.2730      |
++---------------------+-------------------+------------------+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|██████████| 20/20 [00:02&lt;00:00,  7.80it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>-----------------------------------------------------------------------------------------------------
+TEST PERFORMANCE
+-----------------------------------------------------------------------------------------------------
++---------------------+-------------------+------------------+
+|        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
++---------------------+-------------------+------------------+
+| mean_absolute_error |       0.2677      |      0.2291      |
++---------------------+-------------------+------------------+
+
+*****************************************************************************************************
+Outer Cross validation Fold 3
+*****************************************************************************************************
+Did not find any hyperparameter to convert into skopt space.
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
+  warnings.warn(msg)
+100%|██████████| 20/20 [00:02&lt;00:00,  9.91it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 10.09it/s]
+100%|██████████| 20/20 [00:02&lt;00:00,  9.75it/s]
+100%|██████████| 20/20 [00:02&lt;00:00,  9.92it/s]
+100%|██████████| 20/20 [00:02&lt;00:00,  9.88it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>-----------------------------------------------------------------------------------------------------
+BEST_CONFIG 
+-----------------------------------------------------------------------------------------------------
+{}
+-----------------------------------------------------------------------------------------------------
+VALIDATION PERFORMANCE
+-----------------------------------------------------------------------------------------------------
++---------------------+-------------------+------------------+
+|        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
++---------------------+-------------------+------------------+
+| mean_absolute_error |       0.2459      |      0.2453      |
++---------------------+-------------------+------------------+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|██████████| 20/20 [00:02&lt;00:00,  7.51it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>-----------------------------------------------------------------------------------------------------
+TEST PERFORMANCE
+-----------------------------------------------------------------------------------------------------
++---------------------+-------------------+------------------+
+|        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
++---------------------+-------------------+------------------+
+| mean_absolute_error |       0.2456      |      0.3195      |
++---------------------+-------------------+------------------+
+
+*****************************************************************************************************
+Outer Cross validation Fold 4
+*****************************************************************************************************
+Did not find any hyperparameter to convert into skopt space.
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
+  warnings.warn(msg)
+100%|██████████| 20/20 [00:02&lt;00:00,  9.84it/s]
+100%|██████████| 20/20 [00:02&lt;00:00,  9.75it/s]
+100%|██████████| 20/20 [00:02&lt;00:00,  9.36it/s]
+100%|██████████| 20/20 [00:02&lt;00:00,  9.30it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 10.12it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>-----------------------------------------------------------------------------------------------------
+BEST_CONFIG 
+-----------------------------------------------------------------------------------------------------
+{}
+-----------------------------------------------------------------------------------------------------
+VALIDATION PERFORMANCE
+-----------------------------------------------------------------------------------------------------
++---------------------+-------------------+------------------+
+|        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
++---------------------+-------------------+------------------+
+| mean_absolute_error |       0.2495      |      0.2530      |
++---------------------+-------------------+------------------+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>100%|██████████| 20/20 [00:02&lt;00:00,  7.58it/s]
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>-----------------------------------------------------------------------------------------------------
+TEST PERFORMANCE
+-----------------------------------------------------------------------------------------------------
++---------------------+-------------------+------------------+
+|        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
++---------------------+-------------------+------------------+
+| mean_absolute_error |       0.2495      |      0.3070      |
++---------------------+-------------------+------------------+
+
+*****************************************************************************************************
+Outer Cross validation Fold 5
+*****************************************************************************************************
+Did not find any hyperparameter to convert into skopt space.
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
+  warnings.warn(msg)
+100%|██████████| 20/20 [00:01&lt;00:00, 10.21it/s]
+100%|██████████| 20/20 [00:02&lt;00:00,  9.82it/s]
+100%|██████████| 20/20 [00:01&lt;00:00, 10.27it/s]
+100%|██████████| 20/20 [00:02&lt;00:00,  9.80it/s]
 100%|██████████| 20/20 [00:02&lt;00:00,  9.50it/s]
 </pre>
 </div>
@@ -2081,7 +2389,7 @@ VALIDATION PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2590      |      0.2681      |
+| mean_absolute_error |       0.2639      |      0.2622      |
 +---------------------+-------------------+------------------+
 </pre>
 </div>
@@ -2094,7 +2402,7 @@ VALIDATION PERFORMANCE
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 20/20 [00:02&lt;00:00,  7.53it/s]
+<pre>100%|██████████| 20/20 [00:02&lt;00:00,  7.60it/s]
 </pre>
 </div>
 </div>
@@ -2112,315 +2420,7 @@ TEST PERFORMANCE
 +---------------------+-------------------+------------------+
 |        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
 +---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2600      |      0.2170      |
-+---------------------+-------------------+------------------+
-
-*****************************************************************************************************
-Outer Cross validation Fold 2
-*****************************************************************************************************
-Did not find any hyperparameter to convert into skopt space.
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
-  warnings.warn(msg)
-100%|██████████| 20/20 [00:02&lt;00:00,  8.86it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  9.58it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  9.41it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  9.34it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  9.21it/s]
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-----------------------------------------------------------------------------------------------------
-BEST_CONFIG 
------------------------------------------------------------------------------------------------------
-{}
------------------------------------------------------------------------------------------------------
-VALIDATION PERFORMANCE
------------------------------------------------------------------------------------------------------
-+---------------------+-------------------+------------------+
-|        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
-+---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2443      |      0.2561      |
-+---------------------+-------------------+------------------+
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 20/20 [00:02&lt;00:00,  7.24it/s]
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-----------------------------------------------------------------------------------------------------
-TEST PERFORMANCE
------------------------------------------------------------------------------------------------------
-+---------------------+-------------------+------------------+
-|        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
-+---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2650      |      0.2819      |
-+---------------------+-------------------+------------------+
-
-*****************************************************************************************************
-Outer Cross validation Fold 3
-*****************************************************************************************************
-Did not find any hyperparameter to convert into skopt space.
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
-  warnings.warn(msg)
-100%|██████████| 20/20 [00:02&lt;00:00,  9.12it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  8.92it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  9.37it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  9.23it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  9.36it/s]
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-----------------------------------------------------------------------------------------------------
-BEST_CONFIG 
------------------------------------------------------------------------------------------------------
-{}
------------------------------------------------------------------------------------------------------
-VALIDATION PERFORMANCE
------------------------------------------------------------------------------------------------------
-+---------------------+-------------------+------------------+
-|        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
-+---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2542      |      0.2624      |
-+---------------------+-------------------+------------------+
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 20/20 [00:02&lt;00:00,  7.41it/s]
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-----------------------------------------------------------------------------------------------------
-TEST PERFORMANCE
------------------------------------------------------------------------------------------------------
-+---------------------+-------------------+------------------+
-|        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
-+---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2540      |      0.2456      |
-+---------------------+-------------------+------------------+
-
-*****************************************************************************************************
-Outer Cross validation Fold 4
-*****************************************************************************************************
-Did not find any hyperparameter to convert into skopt space.
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
-  warnings.warn(msg)
-100%|██████████| 20/20 [00:02&lt;00:00,  9.42it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  9.48it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  9.45it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  9.66it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  9.81it/s]
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-----------------------------------------------------------------------------------------------------
-BEST_CONFIG 
------------------------------------------------------------------------------------------------------
-{}
------------------------------------------------------------------------------------------------------
-VALIDATION PERFORMANCE
------------------------------------------------------------------------------------------------------
-+---------------------+-------------------+------------------+
-|        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
-+---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2542      |      0.2567      |
-+---------------------+-------------------+------------------+
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 20/20 [00:02&lt;00:00,  7.33it/s]
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-----------------------------------------------------------------------------------------------------
-TEST PERFORMANCE
------------------------------------------------------------------------------------------------------
-+---------------------+-------------------+------------------+
-|        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
-+---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2622      |      0.2185      |
-+---------------------+-------------------+------------------+
-
-*****************************************************************************************************
-Outer Cross validation Fold 5
-*****************************************************************************************************
-Did not find any hyperparameter to convert into skopt space.
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>/opt/hostedtoolcache/Python/3.9.16/x64/lib/python3.9/site-packages/photonai/optimization/scikit_optimize/sk_opt.py:169: UserWarning: Did not find any hyperparameter to convert into skopt space.
-  warnings.warn(msg)
-100%|██████████| 20/20 [00:02&lt;00:00,  9.38it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  9.42it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  9.17it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  9.11it/s]
-100%|██████████| 20/20 [00:02&lt;00:00,  8.83it/s]
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-----------------------------------------------------------------------------------------------------
-BEST_CONFIG 
------------------------------------------------------------------------------------------------------
-{}
------------------------------------------------------------------------------------------------------
-VALIDATION PERFORMANCE
------------------------------------------------------------------------------------------------------
-+---------------------+-------------------+------------------+
-|        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
-+---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2420      |      0.2498      |
-+---------------------+-------------------+------------------+
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 20/20 [00:02&lt;00:00,  6.93it/s]
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-----------------------------------------------------------------------------------------------------
-TEST PERFORMANCE
------------------------------------------------------------------------------------------------------
-+---------------------+-------------------+------------------+
-|        METRIC       | PERFORMANCE TRAIN | PERFORMANCE TEST |
-+---------------------+-------------------+------------------+
-| mean_absolute_error |       0.2419      |      0.2845      |
+| mean_absolute_error |       0.2624      |      0.2548      |
 +---------------------+-------------------+------------------+
 *****************************************************************************************************
 Finished all outer fold computations.
@@ -2435,7 +2435,7 @@ Finished all outer fold computations.
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>100%|██████████| 20/20 [00:03&lt;00:00,  5.55it/s]
+<pre>100%|██████████| 20/20 [00:03&lt;00:00,  5.77it/s]
 </pre>
 </div>
 </div>
@@ -2450,9 +2450,9 @@ Finished all outer fold computations.
 <pre>*****************************************************************************************************
 
 ANALYSIS INFORMATION ================================================================================ 
-Project Folder: /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_gembedding_pipe_results_2023-02-17_11-47-54,
-Computation Time: 2023-02-17 11:47:54.604653 - 2023-02-17 11:49:10.356896
-Duration: 0:01:15.752243
+Project Folder: /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_gembedding_pipe_results_2023-02-17_16-35-15,
+Computation Time: 2023-02-17 16:35:15.353761 - 2023-02-17 16:36:26.644101
+Duration: 0:01:11.290340
 Optimized for: mean_absolute_error
 Hyperparameter Optimizer: sk_opt
 
@@ -2466,7 +2466,7 @@ AVERAGE PERFORMANCE ACROSS OUTER FOLDS =========================================
 +---------------------+---------------+--------------+-----------+----------+
 |     Metric Name     | Training Mean | Training Std | Test Mean | Test Std |
 +---------------------+---------------+--------------+-----------+----------+
-| mean_absolute_error |    0.25663    |   0.008219   |  0.249506 | 0.029368 |
+| mean_absolute_error |    0.259941   |   0.010922   |  0.262448 | 0.044888 |
 +---------------------+---------------+--------------+-----------+----------+
 
 BEST HYPERPARAMETER CONFIGURATION ===================================================================
@@ -2476,15 +2476,15 @@ BEST HYPERPARAMETER CONFIGURATION ==============================================
 +--------+---------------------+----------------------------+
 | fold # | mean_absolute_error | Best Hyperparameter Config |
 +--------+---------------------+----------------------------+
-|   1*   |        0.2170       |             {}             |
-|   2    |        0.2819       |             {}             |
-|   3    |        0.2456       |             {}             |
-|   4    |        0.2185       |             {}             |
-|   5    |        0.2845       |             {}             |
+|   1*   |        0.2018       |             {}             |
+|   2    |        0.2291       |             {}             |
+|   3    |        0.3195       |             {}             |
+|   4    |        0.3070       |             {}             |
+|   5    |        0.2548       |             {}             |
 +--------+---------------------+----------------------------+
 
 PHOTONAI 2.3.0 ======================================================================================
-Your results are stored in /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_gembedding_pipe_results_2023-02-17_11-47-54
+Your results are stored in /home/runner/work/photonai_graph/photonai_graph/documentation/docs/examples/basic_gembedding_pipe_results_2023-02-17_16-35-15
 Go to https://explorer.photon-ai.com and upload your photonai_results.json for convenient result visualization! 
 For more info and documentation visit https://www.photon-ai.com
 </pre>
