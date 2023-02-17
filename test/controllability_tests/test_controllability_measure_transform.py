@@ -17,6 +17,7 @@ class ControllabilityTransformTests(unittest.TestCase):
         self.X_sym = b_symm
         self.y = np.random.rand(20)
         self.rep_X_sym = np.load(os.path.dirname(__file__) + '/X_test.npz')['arr_0']
+        self.path = "/tmp/test.csv"
 
     def test_mod_control_shape(self):
         contr = ControllabilityMeasureTransform(mod_control=1, ave_control=0)
@@ -43,37 +44,33 @@ class ControllabilityTransformTests(unittest.TestCase):
             ControllabilityMeasureTransform(mod_control=0, ave_control=0)
 
     def test_extract_measures_mod_control(self):
-        path = "/tmp/test.csv"
         contr = ControllabilityMeasureTransform(mod_control=1, ave_control=0)
-        contr.extract_measures(self.X_sym, path)
-        os.remove(path)
+        contr.extract_measures(self.X_sym, self.path)
+        os.remove(self.path)
 
     def test_extract_measures_ave_control(self):
-        path = "/tmp/test.csv"
         contr = ControllabilityMeasureTransform(mod_control=0, ave_control=1)
-        contr.extract_measures(self.X_sym, path)
-        os.remove(path)
+        contr.extract_measures(self.X_sym, self.path)
+        os.remove(self.path)
 
     def test_extract_measures_mod_ave_control(self):
-        path = "/tmp/test.csv"
         contr = ControllabilityMeasureTransform(mod_control=1, ave_control=1)
-        contr.extract_measures(self.rep_X_sym, path, ids=[i for i in range(10)], node_list=[f"node_{i}" for i in range(20)])
-        df = pd.read_csv(path)
+        contr.extract_measures(self.rep_X_sym, self.path, ids=[i for i in range(10)],
+                               node_list=[f"node_{i}" for i in range(20)])
+        df = pd.read_csv(self.path)
         path_ref = os.path.dirname(__file__) + "/test.csv"
         df_expected = pd.read_csv(path_ref)
         self.assertTrue(np.allclose(df.to_numpy(), df_expected.to_numpy()), "Generated measures are not as expected")
-        os.remove(path)
+        os.remove(self.path)
 
     def test_node_list_error(self):
-        path = "/tmp/test.csv"
         node_list = list(range(5))
         contr = ControllabilityMeasureTransform(mod_control=1, ave_control=0)
         with self.assertRaises(ValueError):
-            contr.extract_measures(self.X_sym, path, node_list=node_list)
+            contr.extract_measures(self.X_sym, self.path, node_list=node_list)
 
     def test_id_list_error(self):
-        path = "/tmp/test.csv"
         id_list = list(range(3))
         contr = ControllabilityMeasureTransform(mod_control=1, ave_control=0)
         with self.assertRaises(ValueError):
-            contr.extract_measures(self.X_sym, path, ids=id_list)
+            contr.extract_measures(self.X_sym, self.path, ids=id_list)

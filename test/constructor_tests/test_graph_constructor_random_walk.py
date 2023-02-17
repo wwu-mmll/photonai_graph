@@ -16,12 +16,6 @@ class RWTests(unittest.TestCase):
         trans = g_constr.transform(self.Xrandom4d)
         self.assertEqual(np.shape(trans), (20, 20, 20, 3))
 
-    def test_rw_individual(self):
-        g_constr = GraphConstructorRandomWalks()
-        g_constr.fit(self.Xrandom4d, self.y)
-        trans = g_constr.transform(self.Xrandom4d)
-        self.assertEqual(np.shape(trans), (20, 20, 20, 3))
-
     def test_rw_assert_failure(self):
         with self.assertRaises(AssertionError):
             g_constr = GraphConstructorRandomWalks()
