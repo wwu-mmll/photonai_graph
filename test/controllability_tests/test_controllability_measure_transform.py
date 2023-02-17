@@ -17,7 +17,7 @@ class ControllabilityTransformTests(unittest.TestCase):
         self.X_sym = b_symm
         self.y = np.random.rand(20)
         self.rep_X_sym = np.load(os.path.dirname(__file__) + '/X_test.npz')['arr_0']
-        self.path = "/tmp/test.csv"
+        self.path = "./test.csv"
 
     def test_mod_control_shape(self):
         contr = ControllabilityMeasureTransform(mod_control=1, ave_control=0)

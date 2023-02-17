@@ -13,7 +13,7 @@ class DrawConnectogramTests(unittest.TestCase):
         self.matrix = np.random.rand(20, 20, 20)
         self.ids = list(range(6, 11))
         self.ids_wrong = list(range(1, 11))
-        self.directory = '/tmp/'
+        self.directory = './'
 
     def test_drawing_single(self):
         draw_connectograms(self.cyc_graph, show=False)
@@ -26,6 +26,7 @@ class DrawConnectogramTests(unittest.TestCase):
         draw_connectograms(self.cyc_graphs, path=self.directory,
                            ids=self.ids, out_format=output_format, show=False)
         self.assertTrue(os.path.exists(self.directory + str(6) + output_format))
+        [os.remove(os.path.join(self.directory, f"{cid}{output_format}")) for cid in self.ids]
 
     def test_drawing_len_ids_wrong(self):
         with self.assertRaises(Exception):
@@ -45,6 +46,7 @@ class DrawConnectogramTests(unittest.TestCase):
         output_format = ".png"
         draw_connectograms(self.cyc_graphs, path=self.directory, out_format=output_format, show=False)
         self.assertTrue(os.path.exists(self.directory + str(0) + output_format))
+        [os.remove(os.path.join(self.directory, f"{cid}{output_format}")) for cid, _ in enumerate(self.cyc_graphs)]
 
     def test_format(self):
         with self.assertRaises(TypeError):
