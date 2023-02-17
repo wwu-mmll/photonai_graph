@@ -37,18 +37,18 @@ class SpatialTests(unittest.TestCase):
                          5, 5, 4, 4, 4, 4, 4, 6, 4, 3, 3]
 
     def test_spatial(self):
-        path = "/tmp/test_coords.csv"
+        path = "./test_coords.csv"
         self.spatial_coords.to_csv(path, header=False, index=False)
-        g_constr = GraphConstructorSpatial(k_distance=3, atlas_name='test', atlas_folder="/tmp/")
+        g_constr = GraphConstructorSpatial(k_distance=3, atlas_name='test', atlas_folder="./")
         g_constr.fit(self.Xrandom4d, self.y)
         trans = g_constr.transform(self.Xrandom4d)
         self.assertEqual(np.shape(trans), (20, 12, 12, 3))
         os.remove(path)
 
     def test_spatial_mechanism(self):
-        path = "/tmp/test_coords.csv"
+        path = "./test_coords.csv"
         self.spatial_coords.to_csv(path, header=False, index=False)
-        g_constr = GraphConstructorSpatial(k_distance=3, atlas_name='test', atlas_folder="/tmp/")
+        g_constr = GraphConstructorSpatial(k_distance=3, atlas_name='test', atlas_folder="./")
         g_constr.fit(self.Xrandom4d, self.y)
         trans = g_constr.transform(self.Xrandom4d)
         bool_array = np.count_nonzero(trans[0, :, :, 0], axis=1, keepdims=True) == self.check_array
