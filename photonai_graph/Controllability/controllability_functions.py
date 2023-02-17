@@ -59,11 +59,11 @@ def average_control(a_mat):
     u, s, vt = svd(a_mat)  # singluar value decomposition
     a_mat = a_mat / (1 + s[0])  # s is a eigen-value
     t_mat, u_mat = schur(a_mat, 'real')  # Schur stability
-    midMat = np.multiply(u_mat, u_mat).transpose()  # element-wise multiplication
+    mid_mat = np.multiply(u_mat, u_mat).transpose()  # element-wise multiplication
     v = np.matrix(np.diag(t_mat)).transpose()
 
     # %%
     p_mat = np.diag(1 - np.matmul(v, v.transpose()))
     p_mat = np.tile(p_mat.reshape([a_mat.shape[0], 1]), (1, n_mat))
-    values = sum(np.divide(midMat, p_mat))
+    values = sum(np.divide(mid_mat, p_mat))
     return values
