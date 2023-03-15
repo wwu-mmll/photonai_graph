@@ -52,6 +52,7 @@ class GCNClassifierModel(DGLClassifierBaseModel):
                  es_patience: int = 10,
                  es_tolerance: int = 9,
                  es_delta: float = 0,
+                 gpu: bool = True,
                  verbose: bool = False,
                  logs: str = '',
                  **kwargs):
@@ -87,12 +88,14 @@ class GCNClassifierModel(DGLClassifierBaseModel):
                                                  es_patience=es_patience,
                                                  es_tolerance=es_tolerance,
                                                  es_delta=es_delta,
+                                                 gpu=gpu,
                                                  verbose=verbose,
                                                  logs=logs,
                                                  **kwargs)
         self.in_dim = in_dim
         self.hidden_dim = hidden_dim
         self.hidden_layers = hidden_layers
+        self.gpu = gpu
 
     def _init_model(self, X=None, y=None):
         self.model = GCNClassifier(self.in_dim,
@@ -120,6 +123,7 @@ class GCNRegressorModel(DGLRegressorBaseModel):
                  es_patience: int = 10,
                  es_tolerance: int = 9,
                  es_delta: float = 0,
+                 gpu: bool = False,
                  verbose: bool = False,
                  logs: str = '',
                  **kwargs):
@@ -154,12 +158,14 @@ class GCNRegressorModel(DGLRegressorBaseModel):
                                                 es_patience=es_patience,
                                                 es_tolerance=es_tolerance,
                                                 es_delta=es_delta,
+                                                gpu=gpu,
                                                 verbose=verbose,
                                                 logs=logs,
                                                 **kwargs)
         self.in_dim = in_dim
         self.hidden_dim = hidden_dim
         self.hidden_layers = hidden_layers
+        self.gpu = gpu
 
     def _init_model(self, X=None, y=None):
         self.model = GCNClassifier(self.in_dim,

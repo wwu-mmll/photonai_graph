@@ -37,6 +37,7 @@ class DGLModel(BaseEstimator, ABC):
                  es_patience: int = 10,
                  es_tolerance: int = 9,
                  es_delta: float = 0,
+                 gpu: bool = False,
                  verbose: bool = False,
                  logs: str = None):
         """
@@ -67,6 +68,8 @@ class DGLModel(BaseEstimator, ABC):
         early_stopping: bool, default=False
             If true then the loss over multiple iterations is evaluated to see
             whether early stopping should be called on the model
+        gpu: bool, default=False
+            If the system should try using a gpu instead of cpu for running the model
         verbose: bool,default=False
             If true verbose information is printed
         logs: str,default=None
@@ -97,6 +100,10 @@ class DGLModel(BaseEstimator, ABC):
             self.logs = os.getcwd()
         assert_imported(["dgl", "pytorch"])
         self.verbose = verbose
+        if gpu:
+            self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        else:
+            self.device = torch.device('cpu')
 
     def train_model(self, epochs, model, optimizer, loss_func, data_loader, val_loader=None):
         # This function trains the neural network
@@ -106,6 +113,8 @@ class DGLModel(BaseEstimator, ABC):
             epoch_loss = 0
             iteration = 0
             for it, (bg, label) in enumerate(data_loader):
+                bg = bg.to(device=self.device)
+                label = label.to(device=self.device)
                 prediction = model(bg)
                 loss = loss_func(prediction, label)
                 optimizer.zero_grad()
@@ -119,6 +128,8 @@ class DGLModel(BaseEstimator, ABC):
             if self.verbose and self.validation_score:
                 val_loss = 0
                 for it, (bg, label) in enumerate(val_loader):
+                    bg = bg.to(device=self.device)
+                    label = label.to(device=self.device)
                     prediction = model(bg)
                     loss = loss_func(prediction, label)
                     val_loss += loss.detach().item()
@@ -148,6 +159,8 @@ class DGLModel(BaseEstimator, ABC):
         self._init_model(X, y)
         # get optimizers
         loss_func, optimizer = self.setup_model()
+        # push data and model
+        self.model.to(device=self.device)
         # train model
         self.model.train()
         self.train_model(epochs=self.nn_epochs, model=self.model, optimizer=optimizer,
@@ -215,6 +228,7 @@ class DGLClassifierBaseModel(DGLModel, ClassifierMixin, ABC):
                  add_self_loops: bool = True,
                  allow_zero_in_degree: bool = False,
                  validation_score: bool = False,
+                 gpu: bool = False,
                  verbose: bool = False,
                  logs: str = None,
                  **kwargs):
@@ -252,6 +266,7 @@ class DGLClassifierBaseModel(DGLModel, ClassifierMixin, ABC):
                                                      add_self_loops=add_self_loops,
                                                      allow_zero_in_degree=allow_zero_in_degree,
                                                      validation_score=validation_score,
+                                                     gpu=gpu,
                                                      verbose=verbose,
                                                      logs=logs,
                                                      **kwargs)
@@ -267,8 +282,10 @@ class DGLClassifierBaseModel(DGLModel, ClassifierMixin, ABC):
         self.model.eval()
         x_trans = self.handle_inputs(X, self.adjacency_axis, self.feature_axis)
         test_bg = dgl.batch(x_trans)
+        test_bg = test_bg.to(device=self.device)
         probs_y = torch.softmax(self.model(test_bg), 1)
         argmax_y = torch.max(probs_y, 1)[1].view(-1, 1)
+        argmax_y = argmax_y.cpu()
         return argmax_y.squeeze()
 
     @staticmethod
@@ -289,6 +306,7 @@ class DGLRegressorBaseModel(DGLModel, RegressorMixin, ABC):
                  add_self_loops: bool = True,
                  allow_zero_in_degree: bool = False,
                  validation_score: bool = False,
+                 gpu: bool = False,
                  verbose: bool = False,
                  logs: str = None,
                  **kwargs):
@@ -326,6 +344,7 @@ class DGLRegressorBaseModel(DGLModel, RegressorMixin, ABC):
                                                     add_self_loops=add_self_loops,
                                                     allow_zero_in_degree=allow_zero_in_degree,
                                                     validation_score=validation_score,
+                                                    gpu=gpu,
                                                     verbose=verbose,
                                                     logs=logs,
                                                     **kwargs)
@@ -340,8 +359,10 @@ class DGLRegressorBaseModel(DGLModel, RegressorMixin, ABC):
         self.model.eval()
         x_trans = self.handle_inputs(X, self.adjacency_axis, self.feature_axis)
         test_bg = dgl.batch(x_trans)
+        test_bg = test_bg.to(device=self.device)
         probs = self.model(test_bg)
         probs = probs.detach().numpy()
+        probs = probs.cpu()
         return probs.squeeze()
 
     def get_data_loader(self, x_trans, y):
