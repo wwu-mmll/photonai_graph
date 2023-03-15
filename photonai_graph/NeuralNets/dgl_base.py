@@ -69,7 +69,7 @@ class DGLModel(BaseEstimator, ABC):
             If true then the loss over multiple iterations is evaluated to see
             whether early stopping should be called on the model
         gpu: bool, default=False
-            If the system should try using a gpu instead of cpu for running the model
+            If True the system should try using a gpu instead of cpu for training the model
         verbose: bool,default=False
             If true verbose information is printed
         logs: str,default=None
@@ -253,6 +253,8 @@ class DGLClassifierBaseModel(DGLModel, ClassifierMixin, ABC):
                 validation_score: bool,default=False
                     It true the input data is split into train and test (90%/10%).
                     The testset is then used to get validation results during training
+                gpu: bool, default=False
+                    If True the system should try using a gpu instead of cpu for training the model
                 verbose: bool,default=False
                     If true verbose output is generated
                 logs: str,default=None
@@ -331,6 +333,8 @@ class DGLRegressorBaseModel(DGLModel, RegressorMixin, ABC):
         validation_score: bool,default=False
             If true the input data is split into train and test (90%/10%).
             The testset is then used to get validation results during training
+        gpu: bool, default=False
+            If True the system should try using a gpu instead of cpu for training the model
         verbose: bool,default=False
             If true verbose output is generated
         logs: str,default=None

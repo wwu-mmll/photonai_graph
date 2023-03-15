@@ -73,6 +73,8 @@ class GCNClassifierModel(DGLClassifierBaseModel):
         validation_score: bool,default=False
             If true the input data is split into train and test (90%/10%).
             The testset is then used to get validation results during training
+        gpu: bool, default=False
+            If True the system should try using a gpu instead of cpu for training the model
         verbose: bool,default=False
             If true verbose output is generated
         """
@@ -143,6 +145,8 @@ class GCNRegressorModel(DGLRegressorBaseModel):
         validation_score: bool,default=False
             If true the input data is split into train and test (90%/10%).
             The testset is then used to get validation results during training
+        gpu: bool, default=False
+            If True the system should try using a gpu instead of cpu for training the model
         verbose: bool,default=False
             If true verbose output is generated
         """
