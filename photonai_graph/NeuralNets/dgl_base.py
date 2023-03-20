@@ -366,7 +366,7 @@ class DGLRegressorBaseModel(DGLModel, RegressorMixin, ABC):
         test_bg = test_bg.to(device=self.device)
         probs = self.model(test_bg)
         probs = probs.detach().numpy()
-        probs = probs.cpu()
+        # probs = probs.cpu()
         return probs.squeeze()
 
     def get_data_loader(self, x_trans, y):
