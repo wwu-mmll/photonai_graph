@@ -101,7 +101,11 @@ class DGLModel(BaseEstimator, ABC):
         assert_imported(["dgl", "pytorch"])
         self.verbose = verbose
         if gpu:
-            self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+            if torch.cuda.is_available():
+                self.device = torch.device('cuda')
+            else:
+                warnings.warn('Cuda device not found, falling back to CPU')
+                self.device = torch.device('cpu')
         else:
             self.device = torch.device('cpu')
 
