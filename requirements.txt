@@ -1,7 +1,7 @@
 photonai
 networkx<3.1
 pydot
-dgl==1.0.1
+dgl==1.1.0
 nxt-gem
 grakel
 pandas
