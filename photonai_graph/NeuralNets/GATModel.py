@@ -32,7 +32,7 @@ class GATModel(nn.Module):
     def forward(self, bg):
         # For undirected graphs, in_degree is the same as
         # out_degree.
-        h = bg.in_degrees().view(-1, 1).float()
+        h = g.ndata['feat']
         for i, gnn in enumerate(self.layers):
             h = gnn(bg, h)
             if self.agg_mode == 'flatten':

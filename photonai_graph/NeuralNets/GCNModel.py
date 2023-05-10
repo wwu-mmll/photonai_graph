@@ -24,7 +24,7 @@ class GCNClassifier(nn.Module):
     def forward(self, g):
         # Use node degree as the initial node feature. For undirected graphs, the in-degree
         # is the same as the out_degree.
-        h = g.in_degrees().view(-1, 1).float()
+        h = g.ndata['feat']
         # Perform graph convolution and activation function.
         for i, gnn in enumerate(self.layers):
             h = F.relu(gnn(g, h))

@@ -27,7 +27,7 @@ class SGConvClassifier(nn.Module):
         self.classify = nn.Linear(hidden_dim, n_classes)
 
     def forward(self, bg):
-        h = bg.in_degrees().view(-1, 1).float()
+        h = g.ndata['feat']
         for lr, layer in enumerate(self.layers):
             h = layer(bg, h)
         bg.ndata['h'] = h
