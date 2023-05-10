@@ -103,7 +103,7 @@ class SGConvClassifierModel(DGLClassifierBaseModel):
         self.gpu = gpu
 
     def _init_model(self, X=None, y=None):
-        self.model = SGConvClassifier(self.in_dim, self.hidden_dim,
+        self.model = SGConvClassifier(X.shape[1], self.hidden_dim,
                                       len(np.unique(y)), self.hidden_layers,
                                       allow_zero_in_degree=self.allow_zero_in_degree)
 
@@ -174,5 +174,5 @@ class SGConvRegressorModel(DGLRegressorBaseModel):
         self.gpu = gpu
 
     def _init_model(self, X=None, y=None):
-        self.model = SGConvClassifier(self.in_dim, self.hidden_dim, 1, self.hidden_layers,
+        self.model = SGConvClassifier(X.shape[1], self.hidden_dim, 1, self.hidden_layers,
                                       allow_zero_in_degree=self.allow_zero_in_degree).float()

@@ -100,7 +100,7 @@ class GCNClassifierModel(DGLClassifierBaseModel):
         self.gpu = gpu
 
     def _init_model(self, X=None, y=None):
-        self.model = GCNClassifier(self.in_dim,
+        self.model = GCNClassifier(X.shape[1],
                                    self.hidden_dim,
                                    len(np.unique(y)),
                                    self.hidden_layers,
@@ -172,7 +172,7 @@ class GCNRegressorModel(DGLRegressorBaseModel):
         self.gpu = gpu
 
     def _init_model(self, X=None, y=None):
-        self.model = GCNClassifier(self.in_dim,
+        self.model = GCNClassifier(X.shape[1],
                                    self.hidden_dim, 1,
                                    self.hidden_layers,
                                    allow_zero_in_degree=self.allow_zero_in_degree).float()
