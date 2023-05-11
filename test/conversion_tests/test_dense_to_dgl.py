@@ -31,4 +31,4 @@ class DenseToDglTest(unittest.TestCase):
         dgl_graph = dense_to_dgl(in_graph, adjacency_axis=0, feature_axis=1)[0]
         self.assertEqual(dgl_graph.num_nodes(), 3)
         self.assertEqual(dgl_graph.num_edges(), 2)
-        self.assertTrue(np.array_equal(dgl_graph.ndata['feat'].numpy(), in_feats[0, ..., 0]))
+        self.assertTrue(np.array_equal(dgl_graph.ndata['feat'].numpy(), in_feats[0, ..., 0].astype("float32")))
