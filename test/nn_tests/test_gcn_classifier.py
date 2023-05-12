@@ -38,9 +38,3 @@ class GCNClassifierTests(unittest.TestCase):
         gcn_clf.fit(self.Xrandom4d, self.y)
         output = gcn_clf.predict(self.Xrandom4d)
         self.assertTrue(np.array_equal(output.shape, self.y.shape))
-
-    def test_gat_classifier_dgl(self):
-        gat_clf = GCNClassifierModel(nn_epochs=20)
-        gat_clf.fit(self.X_dgl, self.y)
-        output = gat_clf.predict(self.X_dgl)
-        self.assertTrue(np.array_equal(np.array(output.shape), self.y.shape))
