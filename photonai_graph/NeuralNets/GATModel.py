@@ -32,7 +32,7 @@ class GATModel(nn.Module):
     def forward(self, bg):
         # For undirected graphs, in_degree is the same as
         # out_degree.
-        h = bg.in_degrees().view(-1, 1).float()
+        h = bg.ndata['feat']
         for i, gnn in enumerate(self.layers):
             h = gnn(bg, h)
             if self.agg_mode == 'flatten':
@@ -121,7 +121,8 @@ class GATClassifierModel(DGLClassifierBaseModel):
         self.gpu = gpu
 
     def _init_model(self, X=None, y=None):
-        self.model = GATModel(self.in_dim, self.hidden_dim, self.heads,
+        self.model = GATModel(X.shape[1] if isinstance(X, (np.ndarray, np.array)) else X[0].num_nodes(),
+                              self.hidden_dim, self.heads,
                               len(np.unique(y)), self.hidden_layers, self.agg_mode,
                               allow_zero_in_degree=self.allow_zero_in_degree)
 
@@ -201,5 +202,5 @@ class GATRegressorModel(DGLRegressorBaseModel):
         self.gpu = gpu
 
     def _init_model(self, X=None, y=None):
-        self.model = GATModel(self.in_dim, self.hidden_dim, self.heads, 1, self.hidden_layers,
+        self.model = GATModel(X.shape[1], self.hidden_dim, self.heads, 1, self.hidden_layers,
                               allow_zero_in_degree=self.allow_zero_in_degree, agg_mode=self.agg_mode).float()

@@ -27,7 +27,7 @@ class SGConvClassifier(nn.Module):
         self.classify = nn.Linear(hidden_dim, n_classes)
 
     def forward(self, bg):
-        h = bg.in_degrees().view(-1, 1).float()
+        h = bg.ndata['feat']
         for lr, layer in enumerate(self.layers):
             h = layer(bg, h)
         bg.ndata['h'] = h
@@ -103,8 +103,8 @@ class SGConvClassifierModel(DGLClassifierBaseModel):
         self.gpu = gpu
 
     def _init_model(self, X=None, y=None):
-        self.model = SGConvClassifier(self.in_dim, self.hidden_dim,
-                                      len(np.unique(y)), self.hidden_layers,
+        self.model = SGConvClassifier(X.shape[1] if isinstance(X, (np.ndarray, np.array)) else X[0].num_nodes(),
+                                      self.hidden_dim, len(np.unique(y)), self.hidden_layers,
                                       allow_zero_in_degree=self.allow_zero_in_degree)
 
 
@@ -174,5 +174,5 @@ class SGConvRegressorModel(DGLRegressorBaseModel):
         self.gpu = gpu
 
     def _init_model(self, X=None, y=None):
-        self.model = SGConvClassifier(self.in_dim, self.hidden_dim, 1, self.hidden_layers,
+        self.model = SGConvClassifier(X.shape[1], self.hidden_dim, 1, self.hidden_layers,
                                       allow_zero_in_degree=self.allow_zero_in_degree).float()

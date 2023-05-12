@@ -24,7 +24,7 @@ class GCNClassifier(nn.Module):
     def forward(self, g):
         # Use node degree as the initial node feature. For undirected graphs, the in-degree
         # is the same as the out_degree.
-        h = g.in_degrees().view(-1, 1).float()
+        h = g.ndata['feat']
         # Perform graph convolution and activation function.
         for i, gnn in enumerate(self.layers):
             h = F.relu(gnn(g, h))
@@ -100,7 +100,7 @@ class GCNClassifierModel(DGLClassifierBaseModel):
         self.gpu = gpu
 
     def _init_model(self, X=None, y=None):
-        self.model = GCNClassifier(self.in_dim,
+        self.model = GCNClassifier(X.shape[1],
                                    self.hidden_dim,
                                    len(np.unique(y)),
                                    self.hidden_layers,
@@ -172,7 +172,7 @@ class GCNRegressorModel(DGLRegressorBaseModel):
         self.gpu = gpu
 
     def _init_model(self, X=None, y=None):
-        self.model = GCNClassifier(self.in_dim,
+        self.model = GCNClassifier(X.shape[1] if isinstance(X, (np.ndarray, np.array)) else X[0].num_nodes(),
                                    self.hidden_dim, 1,
                                    self.hidden_layers,
                                    allow_zero_in_degree=self.allow_zero_in_degree).float()
