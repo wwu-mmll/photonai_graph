@@ -103,8 +103,8 @@ class SGConvClassifierModel(DGLClassifierBaseModel):
         self.gpu = gpu
 
     def _init_model(self, X=None, y=None):
-        self.model = SGConvClassifier(X.shape[1], self.hidden_dim,
-                                      len(np.unique(y)), self.hidden_layers,
+        self.model = SGConvClassifier(X.shape[1] if isinstance(X, (np.ndarray, np.array)) is np.array else X[0].num_nodes(),
+                                      self.hidden_dim, len(np.unique(y)), self.hidden_layers,
                                       allow_zero_in_degree=self.allow_zero_in_degree)
 
 
