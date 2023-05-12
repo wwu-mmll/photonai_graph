@@ -121,7 +121,7 @@ class GATClassifierModel(DGLClassifierBaseModel):
         self.gpu = gpu
 
     def _init_model(self, X=None, y=None):
-        self.model = GATModel(X.shape[1] if isinstance(X, (np.ndarray, np.array)) is np.array else X[0].num_nodes(),
+        self.model = GATModel(X.shape[1] if isinstance(X, (np.ndarray, np.array)) else X[0].num_nodes(),
                               self.hidden_dim, self.heads,
                               len(np.unique(y)), self.hidden_layers, self.agg_mode,
                               allow_zero_in_degree=self.allow_zero_in_degree)
