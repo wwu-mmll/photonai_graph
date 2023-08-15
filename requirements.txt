@@ -5,7 +5,7 @@ dgl==1.0.1
 nxt-gem
 grakel
 pandas
-numpy<=1.24.2
+numpy<=1.25.2
 scipy
 tensorflow
 torch
